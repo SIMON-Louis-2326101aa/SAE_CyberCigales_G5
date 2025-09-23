@@ -1,6 +1,7 @@
 <?php
 // homepageView.php
-$message = 'Page d\'accueil';
+$title = 'Page d\'accueil';
+$message = 'Bienvenue';
 ?>
 
 <!DOCTYPE html>
@@ -8,13 +9,11 @@ $message = 'Page d\'accueil';
 <head>
     <meta charset="UTF-8">
     <title>Accueil</title>
+    <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
 </head>
 <body>
-<h1><?php echo $message; ?></h1>
+<h1><?php echo $title; ?></h1>
+<h2><?php echo $message; ?></h2>
 
-<!-- Exemple de bouton qui envoie vers le contrôleur -->
-<form action="" method="post">
-    <button type="submit">Cliquer</button>
-</form>
 </body>
 </html>
