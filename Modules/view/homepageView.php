@@ -2,6 +2,7 @@
 // homepageView.php
 $title = 'Page d\'accueil';
 $message = 'Bienvenue';
+$messageInscription = 'Inscription';
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +15,8 @@ $message = 'Bienvenue';
 <body>
 <h1><?php echo $title; ?></h1>
 <h2><?php echo $message; ?></h2>
-
+<a href="/Modules/view/inscription.php" class="btn">
+    <button><?php echo $messageInscription ?></b></button>
+</a>
 </body>
 </html>

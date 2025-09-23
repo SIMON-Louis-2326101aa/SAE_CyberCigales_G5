@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #da6b01, #d69100);
+    background: linear-gradient(to right, #5a0000, #8e0000);
     color: #fff;
     text-align: center;
 }
@@ -16,3 +16,9 @@ h2 {
     margin-bottom: 40px;
     font-weight: 300;
 }
+
+.btn {
+    font-family: 'Arial', sans-serif;
+    display: inline-block;
+}
+
