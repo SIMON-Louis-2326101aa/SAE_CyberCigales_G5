@@ -1,20 +1,37 @@
 <?php
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+require_once __DIR__ . '/includes/constant.php';
 
-if ($uri === '/' || $uri === '/home') {
-    echo "<h1>Accueil</h1><p><a href='/login'>Connexion</a> | <a href='/register'>Inscription</a></p>";
-} elseif ($uri === '/login') {
-    require_once __DIR__ . '/../Modules/controller/UserController.php';
-    $controller = new UserController();
-    $controller->login();
-} elseif ($uri === '/register') {
-    require_once __DIR__ . '/../Modules/controller/UserController.php';
-    $controller = new UserController();
-    $controller->register();
-} elseif ($uri === '/logout') {
-    require_once __DIR__ . '/../Modules/controller/UserController.php';
-    $controller = new UserController();
-    $controller->logout();
-} else {
-    require_once __DIR__ . '/404.php';
+// Récupérer l'URI demandée
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri = '/' . trim($uri, '/');
+
+// Router selon l’URL
+switch ($uri) {
+    case '/':
+    case '/home':
+        require_once __DIR__ . '/Modules/controller/homepageController.php';
+        (new HomePageController())->index();
+        break;
+
+    case '/login':
+        require_once __DIR__ . '/Modules/controller/UserController.php';
+        (new UserController())->login();
+        break;
+
+    case '/register':
+        require_once __DIR__ . '/Modules/controller/UserController.php';
+        (new UserController())->register();
+        break;
+
+    case '/logout':
+        require_once __DIR__ . '/Modules/controller/UserController.php';
+        (new UserController())->logout();
+        break;
+
+    default:
+        require_once __DIR__ . '/404.php';
+        break;
 }

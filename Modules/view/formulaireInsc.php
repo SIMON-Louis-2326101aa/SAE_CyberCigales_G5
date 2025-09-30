@@ -5,7 +5,7 @@
 </head>
     <h1>Inscription</h1>
 
-    <form action="traitement.php" method="post">
+    <form action="" method="post">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
@@ -17,7 +17,7 @@
             </li>
             <li>
                 <label for="mail">E-mail :</label>
-                <input type="email" id="mail" name="user_mail" required>
+                <input type="email" id="mail" name="email" required>
             </li>
             <li>
                 <label for="mdp">Mot de passe :</label><br>
@@ -31,8 +31,5 @@
 
         <button type="submit">S'inscrire</button>
     </form>
-
-
-
+<p><a href="/login">Déjà un compte ? Connexion</a></p>
 </html>
-

@@ -11,18 +11,18 @@ class UserController {
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email']);
-            $password = $_POST['password'];
-            $confirm = $_POST['confirm_password'];
+            $password = $_POST['mdp'];
+            $confirm = $_POST['confirm_mdp'];
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                require __DIR__ . '/../view/inscription.php';
+                require __DIR__ . '/../view/formulaireInsc.php';
                 return;
             }
 
             if ($this->userModel->findByEmail($email)) {
                 $error = "Cet email existe déjà.";
-                require __DIR__ . '/../view/inscription.php';
+                require __DIR__ . '/../view/formulaireInsc.php';
                 return;
             }
 
@@ -30,14 +30,14 @@ class UserController {
             header("Location: /login");
             exit;
         } else {
-            require __DIR__ . '/../view/inscription.php';
+            require __DIR__ . '/../view/formulaireInsc.php';
         }
     }
 
     public function login() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email']);
-            $password = $_POST['password'];
+            $password = $_POST['mdp'];
 
             $user = $this->userModel->login($email, $password);
             if ($user) {

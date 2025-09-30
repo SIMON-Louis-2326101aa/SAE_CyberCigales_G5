@@ -8,9 +8,9 @@
 </head>
 <h1> Connection </h1>
 <form action=""  method="post">
-    Adresse mail : <input type="email" id="mail"> <br>
-    Mot de passe <input type="password" id="mdp"><br>
-    <button type="submit">Connexion</button>
+    E-mail : <input type="email" name="email"> <br>
+    Mot de passe : <input type="password" name="mdp"><br>
+    <button type="submit">Se connecter</button>
 </form>
 <a href="/register">Pas encore inscrit ?</a>
 </html>
