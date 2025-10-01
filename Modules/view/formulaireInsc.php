@@ -5,15 +5,15 @@
 </head>
     <h1>Inscription</h1>
 
-    <form action="" method="post">
+    <form action="/register" method="post">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
-                <input type="text" id="nom" name="user_nom" required>
+                <input type="text" id="nom" name="nom" required>
             </li>
             <li>
                 <label for="prenom">Prenom :</label>
-                <input type="text" id="prenom" name="user_prenom" required>
+                <input type="text" id="prenom" name="prenom" required>
             </li>
             <li>
                 <label for="mail">E-mail :</label>

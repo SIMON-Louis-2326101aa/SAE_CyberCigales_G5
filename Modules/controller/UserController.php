@@ -10,6 +10,8 @@ class UserController {
 
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nom = trim($_POST['nom']);
+            $prenom = trim($_POST['prenom']);
             $email = trim($_POST['email']);
             $password = $_POST['mdp'];
             $confirm = $_POST['confirm_mdp'];
@@ -21,12 +23,13 @@ class UserController {
             }
 
             if ($this->userModel->findByEmail($email)) {
-                $error = "Cet email existe déjà.";
+                $error = "Cet email est déjà utilisé.";
                 require __DIR__ . '/../view/formulaireInsc.php';
                 return;
             }
 
-            $this->userModel->register($email, $password);
+            $this->userModel->register($nom, $prenom, $email, $password);
+
             header("Location: /login");
             exit;
         } else {
@@ -42,8 +45,9 @@ class UserController {
             $user = $this->userModel->login($email, $password);
             if ($user) {
                 session_start();
-                session_regenerate_id(true);
                 $_SESSION['user_id'] = $user['id'];
+                $_SESSION['nom'] = $user['nom'];
+                $_SESSION['prenom'] = $user['prenom'];
                 header("Location: /home");
                 exit;
             } else {
@@ -59,7 +63,8 @@ class UserController {
         session_start();
         session_unset();
         session_destroy();
-        header("Location: /login");
+        header("Location: /home");
         exit;
     }
+
 }

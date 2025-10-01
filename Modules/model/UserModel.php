@@ -15,11 +15,12 @@ class UserModel {
         return $stmt->fetch();
     }
 
-    public function register($email, $password) {
+    public function register($nom, $prenom, $email, $password) {
         $hash = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("INSERT INTO users (email, password) VALUES (:email, :password)");
-        return $stmt->execute(['email' => $email, 'password' => $hash]);
+        $stmt = $this->pdo->prepare("INSERT INTO users (nom, prenom, email, password)  VALUES (:nom, :prenom, :email, :password) ");
+        return $stmt->execute([ 'nom' => $nom, 'prenom' => $prenom, 'email' => $email, 'password' => $hash]);
     }
+
 
     public function login($email, $password) {
         $user = $this->findByEmail($email);

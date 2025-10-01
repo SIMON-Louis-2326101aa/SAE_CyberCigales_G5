@@ -1,9 +1,5 @@
 <?php
-// homepageView.php
-$title = 'Page d\'accueil';
-$message = 'Bienvenue';
-$messageInscription = 'Inscription';
-$messageConnexion = 'Connexion';
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -14,13 +10,12 @@ $messageConnexion = 'Connexion';
     <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
 </head>
 <body>
-<h1><?php echo $title; ?></h1>
-<h2><?php echo $message; ?></h2>
-<a href="/Modules/view/formulaireInsc.php" class="btn">
-    <button><?php echo $messageInscription ?></b></button>
-
-    <a href="/Modules/view/formulaireConnection.php" class="btn">
-        <button><?php echo $messageConnexion ?></b></button>
-</a>
+<?php if (isset($_SESSION['user_id'])): ?>
+    <h1>Bienvenue <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?></h1>
+<?php else: ?>
+    <h1>Bienvenue</h1>
+    <a href="/register"><button>Inscription</button></a>
+    <a href="/login"><button>Connexion</button></a>
+<?php endif; ?>
 </body>
 </html>
