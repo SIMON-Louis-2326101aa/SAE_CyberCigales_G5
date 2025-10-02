@@ -14,6 +14,8 @@
                 <input type="email" id="mail" name="email" required>
             </li>
         </ul>
+        <?php if (!empty($message)) echo "<p style='color:green;'>$message</p>"; ?>
+		<?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
         <button type="submit">Réinitialiser le mot de passe</button>
     </form>
     <p><a href="/login">Retour</a></p>

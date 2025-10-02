@@ -62,13 +62,13 @@ class UserController {
     public function passforgotten() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email']);
+            $user = $this->userModel->findByEmail($email);
             
-            if ($this->userModel->findByEmail($email)) {
-                session_start();
-                header("Location: /login");
-                exit;
+            if ($user) {
+				$message = "Un Email de réinitialisation a été envoyé.";
+                require __DIR__ . '/../view/formulaireMdpOublier.php';
             } else {
-                $error = "Email non existant.";
+                $error = "Email non trouvé";
                 require __DIR__ . '/../view/formulaireMdpOublier.php';
             }
         } else {
