@@ -17,5 +17,10 @@ session_start();
     <a href="/register"><button>Inscription</button></a>
     <a href="/login"><button>Connexion</button></a>
 <?php endif; ?>
+
+<footer>
+    <a href="legal-mention.php">Mentions Légales</a>
+</footer>
+
 </body>
 </html>
