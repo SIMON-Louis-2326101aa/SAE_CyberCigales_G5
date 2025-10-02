@@ -2,6 +2,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>Inscription</title>
+    <link rel="icon" type="image/png" href="/public/assets/Image/favicon.png">
 </head>
 <body>
     <h1>Inscription</h1>

@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title> Connexion </title>
+    <link rel="icon" type="image/png" href="/public/assets/Image/favicon.png">
 </head>
 
 <body>
