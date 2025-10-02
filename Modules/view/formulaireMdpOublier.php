@@ -5,7 +5,7 @@
 </head>
 
 <body>
-<form action="/register" method="post">
+<form action="/passforgotten" method="post">
 	<h2>Vous avez oublié le mot de passe</h2>
 	<h3>Veuillez mettre votre Email pour réinitialiser votre mot de passe</h3>
         <ul>
@@ -14,7 +14,10 @@
                 <input type="email" id="mail" name="email" required>
             </li>
         </ul>
-        <button type="submit">Envoyer un Email</button>
+        <?php if (!empty($message)) echo "<p style='color:green;'>$message</p>"; ?>
+		<?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
+        <button type="submit">Réinitialiser le mot de passe</button>
     </form>
+    <p><a href="/login">Retour</a></p>
 </body>
 </html>

@@ -31,6 +31,11 @@ switch ($uri) {
         (new UserController())->logout();
         break;
 
+	case '/passforgotten':
+		require_once __DIR__ . '/Modules/controller/UserController.php';
+        (new UserController())->passforgotten();
+        break;
+
     default:
         require_once __DIR__ . '/404.php';
         break;

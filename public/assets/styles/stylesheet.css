@@ -1,11 +1,12 @@
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #5a0000, #8e0000);
+    background: white;
     color: #fff;
     text-align: center;
 }
 
 h1 {
+	color: black;
     font-size: 3em;
     margin-bottom: 20px;
     text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
