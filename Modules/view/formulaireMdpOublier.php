@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
 	<meta charset="UTF-8">
+	<title> Mot de passe oublié </title>
+	<link rel="icon" type="image/png" href="/public/assets/Image/favicon.png">
 </head>
 
 <body>
