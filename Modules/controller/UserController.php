@@ -58,6 +58,23 @@ class UserController {
             require __DIR__ . '/../view/formulaireConnection.php';
         }
     }
+    
+    public function passforgotten() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $email = trim($_POST['email']);
+            
+            if ($this->userModel->findByEmail($email)) {
+                session_start();
+                header("Location: /login");
+                exit;
+            } else {
+                $error = "Email non existant.";
+                require __DIR__ . '/../view/formulaireMdpOublier.php';
+            }
+        } else {
+            require __DIR__ . '/../view/formulaireMdpOublier.php';
+        }
+    }
 
     public function logout() {
         session_start();
