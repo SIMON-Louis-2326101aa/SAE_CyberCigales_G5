@@ -3,6 +3,7 @@
     <meta charset="utf-8"/>
     <title>Inscription</title>
 </head>
+<body>
     <h1>Inscription</h1>
 
     <form action="/register" method="post">
@@ -32,4 +33,10 @@
         <button type="submit">S'inscrire</button>
     </form>
 <p><a href="/login">Déjà un compte ? Connexion</a></p>
+
+<footer>
+    <a href="legal-mention.php">Mentions Légales</a>
+</footer>
+
+</body>
 </html>
