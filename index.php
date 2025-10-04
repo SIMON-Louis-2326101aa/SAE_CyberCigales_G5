@@ -37,6 +37,6 @@ switch ($uri) {
         break;
 
     default:
-        require_once __DIR__ . '/404.php';
+        require_once __DIR__ . '/public/404.php';
         break;
 }
