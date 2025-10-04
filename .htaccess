@@ -1,0 +1,11 @@
+# Active le module de réécriture d'URL
+RewriteEngine On
+
+# Si la requête n'est pas un fichier existant (CSS, JS, images, etc.)
+RewriteCond %{REQUEST_FILENAME} !-f
+
+# Et si la requête n'est pas un dossier existant
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Alors on la renvoie vers index.php
+RewriteRule ^(.*)$ index.php [QSA,L]
