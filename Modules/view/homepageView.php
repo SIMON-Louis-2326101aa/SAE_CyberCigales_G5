@@ -15,7 +15,7 @@ session_start();
     <h1>Bienvenue <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?></h1>
     <a href="/logout"><button>Deconnexion</button></a>
 <?php else: ?>
-    <h1>Bienvenue, test deploiment</h1>
+    <h1>Bienvenue</h1>
     <a href="/register"><button>Inscription</button></a>
     <a href="/login"><button>Connexion</button></a>
 <?php endif; ?>
