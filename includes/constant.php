@@ -1,8 +1,8 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'cybercigales');
-define('DB_USER', 'root');
-define('DB_PASS', 'NouveauMotDePasse');
+define('DB_HOST', 'mysql-escapethecode.alwaysdata.net');
+define('DB_NAME', 'escapethecode_bd');
+define('DB_USER', '433487');
+define('DB_PASS', '');
 
 // Connexion PDO globale
 try {
