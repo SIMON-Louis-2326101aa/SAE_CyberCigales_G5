@@ -17,7 +17,7 @@
 <a href="/register">Pas encore inscrit ?</a>
 
 <footer>
-    <a href="legal-mention.php">Mentions Légales</a>
+    <a href="/Modules/view/legal-mention.php">Mentions Légales</a>
 </footer>
 
 </body>
