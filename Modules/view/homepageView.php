@@ -8,7 +8,7 @@ session_start();
     <meta charset="UTF-8">
     <title>Accueil</title>
     <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
-    <link rel="icon" type="image/png" href="/public/assets/Image/favicon.png">
+    <link rel="icon" href="/public/assets/images/favicon.ico">
 </head>
 <body>
 <?php if (isset($_SESSION['user_id'])): ?>

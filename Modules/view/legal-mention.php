@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Mentions Légales</title>
-    <link rel="icon" type="image/png" href="/public/assets/Image/favicon.png">
+    <link rel="icon" href="/public/assets/images/favicon.ico">
 </head>
 
 <body>
