@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/includes/autoloader.php';
 require_once __DIR__ . '/includes/constant.php';
 
 // Récupérer l'URI demandée
