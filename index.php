@@ -34,36 +34,3 @@ $A_params = $C_controller->getParams();
 
 
 echo $displayContent;
-
-// Router selon l’URL
-switch ($uri) {
-    case '/':
-    case '/home':
-        require_once __DIR__ . '/Modules/controller/homepageController.php';
-        (new HomePageController())->index();
-        break;
-
-    case '/login':
-        require_once __DIR__ . '/Modules/controller/UserController.php';
-        (new UserController())->login();
-        break;
-
-    case '/register':
-        require_once __DIR__ . '/Modules/controller/UserController.php';
-        (new UserController())->register();
-        break;
-
-    case '/logout':
-        require_once __DIR__ . '/Modules/controller/UserController.php';
-        (new UserController())->logout();
-        break;
-
-	case '/passforgotten':
-		require_once __DIR__ . '/Modules/controller/UserController.php';
-        (new UserController())->passforgotten();
-        break;
-
-    default:
-        require_once __DIR__ . '/public/404.php';
-        break;
-}

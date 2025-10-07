@@ -1,6 +1,6 @@
 <?php
 
-require 'Constant.php';
+require 'constant.php';
 
 final class autoloader
 {
@@ -35,4 +35,4 @@ final class autoloader
 }
 
 // Enregistrement de l'autoloader
-spl_autoload_register('Autoloader::classLoad');
+spl_autoload_register('autoloader::classLoad');
