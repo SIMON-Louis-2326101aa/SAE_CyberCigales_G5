@@ -20,6 +20,6 @@
 		<?php if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
         <button type="submit">Réinitialiser le mot de passe</button>
     </form>
-    <p><a href="/login">Retour</a></p>
+    <p><a href="index.php?controller=formConnection&action=login" class="active">Retour</a></p>
 </body>
 </html>

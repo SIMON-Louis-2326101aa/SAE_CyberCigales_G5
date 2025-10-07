@@ -13,11 +13,11 @@
     E-mail : <input type="email" name="email"> <br>
     Mot de passe : <input type="password" name="mdp"><br>
     <button type="submit">Se connecter</button>
-    <a href="/passforgotten">Mot de passe oublié?</a>
+    <a href="index.php?controller=formMdpOublie&action=login" class="active"><button>Mot de passe oublié?</button></a>
 </form>
-<a href="index.php?controller=formulaireInscription&action=login" class="active">Pas encore inscrit ?</a>
+<a href="index.php?controller=formInscription&action=login" class="active">Pas encore inscrit ?</a>
 <footer>
-    <a href="/Modules/view/legal-mention.php">Mentions Légales</a>
+    <a href="index.php?controller=legalMention&action=login" class="active">Mentions Légales</a>
 </footer>
 </body>
 </html>

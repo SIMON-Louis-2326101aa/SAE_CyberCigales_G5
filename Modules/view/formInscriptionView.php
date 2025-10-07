@@ -33,10 +33,10 @@
 
         <button type="submit">S'inscrire</button>
     </form>
-    <a href="index.php?controller=formulaireConnection&action=login" class="active">Dejà un compte ? Connection</a>
+    <a href="index.php?controller=formConnection&action=login" class="active">Dejà un compte ? Connection</a>
 
 <footer>
-    <a href="/Modules/view/legal-mention.php">Mentions Légales</a>
+    <a href="index.php?controller=legalMention&action=login" class="active">Mentions Légales</a>
 </footer>
 
 </body>

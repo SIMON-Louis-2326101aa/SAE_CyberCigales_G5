@@ -66,13 +66,13 @@ class UserController {
             
             if ($user) {
 				$message = "Un Email de réinitialisation a été envoyé.";
-                require __DIR__ . '/../view/formMdpOublierView.php';
+                require __DIR__ . '/../view/formMdpOublieView.php';
             } else {
                 $error = "Email non trouvé";
-                require __DIR__ . '/../view/formMdpOublierView.php';
+                require __DIR__ . '/../view/formMdpOublieView.php';
             }
         } else {
-            require __DIR__ . '/../view/formMdpOublierView.php';
+            require __DIR__ . '/../view/formMdpOublieView.php';
         }
     }
 

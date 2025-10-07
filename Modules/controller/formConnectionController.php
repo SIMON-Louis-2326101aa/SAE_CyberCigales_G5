@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__ . '/../controller/UserController.php';
 require __DIR__ . '/../view/formConnectionView.php';
-class formulaireConnectionController
+class formConnectionController
 {
     public function login()
     {
-        viewHandler::show("../view/formulaireConnection");
+        viewHandler::show("../view/formConnectionView");
     }
 }

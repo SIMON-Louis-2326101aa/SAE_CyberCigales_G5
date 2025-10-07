@@ -9,7 +9,7 @@
 <body>
 
     <nav>
-        <a href="homepageView.php">Home</a>
+        <a href="index.php?controller=homepage&action=login" class="active">Home</a>
     </nav>
 
     <div id="legal-mention">

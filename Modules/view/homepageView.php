@@ -14,12 +14,12 @@
     <a href="/logout"><button>Deconnexion</button></a>
 <?php else: ?>
     <h1>Bienvenue</h1>
-    <a href="index.php?controller=formulaireInscription&action=login" class="active"><button>Inscription</button></a>
-    <a href="index.php?controller=formulaireConnection&action=login" class="active"><button>Connection</button></a>
+    <a href="index.php?controller=formInscription&action=login" class="active"><button>Inscription</button></a>
+    <a href="index.php?controller=formConnection&action=login" class="active"><button>Connection</button></a>
 <?php endif; ?>
 
 <footer>
-    <a href="/Modules/view/legal-mention.php">Mentions Légales</a>
+    <a href="index.php?controller=legalMention&action=login" class="active">Mentions Légales</a>
 </footer>
 
 </body>

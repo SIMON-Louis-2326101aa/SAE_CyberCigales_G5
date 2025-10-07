@@ -1,10 +1,10 @@
 <?php
 require_once __DIR__ . '/../controller/UserController.php';
 require __DIR__ . '/../view/formInscriptionView.php';
-class formulaireInscriptionController
+class formInscriptionController
 {
     public function login()
     {
-        viewHandler::show("../view/formulaireInsc");
+        viewHandler::show("../view/formInsciptionView");
     }
 }
