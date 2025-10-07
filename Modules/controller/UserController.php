@@ -18,13 +18,13 @@ class UserController {
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                require __DIR__ . '/../view/formulaireInsc.php';
+                require __DIR__ . '/../view/formInscriptionView.php';
                 return;
             }
 
             if ($this->userModel->findByEmail($email)) {
                 $error = "Cet email est déjà utilisé.";
-                require __DIR__ . '/../view/formulaireInsc.php';
+                require __DIR__ . '/../view/formInscriptionView.php';
                 return;
             }
 
@@ -33,7 +33,7 @@ class UserController {
             header("Location: /login");
             exit;
         } else {
-            require __DIR__ . '/../view/formulaireInsc.php';
+            require __DIR__ . '/../view/formInscriptionView.php';
         }
     }
 
@@ -52,10 +52,10 @@ class UserController {
                 exit;
             } else {
                 $error = "Email ou mot de passe incorrect.";
-                require __DIR__ . '/../view/formulaireConnection.php';
+                require __DIR__ . '/../view/formConnectionView.php';
             }
         } else {
-            require __DIR__ . '/../view/formulaireConnection.php';
+            require __DIR__ . '/../view/formConnectionView.php';
         }
     }
     
@@ -66,13 +66,13 @@ class UserController {
             
             if ($user) {
 				$message = "Un Email de réinitialisation a été envoyé.";
-                require __DIR__ . '/../view/formulaireMdpOublier.php';
+                require __DIR__ . '/../view/formMdpOublierView.php';
             } else {
                 $error = "Email non trouvé";
-                require __DIR__ . '/../view/formulaireMdpOublier.php';
+                require __DIR__ . '/../view/formMdpOublierView.php';
             }
         } else {
-            require __DIR__ . '/../view/formulaireMdpOublier.php';
+            require __DIR__ . '/../view/formMdpOublierView.php';
         }
     }
 

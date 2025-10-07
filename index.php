@@ -20,7 +20,7 @@ error_reporting(E_ALL);
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = '/' . trim($uri, '/');
 
-$S_controller = $_GET['controller'] ?? 'homePage';
+$S_controller = $_GET['controller'] ?? 'homepage';
 $S_action = $_GET['action'] ?? 'login';
 
 viewHandler::bufferStart();
