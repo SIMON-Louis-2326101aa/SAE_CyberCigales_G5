@@ -5,6 +5,6 @@ class formInscriptionController
 {
     public function login()
     {
-        viewHandler::show("../view/formInsciptionView");
+        viewHandler::show("../view/formInscriptionView");
     }
 }
