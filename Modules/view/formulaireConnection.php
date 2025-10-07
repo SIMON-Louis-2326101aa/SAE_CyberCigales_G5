@@ -1,11 +1,10 @@
-<?php
-
-?>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8"/>
     <title> Connexion </title>
     <link rel="icon" href="/public/assets/images/favicon.ico">
+    <link rel="stylesheet" href="./_assets/styles/stylesheet.css">
 </head>
 
 <body>
@@ -16,7 +15,7 @@
     <button type="submit">Se connecter</button>
     <a href="/passforgotten">Mot de passe oublié?</a>
 </form>
-<a href="/register">Pas encore inscrit ?</a>
+<a href="index.php?controller=formulaireInscription&action=login" class="active">Pas encore inscrit ?</a>
 <footer>
     <a href="/Modules/view/legal-mention.php">Mentions Légales</a>
 </footer>

@@ -14,8 +14,8 @@
     <a href="/logout"><button>Deconnexion</button></a>
 <?php else: ?>
     <h1>Bienvenue</h1>
-    <a href="/register"><button>Inscription</button></a>
-    <a href="/login"><button>Connexion</button></a>
+    <a href="index.php?controller=formulaireInscription&action=login" class="active"><button>Inscription</button></a>
+    <a href="index.php?controller=formulaireConnection&action=login" class="active"><button>Connection</button></a>
 <?php endif; ?>
 
 <footer>
