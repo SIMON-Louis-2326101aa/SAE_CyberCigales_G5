@@ -1,7 +1,9 @@
 <?php
-
-class HomePageController {
-    public function index() {
-        require __DIR__ . '/../view/homepageView.php';
+require __DIR__ . '/../view/homepageView.php';
+class homePageController
+{
+    public function login()
+    {
+        ViewHandler::show("../view/homePage");
     }
 }
