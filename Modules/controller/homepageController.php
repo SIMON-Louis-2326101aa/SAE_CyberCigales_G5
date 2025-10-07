@@ -4,6 +4,6 @@ class homePageController
 {
     public function login()
     {
-        ViewHandler::show("../view/homePageView");
+        viewHandler::show("../view/homepageView");
     }
 }

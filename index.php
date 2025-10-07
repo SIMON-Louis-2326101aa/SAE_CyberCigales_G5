@@ -23,13 +23,13 @@ $uri = '/' . trim($uri, '/');
 $S_controller = $_GET['controller'] ?? 'homePage';
 $S_action = $_GET['action'] ?? 'login';
 
-ViewHandler::bufferStart();
+viewHandler::bufferStart();
 // Exécution du contrôleur et de l'action
-$C_controller = new ControllerHandler($S_controller, $S_action);
+$C_controller = new controllerHandler($S_controller, $S_action);
 $C_controller->execute();
 
 // Récupère le contenu tamponné
-$displayContent = ViewHandler::bufferCollect();
+$displayContent = viewHandler::bufferCollect();
 $A_params = $C_controller->getParams();
 
 

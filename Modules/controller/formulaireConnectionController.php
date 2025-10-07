@@ -5,6 +5,6 @@ class formulaireConnectionController
 {
     public function login()
     {
-        ViewHandler::show("../view/formulaireConnection");
+        viewHandler::show("../view/formulaireConnection");
     }
 }

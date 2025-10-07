@@ -5,6 +5,6 @@ class formulaireInscriptionController
 {
     public function login()
     {
-        ViewHandler::show("../view/formulaireInsc");
+        viewHandler::show("../view/formulaireInsc");
     }
 }
