@@ -25,7 +25,7 @@ $S_action = $_GET['action'] ?? 'login';
 
 viewHandler::bufferStart();
 // Exécution du contrôleur et de l'action
-$C_controller = new controllerHandler($S_controller, $S_action);
+$C_controller = new ControllerHandler($S_controller, $S_action);
 $C_controller->execute();
 
 // Récupère le contenu tamponné
