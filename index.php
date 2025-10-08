@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/autoloader.php';
-require_once __DIR__ . '/includes/constant.php';
+//require_once __DIR__ . '/includes/constant.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     // Démarre la session uniquement si elle n'est pas déjà démarrée
@@ -25,7 +25,7 @@ $S_action = $_GET['action'] ?? 'login';
 
 viewHandler::bufferStart();
 // Exécution du contrôleur et de l'action
-$C_controller = new ControllerHandler($S_controller, $S_action);
+$C_controller = new controllerHandler($S_controller, $S_action);
 $C_controller->execute();
 
 // Récupère le contenu tamponné
