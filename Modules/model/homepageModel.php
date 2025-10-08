@@ -1,12 +1,12 @@
 <?php
 /**
-* Class homePageModel
+* Class homepageModel
 *
 * Cette classe représente le modèle pour la page d'accueil.
 * Elle hérite de la classe `database` afin de bénéficier de la connexion à la base de données.
 * Le modèle peut être utilisé pour interagir avec la base de données concernant la page d'accueil.
 */
-class homePageModel extends database {
+class homepageModel extends database {
 
 /**
 * homePageModel constructor.
