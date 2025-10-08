@@ -15,7 +15,7 @@ class formInscriptionController
             $nom = trim($_POST['nom'] ?? '');
             $prenom = trim($_POST['prenom'] ?? '');
             $email = trim($_POST['email'] ?? '');
-            $password = $_POST['password'] ?? '';
+            $password = $_POST['mdp'] ?? '';
             $confirm = $_POST['confirm_mdp'] ?? '';
 
             if (empty($nom) || empty($prenom) || empty($email) || empty($password) || empty($confirm)) {

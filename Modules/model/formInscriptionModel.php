@@ -19,11 +19,10 @@ class formInscriptionModel extends database
     public function findByEmail($email): bool
     {
         $bdd = $this->getBdd();
-
-        $sql = "SELECT COUNT(*) FROM users WHERE email = :mail";
+        $sql = "SELECT COUNT(*) as count FROM users WHERE email = :email";
         $stmt = $bdd->prepare($sql);
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute(['email' => $email]);
-        return $stmt->fetch() > 0;
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'] > 0;
     }
 }
