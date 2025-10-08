@@ -3,6 +3,8 @@
     <meta charset="utf-8"/>
     <title>Inscription</title>
     <link rel="icon" href="/public/assets/images/favicon.ico">
+
+    <link rel="stylesheet" href="./_assets/styles/stylesheet.css">
 </head>
 <body>
     <h1>Inscription</h1>

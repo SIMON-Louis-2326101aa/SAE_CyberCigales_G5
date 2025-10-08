@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Mentions Légales</title>
     <link rel="icon" href="/public/assets/images/favicon.ico">
+    <link rel="stylesheet" href="./_assets/styles/stylesheet.css">
 </head>
 
 <body>
