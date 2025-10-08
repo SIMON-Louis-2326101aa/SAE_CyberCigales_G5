@@ -2,7 +2,7 @@
 //require __DIR__ . '/../view/legalMentionView.php';
 class legalMentionController
 {
-    public function login()
+    public function legal()
     {
         viewHandler::show("../view/legalMentionView");
     }

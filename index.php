@@ -21,7 +21,7 @@ $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = '/' . trim($uri, '/');
 
 $S_controller = $_GET['controller'] ?? 'homepage';
-$S_action = $_GET['action'] ?? 'login';
+$S_action = $_GET['action'] ?? 'openHomepage';
 
 viewHandler::bufferStart();
 // Exécution du contrôleur et de l'action

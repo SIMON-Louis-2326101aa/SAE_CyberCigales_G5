@@ -7,7 +7,7 @@
 <body>
     <h1>Inscription</h1>
 
-    <form action="/register" method="post">
+    <form action="index.php?controller=formConnection&action=login" method="post">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
@@ -36,7 +36,7 @@
     <a href="index.php?controller=formConnection&action=login" class="active">Dejà un compte ? Connection</a>
 
 <footer>
-    <a href="index.php?controller=legalMention&action=login" class="active">Mentions Légales</a>
+    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
 </footer>
 
 </body>

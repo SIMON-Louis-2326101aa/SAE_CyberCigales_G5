@@ -42,6 +42,11 @@ final class controllerHandler
         $controller = $this->url['controller'];
         $action = $this->url['action'];
 
+        $controllerFile = Constant::indexDir() . '/Modules/controller/' . $controller . '.php';
+        if (file_exists($controllerFile)) {
+            require_once $controllerFile;
+        }
+
         if (!class_exists($controller)) {
             throw new RuntimeException("'$controller' est introuvable.");
         }
