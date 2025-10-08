@@ -9,7 +9,7 @@
 
 <body>
 <h1> Connection </h1>
-<form action="/login"  method="post">
+<form action="index.php?controller=homepage&action=login"  method="post">
     E-mail : <input type="email" name="email"> <br>
     Mot de passe : <input type="password" name="mdp"><br>
     <button type="submit">Se connecter</button>
