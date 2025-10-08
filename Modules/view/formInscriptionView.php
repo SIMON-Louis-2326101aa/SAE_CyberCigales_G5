@@ -7,7 +7,7 @@
 <body>
     <h1>Inscription</h1>
 
-    <form action="index.php?controller=formInscription&action=register" method="get">
+    <form action="index.php?controller=formInscription&action=register" method="post">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
@@ -22,7 +22,7 @@
                 <input type="email" id="mail" name="email" required>
             </li>
             <li>
-                <label for="mdp">Mot de passe :</label><br>
+                <label for="password">Mot de passe :</label><br>
                 <input type="password" id="mdp" name="mdp" required>
             </li>
             <li>

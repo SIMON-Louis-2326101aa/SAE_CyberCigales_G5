@@ -22,7 +22,7 @@ class formInscriptionModel extends database
 
         $sql = "SELECT COUNT(*) FROM users WHERE email = :mail";
         $stmt = $bdd->prepare($sql);
-        $stmt->bindParam(':mail', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute(['email' => $email]);
         return $stmt->fetch() > 0;
     }
