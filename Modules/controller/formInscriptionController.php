@@ -55,7 +55,9 @@ class formInscriptionController
                     }
 
                     $_SESSION['utilisateur'] = $utilisateur;
-                    $_SESSION['nom'] = $utilisateur['Nom'];
+                    $_SESSION['user_id'] = $utilisateur['id'];
+                    $_SESSION['nom'] = $utilisateur['nom'];
+                    $_SESSION['prenom'] = $utilisateur['prenom'];
                     $_SESSION['email'] = $utilisateur['email'];
 
                     header("Location: /index.php?controller=homepage&action=openHomepage");
