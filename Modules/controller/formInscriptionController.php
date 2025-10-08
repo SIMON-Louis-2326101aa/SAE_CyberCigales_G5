@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../includes/viewHandler.php';
 //require __DIR__ . '/../view/formInscriptionView.php';
 class formInscriptionController
 {
-    private formInscriptionModel $formInscriptionModel;
+    private $formInscriptionModel;
     public function __construct() {
         $this->formInscriptionModel = new formInscriptionModel();
     }
@@ -20,19 +20,19 @@ class formInscriptionController
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                require __DIR__ . '/../view/formInscriptionView.php';
+                viewHandler::show("../view/formInscriptionView", ['error' => $error]); 
                 return;
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
                 $error = "Cet email est déjà utilisé.";
-                require __DIR__ . '/../view/formInscriptionView.php';
+                viewHandler::show("../view/formInscriptionView", ['error' => $error]);
                 return;
             }
 
             $this->formInscriptionModel->register($nom, $prenom, $email, $password);
 
-            //header("Location: /login");
+            header("Location: index.php?controller=formConnection&action=login");
             exit;
         } else {
             viewHandler::show("../view/formInscriptionView");

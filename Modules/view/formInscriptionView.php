@@ -7,7 +7,7 @@
 <body>
     <h1>Inscription</h1>
 
-    <form action="index.php?controller=formConnection&action=login" method="post">
+    <form action="index.php?controller=formInscription&action=register" method="get">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
