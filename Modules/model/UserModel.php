@@ -1,12 +1,12 @@
 <?php
 require_once __DIR__ . '/../../includes/constant.php';
+require_once __DIR__ . '/database.php';
 
-class UserModel {
+class UserModel extends Database{
     private $pdo;
 
     public function __construct() {
-        global $pdo;
-        $this->pdo = $pdo;
+        $this->pdo = $this->getBdd();
     }
 
     public function findByEmail($email) {
@@ -14,13 +14,6 @@ class UserModel {
         $stmt->execute(['email' => $email]);
         return $stmt->fetch();
     }
-
-    public function register($nom, $prenom, $email, $password) {
-        $hash = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $this->pdo->prepare("INSERT INTO users (nom, prenom, email, password)  VALUES (:nom, :prenom, :email, :password) ");
-        return $stmt->execute([ 'nom' => $nom, 'prenom' => $prenom, 'email' => $email, 'password' => $hash]);
-    }
-
 
     public function login($email, $password) {
         $user = $this->findByEmail($email);
