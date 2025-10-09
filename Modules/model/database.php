@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/connexionDB.php';
+require_once __DIR__ . '/../../includes/connexionDB.php';
 
 abstract class database
 {
