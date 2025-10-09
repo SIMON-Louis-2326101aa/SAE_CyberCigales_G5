@@ -17,7 +17,7 @@
     E-mail : <input type="email" name="email" required> <br>
     Mot de passe : <input type="password" name="mdp" required><br>
     <button type="submit" name="login">Se connecter</button>
-    <a href="index.php?controller=formMdpOublie&action=mdpforgot" class="active">Mot de passe oublié?</a>
+    <a href="index.php?controller=forgotPwd&action=forgot" class="active">Mot de passe oublié?</a>
 </form>
 <a href="index.php?controller=formInscription&action=register" class="active">Pas encore inscrit ?</a>
 <footer>
