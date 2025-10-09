@@ -42,5 +42,5 @@ Responsivité du site pour tous les supports
    
 Commentaires et documentation interne du code   
    
-Licence   
+### Licence   
 Projet privé – réservé à l’usage universitaire pour la SAE.   
