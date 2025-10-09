@@ -15,8 +15,8 @@ class accountController
                 header("Location: /index.php?controller=homepage&action=openHomepage");
                 exit();
             } else {
-                // Si la suppression échoue, on affiche l'erreur sur la page du compte
                 $data['error'] = "Une erreur est survenue lors de la suppression de votre compte.";
+                echo $data['error'];
             }
         }
 
