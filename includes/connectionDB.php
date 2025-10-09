@@ -1,5 +1,5 @@
 <?php
-final class connexionDB
+final class connectionDB
 {
     private PDO $pdo;
     private static ?self $instance = null;

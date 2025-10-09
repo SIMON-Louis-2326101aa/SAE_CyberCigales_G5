@@ -2,14 +2,14 @@
 
 require_once __DIR__ . '/database.php';
 
-require_once __DIR__ . '/../../includes/connexionDB.php';
+require_once __DIR__ . '/../../includes/connectionDB.php';
 class forgotPwdModel extends database
 {
-    private connexionDB $db;
+    private connectionDB $db;
 
     public function __construct() {
-        // Supposons que connexionDB est votre classe de singleton/connexion
-        $this->db = connexionDB::getInstance();
+        // Supposons que connectionDB est votre classe de singleton/connexion
+        $this->db = connectionDB::getInstance();
     }
     public function emailExists(string $email): bool
     {

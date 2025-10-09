@@ -1,12 +1,12 @@
 <?php
 require_once __DIR__ . '/database.php';
 
-require_once __DIR__ . '/../../includes/connexionDB.php';
+require_once __DIR__ . '/../../includes/connectionDB.php';
 class formRegisterModel extends database
 {
-    private connexionDB $db;
+    private connectionDB $db;
     public function __construct() {
-        $this->db = connexionDB::getInstance();
+        $this->db = connectionDB::getInstance();
     }
     public function register(string $nom, string $prenom, string $email, string $password): bool
     {
