@@ -15,7 +15,7 @@
 <h1> Connection </h1>
 <form action="index.php?controller=formConnection&action=login"  method="post">
     E-mail : <input type="email" name="email" required> <br>
-    Mot de passe : <input type="password" name="mdp" required><br>
+    Mot de passe : <input type="password" name="pwd" required><br>
     <button type="submit" name="login">Se connecter</button>
     <a href="index.php?controller=forgotPwd&action=forgot" class="active">Mot de passe oublié?</a>
 </form>

@@ -19,4 +19,14 @@ class formConnectionModel extends database
         }
         return null;
     }
+
+    public function emailExists(string $email): bool
+    {
+        $bdd = $this->getBdd();
+        $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        return $stmt->fetchColumn() > 0;
+    }
+
 }
