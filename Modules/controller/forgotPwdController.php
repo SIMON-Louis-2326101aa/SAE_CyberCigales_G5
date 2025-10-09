@@ -31,7 +31,7 @@ class forgotPwdController
                 }
             }
         }
-        viewHandler::show('/forgotPwdView', $data);
+        viewHandler::show('/forgotPwdView');
 
     }
 
