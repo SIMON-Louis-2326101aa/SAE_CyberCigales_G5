@@ -19,6 +19,7 @@ class formConnectionController
             if (empty($email) || empty($password)) {
                 $error = "Veuillez remplir tous les champs.";
                 viewHandler::show("../view/formConnectionView", ['error' => $error]);
+                echo $error;
                 return;
             }
 

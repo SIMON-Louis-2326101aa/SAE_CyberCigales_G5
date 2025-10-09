@@ -26,13 +26,15 @@ class formInscriptionController
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                viewHandler::show("../view/formInscriptionView", ['error' => $error]); 
+                viewHandler::show("../view/formInscriptionView", ['error' => $error]);
+                echo $error;
                 return;
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
                 $error = "Cet email est déjà utilisé.";
                 viewHandler::show("../view/formInscriptionView", ['error' => $error]);
+                echo $error;
                 return;
             }
 
