@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Accueil</title>
+    <title>Compte</title>
     <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
     <link rel="icon" href="/public/assets/images/favicon.ico">
 </head>
@@ -60,7 +60,7 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
         </button>
     </form>
 
-    <a href="index.php?controller=account&action=account" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
+    <a href="index.php?controller=changePwd&action=changePwd" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
 
 <?php endif; ?>
 <footer>

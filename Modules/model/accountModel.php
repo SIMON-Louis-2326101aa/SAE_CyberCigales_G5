@@ -16,18 +16,4 @@ class accountModel extends database
             'email' => $email,
         ]);
     }
-
-    public function changePwd(string $newPassword, string $email): bool
-    {
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-
-        $bdd = $this->getBdd();
-        $sql = "UPDATE users SET password = :password WHERE email = :email";
-        $stmt = $bdd->prepare($sql);
-        return $stmt->execute([
-            'password' => $hashedPassword,
-            'email' => $email
-        ]);
-
-    }
 }
