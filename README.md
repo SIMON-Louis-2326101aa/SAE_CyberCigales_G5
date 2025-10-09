@@ -1,11 +1,11 @@
 # SAE_CyberCigales_G5
 
-Contributeurs
-Louis SIMON
-CONTRUCCI Lou
-Imran Guzelbaba
-Gwenn Diaz
-Hana Badjoudj
+Contributeurs :    
+Louis SIMON   
+CONTRUCCI Lou   
+Imran Guzelbaba    
+Gwenn Diaz    
+Hana Badjoudj    
 
 Commandes a gardé :
 git stash
