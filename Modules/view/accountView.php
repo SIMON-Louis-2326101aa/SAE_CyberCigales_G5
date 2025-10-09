@@ -52,8 +52,16 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
 <?php elseif (isset($_SESSION['user_id'])) : ?>
     <h1>Votre compte</h1>
     <p>Vous etes connecter au compte <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?></p>
-    <a href="index.php?controller=account&action=delete" class="active"><button>Suppremier ce compte</button></a>
-    <a href="index.php?controller=account&action=changePwd" class="active"><button>Modifier le mot de passe</button></a>
+    <form method="POST" action="index.php?controller=account&action=account">
+        <button type="submit" name="delete"
+                onclick="return confirm('Confirmer la suppression ?')"
+                class="danger-button">
+            Supprimer ce compte
+        </button>
+    </form>
+
+    <a href="index.php?controller=account&action=account" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
+
 <?php endif; ?>
 <footer>
     <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
