@@ -20,40 +20,10 @@ Authentification et gestion des sessions utilisateurs
 
 Interface modulaire : pages d’accueil, mentions légales, formulaires
 
-Gestion des accès et sécurité renforcée (.htaccess, autoloader, logs)
-
-CRUD utilisateurs (à finaliser)
+CRUD utilisateurs
 
 Responsivité et accessibilité (à améliorer)
 
-Architecture et Organisation
-text
-SAE_CyberCigales_G5/
-│
-├── Modules/
-│   ├── controller/
-│   ├── model/
-│   └── view/
-│
-├── includes/
-│   ├── autoloader.php
-│   ├── connexionDB.php
-│   ├── constant.php
-│   ├── controllerHandler.php
-│   ├── logSecurity.php
-│   └── viewHandler.php
-│
-├── public/
-│   ├── assets/
-│   │   ├── images/
-│   │   ├── js/
-│   │   └── styles/
-│   └── 404.php
-│
-├── index.php
-├── README.md
-├── .gitignore
-└── .htaccess
 Utilisation
 Accéder à la page d’accueil via index.php.
 
