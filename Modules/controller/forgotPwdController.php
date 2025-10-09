@@ -15,7 +15,7 @@ class forgotPwdController
             $subject = 'Reinitialisation du mot de passe';
             $message = 'Bonjour ! 
             Pour reinitialiser votre mot de passe cliquer sur le lien suivant: 
-            http://localhost:8080/index.php?controller=forgetPwd&action=changePwd';
+            https://escapethecode.alwaysdata.net/index.php?controller=forgetPwd&action=changePwd';
 
             if (mail($to, $subject, $message)) {
                 $data['success'] = "Votre mot de passe a été modifié avec succès.";
