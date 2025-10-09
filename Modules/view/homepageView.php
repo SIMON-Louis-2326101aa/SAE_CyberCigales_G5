@@ -16,7 +16,7 @@
 <?php else: ?>
     <h1>Bienvenue</h1>
     <p>Veuillez vous connecter ou créer un compte</p>
-    <a href="index.php?controller=formInscription&action=register" class="active"><button>Inscription</button></a>
+    <a href="index.php?controller=formRegister&action=register" class="active"><button>Inscription</button></a>
     <a href="index.php?controller=formConnection&action=login" class="active"><button>Connexion</button></a>
 <?php endif; ?>
 

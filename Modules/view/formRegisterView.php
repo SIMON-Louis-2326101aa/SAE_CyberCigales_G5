@@ -25,10 +25,10 @@
                 <input type="email" id="mail" name="email" required><br>
 
                 <label for="password">Mot de passe :</label>
-                <input type="password" id="mdp" name="mdp" required><br>
+                <input type="password" id="pwd" name="pwd" required><br>
 
                 <label for="confirm_mdp">Confirmer le mot de passe :</label>
-                <input type="password" id="confirm_mdp" name="confirm_mdp" required><br>
+                <input type="password" id="confirm_pwd" name="confirm_pwd" required><br>
 
 
         <button type="submit" name="register">S'inscrire</button>

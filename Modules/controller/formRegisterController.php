@@ -1,13 +1,13 @@
 <?php
-require_once __DIR__ . '/../model/formInscriptionModel.php';
+require_once __DIR__ . '/../model/formRegisterModel.php';
 require_once __DIR__ . '/../../includes/viewHandler.php';
 
-//require __DIR__ . '/../view/formInscriptionView.php';
-class formInscriptionController
+//require __DIR__ . '/../view/formRegisterView.php';
+class formRegisterController
 {
     private $formInscriptionModel;
     public function __construct() {
-        $this->formInscriptionModel = new formInscriptionModel();
+        $this->formInscriptionModel = new formRegisterModel();
     }
 
     public function register() {
@@ -15,25 +15,25 @@ class formInscriptionController
             $nom = trim($_POST['nom'] ?? '');
             $prenom = trim($_POST['prenom'] ?? '');
             $email = trim($_POST['email'] ?? '');
-            $password = $_POST['mdp'] ?? '';
-            $confirm = $_POST['confirm_mdp'] ?? '';
+            $password = $_POST['pwd'] ?? '';
+            $confirm = $_POST['confirm_pwd'] ?? '';
 
             if (empty($nom) || empty($prenom) || empty($email) || empty($password) || empty($confirm)) {
                 $error = "Tous les champs obligatoires doivent être remplis.";
-                ViewHandler::show('../view/formInscriptionView', ['error' => $error]);
+                ViewHandler::show('../view/formRegisterView', ['error' => $error]);
                 return;
             }
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                viewHandler::show("../view/formInscriptionView", ['error' => $error]);
+                viewHandler::show("../view/formRegisterView", ['error' => $error]);
                 echo $error;
                 return;
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
                 $error = "Cet email est déjà utilisé.";
-                viewHandler::show("../view/formInscriptionView", ['error' => $error]);
+                viewHandler::show("../view/formRegisterView", ['error' => $error]);
                 echo $error;
                 return;
             }
@@ -72,11 +72,11 @@ class formInscriptionController
                 }
             } else {
                 $error = "Erreur lors de l'inscription.";
-                ViewHandler::show('../view/formInscriptionView', ['error' => $error]);
+                ViewHandler::show('../view/formRegisterView', ['error' => $error]);
                 return;
             }
         }
-        viewHandler::show("../view/formInscriptionView");
+        viewHandler::show("../view/formRegisterView");
 
     }
 }

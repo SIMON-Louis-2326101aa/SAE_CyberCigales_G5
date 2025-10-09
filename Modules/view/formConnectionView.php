@@ -19,7 +19,7 @@
     <button type="submit" name="login">Se connecter</button>
     <a href="index.php?controller=forgotPwd&action=forgot" class="active">Mot de passe oublié?</a>
 </form>
-<a href="index.php?controller=formInscription&action=register" class="active">Pas encore inscrit ?</a>
+<a href="index.php?controller=formRegister&action=register" class="active">Pas encore inscrit ?</a>
 <footer>
     <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
 </footer>

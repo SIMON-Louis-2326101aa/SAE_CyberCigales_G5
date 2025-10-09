@@ -2,7 +2,7 @@
 require_once __DIR__ . '/database.php';
 
 require_once __DIR__ . '/../../includes/connexionDB.php';
-class formInscriptionModel extends database
+class formRegisterModel extends database
 {
     private connexionDB $db;
     public function __construct() {
