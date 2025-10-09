@@ -18,9 +18,6 @@
 
         <label for="mail">E-mail :</label>
         <input type="email" id="mail" name="email" required><br>
-
-<!--        --><?php //if (!empty($message)) echo "<p style='color:green;'>$message</p>"; ?>
-<!--		--><?php //if (!empty($error)) echo "<p style='color:red;'>$error</p>"; ?>
         <button type="submit" name="forgotPwd">Réinitialiser le mot de passe</button>
     </form>
     <p><a href="index.php?controller=formConnection&action=login" class="active">Retour</a></p>
