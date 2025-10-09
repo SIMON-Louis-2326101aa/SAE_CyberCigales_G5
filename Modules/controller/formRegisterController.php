@@ -18,12 +18,6 @@ class formRegisterController
             $password = $_POST['pwd'] ?? '';
             $confirm = $_POST['confirm_pwd'] ?? '';
 
-            if (empty($nom) || empty($prenom) || empty($email) || empty($password) || empty($confirm)) {
-                $error = "Tous les champs obligatoires doivent être remplis.";
-                ViewHandler::show('../view/formRegisterView', ['error' => $error]);
-                return;
-            }
-
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
                 viewHandler::show("../view/formRegisterView", ['error' => $error]);
@@ -68,11 +62,13 @@ class formRegisterController
                     // Fallback : utilisateur non retrouvé
                     $error = "Inscription réussie, mais problème de connexion automatique.";
                     ViewHandler::show('../view/formConnectionView', ['error' => $error]);
+                    echo $error;
                     return;
                 }
             } else {
                 $error = "Erreur lors de l'inscription.";
                 ViewHandler::show('../view/formRegisterView', ['error' => $error]);
+                echo $error;
                 return;
             }
         }
