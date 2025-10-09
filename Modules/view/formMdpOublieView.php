@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
 </head>
 
+<nav>
+    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+</nav>
+
 <body>
 <form action="/passforgotten" method="post">
 	<h2>Vous avez oublié le mot de passe</h2>

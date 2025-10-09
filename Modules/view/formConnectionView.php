@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
 </head>
 
+<nav>
+    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+</nav>
+
 <body>
 <h1> Connection </h1>
 <form action="index.php?controller=formConnection&action=login"  method="post">

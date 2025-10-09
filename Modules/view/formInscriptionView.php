@@ -5,6 +5,11 @@
     <link rel="icon" href="/public/assets/images/favicon.ico">
     <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
 </head>
+
+<nav>
+    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+</nav>
+
 <body>
     <h1>Inscription</h1>
 
