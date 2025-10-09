@@ -1,8 +1,13 @@
 <?php
 require_once __DIR__ . '/database.php';
 
+require_once __DIR__ . '/../../includes/connexionDB.php';
 class formInscriptionModel extends database
 {
+    private connexionDB $db;
+    public function __construct() {
+        $this->db = connexionDB::getInstance();
+    }
     public function register(string $nom, string $prenom, string $email, string $password): bool
     {
         $sql = "INSERT INTO users (nom, prenom, email, password) VALUES (:nom, :prenom, :email, :password)";
