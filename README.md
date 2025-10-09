@@ -31,7 +31,7 @@ Les contrôleurs gèrent les modules utilisateurs.
    
 Les pages principales sont accessibles depuis la racine ou via des routes paramétrées par le contrôleur.   
    
-Points à améliorer :   
+### Points à améliorer :   
 Documentation détaillée (code, modules, installation avancée)   
    
 CRUD utilisateurs : finalisation et tests   
