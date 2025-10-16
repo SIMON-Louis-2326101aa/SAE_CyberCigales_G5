@@ -26,7 +26,7 @@ class formRegisterController
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
-                $error = "Cet email est déjà utilisé.";
+                $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
                 viewHandler::show("../view/formRegisterView", ['error' => $error]);
                 echo $error;
                 return;
