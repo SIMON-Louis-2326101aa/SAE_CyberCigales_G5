@@ -47,6 +47,7 @@ class formConnectionController
             } else {
                 $error = "Email ou mot de passe incorrect.";
                 viewHandler::show("../view/formConnectionView", ['error' => $error]);
+                echo $error;
                 return;
             }
         }

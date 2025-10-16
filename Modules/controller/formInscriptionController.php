@@ -18,12 +18,6 @@ class formInscriptionController
             $password = $_POST['mdp'] ?? '';
             $confirm = $_POST['confirm_mdp'] ?? '';
 
-            if (empty($nom) || empty($prenom) || empty($email) || empty($password) || empty($confirm)) {
-                $error = "Tous les champs obligatoires doivent être remplis.";
-                ViewHandler::show('../view/formInscriptionView', ['error' => $error]);
-                return;
-            }
-
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
                 viewHandler::show("../view/formInscriptionView", ['error' => $error]);
@@ -32,7 +26,7 @@ class formInscriptionController
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
-                $error = "Cet email est déjà utilisé.";
+                $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
                 viewHandler::show("../view/formInscriptionView", ['error' => $error]);
                 echo $error;
                 return;
