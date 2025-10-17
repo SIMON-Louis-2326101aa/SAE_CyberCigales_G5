@@ -22,6 +22,8 @@
 
 <footer>
     <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
+    |
+    <a href="index.php?controller=sitemap&action=show" class="active">Plan du site</a>
 </footer>
 
 </body>
