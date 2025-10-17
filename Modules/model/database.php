@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../includes/connexionDB.php';
+require_once __DIR__ . '/../../includes/connectionDB.php';
 
 abstract class database
 {
@@ -7,8 +7,8 @@ abstract class database
 
     private static function setBdd()
     {
-        // Utiliser connexionDB pour obtenir la connexion
-        $connexion = connexionDB::getInstance();
+        // Utiliser connectionDB pour obtenir la connexion
+        $connexion = connectionDB::getInstance();
         self::$_bdd = $connexion->getPdo();
     }
 

@@ -4,6 +4,6 @@ class legalMentionController
 {
     public function legal()
     {
-        viewHandler::show("../view/legalMentionView");
+        viewHandler::show("legalMentionView", ['pageTitle' => 'Mentions Légales']);
     }
 }

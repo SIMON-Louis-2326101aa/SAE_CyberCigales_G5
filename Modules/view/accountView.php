@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Accueil</title>
-    <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
-    <link rel="icon" href="/public/assets/images/favicon.ico">
-</head>
-<nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
-</nav>
 <?php
 // Vérifier si l'utilisateur est admin
 $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com';
@@ -18,8 +7,8 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
 <h1>Bonjour Admin !</h1>
 <p>Voici la base de donnée : <?php
     // Récupérer tous les utilisateurs avec SQL direct
-    require_once __DIR__ . '/../../includes/connexionDB.php';
-    $db = connexionDB::getInstance();
+    require_once __DIR__ . '/../../includes/connectionDB.php';
+    $db = connectionDB::getInstance();
     $pdo = $db->getPdo();
 
     $stmt = $pdo->query("SELECT * FROM users");
@@ -52,12 +41,14 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
 <?php elseif (isset($_SESSION['user_id'])) : ?>
     <h1>Votre compte</h1>
     <p>Vous etes connecter au compte <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?></p>
-    <a href="index.php?controller=account&action=delete" class="active"><button>Suppremier ce compte</button></a>
-    <a href="index.php?controller=account&action=changePwd" class="active"><button>Modifier le mot de passe</button></a>
-<?php endif; ?>
-<footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
-</footer>
+    <form method="POST" action="index.php?controller=account&action=account">
+        <button type="submit" name="delete"
+                onclick="return confirm('Confirmer la suppression ?')"
+                class="danger-button">
+            Supprimer ce compte
+        </button>
+    </form>
 
-</body>
-</html>
+    <a href="index.php?controller=changePwd&action=changePwd" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
+
+<?php endif; ?>
