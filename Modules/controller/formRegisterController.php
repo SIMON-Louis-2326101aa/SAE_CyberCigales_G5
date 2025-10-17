@@ -35,12 +35,7 @@ class formRegisterController
             $success = $this->formInscriptionModel->register($nom, $prenom, $email, $password);
 
             if ($success) {
-                // Après inscription, envoyer un code de vérification et rediriger vers la page de saisie
-                require_once __DIR__ . '/../model/emailVerificationModel.php';
-                $evm = new emailVerificationModel();
-                $evm->generateAndStoreCode($email);
-                @mail($email, 'Vérification de votre adresse email', "Votre code de vérification vient d'être envoyé.");
-
+                // Après inscription, rediriger vers la demande de code (qui gère l'envoi)
                 header('Location: index.php?controller=emailVerification&action=request&email=' . urlencode($email));
                 exit();
             } else {

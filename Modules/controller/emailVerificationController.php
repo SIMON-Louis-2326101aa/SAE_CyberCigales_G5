@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../model/emailVerificationModel.php';
+require_once __DIR__ . '/../../includes/mailer.php';
 
 class emailVerificationController
 {
@@ -22,11 +23,7 @@ class emailVerificationController
 
         $subject = 'Vérification de votre adresse email';
         $message = "Votre code de vérification est : {$code}\nIl expire dans 10 minutes.";
-        $headers = "From: no-reply@escapethecode.alwaysdata.net\r\n" .
-                   "Reply-To: no-reply@escapethecode.alwaysdata.net\r\n" .
-                   "X-Mailer: PHP/" . phpversion();
-
-        $sent = @mail($email, $subject, $message, $headers);
+        $sent = Mailer::send($email, $subject, $message);
 
         $params = ['email' => $email];
         if ($sent) {
