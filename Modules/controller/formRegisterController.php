@@ -35,36 +35,14 @@ class formRegisterController
             $success = $this->formInscriptionModel->register($nom, $prenom, $email, $password);
 
             if ($success) {
-                // Connexion automatique après inscription
-                require_once(__DIR__ . '/../model/formConnectionModel.php');// Inclure le modèle si nécessaire
-                $connexionModel = new formConnectionModel();
-                $utilisateur = $connexionModel->authenticate($email, $password);
+                // Après inscription, envoyer un code de vérification et rediriger vers la page de saisie
+                require_once __DIR__ . '/../model/emailVerificationModel.php';
+                $evm = new emailVerificationModel();
+                $evm->generateAndStoreCode($email);
+                @mail($email, 'Vérification de votre adresse email', "Votre code de vérification vient d'être envoyé.");
 
-                if ($utilisateur) {
-                    if (session_status() == PHP_SESSION_NONE) {
-                        session_start([
-                            'use_strict_mode' => true,
-                            'cookie_httponly' => true,
-                            'cookie_secure' => true,
-                            'cookie_samesite' => 'None'
-                        ]);
-                    }
-
-                    $_SESSION['utilisateur'] = $utilisateur;
-                    $_SESSION['user_id'] = $utilisateur['id'];
-                    $_SESSION['nom'] = $utilisateur['nom'];
-                    $_SESSION['prenom'] = $utilisateur['prenom'];
-                    $_SESSION['email'] = $utilisateur['email'];
-
-                    header("Location: /index.php?controller=homepage&action=openHomepage");
-                    exit();
-                } else {
-                    // Fallback : utilisateur non retrouvé
-                    $error = "Inscription réussie, mais problème de connexion automatique.";
-                    ViewHandler::show('../view/formConnectionView', ['error' => $error]);
-                    echo $error;
-                    return;
-                }
+                header('Location: index.php?controller=emailVerification&action=request&email=' . urlencode($email));
+                exit();
             } else {
                 $error = "Erreur lors de l'inscription.";
                 ViewHandler::show('../view/formRegisterView', ['error' => $error]);
