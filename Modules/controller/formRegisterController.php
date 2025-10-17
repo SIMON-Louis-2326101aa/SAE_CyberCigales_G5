@@ -20,14 +20,14 @@ class formRegisterController
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
+                viewHandler::show("formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error]);
                 echo $error;
                 return;
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
                 $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
+                viewHandler::show("formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error]);
                 echo $error;
                 return;
             }
@@ -61,18 +61,18 @@ class formRegisterController
                 } else {
                     // Fallback : utilisateur non retrouvé
                     $error = "Inscription réussie, mais problème de connexion automatique.";
-                    ViewHandler::show('../view/formConnectionView', ['error' => $error]);
+                    ViewHandler::show('formConnectionView', ['pageTitle' => 'Connexion', 'error' => $error]);
                     echo $error;
                     return;
                 }
-            } else {
+            } /*else {
                 $error = "Erreur lors de l'inscription.";
                 ViewHandler::show('../view/formRegisterView', ['error' => $error]);
                 echo $error;
                 return;
-            }
+            }*/
         }
-        viewHandler::show("../view/formRegisterView");
+        viewHandler::show("formRegisterView", ['pageTitle' => 'Inscription']);
 
     }
 }

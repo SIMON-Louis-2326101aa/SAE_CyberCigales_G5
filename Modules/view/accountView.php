@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Compte</title>
-    <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
-    <link rel="icon" href="/public/assets/images/favicon.ico">
-</head>
-<nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
-</nav>
 <?php
 // Vérifier si l'utilisateur est admin
 $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com';
@@ -63,9 +52,3 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <a href="index.php?controller=changePwd&action=changePwd" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
 
 <?php endif; ?>
-<footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
-</footer>
-
-</body>
-</html>

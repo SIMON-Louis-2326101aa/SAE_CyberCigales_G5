@@ -1,16 +1,3 @@
-<html lang="fr">
-<head>
-    <meta charset="utf-8"/>
-    <title>Inscription</title>
-    <link rel="icon" href="/public/assets/images/favicon.ico">
-    <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
-</head>
-
-<nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
-</nav>
-
-<body>
     <h1>Inscription</h1>
 
     <form action="index.php?controller=formRegister&action=register" method="post">
@@ -34,10 +21,3 @@
         <button type="submit" name="register">S'inscrire</button>
     </form>
     <a href="index.php?controller=formConnection&action=login" class="active">Dejà un compte ? Connection</a>
-
-<footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
-</footer>
-
-</body>
-</html>

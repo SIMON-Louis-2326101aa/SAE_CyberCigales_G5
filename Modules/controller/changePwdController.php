@@ -29,7 +29,7 @@ class changePwdController
                 }
             }
         }
-        viewHandler::show('../view/changePwdView');
+        viewHandler::show('changePwdView', ['pageTitle' => 'Changer de mot de passe']);
     }
 
 }

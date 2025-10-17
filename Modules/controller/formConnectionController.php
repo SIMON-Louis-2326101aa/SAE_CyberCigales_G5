@@ -18,15 +18,15 @@ class formConnectionController
 
             $utilisateur = $this->formConnectionModel->authenticate($email, $password);
 
-            if ($utilisateur) {
-                if (session_status() == PHP_SESSION_NONE) {
-                    session_start([
-                        'use_strict_mode' => true,
-                        'cookie_httponly' => true,
-                        'cookie_secure' => true,
-                        'cookie_samesite' => 'None'
-                    ]);
-                }
+                if ($utilisateur) {
+                    if (session_status() == PHP_SESSION_NONE) {
+                        session_start([
+                            'use_strict_mode' => true,
+                            'cookie_httponly' => true,
+                            'cookie_secure' => true,
+                            'cookie_samesite' => 'None'
+                        ]);
+                    }
 
                 $_SESSION['utilisateur'] = $utilisateur;
                 $_SESSION['user_id'] = $utilisateur['id'];
@@ -43,7 +43,7 @@ class formConnectionController
                 return;
             }
         }
-        viewHandler::show("../view/formConnectionView");
+        viewHandler::show("formConnectionView", ['pageTitle' => 'Connexion']);
     }
 
     public function logout() {

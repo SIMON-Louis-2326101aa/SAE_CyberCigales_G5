@@ -4,6 +4,6 @@ class homePageController
 {
     public function openHomepage()
     {
-        viewHandler::show("../view/homepageView");
+        viewHandler::show("homepageView", ['pageTitle' => 'Accueil']);
     }
 }

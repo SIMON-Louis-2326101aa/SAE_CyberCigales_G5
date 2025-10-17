@@ -31,13 +31,13 @@ class forgotPwdController
                 }
             }
         }
-        viewHandler::show('/forgotPwdView');
+        viewHandler::show('forgotPwdView', ['pageTitle' => 'Mot de passe oublié']);
 
     }
 
     public function changePwd(){
 
-        viewHandler::show('/changePwdView');
+        viewHandler::show('changePwdView', ['pageTitle' => 'Changer de mot de passe']);
     }
 
 }

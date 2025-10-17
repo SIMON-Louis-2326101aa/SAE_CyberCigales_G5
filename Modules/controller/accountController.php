@@ -20,7 +20,7 @@ class accountController
             }
         }
 
-        viewHandler::show('../view/accountView');
+        viewHandler::show('accountView', ['pageTitle' => 'Mon Compte']);
     }
 
 }
