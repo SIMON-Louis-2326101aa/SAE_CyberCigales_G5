@@ -32,9 +32,13 @@ class emailVerificationController
         if ($sent) {
             $params['info'] = 'Un code vous a été envoyé.';
         } else {
-            // En local, l'envoi peut échouer: afficher le code pour tests
-            $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
-            $params['devCode'] = $code;
+            // En dev/local uniquement, afficher le code pour permettre les tests
+            if (class_exists('Constant') && Constant::isDev()) {
+                $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
+                $params['devCode'] = $code;
+            } else {
+                $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+            }
         }
 
         viewHandler::show('../view/emailVerificationView', $params);

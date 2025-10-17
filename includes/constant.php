@@ -33,4 +33,12 @@ final class Constant
     {
         return self::indexDir() . self::INCLUDES_DIR;
     }
+
+    // Indique si l'on est en environnement de développement/local
+    public static function isDev(): bool
+    {
+        $server = $_SERVER['SERVER_NAME'] ?? '';
+        $host = $_SERVER['HTTP_HOST'] ?? '';
+        return in_array($server, ['127.0.0.1', 'localhost']) || in_array($host, ['127.0.0.1', 'localhost']);
+    }
 }
