@@ -17,6 +17,9 @@
     <?php if (!empty($info)): ?>
         <p><?php echo htmlspecialchars($info); ?></p>
     <?php endif; ?>
+    <?php if (!empty($devCode)): ?>
+        <p><strong>Code (dev/local):</strong> <?php echo htmlspecialchars($devCode); ?></p>
+    <?php endif; ?>
     <?php if (!empty($error)): ?>
         <p style="color:red;"><?php echo htmlspecialchars($error); ?></p>
     <?php endif; ?>

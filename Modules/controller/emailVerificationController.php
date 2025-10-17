@@ -22,9 +22,22 @@ class emailVerificationController
 
         $subject = 'Vérification de votre adresse email';
         $message = "Votre code de vérification est : {$code}\nIl expire dans 10 minutes.";
-        @mail($email, $subject, $message);
+        $headers = "From: no-reply@escapethecode.alwaysdata.net\r\n" .
+                   "Reply-To: no-reply@escapethecode.alwaysdata.net\r\n" .
+                   "X-Mailer: PHP/" . phpversion();
 
-        viewHandler::show('../view/emailVerificationView', ['email' => $email, 'info' => 'Un code vous a été envoyé.']);
+        $sent = @mail($email, $subject, $message, $headers);
+
+        $params = ['email' => $email];
+        if ($sent) {
+            $params['info'] = 'Un code vous a été envoyé.';
+        } else {
+            // En local, l'envoi peut échouer: afficher le code pour tests
+            $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
+            $params['devCode'] = $code;
+        }
+
+        viewHandler::show('../view/emailVerificationView', $params);
     }
 
     public function verify()
