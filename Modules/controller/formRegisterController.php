@@ -18,16 +18,39 @@ class formRegisterController
             $password = $_POST['pwd'] ?? '';
             $confirm = $_POST['confirm_pwd'] ?? '';
 
+            if(strlen($password) < 8) {
+                $error = "Votre mot de passe n'est pas assez long : minimuhn 8 caractères";
+                viewHandler::show("../view/formRegisterView");
+                echo $error;
+                return;
+            }
+
+            $verif_majuscule = '/[A-Z]/'; // Au moins une majuscule
+            $verif_minuscule = '/[a-z]/'; // Au moins une minuscule
+            $verif_chiffre = '/[0-9]/';   // Au moins un chiffre
+            $verif_special = '/[^a-zA-Z0-9]/'; // Au moins un caractère spécial (non alpha-numérique)
+
+            if (!preg_match($verif_majuscule, $password) ||
+                !preg_match($verif_minuscule, $password) ||
+                !preg_match($verif_chiffre, $password) ||
+                !preg_match($verif_special, $password))
+            {
+                $error = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
+                viewHandler::show("../view/formRegisterView");
+                echo $error;
+                return;
+            }
+
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
+                viewHandler::show("../view/formRegisterView");
                 echo $error;
                 return;
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
                 $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
+                viewHandler::show("../view/formRegisterView");
                 echo $error;
                 return;
             }
