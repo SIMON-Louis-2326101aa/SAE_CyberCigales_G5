@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/database.php';
-
 require_once __DIR__ . '/../../includes/connectionDB.php';
+
 class accountModel extends database
 {
     private connectionDB $db;

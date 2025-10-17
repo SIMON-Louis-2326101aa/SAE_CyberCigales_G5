@@ -8,11 +8,11 @@
 </head>
 
 <nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+    <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
 </nav>
 
 <body>
-<form action="index.php?controller=forgotPwd&action=forgot" method="post">
+<form action="index.php?controller=user&action=forgot" method="post">
 	<h2>Vous avez oublié votre mot de passe</h2>
 	<h3>Veuillez mettre votre Email pour réinitialiser votre mot de passe</h3>
 
@@ -20,6 +20,6 @@
         <input type="email" id="mail" name="email" required><br>
         <button type="submit" name="forgotPwd">Réinitialiser le mot de passe</button>
     </form>
-    <p><a href="index.php?controller=formConnection&action=login" class="active">Retour</a></p>
+    <p><a href="index.php?controller=user&action=login" class="active">Retour</a></p>
 </body>
 </html>

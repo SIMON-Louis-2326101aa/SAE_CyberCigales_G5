@@ -7,7 +7,7 @@
     <link rel="icon" href="/public/assets/images/favicon.ico">
 </head>
 <nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+    <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
 </nav>
 <?php
 // Vérifier si l'utilisateur est admin
@@ -47,12 +47,12 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <?php endforeach; ?>
     </tbody>
 </table></p>
-<a href="index.php?controller=formConnection&action=logout"><button>Déconnexion</button></a>
+<a href="index.php?controller=user&action=logout"><button>Déconnexion</button></a>
 
 <?php elseif (isset($_SESSION['user_id'])) : ?>
     <h1>Votre compte</h1>
     <p>Vous etes connecter au compte <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?></p>
-    <form method="POST" action="index.php?controller=account&action=account">
+    <form method="POST" action="index.php?controller=user&action=account">
         <button type="submit" name="delete"
                 onclick="return confirm('Confirmer la suppression ?')"
                 class="danger-button">
@@ -64,7 +64,7 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
 
 <?php endif; ?>
 <footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
+    <a href="index.php?controller=redirection&action=openLegal" class="active">Mentions Légales</a>
 </footer>
 
 </body>

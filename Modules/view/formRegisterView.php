@@ -7,13 +7,13 @@
 </head>
 
 <nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+    <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
 </nav>
 
 <body>
     <h1>Inscription</h1>
 
-    <form action="index.php?controller=formRegister&action=register" method="post">
+    <form action="index.php?controller=user&action=register" method="post">
 
                 <label for="nom">Nom :</label>
                 <input type="text" id="nom" name="nom" required><br>
@@ -33,10 +33,10 @@
 
         <button type="submit" name="register">S'inscrire</button>
     </form>
-    <a href="index.php?controller=formConnection&action=login" class="active">Dejà un compte ? Connection</a>
+    <a href="index.php?controller=user&action=login" class="active">Dejà un compte ? Connection</a>
 
 <footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
+    <a href="index.php?controller=redirection&action=openLegal" class="active">Mentions Légales</a>
 </footer>
 
 </body>

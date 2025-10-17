@@ -7,10 +7,10 @@
     <link rel="icon" href="/public/assets/images/favicon.ico">
 </head>
 <nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+    <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
 </nav>
 <body>
-<form method="POST" action="index.php?controller=changePwd&action=changePwd">
+<form method="POST" action="index.php?controller=user&action=changePwd">
     <h2>Modifier mon mot de passe</h2>
 
     <label for="new_password">Nouveau mot de passe :</label>
@@ -22,7 +22,7 @@
     <button type="submit" name="changePwd">Valider le changement</button>
 </form>
 <footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
+    <a href="index.php?controller=redirection&action=openLegal" class="active">Mentions Légales</a>
 </footer>
 </body>
 </html>

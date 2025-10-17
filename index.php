@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . '/includes/autoloader.php';
-//require_once __DIR__ . '/includes/constant.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     // Démarre la session uniquement si elle n'est pas déjà démarrée
@@ -20,7 +19,7 @@ error_reporting(E_ALL);
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri = '/' . trim($uri, '/');
 
-$S_controller = $_GET['controller'] ?? 'homepage';
+$S_controller = $_GET['controller'] ?? 'redirection';
 $S_action = $_GET['action'] ?? 'openHomepage';
 
 viewHandler::bufferStart();
