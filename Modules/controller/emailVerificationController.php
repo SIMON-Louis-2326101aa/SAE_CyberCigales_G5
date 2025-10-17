@@ -19,6 +19,7 @@ class emailVerificationController
             exit();
         }
 
+        // Toujours regénérer un code frais pour éviter un délai expiré/perdu
         $code = $this->model->generateAndStoreCode($email);
 
         $subject = 'Vérification de votre adresse email';

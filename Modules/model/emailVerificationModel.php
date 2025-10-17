@@ -25,15 +25,15 @@ class emailVerificationModel extends database
     public function generateAndStoreCode(string $email, int $ttlMinutes = 10): string
     {
         $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
-        $expiresAt = (new DateTimeImmutable("+{$ttlMinutes} minutes"))->format('Y-m-d H:i:s');
+        $ttl = max(1, min(60, (int)$ttlMinutes));
 
-        $stmt = $this->getBdd()->prepare(
-            'INSERT INTO email_verification_codes (email, code, expires_at, created_at) VALUES (:email, :code, :expires_at, NOW())'
-        );
+        // Utiliser l'horloge de la base (NOW()) pour éviter les décalages PHP/MySQL
+        $sql = "INSERT INTO email_verification_codes (email, code, expires_at, created_at)
+                VALUES (:email, :code, DATE_ADD(NOW(), INTERVAL {$ttl} MINUTE), NOW())";
+        $stmt = $this->getBdd()->prepare($sql);
         $stmt->execute([
             'email' => $email,
             'code' => $code,
-            'expires_at' => $expiresAt,
         ]);
 
         return $code;
