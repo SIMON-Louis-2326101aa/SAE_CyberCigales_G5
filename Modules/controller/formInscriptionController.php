@@ -68,15 +68,15 @@ class formInscriptionController
                     // Fallback : utilisateur non retrouvé
                     $error = "Inscription réussie, mais problème de connexion automatique.";
                     ViewHandler::show('../view/formConnectionView', ['error' => $error]);
+                    echo $error;
                     return;
                 }
-            } else {
+            } /*else {
                 $error = "Erreur lors de l'inscription.";
                 ViewHandler::show('../view/formInscriptionView', ['error' => $error]);
                 return;
-            }
+            }*/
         }
-        viewHandler::show("../view/formInscriptionView");
-
+        viewHandler::show('formInscriptionView', ['pageTitle' => 'Inscription']);
     }
 }
