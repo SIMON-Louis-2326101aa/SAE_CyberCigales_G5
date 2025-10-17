@@ -27,7 +27,7 @@
     <form action="index.php?controller=emailVerification&action=verify" method="post">
         <input type="hidden" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>">
         <label for="code">Code reçu par email</label>
-        <input type="text" id="code" name="code" required maxlength="6" pattern="\\d{6}" placeholder="123456">
+        <input type="text" id="code" name="code" required maxlength="6" pattern="^[0-9]{6}$" inputmode="numeric" placeholder="123456">
         <button type="submit">Vérifier</button>
     </form>
 

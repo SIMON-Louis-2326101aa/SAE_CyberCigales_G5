@@ -50,6 +50,12 @@ class emailVerificationController
             return;
         }
 
+        // Validation stricte: 6 chiffres
+        if (!preg_match('/^[0-9]{6}$/', $code)) {
+            viewHandler::show('../view/emailVerificationView', ['email' => $email, 'error' => 'Veuillez respecter le format: 6 chiffres.']);
+            return;
+        }
+
         if ($this->model->validateCode($email, $code)) {
             // Marquer l'email comme vérifié si la table users a un champ (non présent ici)
             // Rediriger vers la connexion
