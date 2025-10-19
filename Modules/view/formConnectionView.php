@@ -30,7 +30,24 @@
 <?php endif; ?>
 
 <form action="index.php?controller=formConnection&action=login"  method="post" name="loginForm" autocomplete="on">
-    E-mail : <input type="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required> <br>
+    E-mail : <input type="email" name="email" list="email-suggestions" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required> <br>
+    
+    <datalist id="email-suggestions">
+        <?php
+        // Récupérer les derniers emails utilisés depuis la base de données
+        try {
+            require_once __DIR__ . '/../model/database.php';
+            $db = new database();
+            $stmt = $db->getBdd()->query("SELECT DISTINCT email FROM users ORDER BY created_at DESC LIMIT 10");
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                echo '<option value="' . htmlspecialchars($row['email']) . '">';
+            }
+        } catch (Exception $e) {
+            // En cas d'erreur, ne rien afficher
+        }
+        ?>
+    </datalist>
+    
     Mot de passe : <input type="password" name="pwd" autocomplete="current-password" required><br>
     <button type="submit" name="login">Se connecter</button>
     <a href="index.php?controller=forgotPwd&action=forgot" class="active">Mot de passe oublié?</a>
