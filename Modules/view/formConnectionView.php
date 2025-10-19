@@ -16,7 +16,10 @@
 
 <?php if (isset($_GET['registered']) && $_GET['registered'] === 'success'): ?>
     <div style="background-color: #e8f5e9; border: 2px solid #4caf50; padding: 15px; border-radius: 5px; margin: 15px 0;">
-        <p style="color: #2e7d32; font-weight: bold; margin: 0;">🎉 Inscription réussie ! Votre compte a été créé et votre email a été vérifié. Vous pouvez maintenant vous connecter.</p>
+        <p style="color: #2e7d32; font-weight: bold; margin: 0;">
+            🎉 Inscription réussie<?php if (isset($prenom) && isset($nom)): ?>, <?php echo htmlspecialchars($prenom . ' ' . $nom); ?><?php endif; ?> ! 
+            Votre compte a été créé et votre email a été vérifié. Vous pouvez maintenant vous connecter.
+        </p>
     </div>
 <?php endif; ?>
 

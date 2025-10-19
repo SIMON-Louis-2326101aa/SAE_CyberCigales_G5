@@ -46,10 +46,16 @@ class formConnectionController
             }
         }
         
-        // Pré-remplir l'email si on vient de l'inscription
+        // Pré-remplir les infos si on vient de l'inscription
         $params = [];
         if (isset($_GET['email'])) {
             $params['email'] = $_GET['email'];
+        }
+        if (isset($_GET['nom'])) {
+            $params['nom'] = $_GET['nom'];
+        }
+        if (isset($_GET['prenom'])) {
+            $params['prenom'] = $_GET['prenom'];
         }
         
         viewHandler::show("../view/formConnectionView", $params);

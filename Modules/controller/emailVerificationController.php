@@ -61,10 +61,18 @@ class emailVerificationController
         $codeStatus = $this->model->checkCodeStatus($email, $code);
         
         if ($codeStatus['valid']) {
+            // Récupérer les infos de l'inscription en attente pour les passer à la page de connexion
+            $pending = $this->model->getPendingRegistration($email);
+            
             // Créer le compte utilisateur maintenant que l'email est vérifié
             if ($this->model->createUserAfterVerification($email)) {
-                // Compte créé avec succès, rediriger vers la connexion avec message de succès et email pré-rempli
-                header('Location: index.php?controller=formConnection&action=login&registered=success&email=' . urlencode($email));
+                // Compte créé avec succès, rediriger vers la connexion avec toutes les infos
+                $params = 'registered=success&email=' . urlencode($email);
+                if ($pending) {
+                    $params .= '&nom=' . urlencode($pending['nom']);
+                    $params .= '&prenom=' . urlencode($pending['prenom']);
+                }
+                header('Location: index.php?controller=formConnection&action=login&' . $params);
                 exit();
             } else {
                 // Erreur lors de la création du compte
