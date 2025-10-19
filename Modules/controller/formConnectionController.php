@@ -45,7 +45,14 @@ class formConnectionController
                 return;
             }
         }
-        viewHandler::show("../view/formConnectionView");
+        
+        // Pré-remplir l'email si on vient de l'inscription
+        $params = [];
+        if (isset($_GET['email'])) {
+            $params['email'] = $_GET['email'];
+        }
+        
+        viewHandler::show("../view/formConnectionView", $params);
     }
 
     public function logout() {

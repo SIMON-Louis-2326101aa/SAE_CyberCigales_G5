@@ -63,8 +63,8 @@ class emailVerificationController
         if ($codeStatus['valid']) {
             // Créer le compte utilisateur maintenant que l'email est vérifié
             if ($this->model->createUserAfterVerification($email)) {
-                // Compte créé avec succès, rediriger vers la connexion avec message de succès
-                header('Location: index.php?controller=formConnection&action=login&registered=success');
+                // Compte créé avec succès, rediriger vers la connexion avec message de succès et email pré-rempli
+                header('Location: index.php?controller=formConnection&action=login&registered=success&email=' . urlencode($email));
                 exit();
             } else {
                 // Erreur lors de la création du compte
