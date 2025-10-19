@@ -22,19 +22,19 @@
     <form action="index.php?controller=formRegister&action=register" method="post">
 
                 <label for="nom">Nom :</label>
-                <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($nom ?? ''); ?>" required><br>
+                <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($nom ?? ''); ?>" autocomplete="family-name" required><br>
 
                 <label for="prenom">Prenom :</label>
-                <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($prenom ?? ''); ?>" required><br>
+                <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($prenom ?? ''); ?>" autocomplete="given-name" required><br>
 
                 <label for="mail">E-mail :</label>
-                <input type="email" id="mail" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required><br>
+                <input type="email" id="mail" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required><br>
 
                 <label for="password">Mot de passe :</label>
-                <input type="password" id="pwd" name="pwd" required><br>
+                <input type="password" id="pwd" name="pwd" autocomplete="new-password" required><br>
 
                 <label for="confirm_mdp">Confirmer le mot de passe :</label>
-                <input type="password" id="confirm_pwd" name="confirm_pwd" required><br>
+                <input type="password" id="confirm_pwd" name="confirm_pwd" autocomplete="new-password" required><br>
 
 
         <button type="submit" name="register">S'inscrire</button>
