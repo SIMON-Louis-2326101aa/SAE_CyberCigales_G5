@@ -20,8 +20,12 @@ class formRegisterController
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
-                echo $error;
+                viewHandler::show("../view/formRegisterView", [
+                    'error' => $error,
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email
+                ]);
                 return;
             }
 
@@ -31,12 +35,22 @@ class formRegisterController
             if ($emailStatus['verified']) {
                 // Le compte existe et est vérifié
                 $error = "Un compte avec cet email existe déjà. <a href='index.php?controller=formConnection&action=login'>Connectez-vous ici</a> ou utilisez un autre email.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
+                viewHandler::show("../view/formRegisterView", [
+                    'error' => $error,
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email
+                ]);
                 return;
             } elseif ($emailStatus['pending']) {
                 // Une inscription est en attente de vérification
                 $error = "Une inscription est déjà en cours pour cet email. <a href='index.php?controller=emailVerification&action=request&email=" . urlencode($email) . "'>Cliquez ici pour recevoir un nouveau code</a>.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
+                viewHandler::show("../view/formRegisterView", [
+                    'error' => $error,
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email
+                ]);
                 return;
             }
 
@@ -51,8 +65,12 @@ class formRegisterController
                 exit();
             } else {
                 $error = "Erreur lors de l'inscription.";
-                ViewHandler::show('../view/formRegisterView', ['error' => $error]);
-                echo $error;
+                ViewHandler::show('../view/formRegisterView', [
+                    'error' => $error,
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email
+                ]);
                 return;
             }
         }

@@ -20,8 +20,14 @@
     </div>
 <?php endif; ?>
 
+<?php if (isset($error)): ?>
+    <div style="background-color: #ffebee; border: 1px solid #f44336; padding: 15px; border-radius: 5px; margin: 15px 0;">
+        <p style="color: #c62828; font-weight: bold; margin: 0;">❌ <?php echo htmlspecialchars($error); ?></p>
+    </div>
+<?php endif; ?>
+
 <form action="index.php?controller=formConnection&action=login"  method="post">
-    E-mail : <input type="email" name="email" required> <br>
+    E-mail : <input type="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" required> <br>
     Mot de passe : <input type="password" name="pwd" required><br>
     <button type="submit" name="login">Se connecter</button>
     <a href="index.php?controller=forgotPwd&action=forgot" class="active">Mot de passe oublié?</a>
