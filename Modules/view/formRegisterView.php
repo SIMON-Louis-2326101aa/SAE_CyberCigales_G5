@@ -13,6 +13,12 @@
 <body>
     <h1>Inscription</h1>
 
+    <?php if (isset($error)): ?>
+        <div style="background-color: #ffebee; border: 1px solid #f44336; padding: 15px; border-radius: 5px; margin: 15px 0;">
+            <p style="color: #c62828; font-weight: bold; margin: 0;">⚠️ <?php echo $error; ?></p>
+        </div>
+    <?php endif; ?>
+
     <form action="index.php?controller=formRegister&action=register" method="post">
 
                 <label for="nom">Nom :</label>

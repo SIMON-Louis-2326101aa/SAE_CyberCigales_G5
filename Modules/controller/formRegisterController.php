@@ -25,17 +25,28 @@ class formRegisterController
                 return;
             }
 
-            if ($this->formInscriptionModel->findByEmail($email)) {
-                $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
+            // Vérifier le statut de l'email
+            $emailStatus = $this->formInscriptionModel->getEmailStatus($email);
+            
+            if ($emailStatus['verified']) {
+                // Le compte existe et est vérifié
+                $error = "Un compte avec cet email existe déjà. <a href='index.php?controller=formConnection&action=login'>Connectez-vous ici</a> ou utilisez un autre email.";
                 viewHandler::show("../view/formRegisterView", ['error' => $error]);
-                echo $error;
+                return;
+            } elseif ($emailStatus['pending']) {
+                // Une inscription est en attente de vérification
+                $error = "Une inscription est déjà en cours pour cet email. <a href='index.php?controller=emailVerification&action=request&email=" . urlencode($email) . "'>Cliquez ici pour recevoir un nouveau code</a>.";
+                viewHandler::show("../view/formRegisterView", ['error' => $error]);
                 return;
             }
 
-            $success = $this->formInscriptionModel->register($nom, $prenom, $email, $password);
+            // Stocker l'inscription en attente au lieu de créer le compte immédiatement
+            require_once __DIR__ . '/../model/emailVerificationModel.php';
+            $emailModel = new emailVerificationModel();
+            $success = $emailModel->storePendingRegistration($nom, $prenom, $email, password_hash($password, PASSWORD_BCRYPT));
 
             if ($success) {
-                // Après inscription, rediriger vers la demande de code (qui gère l'envoi)
+                // Après stockage temporaire, rediriger vers la demande de code
                 header('Location: index.php?controller=emailVerification&action=request&email=' . urlencode($email));
                 exit();
             } else {

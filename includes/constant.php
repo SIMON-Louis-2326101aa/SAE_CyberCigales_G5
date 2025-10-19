@@ -39,6 +39,26 @@ final class Constant
     {
         $server = $_SERVER['SERVER_NAME'] ?? '';
         $host = $_SERVER['HTTP_HOST'] ?? '';
-        return in_array($server, ['127.0.0.1', 'localhost']) || in_array($host, ['127.0.0.1', 'localhost']);
+        
+        // Environnements de développement
+        $devEnvironments = ['127.0.0.1', 'localhost', 'dev', 'development'];
+        
+        // Vérifier le serveur et l'host
+        if (in_array($server, $devEnvironments) || in_array($host, $devEnvironments)) {
+            return true;
+        }
+        
+        // Vérifier si on contient "localhost" ou "127.0.0.1" dans l'URL
+        if (strpos($server, 'localhost') !== false || strpos($host, 'localhost') !== false) {
+            return true;
+        }
+        
+        // Vérifier l'IP locale
+        if (strpos($server, '127.0.0.1') !== false || strpos($host, '127.0.0.1') !== false) {
+            return true;
+        }
+        
+        // Par défaut, considérer comme production
+        return false;
     }
 }

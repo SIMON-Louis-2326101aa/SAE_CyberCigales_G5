@@ -57,14 +57,34 @@ class emailVerificationController
             return;
         }
 
-        if ($this->model->validateCode($email, $code)) {
-            // Marquer l'email comme vérifié si la table users a un champ (non présent ici)
-            // Rediriger vers la connexion
-            header('Location: index.php?controller=formConnection&action=login');
-            exit();
+        // Vérifier le statut détaillé du code
+        $codeStatus = $this->model->checkCodeStatus($email, $code);
+        
+        if ($codeStatus['valid']) {
+            // Créer le compte utilisateur maintenant que l'email est vérifié
+            if ($this->model->createUserAfterVerification($email)) {
+                // Compte créé avec succès, rediriger vers la connexion avec message de succès
+                header('Location: index.php?controller=formConnection&action=login&registered=success');
+                exit();
+            } else {
+                // Erreur lors de la création du compte
+                viewHandler::show('../view/emailVerificationView', ['email' => $email, 'error' => 'Erreur lors de la création du compte. Veuillez réessayer.']);
+                return;
+            }
         }
-
-        viewHandler::show('../view/emailVerificationView', ['email' => $email, 'error' => 'Code invalide ou expiré.']);
+        
+        // Afficher un message d'erreur spécifique selon la raison
+        if ($codeStatus['reason'] === 'expired') {
+            viewHandler::show('../view/emailVerificationView', [
+                'email' => $email, 
+                'error' => 'Ce code a expiré. Les codes sont valables 10 minutes. <a href="index.php?controller=emailVerification&action=request&email=' . urlencode($email) . '">Demander un nouveau code</a>.'
+            ]);
+        } else {
+            viewHandler::show('../view/emailVerificationView', [
+                'email' => $email, 
+                'error' => 'Le code saisi est incorrect. Veuillez vérifier et réessayer.'
+            ]);
+        }
     }
 }
 

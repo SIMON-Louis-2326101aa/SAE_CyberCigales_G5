@@ -24,10 +24,47 @@ class formRegisterModel extends database
     public function findByEmail($email): bool
     {
         $bdd = $this->getBdd();
+        
+        // Vérifier si l'email existe déjà dans les utilisateurs
         $sql = "SELECT COUNT(*) as count FROM users WHERE email = :email";
         $stmt = $bdd->prepare($sql);
         $stmt->execute(['email' => $email]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result['count'] > 0) {
+            return true;
+        }
+        
+        // Vérifier aussi dans les inscriptions en attente
+        $sql = "SELECT COUNT(*) as count FROM pending_registrations WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
         return $result['count'] > 0;
+    }
+    
+    // Nouvelle méthode pour obtenir le statut de l'email
+    public function getEmailStatus($email): array
+    {
+        $bdd = $this->getBdd();
+        
+        // Vérifier dans users
+        $sql = "SELECT COUNT(*) as count FROM users WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $inUsers = $stmt->fetch(PDO::FETCH_ASSOC)['count'] > 0;
+        
+        // Vérifier dans pending_registrations
+        $sql = "SELECT COUNT(*) as count FROM pending_registrations WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $inPending = $stmt->fetch(PDO::FETCH_ASSOC)['count'] > 0;
+        
+        return [
+            'exists' => $inUsers || $inPending,
+            'verified' => $inUsers,
+            'pending' => $inPending
+        ];
     }
 }
