@@ -28,20 +28,7 @@
                 <input type="text" id="prenom" name="prenom" value="<?php echo htmlspecialchars($prenom ?? ''); ?>" autocomplete="given-name" required><br>
 
                 <label for="mail">E-mail :</label>
-                <input type="email" id="mail" name="email" list="email-suggestions-register" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required><br>
-                
-                <datalist id="email-suggestions-register">
-                    <?php
-                    // Récupérer les domaines d'email courants pour suggestions
-                    $emailDomains = ['@gmail.com', '@outlook.com', '@yahoo.fr', '@hotmail.com', '@etu.univ-amu.fr'];
-                    $currentEmail = $email ?? '';
-                    if (strpos($currentEmail, '@') === false && !empty($currentEmail)) {
-                        foreach ($emailDomains as $domain) {
-                            echo '<option value="' . htmlspecialchars($currentEmail . $domain) . '">';
-                        }
-                    }
-                    ?>
-                </datalist>
+                <input type="email" id="mail" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required><br>
 
                 <label for="password">Mot de passe :</label>
                 <input type="password" id="pwd" name="pwd" autocomplete="new-password" required><br>
