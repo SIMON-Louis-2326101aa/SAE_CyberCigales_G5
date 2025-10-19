@@ -19,7 +19,7 @@
         </div>
     <?php endif; ?>
 
-    <form action="index.php?controller=formRegister&action=register" method="post">
+    <form action="index.php?controller=formRegister&action=register" method="post" name="registerForm" autocomplete="on">
 
                 <label for="nom">Nom :</label>
                 <input type="text" id="nom" name="nom" value="<?php echo htmlspecialchars($nom ?? ''); ?>" autocomplete="family-name" required><br>

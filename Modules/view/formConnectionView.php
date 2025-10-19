@@ -29,7 +29,7 @@
     </div>
 <?php endif; ?>
 
-<form action="index.php?controller=formConnection&action=login"  method="post">
+<form action="index.php?controller=formConnection&action=login"  method="post" name="loginForm" autocomplete="on">
     E-mail : <input type="email" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required> <br>
     Mot de passe : <input type="password" name="pwd" autocomplete="current-password" required><br>
     <button type="submit" name="login">Se connecter</button>
