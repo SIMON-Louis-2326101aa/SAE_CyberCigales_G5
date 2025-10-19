@@ -30,7 +30,7 @@
 <?php endif; ?>
 
 <form action="index.php?controller=formConnection&action=login"  method="post" name="loginForm" autocomplete="on">
-    E-mail : <input type="email" name="email" list="email-suggestions" value="<?php echo htmlspecialchars($email ?? ''); ?>" autocomplete="email" required> <br>
+    E-mail : <input type="email" name="email" list="email-suggestions" autocomplete="email" required> <br>
     
     <datalist id="email-suggestions">
         <?php
