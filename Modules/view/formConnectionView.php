@@ -36,9 +36,9 @@
         <?php
         // Récupérer les derniers emails utilisés depuis la base de données
         try {
-            require_once __DIR__ . '/../model/database.php';
-            $db = new database();
-            $stmt = $db->getBdd()->query("SELECT DISTINCT email FROM users ORDER BY created_at DESC LIMIT 10");
+            require_once __DIR__ . '/../../includes/connectionDB.php';
+            $db = connectionDB::getInstance();
+            $stmt = $db->getPdo()->query("SELECT DISTINCT email FROM users ORDER BY created_at DESC LIMIT 10");
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 echo '<option value="' . htmlspecialchars($row['email']) . '">';
             }
