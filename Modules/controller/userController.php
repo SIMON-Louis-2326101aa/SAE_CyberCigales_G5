@@ -179,7 +179,7 @@ class userController
 
             if(strlen($newPassword) < 8) {
                 $error = "Votre mot de passe n'est pas assez long : minimun 8 caractères";
-                viewHandler::show("../view/formRegisterView");
+                viewHandler::show("../view/changePwdView");
                 echo $error;
                 return;
             }
@@ -195,7 +195,7 @@ class userController
                 !preg_match($verif_special, $newPassword))
             {
                 $error = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
-                viewHandler::show("../view/formRegisterView");
+                viewHandler::show("../view/changePwdView");
                 echo $error;
                 return;
             }
