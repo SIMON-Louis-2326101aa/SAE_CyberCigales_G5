@@ -29,14 +29,14 @@ class userController
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                header("Location: /index.php?controller=redirection&action=openFormRegister");
+                header("Location: index.php?controller=redirection&action=openFormRegister");
                 echo $error;
                 return;
             }
 
             if ($this->formInscriptionModel->findByEmail($email)) {
                 $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
-                header("Location: /index.php?controller=redirection&action=openFormRegister");
+                header("Location: index.php?controller=redirection&action=openFormRegister");
                 echo $error;
                 return;
             }
@@ -65,23 +65,23 @@ class userController
                     $_SESSION['prenom'] = $utilisateur['prenom'];
                     $_SESSION['email'] = $utilisateur['email'];
 
-                    header("Location: /index.php?controller=redirection&action=openHomepage");
+                    header("Location: index.php?controller=redirection&action=openHomepage");
                     exit();
                 } else {
                     // Fallback : utilisateur non retrouvé
                     $error = "Inscription réussie, mais problème de connexion automatique.";
-                    header("Location: /index.php?controller=redirection&action=openFormConnection");
+                    header("Location: index.php?controller=redirection&action=openFormConnection");
                     echo $error;
                     return;
                 }
             } else {
                 $error = "Erreur lors de l'inscription.";
-                header("Location: /index.php?controller=redirection&action=openFormRegister");
+                header("Location: index.php?controller=redirection&action=openFormRegister");
                 echo $error;
                 return;
             }
         }
-        header("Location: /index.php?controller=redirection&action=openFormRegister");
+        header("Location: index.php?controller=redirection&action=openFormRegister");
     }
 
     public function login()
