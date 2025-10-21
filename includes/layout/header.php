@@ -7,6 +7,10 @@
     <link rel="icon" href="/public/assets/images/favicon.ico">
 </head>
 <body>
-<nav>
-    <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+<nav class="nav-menu">
+
+    <div id="nav-menu-sections">
+        <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+    </div>
+
 </nav>
