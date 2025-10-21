@@ -1,23 +1,11 @@
 <?php
-require_once __DIR__ . '/../model/formRegisterModel.php';
-require_once __DIR__ . '/../model/formConnectionModel.php';
-require_once __DIR__ . "/../model/forgotPwdModel.php";
-require_once __DIR__ . "/../model/changePwdModel.php";
-require_once __DIR__ . "/../model/accountModel.php";
+require_once __DIR__ . '/../model/userModel.php';
 require_once __DIR__ . '/../../includes/viewHandler.php';
 class userController
 {
-    private $formInscriptionModel;
-    private $formConnectionModel;
-    private $forgotPwdModel;
-    private $changePwdModel;
-    private $accountModel;
+    private $userModel;
     public function __construct() {
-        $this->formInscriptionModel = new formRegisterModel();
-        $this->formConnectionModel = new formConnectionModel();
-        $this->forgotPwdModel = new forgotPwdModel();
-        $this->changePwdModel = new changePwdModel();
-        $this->accountModel = new accountModel();
+        $this->userModel = new userModel();
     }
     public function register() {
         if (isset($_POST['register'])) {
@@ -34,19 +22,18 @@ class userController
                 return;
             }
 
-            if ($this->formInscriptionModel->findByEmail($email)) {
+            if ($this->userModel->findByEmail($email)) {
                 $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
                 header("Location: index.php?controller=redirection&action=openFormRegister");
                 echo $error;
                 return;
             }
 
-            $success = $this->formInscriptionModel->register($nom, $prenom, $email, $password);
+            $success = $this->userModel->register($nom, $prenom, $email, $password);
 
             if ($success) {
                 // Connexion automatique après inscription
-                require_once(__DIR__ . '/../model/formConnectionModel.php');// Inclure le modèle si nécessaire
-                $connexionModel = new formConnectionModel();
+                $connexionModel = new userModel();
                 $utilisateur = $connexionModel->authenticate($email, $password);
 
                 if ($utilisateur) {
@@ -90,7 +77,7 @@ class userController
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['pwd'] ?? '';
 
-            $utilisateur = $this->formConnectionModel->authenticate($email, $password);
+            $utilisateur = $this->userModel->authenticate($email, $password);
 
             if ($utilisateur) {
                 if (session_status() == PHP_SESSION_NONE) {
@@ -137,7 +124,7 @@ class userController
     public function forgot(){
         if (isset($_POST['forgotPwd'])) {
             $email = $_POST['email'] ?? '';
-            if (!$this->forgotPwdModel->emailExists($email)) {
+            if (!$this->userModel->emailExists($email)) {
                 $data['error'] = "L'email n'existe pas ! Veuillez retourner en arriere pour vous inscrire.";
                 echo $data['error'];
             } else {
@@ -174,7 +161,7 @@ class userController
                 $data['error'] = "Les mots de passe ne correspondent pas.";
                 echo $data['error'];
             } else {
-                if ($this->changePwdModel->changePwd($newPassword, $email)) {
+                if ($this->userModel->changePwd($newPassword, $email)) {
                     $data['success'] = "Votre mot de passe a été modifié avec succès.";
                     echo $data['success'];
                 } else {
@@ -189,7 +176,7 @@ class userController
 
         if (isset($_POST['delete'])) {
             $email = $_SESSION['email'];
-            if ($this->accountModel->delete($email)) {
+            if ($this->userModel->delete($email)) {
                 session_destroy();
                 header("Location: /index.php?controller=redirection&action=openHomepage");
                 exit();
