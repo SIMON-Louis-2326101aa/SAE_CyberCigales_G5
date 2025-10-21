@@ -22,6 +22,29 @@ class userController
                 return;
             }
 
+            if(strlen($password) < 8) {
+                $error = "Votre mot de passe n'est pas assez long : minimun 8 caractères";
+                viewHandler::show("../view/formRegisterView");
+                echo $error;
+                return;
+            }
+
+            $verif_majuscule = '/[A-Z]/'; // Au moins une majuscule
+            $verif_minuscule = '/[a-z]/'; // Au moins une minuscule
+            $verif_chiffre = '/[0-9]/';   // Au moins un chiffre
+            $verif_special = '/[^a-zA-Z0-9]/'; // Au moins un caractère spécial (non alpha-numérique)
+
+            if (!preg_match($verif_majuscule, $password) ||
+                !preg_match($verif_minuscule, $password) ||
+                !preg_match($verif_chiffre, $password) ||
+                !preg_match($verif_special, $password))
+            {
+                $error = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
+                viewHandler::show("../view/formRegisterView");
+                echo $error;
+                return;
+            }
+
             if ($this->userModel->findByEmail($email)) {
                 $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
                 header("Location: index.php?controller=redirection&action=openFormRegister");
@@ -153,6 +176,29 @@ class userController
             $newPassword = $_POST['new_password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
             $email = $_SESSION['email'];
+
+            if(strlen($newPassword) < 8) {
+                $error = "Votre mot de passe n'est pas assez long : minimun 8 caractères";
+                viewHandler::show("../view/formRegisterView");
+                echo $error;
+                return;
+            }
+
+            $verif_majuscule = '/[A-Z]/'; // Au moins une majuscule
+            $verif_minuscule = '/[a-z]/'; // Au moins une minuscule
+            $verif_chiffre = '/[0-9]/';   // Au moins un chiffre
+            $verif_special = '/[^a-zA-Z0-9]/'; // Au moins un caractère spécial (non alpha-numérique)
+
+            if (!preg_match($verif_majuscule, $newPassword) ||
+                !preg_match($verif_minuscule, $newPassword) ||
+                !preg_match($verif_chiffre, $newPassword) ||
+                !preg_match($verif_special, $newPassword))
+            {
+                $error = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
+                viewHandler::show("../view/formRegisterView");
+                echo $error;
+                return;
+            }
 
             if (empty($newPassword) || empty($confirmPassword)) {
                 $data['error'] = "Veuillez remplir les deux champs de mot de passe.";

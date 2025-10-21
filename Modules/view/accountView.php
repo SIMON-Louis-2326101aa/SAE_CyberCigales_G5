@@ -48,8 +48,5 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
             Supprimer ce compte
         </button>
     </form>
-
     <a href="index.php?controller=user&action=changePwd" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
-    <a href="index.php?controller=user&action=changePwd" class="active"><button name="changePwd">Modifier le mot de passe</button></a>
-
 <?php endif; ?>
