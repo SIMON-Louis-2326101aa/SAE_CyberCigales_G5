@@ -1,4 +1,4 @@
-<form action="index.php?controller=forgotPwd&action=forgot" method="post">
+<form action="index.php?controller=user&action=forgot" method="post">
 	<h2>Vous avez oublié votre mot de passe</h2>
 	<h3>Veuillez mettre votre Email pour réinitialiser votre mot de passe</h3>
 

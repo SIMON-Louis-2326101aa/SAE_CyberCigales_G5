@@ -5,4 +5,4 @@
     <button type="submit" name="login">Se connecter</button>
     <a href="index.php?controller=user&action=forgot" class="active">Mot de passe oublié?</a>
 </form>
-<a href="index.php?controller=formRegister&action=register" class="active">Pas encore inscrit ?</a>
+<a href="index.php?controller=user&action=register" class="active">Pas encore inscrit ?</a>

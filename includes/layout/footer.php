@@ -1,5 +1,5 @@
 <footer>
-    <a href="index.php?controller=legalMention&action=legal" class="active">Mentions Légales</a>
+    <a href="index.php?controller=redirection&action=openLegal" class="active">Mentions Légales</a>
 </footer>
 
 </body>

@@ -1,4 +1,4 @@
-<form method="POST" action="index.php?controller=changePwd&action=changePwd">
+<form method="POST" action="index.php?controller=user&action=changePwd">
     <h2>Modifier mon mot de passe</h2>
 
     <label for="new_password">Nouveau mot de passe :</label>

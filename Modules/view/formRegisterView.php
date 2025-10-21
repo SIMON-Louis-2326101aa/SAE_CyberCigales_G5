@@ -20,4 +20,4 @@
 
         <button type="submit" name="register">S'inscrire</button>
     </form>
-    <a href="index.php?controller=formConnection&action=login" class="active">Dejà un compte ? Connection</a>
+    <a href="index.php?controller=user&action=login" class="active">Dejà un compte ? Connection</a>
