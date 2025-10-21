@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
 
 // Définir les paramètres (lus depuis le .env)
@@ -61,6 +61,4 @@ if ($output) {
         }
     }
 }
-
-// Pour des raisons de sécurité, le script ne doit rien afficher en sortie
 exit(0);
