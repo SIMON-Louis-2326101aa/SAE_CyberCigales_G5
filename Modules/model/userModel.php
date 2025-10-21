@@ -2,7 +2,7 @@
 require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/../../includes/connectionDB.php';
 
-class userModel
+class userModel extends database
 {
     private connectionDB $db;
 
