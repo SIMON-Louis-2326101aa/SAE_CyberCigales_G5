@@ -5,21 +5,30 @@ final class connectionDB
     private static ?self $instance = null;
 
     // Idéalement: lire depuis l'environnement
-    private const DB_HOST = 'mysql-escapethecode.alwaysdata.net';
-    private const DB_NAME = 'escapethecode_bd';
-    private const DB_USER = '433487';
-    private const DB_PASS = 'SAECyberCigales';
+    private const DB_HOST = 'DB_HOST';
+    private const DB_NAME = 'DB_NAME';
+    private const DB_USER = 'DB_USER';
+    private const DB_PASS = 'DB_PASS';
 
     private function __construct()
     {
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', self::DB_HOST, self::DB_NAME);
+        $host = $_ENV[self::DB_HOST] ?? getenv(self::DB_HOST);
+        $name = $_ENV[self::DB_NAME] ?? getenv(self::DB_NAME);
+        $user = $_ENV[self::DB_USER] ?? getenv(self::DB_USER);
+        $pass = $_ENV[self::DB_PASS] ?? getenv(self::DB_PASS);
+
+        if (!$host || !$name || !$user) {
+            throw new RuntimeException('Les variables d\'environnement de connexion à la DB sont manquantes.');
+        }
+
+        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $host, $name);
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ];
         try {
-            $this->pdo = new PDO($dsn, self::DB_USER, self::DB_PASS, $options);
+            $this->pdo = new PDO($dsn, $user, $pass, $options);
         } catch (PDOException $e) {
             // En prod: log + message générique
             throw new RuntimeException('Erreur de connexion à la base de données.');
