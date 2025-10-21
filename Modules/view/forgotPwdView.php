@@ -6,4 +6,4 @@
         <input type="email" id="mail" name="email" required><br>
         <button type="submit" name="forgotPwd">Réinitialiser le mot de passe</button>
     </form>
-    <p><a href="index.php?controller=formConnection&action=login" class="active">Retour</a></p>
+    <p><a href="index.php?controller=user&action=login" class="active">Retour</a></p>
