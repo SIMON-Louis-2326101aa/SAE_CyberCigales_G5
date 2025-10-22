@@ -107,7 +107,7 @@ h2 {
 }
 
 /* Responsive */
-@media screen and (max-width: 768px) {
+ @media screen and (max-width: 768px) {
     body {
         font-size: 14px;
     }
@@ -134,4 +134,74 @@ h2 {
     #nav-auth-buttons {
         justify-content: center;
     }
+}
+
+.btn {
+    font-family: 'Arial', sans-serif;
+    display: inline-block;
+}
+
+.db-table{
+    color: #333;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+a {
+    color: #0000ff;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.theme-button {
+    background-color: #101050;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+nav a.active {
+    /* Styles will be inherited from .theme-button or handled by parent flex container */
+}
+
+nav a.active:hover {
+    background-color: #AA5010;
+    color: black;
+}
+
+.theme-button:hover {
+    background-color: #AA5010;
+    color: black;
+}
+
+/* Theme Sombre */
+body.dark-theme {
+    background: #333;
+    color: white;
+}
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme a,
+body.dark-theme .db-table {
+    color: white;
+}
+
+body.dark-theme .theme-button,
+body.dark-theme nav a.active {
+    background-color: #AA5010;
+    color: white;
+}
+
+body.dark-theme .theme-button:hover,
+body.dark-theme nav a.active:hover {
+    background-color: #101050;
+    color: white;
 }
