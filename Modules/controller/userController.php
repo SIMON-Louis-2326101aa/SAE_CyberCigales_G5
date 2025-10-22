@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../model/userModel.php';
 require_once __DIR__ . '/../../includes/viewHandler.php';
+require_once __DIR__ . '/../model/emailVerificationModel.php';
+require_once __DIR__ . '/../../includes/mailer.php';
 class userController
 {
     private $userModel;
@@ -14,6 +16,9 @@ class userController
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['pwd'] ?? '';
             $confirm = $_POST['confirm_pwd'] ?? '';
+
+            $emailModel = new emailVerificationModel();
+
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
@@ -45,48 +50,72 @@ class userController
                 return;
             }
 
-            if ($this->userModel->findByEmail($email)) {
-                $error = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
-                header("Location: index.php?controller=redirection&action=openFormRegister");
+            // Vérifier le statut de l'email
+            $emailStatus = $this->userModel->getEmailStatus($email);
+
+            if ($emailStatus['verified']) {
+                // Le compte existe et est vérifié
+                $error = "Inscription imposible .";
+                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Vérication de l\'email'],['error' => $error]);
                 echo $error;
                 return;
             }
 
-            $success = $this->userModel->register($nom, $prenom, $email, $password);
+            // Stocker l'inscription en attente au lieu de créer le compte immédiatement
+            $emailModel = new emailVerificationModel();
+
+            if ($emailStatus['pending']) {
+                // Si déjà en attente, renvoyer un nouveau code et afficher la vue de vérification
+                $code = $emailModel->generateAndStoreCode($email);
+
+                $subject = 'Vérification de votre adresse email';
+                $message = "Votre code de vérification est : {$code}\nIl expire dans 10 minutes.";
+                $sent = Mailer::send($email, $subject, $message);
+
+                $params = ['email' => $email];
+                if ($sent) {
+                    $params['info'] = 'Un nouveau code vous a été envoyé.';
+                } else {
+                    if (class_exists('Constant') && Constant::isDev()) {
+                        $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
+                        $params['devCode'] = $code;
+                    } else {
+                        $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+                    }
+                }
+
+                viewHandler::show('../view/emailVerificationView', $params);
+                return;
+            }
+
+            // Stocker l'inscription en attente (nouvelle inscription)
+            $success = $emailModel->storePendingRegistration($nom, $prenom, $email, password_hash($password, PASSWORD_BCRYPT));
 
             if ($success) {
-                // Connexion automatique après inscription
-                $connexionModel = new userModel();
-                $utilisateur = $connexionModel->authenticate($email, $password);
+                // Générer et envoyer le code, puis afficher la vue de vérification (ne pas auto-login)
+                $code = $emailModel->generateAndStoreCode($email);
 
-                if ($utilisateur) {
-                    if (session_status() == PHP_SESSION_NONE) {
-                        session_start([
-                            'use_strict_mode' => true,
-                            'cookie_httponly' => true,
-                            'cookie_secure' => true,
-                            'cookie_samesite' => 'None'
-                        ]);
-                    }
+                $subject = 'Vérification de votre adresse email';
+                $message = "Votre code de vérification est : {$code}\nIl expire dans 10 minutes.";
+                $sent = Mailer::send($email, $subject, $message);
 
-                    $_SESSION['utilisateur'] = $utilisateur;
-                    $_SESSION['user_id'] = $utilisateur['id'];
-                    $_SESSION['nom'] = $utilisateur['nom'];
-                    $_SESSION['prenom'] = $utilisateur['prenom'];
-                    $_SESSION['email'] = $utilisateur['email'];
-
-                    header("Location: index.php?controller=redirection&action=openHomepage");
-                    exit();
+                $params = ['email' => $email];
+                if ($sent) {
+                    $params['info'] = 'Un code vous a été envoyé. Vérifiez votre boîte mail.';
                 } else {
-                    // Fallback : utilisateur non retrouvé
-                    $error = "Inscription réussie, mais problème de connexion automatique.";
-                    header("Location: index.php?controller=redirection&action=openFormConnection");
-                    echo $error;
-                    return;
+                    if (class_exists('Constant') && Constant::isDev()) {
+                        $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
+                        $params['devCode'] = $code;
+                    } else {
+                        $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+                    }
                 }
+
+                viewHandler::show('../view/emailVerificationView', $params);
+                return;
             } else {
                 $error = "Erreur lors de l'inscription.";
-                header("Location: index.php?controller=redirection&action=openFormRegister");
+                viewHandler::show("../view/formRegisterView", ['error' => $error]);
                 echo $error;
                 return;
             }

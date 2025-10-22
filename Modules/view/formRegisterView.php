@@ -1,5 +1,5 @@
     <h1>Inscription</h1>
-
+    <?php if (isset($error)): ?>    <?php endif; ?>
     <form action="index.php?controller=user&action=register" method="post">
 
                 <label for="nom">Nom :</label>

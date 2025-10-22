@@ -1,14 +1,17 @@
 <?php
 require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/../../includes/connectionDB.php';
+require_once __DIR__ . '/../model/emailVerificationModel.php';
 
 class userModel extends database
 {
     private connectionDB $db;
+    private $eModel;
 
     public function __construct()
     {
         $this->db = connectionDB::getInstance();
+        $this->eModel = new emailVerificationModel();
     }
     public function register(string $nom, string $prenom, string $email, string $password): bool
     {
@@ -21,6 +24,35 @@ class userModel extends database
             'email' => $email,
             'password' => $hash
         ]);
+    }
+    // Créer le compte utilisateur après vérification
+    public function createUserAfterVerification(string $email): bool
+    {
+        $pending = $this->eModel->getPendingRegistration($email);
+        if (!$pending) {
+            return false;
+        }
+
+        // Créer l'utilisateur avec email vérifié
+        $stmt = $this->getBdd()->prepare(
+            'INSERT INTO users (nom, prenom, email, password, email_verified, created_at) 
+             VALUES (:nom, :prenom, :email, :password, TRUE, NOW())'
+        );
+
+        $success = $stmt->execute([
+            'nom' => $pending['nom'],
+            'prenom' => $pending['prenom'],
+            'email' => $pending['email'],
+            'password' => $pending['password']
+        ]);
+
+        if ($success) {
+            // Supprimer l'inscription en attente
+            $stmt = $this->getBdd()->prepare('DELETE FROM pending_registrations WHERE email = :email');
+            $stmt->execute(['email' => $email]);
+        }
+
+        return $success;
     }
     public function findByEmail($email): bool
     {
@@ -71,4 +103,28 @@ class userModel extends database
             'email' => $email,
         ]);
     }
+    // Nouvelle méthode pour obtenir le statut de l'email
+    public function getEmailStatus($email): array
+    {
+        $bdd = $this->getBdd();
+
+        // Vérifier dans users
+        $sql = "SELECT COUNT(*) as count FROM users WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $inUsers = $stmt->fetch(PDO::FETCH_ASSOC)['count'] > 0;
+
+        // Vérifier dans pending_registrations
+        $sql = "SELECT COUNT(*) as count FROM pending_registrations WHERE email = :email";
+        $stmt = $bdd->prepare($sql);
+        $stmt->execute(['email' => $email]);
+        $inPending = $stmt->fetch(PDO::FETCH_ASSOC)['count'] > 0;
+
+        return [
+            'exists' => $inUsers || $inPending,
+            'verified' => $inUsers,
+            'pending' => $inPending
+        ];
+    }
+
 }
