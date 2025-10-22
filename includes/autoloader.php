@@ -1,10 +1,29 @@
 <?php
+/**
+ * Autoloader - Chargement automatique des classes
+ * 
+ * Ce fichier implémente l'autoloading de classes pour le projet.
+ * Il cherche automatiquement les fichiers de classes dans les différents répertoires.
+ * 
+ * Fonctionnement :
+ * - Quand une classe est instanciée (ex: new userModel()), PHP appelle automatiquement ClassLoad()
+ * - La méthode cherche le fichier correspondant dans includes/, Modules/model/, Modules/view/, Modules/controller/
+ * - Si trouvé, le fichier est chargé (require) et la classe devient disponible
+ * 
+ * @author SAE CyberCigales G5
+ * @version 1.0
+ */
 
 require 'constant.php';
 
 final class autoloader
 {
-
+    /**
+     * Charge un fichier PHP s'il est lisible
+     * 
+     * @param string $S_toLoad Chemin complet vers le fichier à charger
+     * @return bool True si le fichier a été chargé, False sinon
+     */
     private static function _load(string $S_toLoad): bool
     {
         if (is_readable($S_toLoad)) {
@@ -13,6 +32,20 @@ final class autoloader
         }
         return false;
     }
+    
+    /**
+     * Charge automatiquement une classe en cherchant dans les différents répertoires
+     * 
+     * Cette méthode est appelée automatiquement par PHP quand une classe est utilisée
+     * mais n'a pas encore été chargée. Elle cherche dans l'ordre :
+     * 1. includes/ (classes utilitaires)
+     * 2. Modules/model/ (modèles de données)
+     * 3. Modules/view/ (vues)
+     * 4. Modules/controller/ (contrôleurs)
+     * 
+     * @param string $S_className Nom de la classe à charger
+     * @return bool True si la classe a été trouvée et chargée, False sinon
+     */
     public static function ClassLoad(string $S_className): bool
     {
         $directories = [
