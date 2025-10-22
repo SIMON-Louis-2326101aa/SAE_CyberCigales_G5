@@ -173,50 +173,90 @@ class userController
         header("Location: index.php?controller=redirection&action=openHomepage");
         exit();
     }
+
     public function forgot(){
         if (isset($_POST['forgotPwd'])) {
-            $email = $_POST['email'] ?? '';
+            $email = trim($_POST['email'] ?? '');
+
             if (!$this->userModel->emailExists($email)) {
-                $data['error'] = "L'email n'existe pas ! Veuillez retourner en arriere pour vous inscrire.";
+                $data['error'] = "L'email n'existe pas ! Veuillez retourner en arrière pour vous inscrire.";
                 echo $data['error'];
+                header("Location: index.php?controller=redirection&action=openForgotPwd");
+                return;
+            }
+
+            $prModel = new passwordResetModel();
+            $token = $prModel->createTokenForEmail($email, 60); // token valable 60 minutes
+
+            if (!$token) {
+                $data['error'] = "Impossible de générer le token. Réessayez plus tard.";
+                echo $data['error'];
+                header("Location: index.php?controller=redirection&action=openForgotPwd");
+                return;
+            }
+
+            $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+            $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+            $resetLink = $scheme . '://' . $host . '/index.php?controller=redirection&action=openChangePwd&token=' . urlencode($token);
+
+            $to = $email;
+            $subject = 'Réinitialisation du mot de passe';
+            $message = "Bonjour,\n\nPour réinitialiser votre mot de passe, cliquez sur le lien suivant :\n\n{$resetLink}\n\nLe lien expire dans 60 minutes.\n\nSi vous n'avez pas demandé cette réinitialisation, ignorez ce message.";
+
+            if (Mailer::send($to, $subject, $message)) {
+                $data['success'] = "Un lien de réinitialisation vous a été envoyé.";
+                echo $data['success'];
             } else {
-                $_SESSION['email'] = $email;
-
-                $to = $email;
-                $subject = 'Reinitialisation du mot de passe';
-                $message = 'Bonjour ! 
-                Pour reinitialiser votre mot de passe cliquer sur le lien suivant: 
-                https://escapethecode.alwaysdata.net/index.php?controller=redirection&action=openChangePwd';
-
-                if (mail($to, $subject, $message)) {
-                    $data['success'] = "Un lien de réinitialisation vous a été envoyé.";
-                    echo $data['success'];
+                if (class_exists('Constant') && Constant::isDev()) {
+                    // Afficher le token en local pour faciliter les tests
+                    $data['info'] = "Envoi d'email indisponible en local. Token: {$token}";
+                    echo $data['info'];
                 } else {
-                    $data['error'] = "Erreur lors de l'envoie du mail. Veuillez réessayer.";
+                    $data['error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";
                     echo $data['error'];
                 }
             }
         }
         header("Location: index.php?controller=redirection&action=openForgotPwd");
-
     }
+
     public function changePwd(){
+        // Si on arrive via le lien (GET) : afficher la vue avec le token (la vue doit inclure un champ hidden 'token')
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $token = $_GET['token'] ?? '';
+            if (empty($token)) {
+                header("Location: index.php?controller=redirection&action=openHomepage");
+                exit();
+            }
+            // Afficher la vue changePwdView et fournir le token (la vue doit mettre le token dans le form)
+            viewHandler::show("../view/changePwdView", ['token' => $token]);
+            return;
+        }
+
+        // Traitement du POST pour changer le mot de passe
         if (isset($_POST['changePwd'])) {
             $newPassword = $_POST['new_password'] ?? '';
             $confirmPassword = $_POST['confirm_password'] ?? '';
-            $email = $_SESSION['email'];
+            $token = $_POST['token'] ?? '';
+
+            if (empty($token)) {
+                $data['error'] = "Token manquant.";
+                echo $data['error'];
+                header("Location: /index.php?controller=redirection&action=openChangePwd");
+                return;
+            }
 
             if(strlen($newPassword) < 8) {
-                $error = "Votre mot de passe n'est pas assez long : minimun 8 caractères";
-                viewHandler::show("../view/changePwdView");
+                $error = "Votre mot de passe n'est pas assez long : minimum 8 caractères";
+                viewHandler::show("../view/changePwdView", ['token' => $token]);
                 echo $error;
                 return;
             }
 
-            $verif_majuscule = '/[A-Z]/'; // Au moins une majuscule
-            $verif_minuscule = '/[a-z]/'; // Au moins une minuscule
-            $verif_chiffre = '/[0-9]/';   // Au moins un chiffre
-            $verif_special = '/[^a-zA-Z0-9]/'; // Au moins un caractère spécial (non alpha-numérique)
+            $verif_majuscule = '/[A-Z]/';
+            $verif_minuscule = '/[a-z]/';
+            $verif_chiffre = '/[0-9]/';
+            $verif_special = '/[^a-zA-Z0-9]/';
 
             if (!preg_match($verif_majuscule, $newPassword) ||
                 !preg_match($verif_minuscule, $newPassword) ||
@@ -224,7 +264,7 @@ class userController
                 !preg_match($verif_special, $newPassword))
             {
                 $error = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
-                viewHandler::show("../view/changePwdView");
+                viewHandler::show("../view/changePwdView", ['token' => $token]);
                 echo $error;
                 return;
             }
@@ -236,7 +276,19 @@ class userController
                 $data['error'] = "Les mots de passe ne correspondent pas.";
                 echo $data['error'];
             } else {
+                $prModel = new passwordResetModel();
+                $tokenRow = $prModel->getValidTokenRow($token);
+                if (!$tokenRow) {
+                    $data['error'] = "Token invalide ou expiré.";
+                    echo $data['error'];
+                    header("Location: /index.php?controller=redirection&action=openForgotPwd");
+                    return;
+                }
+
+                $email = $tokenRow['email'];
+
                 if ($this->userModel->changePwd($newPassword, $email)) {
+                    $prModel->markTokenUsed($token);
                     $data['success'] = "Votre mot de passe a été modifié avec succès.";
                     echo $data['success'];
                 } else {
