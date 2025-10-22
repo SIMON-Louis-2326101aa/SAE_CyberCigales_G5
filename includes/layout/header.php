@@ -10,12 +10,22 @@
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
+        <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
     </div>
 
     <div id="nav-auth-buttons">
-        <a href="index.php?controller=user&action=register" class="active"><button>Inscription</button></a>
-        <a href="index.php?controller=user&action=login" class="active"><button>Connexion</button></a>
+        <?php
+        if (isset($_SESSION['utilisateur'])) {
+            ?>
+            <a href="index.php?controller=user&action=logout" class="active">Déconnexion</a>
+            <?php
+        } else {
+            ?>
+            <a href="index.php?controller=user&action=register" class="active">Inscription</a>
+            <a href="index.php?controller=user&action=login" class="active">Connexion</a>
+            <?php
+        }
+        ?>
     </div>
 
 </nav>

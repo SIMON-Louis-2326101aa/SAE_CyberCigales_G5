@@ -106,6 +106,61 @@ h2 {
     text-decoration: underline;
 }
 
+form{
+    background: #fff;
+    padding: 24px;
+    margin: 40px auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px;
+    width: 100%;
+    max-width: 400px;
+}
+
+ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li{
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+label{
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #555;
+}
+
+input, textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+#formulaire {
+    margin-bottom: 8vw;
+}
+
 /* Responsive */
 @media screen and (max-width: 768px) {
     body {

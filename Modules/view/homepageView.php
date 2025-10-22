@@ -6,7 +6,4 @@
 
 <?php else: ?>
     <h1>Bienvenue</h1>
-    <p>Veuillez vous connecter ou créer un compte</p>
-    <a href="index.php?controller=user&action=register" class="active"><button>Inscription</button></a>
-    <a href="index.php?controller=user&action=login" class="active"><button>Connexion</button></a>
 <?php endif; ?>
