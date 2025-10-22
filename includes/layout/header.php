@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title><?php echo $A_params['pageTitle'] ?? 'CyberCigales'; ?></title>
-    <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
-    <link rel="icon" href="/public/assets/images/favicon.ico">
+    <link rel="stylesheet" href="/assets/styles/stylesheet.css">
+    <link rel="icon" href="/assets/images/favicon.ico">
 </head>
 <body>
 <nav>

@@ -1,8 +1,10 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/includes/autoloader.php';
+$ROOT_DIR = dirname(__DIR__);
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+require $ROOT_DIR . '/vendor/autoload.php';
+require_once $ROOT_DIR . '/includes/autoloader.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config');
 $dotenv->load();
 
 if (session_status() === PHP_SESSION_NONE) {
