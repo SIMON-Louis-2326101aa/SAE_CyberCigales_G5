@@ -31,6 +31,10 @@ h2 {
     width: 60%;
 }
 
+a {
+    color: #0000ff;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
@@ -70,13 +74,14 @@ nav a.active:hover {
 /* Theme Sombre */
 body.dark-theme {
     background: #333;
-    color: #ffffff;
+    color: white;
 }
 
 body.dark-theme h1,
 body.dark-theme h2,
+body.dark dark-theme a,
 body.dark-theme .db-table {
-    color: #ffffff;
+    color: white;
 }
 
 body.dark-theme .theme-button,
