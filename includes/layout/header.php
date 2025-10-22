@@ -13,4 +13,9 @@
         <a href="index.php?controller=homepage&action=openHomepage" class="active">Home</a>
     </div>
 
+    <div id="nav-auth-buttons">
+        <a href="index.php?controller=formRegister&action=register" class="active"><button>Inscription</button></a>
+        <a href="index.php?controller=formConnection&action=login" class="active"><button>Connexion</button></a>
+    </div>
+
 </nav>
