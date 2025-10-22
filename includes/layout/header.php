@@ -9,4 +9,6 @@
 <body>
 <nav>
     <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
+    <a href="index.php?controller=redirection&action=openAbout">À Propos</a>
+    <a href="index.php?controller=redirection&action=openLegal">Mentions Légales</a>
 </nav>
