@@ -53,7 +53,7 @@
     <!-- Section Projet -->
     <section class="project-section">
         <h2>Le Projet</h2>
-        <p><strong>CyberCigales</strong> est un projet universitaire réalisé dans le cadre de la SAE (Situation d'Apprentissage et d'Évaluation) à l'Université d'Aix-Marseille.</p>
+        <p><strong>CyberCigales</strong> est un projet universitaire réalisé dans le cadre de la SAE (Situation d'Apprentissage et d'Évaluation) en 2ème année de BUT Informatique à Aix-en-Provence.</p>
         
         <h3>Objectifs Pédagogiques</h3>
         <ul>
@@ -125,7 +125,7 @@
     <!-- Section Contexte -->
     <section class="context-section">
         <h2>Contexte Universitaire</h2>
-        <p>Ce projet s'inscrit dans le cadre de notre formation en informatique à l'<strong>Université d'Aix-Marseille</strong>. Il nous permet de mettre en pratique les concepts théoriques appris en cours :</p>
+        <p>Ce projet s'inscrit dans le cadre de notre formation en <strong>2ème année de BUT Informatique</strong> à <strong>Aix-en-Provence</strong>. Il nous permet de mettre en pratique les concepts théoriques appris en cours :</p>
         
         <ul>
             <li><strong>Développement Web</strong> - Maîtrise des technologies web modernes</li>
@@ -141,7 +141,8 @@
         <h2>Contact</h2>
         <p>Pour toute question concernant ce projet, vous pouvez nous contacter :</p>
         <p><strong>Équipe CyberCigales G5</strong><br>
-        Université d'Aix-Marseille<br>
+        BUT Informatique - 2ème année<br>
+        Aix-en-Provence<br>
         Projet SAE - Cybersécurité</p>
     </section>
 
