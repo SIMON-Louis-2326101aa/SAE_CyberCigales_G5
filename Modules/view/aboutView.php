@@ -20,32 +20,32 @@
     <!-- Section Équipe -->
     <section class="team-section">
         <h2>Notre Équipe</h2>
-        <p>Nous sommes un groupe d'étudiants de l'Université d'Aix-Marseille, passionnés par la cybersécurité et le développement web.</p>
+        <p>Nous sommes un groupe d'étudiants en 2ème année de BUT Informatique à Aix-en-Provence, passionnés par la cybersécurité et le développement web.</p>
         
         <div class="team-grid">
             <div class="team-member">
                 <h3>BADJOUDJ Hana</h3>
-                <p>Développeuse Frontend & Sécurité</p>
+                <p>Développeuse</p>
             </div>
             
             <div class="team-member">
                 <h3>CONTRUCCI Lou</h3>
-                <p>Développeuse Backend & Base de données</p>
+                <p>Développeuse</p>
             </div>
             
             <div class="team-member">
                 <h3>DIAZ Gwenn</h3>
-                <p>Développeuse Full-Stack & UI/UX</p>
+                <p>Product Owner et Développeuse</p>
             </div>
             
             <div class="team-member">
                 <h3>GUZELBABA Imran</h3>
-                <p>Développeur Backend & Sécurité</p>
+                <p>Développeur</p>
             </div>
             
             <div class="team-member">
                 <h3>SIMON Louis</h3>
-                <p>Développeur Full-Stack & DevOps</p>
+                <p>Scrum Master et Développeur</p>
             </div>
         </div>
     </section>
@@ -55,16 +55,22 @@
         <h2>Le Projet</h2>
         <p><strong>CyberCigales</strong> est un projet universitaire réalisé dans le cadre de la SAE (Situation d'Apprentissage et d'Évaluation) en 2ème année de BUT Informatique à Aix-en-Provence.</p>
         
+        <h3>Description du Projet</h3>
+        <p>Le projet consiste à créer un <strong>escape game numérique interactif</strong> sur le thème de la cybersécurité et de la cryptographie. Ce jeu a pour objectif de faire découvrir aux lycéennes les bases de la sécurité informatique à travers des énigmes et des mini-jeux ludiques et pédagogiques.</p>
+        
+        <h3>Présentation Publique</h3>
+        <p>Le projet sera présenté le <strong>18 mars 2026</strong> lors de l'atelier <strong>CYBER Cigales</strong>, organisé en partenariat avec l'association <a href="https://lescigales.org" target="_blank">Les Cigales</a>. Cette association œuvre pour initier les jeunes, et plus particulièrement les filles, aux sciences et aux technologies.</p>
+        
         <h3>Objectifs Pédagogiques</h3>
         <ul>
-            <li>Maîtrise du développement web en PHP</li>
-            <li>Implémentation de l'architecture MVC</li>
-            <li>Gestion sécurisée des utilisateurs</li>
-            <li>Pratique du travail en équipe</li>
-            <li>Développement de bonnes pratiques de sécurité</li>
+            <li>Rendre la cybersécurité et la cryptographie accessibles et amusantes</li>
+            <li>Susciter la curiosité et l'intérêt pour les métiers du numérique</li>
+            <li>Initier les lycéennes aux bases de la sécurité informatique</li>
+            <li>Développer des compétences en développement web et cybersécurité</li>
+            <li>Pratique du travail en équipe avec des rôles définis (Scrum, Product Owner)</li>
         </ul>
         
-        <h3>Fonctionnalités Principales</h3>
+        <h3>Fonctionnalités Techniques</h3>
         <ul>
             <li>✅ <strong>Authentification sécurisée</strong> - Connexion/Déconnexion/Inscription</li>
             <li>✅ <strong>Gestion des sessions</strong> - Protection des données utilisateur</li>
