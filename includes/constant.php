@@ -33,4 +33,32 @@ final class Constant
     {
         return self::indexDir() . self::INCLUDES_DIR;
     }
+
+    public static function isDev(): bool
+    {
+        // 1) Priorité à APP_ENV
+        $env = $_ENV['APP_ENV'] ?? null;
+        if ($env === null) {
+            $env = getenv('APP_ENV') ?: ($_SERVER['APP_ENV'] ?? null);
+        }
+        if ($env !== null) {
+            $env = strtolower(trim((string)$env));
+            return in_array($env, ['dev', 'development', 'local'], true);
+        }
+
+        // 2) Fallback sur host/serveur (utile si on n'utilise pas de .env en local)
+        $server = strtolower($_SERVER['SERVER_NAME'] ?? '');
+        $host = strtolower($_SERVER['HTTP_HOST'] ?? '');
+        $devEnvironments = ['127.0.0.1', 'localhost', '::1'];
+
+        foreach ($devEnvironments as $dev) {
+            if ($dev !== '' && (strpos($server, $dev) !== false || strpos($host, $dev) !== false)) {
+                return true;
+            }
+        }
+
+        // Par défaut, considérer comme production
+        return false;
+    }
+
 }
