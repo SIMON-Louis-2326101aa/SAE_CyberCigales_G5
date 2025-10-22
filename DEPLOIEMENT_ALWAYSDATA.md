@@ -10,12 +10,7 @@
 
 ### 1. Base de données
 Les informations de connexion sont déjà configurées dans `includes/connectionDB.php` :
-```php
-DB_HOST: mysql-escapethecode.alwaysdata.net
-DB_NAME: escapethecode_bd
-DB_USER: 433487
-DB_PASS: SAECyberCigales
-```
+
 
 ### 2. Système d'email
 ✅ **Aucune configuration supplémentaire nécessaire !**
