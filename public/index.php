@@ -15,11 +15,13 @@
  * @version 1.0
  */
 
-require __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/includes/autoloader.php';
+$ROOT_DIR = dirname(__DIR__);
+
+require $ROOT_DIR . '/vendor/autoload.php';
+require_once $ROOT_DIR . '/includes/autoloader.php';
 
 // Chargement des variables d'environnement depuis le fichier .env
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config');
 $dotenv->load();
 
 // Configuration sécurisée des sessions

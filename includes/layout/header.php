@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title><?php echo $A_params['pageTitle'] ?? 'CyberCigales'; ?></title>
-    <link rel="stylesheet" href="/public/assets/styles/stylesheet.css">
-    <link rel="icon" href="/public/assets/images/favicon.ico">
+    <link rel="stylesheet" href="./assets/styles/stylesheet.css">
+    <link rel="icon" href="./assets/images/favicon.ico">
 </head>
 <body>
-<nav>
-    <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
+<nav class="nav-menu">
+
+    <div id="nav-menu-sections">
+        <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
+    </div>
+
+    <div id="nav-auth-buttons">
+        <a href="index.php?controller=user&action=register" class="active"><button>Inscription</button></a>
+        <a href="index.php?controller=user&action=login" class="active"><button>Connexion</button></a>
+    </div>
+
 </nav>
