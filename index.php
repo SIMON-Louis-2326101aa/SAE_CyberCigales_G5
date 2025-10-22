@@ -1,9 +1,11 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/includes/autoloader.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// Configuration de la base de données (remplace le .env)
+$_ENV['DB_HOST'] = 'localhost';
+$_ENV['DB_NAME'] = 'cybercigales_db';
+$_ENV['DB_USER'] = 'root';
+$_ENV['DB_PASS'] = '';
 
 if (session_status() === PHP_SESSION_NONE) {
     // Démarre la session uniquement si elle n'est pas déjà démarrée
