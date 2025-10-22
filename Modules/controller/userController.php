@@ -22,15 +22,15 @@ class userController
 
             if ($password !== $confirm) {
                 $error = "Les mots de passe ne correspondent pas.";
-                header("Location: index.php?controller=redirection&action=openFormRegister");
-                echo $error;
+                // On affiche la vue avec l'erreur et les données conservées
+                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
                 return;
             }
 
             if(strlen($password) < 8) {
                 $error = "Votre mot de passe n'est pas assez long : minimun 8 caractères";
-                viewHandler::show("../view/formRegisterView");
-                echo $error;
+                // Modification ici
+                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
                 return;
             }
 
@@ -45,8 +45,8 @@ class userController
                 !preg_match($verif_special, $password))
             {
                 $error = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
-                viewHandler::show("../view/formRegisterView");
-                echo $error;
+                // Modification ici
+                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription','error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
                 return;
             }
 
@@ -56,8 +56,8 @@ class userController
             if ($emailStatus['verified']) {
                 // Le compte existe et est vérifié
                 $error = "Inscription imposible .";
-                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Vérication de l\'email'],['error' => $error]);
-                echo $error;
+                // Modification ici
+                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
                 return;
             }
 
@@ -115,8 +115,8 @@ class userController
                 return;
             } else {
                 $error = "Erreur lors de l'inscription.";
-                viewHandler::show("../view/formRegisterView", ['error' => $error]);
-                echo $error;
+                // Modification ici
+                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
                 return;
             }
         }
