@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const themeButton = document.querySelector('button.theme-button');
+    const themeButton = document.querySelector('#theme-changer');
     const body = document.body;
 
     // Chargement du theme depuis localStorage

@@ -11,13 +11,13 @@
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=redirection&action=openHomepage" class="active theme-button">Home</a>
+        <a href="index.php?controller=redirection&action=openHomepage" class="active btn-nav">Home</a>
     </div>
 
     <div id="nav-auth-buttons">
-        <button class="theme-button">Changer de Theme</button>
-        <a href="index.php?controller=user&action=register" class="active"><button>Inscription</button></a>
-        <a href="index.php?controller=user&action=login" class="active"><button>Connexion</button></a>
+        <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
+        <a href="index.php?controller=user&action=register" class="active btn-nav">Inscription</a>
+        <a href="index.php?controller=user&action=login" class="active btn-nav">Connexion</a>
     </div>
 
 </nav>
