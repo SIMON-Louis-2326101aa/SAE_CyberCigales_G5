@@ -106,6 +106,44 @@ h2 {
     text-decoration: underline;
 }
 
+.flash {
+    margin: 10px auto;
+    padding: 12px 18px;
+    width: 80%;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    position: relative;
+    opacity: 1;
+    transition: opacity 0.6s ease;
+}
+
+.flash-success {
+    background-color: #d1f7d1;
+    color: #0a580a;
+    border: 1px solid #0a580a;
+}
+
+.flash-error {
+    background-color: #ffd2d2;
+    color: #800000;
+    border: 1px solid #800000;
+}
+
+.flash.is-hiding { opacity: 0; }
+
+.flash__close {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
 form{
     background: #fff;
     padding: 24px;

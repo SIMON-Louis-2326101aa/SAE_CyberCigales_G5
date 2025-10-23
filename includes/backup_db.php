@@ -1,64 +1,112 @@
 <?php
+declare(strict_types=1);
+
+/**
+ * backup_db.php
+ * Script de sauvegarde SQL
+ * - Charge les infos depuis .env
+ * - Utilise un fichier temporaire --defaults-extra-file pour ne PAS exposer le mot de passe dans la ligne de commande
+ * - Crée le répertoire de backup s'il n'existe pas
+ * - Dump avec options sûres
+ * - Rotation simple des sauvegardes
+ */
+
 require __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-$dotenv->load();
+// Charge .env depuis la racine du projet
+$rootDir = dirname(__DIR__);
+if (class_exists(Dotenv\Dotenv::class)) {
+    Dotenv\Dotenv::createImmutable($rootDir)->load();
+    if (function_exists('log_console')) log_console('Fichier .env chargé', 'info'); // ℹ️
+}
 
-// Définir les paramètres (lus depuis le .env)
-$DB_HOST = $_ENV['DB_HOST'] ?? getenv('DB_HOST');
-$DB_NAME = $_ENV['DB_NAME'] ?? getenv('DB_NAME');
-$DB_USER = $_ENV['DB_USER'] ?? getenv('DB_USER');
-$DB_PASS = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
+// Récupère les paramètres DB
+$dbHost = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?: '';
+$dbName = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: '';
+$dbUser = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: '';
+$dbPass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: '';
 
-// Définir le chemin de sauvegarde et le nom du fichier
-$backupDir = '/home/escapethecode/backups/';
-$fileName = $DB_NAME . '_' . date('dmY_His') . '.sql';
-$fullPath = $backupDir . $fileName;
+// Validation minimale
+if ($dbHost === '' || $dbName === '' || $dbUser === '') {
+    if (function_exists('log_console')) log_console('Variables DB manquantes pour le backup', 'error'); // ❌
+    error_log('Backup DB: variables manquantes (DB_HOST/DB_NAME/DB_USER)');
+    exit(1);
+}
 
-// Construire la commande mysqldump (Utilisation de shell_exec est nécessaire pour exécuter des commandes système)
-// La commande utilise les identifiants pour dumper la DB
+// Répertoire de backup.
+$backupDir = '/home/escapethecode/backups';
+if (!is_dir($backupDir)) {
+    if (!@mkdir($backupDir, 0755, true) && !is_dir($backupDir)) {
+        if (function_exists('log_console')) log_console("Impossible de créer le répertoire: {$backupDir}", 'error'); // ❌
+        error_log("Backup DB: mkdir échoué pour {$backupDir}");
+        exit(1);
+    }
+}
+
+// Nom de fichier : tri naturel fiable => YYYYMMDD_HHMMSS
+$fileName = $dbName . '_' . date('Ymd_His') . '.sql';
+$fullPath = rtrim($backupDir, "/\\") . DIRECTORY_SEPARATOR . $fileName;
+
+// Crée un fichier temporaire de config pour éviter d’exposer le mot de passe
+$defaultsFile = tempnam(sys_get_temp_dir(), 'mysqldump_');
+if ($defaultsFile === false) {
+    if (function_exists('log_console')) log_console('Impossible de créer le fichier temporaire pour credentials', 'error'); // ❌
+    error_log('Backup DB: tempnam() a échoué');
+    exit(1);
+}
+
+// Écrit les infos dans le fichier .cnf temporaire
+// ATTENTION : on évite de logguer ce contenu !
+$defaultsContent = "[client]\nuser={$dbUser}\npassword={$dbPass}\nhost={$dbHost}\n";
+file_put_contents($defaultsFile, $defaultsContent);
+@chmod($defaultsFile, 0600);
+
+// Construis la commande mysqldump
 $command = sprintf(
-    'mysqldump --opt -h%s -u%s -p%s %s > %s',
-    escapeshellarg($DB_HOST),
-    escapeshellarg($DB_USER),
-    escapeshellarg($DB_PASS),
-    escapeshellarg($DB_NAME),
+    'mysqldump --defaults-extra-file=%s --single-transaction --routines --triggers --events --set-gtid-purged=OFF --default-character-set=utf8mb4 %s > %s 2>&1',
+    escapeshellarg($defaultsFile),
+    escapeshellarg($dbName),
     escapeshellarg($fullPath)
 );
 
-//  Exécuter la commande
-$output = shell_exec($command . ' 2>&1'); // 2>&1 capture les erreurs
+// Exécute la commande et capture la sortie
+if (function_exists('log_console')) log_console('Lancement du dump MySQL', 'file'); // 📄
+$output = shell_exec($command);
 
-// Gestion des erreurs (Optionnel: log ou alerte)
-if ($output) {
-    // Si $output contient quelque chose, il y a probablement eu une erreur (ex: mauvaise connexion DB, chemin invalide)
-    error_log("Erreur lors de la sauvegarde de la DB: " . $output);
-    // Dans un vrai système, vous enverriez un email d'alerte ici.
-} else {
-    // --- Logique de Nettoyage ---
-    // Définir le chemin et le nombre max de sauvegardes à conserver (ex: 5 semaines)
-    $backupDir = '/home/escapethecode/backups/';
-    $maxBackupsToKeep = 5;
+// Nettoie le fichier temporaire des infos au plus tôt
+@unlink($defaultsFile);
 
-    // Lire tous les fichiers SQL dans le répertoire
-    $files = glob($backupDir . '*.sql');
+// Vérifie le résultat
+if (!is_file($fullPath) || filesize($fullPath) === 0) {
+    if (function_exists('log_console')) log_console('Échec du dump MySQL (fichier vide ou absent)', 'error'); // ❌
+    error_log("Backup DB: échec du dump. Sortie:\n" . (string)$output);
+    exit(1);
+}
 
-    //  Triez les fichiers par date/nom (le plus récent en dernier)
-    usort($files, 'strnatcmp'); // Tri par nom (si le nom contient la date/heure, c'est suffisant)
+if (function_exists('log_console')) log_console("Dump terminé: {$fullPath}", 'ok'); // ✅
 
-    // 3. Compter le nombre de fichiers à supprimer
-    $count = count($files);
-    $numToDelete = $count - $maxBackupsToKeep;
+// --- Rotation des sauvegardes ---
+// Conserver au max 5 sauvegardes les plus récentes
+$maxBackupsToKeep = 5;
 
-    if ($numToDelete > 0) {
-        // 4. Parcourir et supprimer les plus anciens
-        for ($i = 0; $i < $numToDelete; $i++) {
-            if (unlink($files[$i])) {
-                // Fichier supprimé avec succès
-            } else {
-                error_log("Impossible de supprimer le vieux fichier de sauvegarde: " . $files[$i]);
-            }
+// Liste les .sql et trie par nom
+$files = glob(rtrim($backupDir, "/\\") . DIRECTORY_SEPARATOR . '*.sql') ?: [];
+natsort($files);                 // du plus ancien au plus récent
+$files = array_values($files);   // réindexe
+
+$toDelete = count($files) - $maxBackupsToKeep;
+if ($toDelete > 0) {
+    for ($i = 0; $i < $toDelete; $i++) {
+        $old = $files[$i];
+        if (@unlink($old)) {
+            if (function_exists('log_console')) log_console("Ancienne sauvegarde supprimée: {$old}", 'file'); // 📄
+        } else {
+            if (function_exists('log_console')) log_console("Suppression impossible: {$old}", 'error'); // ❌
+            error_log("Backup DB: impossible de supprimer {$old}");
         }
     }
 }
+
+if (function_exists('log_console')) log_console('Rotation des sauvegardes terminée', 'ok'); // ✅
+
 exit(0);

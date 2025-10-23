@@ -1,59 +1,51 @@
 <?php
 /**
  * Classe abstraite de base pour la gestion de la base de données
- * 
+ *
  * Cette classe abstraite fournit les fonctionnalités de base pour la connexion
  * à la base de données. Elle utilise le pattern Singleton via connectionDB
  * pour s'assurer qu'une seule connexion est établie.
- * 
+ *
  * Fonctionnalités :
  * - Gestion centralisée de la connexion PDO
  * - Pattern Singleton pour éviter les connexions multiples
- * - Méthode getBdd() accessible à tous les modèles
- * 
- * @author SAE CyberCigales G5
- * @version 1.0
  */
 
 require_once __DIR__ . '/../../includes/connectionDB.php';
 
 abstract class database
 {
-    /**
-     * @var PDO|null Instance de connexion à la base de données
-     */
-    private static $_bdd;
+    private static ?PDO $pdo = null;
 
-    /**
-     * Initialise la connexion à la base de données
-     * 
-     * Cette méthode privée utilise le pattern Singleton de connectionDB
-     * pour obtenir une instance unique de connexion PDO.
-     * 
-     * @return void
-     */
-    private static function setBdd()
+    /** Initialise la connexion PDO unique via connectionDB */
+    private static function setBdd(): void
     {
-        // Utiliser connectionDB pour obtenir la connexion
-        $connexion = connectionDB::getInstance();
-        self::$_bdd = $connexion->getPdo();
+        try {
+            $connexion = connectionDB::getInstance();
+            self::$pdo = $connexion->getPdo();
+
+            if (function_exists('log_console')) {
+                log_console('Connexion PDO initialisée avec succès', 'ok'); // ✅
+            }
+        } catch (Throwable $e) {
+            if (function_exists('log_console')) {
+                log_console('Erreur lors de l’initialisation de PDO : ' . $e->getMessage(), 'error'); // ❌
+            }
+            throw new RuntimeException('Impossible d’établir la connexion PDO.');
+        }
     }
 
-    /**
-     * Retourne l'instance de connexion à la base de données
-     * 
-     * Cette méthode publique permet aux classes héritières d'accéder
-     * à la connexion PDO. Si la connexion n'existe pas encore,
-     * elle l'initialise automatiquement.
-     * 
-     * @return PDO Instance de connexion PDO
-     */
-    public function getBdd()
+    /** Retourne l’unique instance PDO */
+    protected function getBdd(): PDO
     {
-        if (self::$_bdd == null) {
+        if (self::$pdo === null) {
             self::setBdd();
         }
-        return self::$_bdd;
+
+        if (function_exists('log_console')) {
+            log_console('Connexion PDO récupérée depuis Database', 'file'); // 📄
+        }
+
+        return self::$pdo;
     }
 }
-?>

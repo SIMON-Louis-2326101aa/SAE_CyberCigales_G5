@@ -1,24 +1,24 @@
 <?php
+declare(strict_types=1);
+
 final class connectionDB
 {
     private PDO $pdo;
     private static ?self $instance = null;
 
-    // Idéalement: lire depuis l'environnement
-    private const DB_HOST = 'DB_HOST';
-    private const DB_NAME = 'DB_NAME';
-    private const DB_USER = 'DB_USER';
-    private const DB_PASS = 'DB_PASS';
-
-    private function __construct()
+    public function __construct()
     {
-        $host = $_ENV[self::DB_HOST] ?? getenv(self::DB_HOST);
-        $name = $_ENV[self::DB_NAME] ?? getenv(self::DB_NAME);
-        $user = $_ENV[self::DB_USER] ?? getenv(self::DB_USER);
-        $pass = $_ENV[self::DB_PASS] ?? getenv(self::DB_PASS);
+        // Lecture via .env ou variables système
+        $host = $_ENV['DB_HOST'] ?? getenv('DB_HOST');
+        $name = $_ENV['DB_NAME'] ?? getenv('DB_NAME');
+        $user = $_ENV['DB_USER'] ?? getenv('DB_USER');
+        $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
 
         if (!$host || !$name || !$user) {
-            throw new RuntimeException('Les variables d\'environnement de connexion à la DB sont manquantes.');
+            if (function_exists('log_console')) {
+                log_console("Variables DB manquantes", 'error'); // ❌
+            }
+            throw new RuntimeException("Les variables d'environnement DB sont manquantes.");
         }
 
         $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $host, $name);
@@ -27,11 +27,17 @@ final class connectionDB
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
         ];
+
         try {
             $this->pdo = new PDO($dsn, $user, $pass, $options);
+            if (function_exists('log_console')) {
+                log_console("Connexion DB réussie ($host / $name)", 'ok'); // ✅
+            }
         } catch (PDOException $e) {
-            // En prod: log + message générique
-            throw new RuntimeException('Erreur de connexion à la base de données.');
+            if (function_exists('log_console')) {
+                log_console("Erreur PDO: " . $e->getMessage(), 'error'); // ❌
+            }
+            throw new RuntimeException("Erreur de connexion à la base de données.");
         }
     }
 
@@ -54,17 +60,19 @@ final class connectionDB
         return $name;
     }
 
-    /** Construit un WHERE préparé à partir d'un tableau ['col' => valeur, ...] */
+    /** Construit un WHERE préparé à partir d'un tableau */
     private function buildWhere(array $where): array
     {
         $clauses = [];
         $params  = [];
+
         foreach ($where as $col => $val) {
             $col = $this->assertIdentifier($col);
             $param = ":w_$col";
             $clauses[] = "`$col` = $param";
             $params[$param] = $val;
         }
+
         $sql = $clauses ? (' WHERE ' . implode(' AND ', $clauses)) : '';
         return [$sql, $params];
     }
@@ -97,6 +105,11 @@ final class connectionDB
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
+
+        if (function_exists('log_console')) {
+            log_console("INSERT sur $table réussi", 'ok'); // ✅
+        }
+
         return (int)$this->pdo->lastInsertId();
     }
 
@@ -111,6 +124,11 @@ final class connectionDB
         $sql = "DELETE FROM `$table`" . $whereSql;
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
+
+        if (function_exists('log_console')) {
+            log_console("DELETE sur $table : {$stmt->rowCount()} ligne(s)", 'file'); // 📄
+        }
+
         return $stmt->rowCount();
     }
 
@@ -123,6 +141,7 @@ final class connectionDB
 
         $setParts = [];
         $params = [];
+
         foreach ($data as $col => $val) {
             $col = $this->assertIdentifier($col);
             $ph = ":u_$col";
@@ -134,11 +153,17 @@ final class connectionDB
         if ($whereSql === '') {
             throw new InvalidArgumentException('UPDATE sans WHERE interdit.');
         }
+
         $params += $whereParams;
 
         $sql = "UPDATE `$table` SET " . implode(', ', $setParts) . $whereSql;
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
+
+        if (function_exists('log_console')) {
+            log_console("UPDATE sur $table : {$stmt->rowCount()} ligne(s)", 'file'); // 📄
+        }
+
         return $stmt->rowCount();
     }
 
@@ -146,12 +171,19 @@ final class connectionDB
     {
         $table = $this->assertIdentifier($table);
         [$whereSql, $params] = $this->buildWhere($where);
+
         $sql = "SELECT * FROM `$table`" . $whereSql;
         if ($limit !== null) {
             $sql .= " LIMIT " . (int)$limit;
         }
+
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
+
+        if (function_exists('log_console')) {
+            log_console("SELECT * FROM $table", 'file'); // 📄
+        }
+
         return $stmt->fetchAll();
     }
 
@@ -169,6 +201,10 @@ final class connectionDB
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         $row = $stmt->fetch();
+
+        if (function_exists('log_console')) {
+            log_console("SELECT `$field` FROM `$table` réussi", 'ok'); // ✅
+        }
 
         return $row[$field] ?? null;
     }

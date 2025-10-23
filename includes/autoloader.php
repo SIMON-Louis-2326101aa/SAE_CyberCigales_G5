@@ -1,71 +1,94 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Autoloader - Chargement automatique des classes
- * 
- * Ce fichier implémente l'autoloading de classes pour le projet.
- * Il cherche automatiquement les fichiers de classes dans les différents répertoires.
- * 
- * Fonctionnement :
- * - Quand une classe est instanciée (ex: new userModel()), PHP appelle automatiquement ClassLoad()
- * - La méthode cherche le fichier correspondant dans includes/, Modules/model/, Modules/view/, Modules/controller/
- * - Si trouvé, le fichier est chargé (require) et la classe devient disponible
- * 
- * @author SAE CyberCigales G5
- * @version 1.0
+ * Autoloader.php
+ * - Parcourt les répertoires déclarés dans Constant::*_DIR.
+ * - Construit des chemins absolus à partir de Constant::indexDir().
  */
 
-require 'constant.php';
+require __DIR__ . '/constant.php';
 
 final class autoloader
 {
+    /** Empêche l'instanciation. */
+    private function __construct() {}
+
     /**
      * Charge un fichier PHP s'il est lisible
-     * 
-     * @param string $S_toLoad Chemin complet vers le fichier à charger
-     * @return bool True si le fichier a été chargé, False sinon
      */
-    private static function _load(string $S_toLoad): bool
+    private static function log(string $message, string $type = 'info'): void
     {
-        if (is_readable($S_toLoad)) {
-            require $S_toLoad;
+        if (function_exists('log_console')) {
+            log_console($message, $type); // ℹ️ ✅ ❌ 📄 🔊
+        }
+    }
+
+    /**
+     * Tente de charger un fichier si lisible.
+     * @param string $path Chemin absolu vers le fichier.
+     */
+    private static function loadFile(string $path): bool
+    {
+        if (is_readable($path)) {
+            require $path;
+            self::log("Chargé: {$path}", 'ok');     // ✅
             return true;
         }
+        self::log("Non lisible: {$path}", 'file');   // 📄
         return false;
     }
-    
+
     /**
-     * Charge automatiquement une classe en cherchant dans les différents répertoires
-     * 
-     * Cette méthode est appelée automatiquement par PHP quand une classe est utilisée
-     * mais n'a pas encore été chargée. Elle cherche dans l'ordre :
-     * 1. includes/ (classes utilitaires)
-     * 2. Modules/model/ (modèles de données)
-     * 3. Modules/view/ (vues)
-     * 4. Modules/controller/ (contrôleurs)
-     * 
-     * @param string $S_className Nom de la classe à charger
-     * @return bool True si la classe a été trouvée et chargée, False sinon
+     * Autoload principal.
+     *  Charge automatiquement une classe en cherchant dans les différents répertoire
+     * Exemple: "controllerHandler" -> <dir>/controllerHandler.php
      */
-    public static function ClassLoad(string $S_className): bool
+    public static function classLoad(string $className): bool
     {
-        $directories = [
-            Constant::INCLUDES_DIR,
-            Constant::MODEL_DIR,
-            Constant::VIEW_DIR,
-            Constant::CONTROLLER_DIR
+        // Vérifie la classe Constant (chemins)
+        if (!class_exists('Constant')) {
+            self::log('Classe Constant introuvable (includes/constant.php non chargé ?)', 'error'); // ❌
+            return false;
+        }
+
+        // Racine projet + dossiers à parcourir (sans slash final)
+        $root = rtrim(Constant::indexDir(), '/\\');
+        $dirs = [
+            rtrim(Constant::INCLUDES_DIR, '/\\'),
+            rtrim(Constant::MODEL_DIR, '/\\'),
+            rtrim(Constant::VIEW_DIR, '/\\'),
+            rtrim(Constant::CONTROLLER_DIR, '/\\'),
         ];
 
-        foreach ($directories as $directory) {
-            $S_file = Constant::indexDir() . $directory . "$S_className.php";
-            if (self::_load($S_file)) {
+        // Type de fichier attendu
+        $fileName = $className . '.php';
+
+        // Essaie chaque répertoire déclaré
+        foreach ($dirs as $dir) {
+            $fullPath = $root . '/' . $dir . '/' . $fileName;
+            $fullPath = preg_replace('#[\\/]+#', '/', $fullPath); // Normalisation
+            if (self::loadFile($fullPath)) {
                 return true;
             }
         }
 
-        echo "Classe non trouvée : " . $S_className . "<br>"; // Ajout pour débogage
+        // Fallback : racine du projet
+        $fallback = $root . '/' . $fileName;
+        $fallback = preg_replace('#[\\/]+#', '/', $fallback);
+        if (self::loadFile($fallback)) {
+            return true;
+        }
+
+        self::log("Classe non trouvée: {$className}", 'error'); // ❌
         return false;
     }
 }
 
-// Enregistrement de l'autoloader
-spl_autoload_register('autoloader::classLoad');
+// Enregistrement de l’autoload
+spl_autoload_register([autoloader::class, 'classLoad']);
+
+// Log global (on n'appelle pas la méthode privée)
+if (function_exists('log_console')) {
+    log_console('Autoloader enregistré', 'info'); // ℹ️
+}
