@@ -10,7 +10,8 @@
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
+        <a href="index.php?controller=redirection&action=openHomepage" id="nav-menu-title"><img src="/assets/images/logo.png" alt="logo-escape-the-code"></a>
+        <a href="index.php?controller=redirection&action=openHomepage" class="active">Acceuil</a>
     </div>
 
     <div id="nav-auth-buttons">
