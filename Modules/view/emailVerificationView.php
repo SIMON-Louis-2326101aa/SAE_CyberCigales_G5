@@ -20,9 +20,13 @@
     <?php endif; ?>
 
     <form action="index.php?controller=emailVerification&action=verify" method="post">
-        <input type="hidden" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>">
-        <label for="code">Code reçu par email</label>
-        <input type="text" id="code" name="code" required maxlength="6" pattern="^[0-9]{6}$" inputmode="numeric" placeholder="123456">
+        <ul>
+            <li>
+                <input type="hidden" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>">
+                <label for="code">Code reçu par email</label>
+                <input type="text" id="code" name="code" required maxlength="6" pattern="^[0-9]{6}$" inputmode="numeric" placeholder="123456">
+            </li>
+        </ul>
         <button type="submit">Vérifier</button>
     </form>
 
