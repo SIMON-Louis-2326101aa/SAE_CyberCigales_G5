@@ -3,11 +3,15 @@ require_once __DIR__ . '/../model/userModel.php';
 require_once __DIR__ . '/../../includes/viewHandler.php';
 require_once __DIR__ . '/../model/emailVerificationModel.php';
 require_once __DIR__ . '/../../includes/mailer.php';
+require_once __DIR__ . '/../model/loginAttemptModel.php';
 class userController
 {
     private $userModel;
+    private $loginAttemptModel;
+    
     public function __construct() {
         $this->userModel = new userModel();
+        $this->loginAttemptModel = new loginAttemptModel();
     }
     public function register() {
         if (isset($_POST['register'])) {
@@ -128,10 +132,32 @@ class userController
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['pwd'] ?? '';
+            $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+
+            // Vérifier si le compte est bloqué
+            $accountBlocked = $this->loginAttemptModel->isAccountBlocked($email);
+            if ($accountBlocked['blocked']) {
+                $remainingMinutes = ceil($accountBlocked['remaining_time'] / 60);
+                $error = "Trop de tentatives de connexion échouées. Veuillez réessayer dans {$remainingMinutes} minute(s).";
+                viewHandler::show("../view/formConnectionView", ['pageTitle' => 'Connexion', 'error' => $error]);
+                return;
+            }
+
+            // Vérifier si l'IP est bloquée
+            $ipBlocked = $this->loginAttemptModel->isIPBlocked($ip);
+            if ($ipBlocked['blocked']) {
+                $remainingMinutes = ceil($ipBlocked['remaining_time'] / 60);
+                $error = "Trop de tentatives de connexion depuis cette adresse IP. Veuillez réessayer dans {$remainingMinutes} minute(s).";
+                viewHandler::show("../view/formConnectionView", ['pageTitle' => 'Connexion', 'error' => $error]);
+                return;
+            }
 
             $utilisateur = $this->userModel->authenticate($email, $password);
 
             if ($utilisateur) {
+                // Connexion réussie - nettoyer les tentatives échouées
+                $this->loginAttemptModel->clearFailedAttempts($email);
+                
                 if (session_status() == PHP_SESSION_NONE) {
                     session_start([
                         'use_strict_mode' => true,
@@ -150,9 +176,20 @@ class userController
                 header("Location: index.php?controller=redirection&action=openHomepage");
                 exit();
             } else {
-                $error = "Email ou mot de passe incorrect.";
-                header("Location: index.php?controller=redirection&action=openFormConnection");
-                echo $error;
+                // Connexion échouée - enregistrer la tentative
+                $this->loginAttemptModel->recordFailedAttempt($email, $ip);
+                
+                // Vérifier à nouveau si le compte est maintenant bloqué
+                $accountBlocked = $this->loginAttemptModel->isAccountBlocked($email);
+                if ($accountBlocked['blocked']) {
+                    $remainingMinutes = ceil($accountBlocked['remaining_time'] / 60);
+                    $error = "Trop de tentatives de connexion échouées. Votre compte est temporairement bloqué. Veuillez réessayer dans {$remainingMinutes} minute(s).";
+                } else {
+                    $remainingAttempts = 5 - $accountBlocked['attempts'];
+                    $error = "Email ou mot de passe incorrect. Il vous reste {$remainingAttempts} tentative(s) avant le blocage temporaire.";
+                }
+                
+                viewHandler::show("../view/formConnectionView", ['pageTitle' => 'Connexion', 'error' => $error]);
                 return;
             }
         }
