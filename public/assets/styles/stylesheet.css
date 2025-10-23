@@ -49,17 +49,6 @@ body {
     gap: 1rem;
 }
 
-#nav-auth-buttons a {
-    background-color: rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
-    padding: 0.5rem 1.5rem;
-    font-weight: 500;
-}
-
-#nav-auth-buttons a:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-}
-
 /* Contenu principal */
 main {
     flex: 1;
@@ -231,4 +220,64 @@ button:hover {
     #nav-auth-buttons {
         justify-content: center;
     }
+}
+
+.btn {
+    font-family: 'Arial', sans-serif;
+    display: inline-block;
+}
+
+.db-table{
+    color: #333;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+
+a {
+    color: #0000ff;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.btn-nav {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-nav:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Theme Sombre */
+body.dark-theme {
+    background: #333;
+    color: white;
+}
+
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme a,
+body.dark-theme .db-table {
+    color: white;
+}
+
+body.dark-theme .btn-nav {
+    background-color: #001240;
+    color: white;
+}
+
+body.dark-theme .btn-nav:hover {
+    background-color: #101050;
+    color: white;
 }

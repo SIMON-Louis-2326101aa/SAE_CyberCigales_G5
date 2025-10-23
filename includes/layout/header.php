@@ -15,20 +15,24 @@ if (session_status() === PHP_SESSION_NONE) {
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=redirection&action=openHomepage" class="active">Home</a>
+        <a href="index.php?controller=redirection&action=openHomepage" class="active btn-nav">Home</a>
     </div>
 
     <div id="nav-auth-buttons">
         <?php
         if (isset($_SESSION['utilisateur'])) {
             ?>
-            <a href="index.php?controller=user&action=logout" class="active">Déconnexion</a>
-            <a href="index.php?controller=user&action=account" class="active">Compte</a>
+            <!-- Changer de Theme marche comme un bouton mais l'ajout de javascript:void(0) permet de ne pas recharger la page -->
+            <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
+            <a href="index.php?controller=user&action=logout" class="active btn-nav">Déconnexion</a>
+            <a href="index.php?controller=user&action=account" class="active btn-nav">Compte</a>
             <?php
         } else {
             ?>
-            <a href="index.php?controller=user&action=register" class="active">Inscription</a>
-            <a href="index.php?controller=user&action=login" class="active">Connexion</a>
+            <!-- Changer de Theme d(0) -->
+            <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
+            <a href="index.php?controller=user&action=register" class="active btn-nav">Inscription</a>
+            <a href="index.php?controller=user&action=login" class="active btn-nav">Connexion</a>
             <?php
         }
         ?>
