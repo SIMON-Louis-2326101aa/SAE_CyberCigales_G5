@@ -3,21 +3,37 @@ require_once __DIR__ . '/../../includes/connectionDB.php';
 
 abstract class database
 {
-    private static $_bdd;
+    private static ?PDO $pdo = null;
 
-    private static function setBdd()
+    /** Initialise la connexion PDO unique via connectionDB */
+    private static function setBdd(): void
     {
-        // Utiliser connectionDB pour obtenir la connexion
-        $connexion = connectionDB::getInstance();
-        self::$_bdd = $connexion->getPdo();
+        try {
+            $connexion = connectionDB::getInstance();
+            self::$pdo = $connexion->getPdo();
+
+            if (function_exists('log_console')) {
+                log_console('Connexion PDO initialisée avec succès', 'ok'); // ✅
+            }
+        } catch (Throwable $e) {
+            if (function_exists('log_console')) {
+                log_console('Erreur lors de l’initialisation de PDO : ' . $e->getMessage(), 'error'); // ❌
+            }
+            throw new RuntimeException('Impossible d’établir la connexion PDO.');
+        }
     }
 
-    public function getBdd()
+    /** Retourne l’unique instance PDO */
+    protected function getBdd(): PDO
     {
-        if (self::$_bdd == null) {
+        if (self::$pdo === null) {
             self::setBdd();
         }
-        return self::$_bdd;
+
+        if (function_exists('log_console')) {
+            log_console('Connexion PDO récupérée depuis Database', 'file'); // 📄
+        }
+
+        return self::$pdo;
     }
 }
-?>
