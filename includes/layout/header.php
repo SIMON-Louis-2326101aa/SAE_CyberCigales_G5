@@ -18,6 +18,7 @@
         if (isset($_SESSION['utilisateur'])) {
             ?>
             <a href="index.php?controller=user&action=logout" class="active">Déconnexion</a>
+            <a href="index.php?controller=user&action=account" class="active">Compte</a>
             <?php
         } else {
             ?>
