@@ -282,7 +282,7 @@ class userController
             $email = trim($_POST['email'] ?? '');
 
             if (!$this->userModel->emailExists($email)) {
-                $_SESSION['flash_error'] = "L'email n'existe pas ! Veuillez retourner en arrière pour vous inscrire.";
+                $_SESSION['flash_error'] = "Si l'email existe, un lien de réinitialisation vous a été envoyé.";
                 if (function_exists('log_console')) log_console("Forgot: email inconnu ($email)", 'info'); // ℹ️
                 header("Location: index.php?controller=redirection&action=openForgotPwd");
                 exit;
@@ -331,7 +331,7 @@ class userController
                 </table>
             </div>';
             if (Mailer::send($to, $subject, $message)) {
-                $_SESSION['flash_success'] = "Un lien de réinitialisation vous a été envoyé.";
+                $_SESSION['flash_success'] = "Si l'email existe, un lien de réinitialisation vous a été envoyé.";
                 if (function_exists('log_console')) log_console("Forgot: mail envoyé ($email)", 'ok'); // ✅
             } else {
                 $_SESSION['flash_error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";
