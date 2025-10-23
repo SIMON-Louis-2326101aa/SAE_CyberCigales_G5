@@ -55,7 +55,7 @@ class userController
 
             if ($emailStatus['verified']) {
                 // Le compte existe et est vérifié
-                $error = "Inscription imposible .";
+                $error = "Inscription imposible.";
                 // Modification ici
                 viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
                 return;
@@ -69,7 +69,29 @@ class userController
                 $code = $emailModel->generateAndStoreCode($email);
 
                 $subject = 'Vérification de votre adresse email';
-                $message = "Votre code de vérification est : {$code}\nIl expire dans 10 minutes.";
+                // HTML pour le corps de l'email (avec CSS inline)
+                $message = <<<HTML
+<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <table width="600" style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <tr>
+                        <td style="text-align: center;">
+                            <h2 style="color: #333333;">Vérification de votre adresse email</h2>
+                            <p style="font-size: 16px; color: #555555;">Merci de vous être inscrit !</p>
+                            <p style="font-size: 16px; color: #555555;">Votre code de vérification est :</p>
+                            <p style="font-size: 24px; font-weight: bold; color: #007bff; background-color: #e9f7ff; padding: 10px; border-radius: 4px; display: inline-block;">' . htmlspecialchars($code) . '</p>
+                            <p style="font-size: 14px; color: #888888;">Ce code expire dans 10 minutes.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+HTML;
+
                 $sent = Mailer::send($email, $subject, $message);
 
                 $params = ['email' => $email];
@@ -96,7 +118,27 @@ class userController
                 $code = $emailModel->generateAndStoreCode($email);
 
                 $subject = 'Vérification de votre adresse email';
-                $message = "Votre code de vérification est : {$code}\nIl expire dans 10 minutes.";
+                $message = <<<HTML
+<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <table width="600" style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <tr>
+                        <td style="text-align: center;">
+                            <h2 style="color: #333333;">Vérification de votre adresse email</h2>
+                            <p style="font-size: 16px; color: #555555;">Merci de vous être inscrit !</p>
+                            <p style="font-size: 16px; color: #555555;">Votre code de vérification est :</p>
+                            <p style="font-size: 24px; font-weight: bold; color: #007bff; background-color: #e9f7ff; padding: 10px; border-radius: 4px; display: inline-block;">' . htmlspecialchars($code) . '</p>
+                            <p style="font-size: 14px; color: #888888;">Ce code expire dans 10 minutes.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+HTML;;
                 $sent = Mailer::send($email, $subject, $message);
 
                 $params = ['email' => $email];
@@ -201,8 +243,31 @@ class userController
 
             $to = $email;
             $subject = 'Réinitialisation du mot de passe';
-            $message = "Bonjour,\n\nPour réinitialiser votre mot de passe, cliquez sur le lien suivant :\n\n{$resetLink}\n\nLe lien expire dans 60 minutes.\n\nSi vous n'avez pas demandé cette réinitialisation, ignorez ce message.";
-
+            $message = '
+            <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="center">
+                            <table width="600" style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <h2 style="color: #333333;">Réinitialisation du mot de passe</h2>
+                                        <p style="font-size: 16px; color: #555555;">Bonjour,</p>
+                                        <p style="font-size: 16px; color: #555555;">Pour réinitialiser votre mot de passe, veuillez cliquer sur le bouton ci-dessous :</p>
+                                        <p style="margin: 20px 0;">
+                                            <a href="' . htmlspecialchars($resetLink) . '" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                                                Réinitialiser mon mot de passe
+                                            </a>
+                                        </p>
+                                        <p style="font-size: 14px; color: #888888;">Ce lien expire dans 60 minutes.</p>
+                                        <p style="font-size: 14px; color: #888888;">Si vous n\'avez pas demandé cette réinitialisation, veuillez ignorer cet email.</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>';
             if (Mailer::send($to, $subject, $message)) {
                 $data['success'] = "Un lien de réinitialisation vous a été envoyé.";
                 echo $data['success'];
