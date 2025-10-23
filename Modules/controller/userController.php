@@ -199,7 +199,6 @@ class userController
 //            header("Location: index.php?controller=redirection&action=openHomepage");
 //            exit;
 //        }
-
         header("Location: index.php?controller=redirection&action=openFormRegister");
     }
 
@@ -349,6 +348,7 @@ class userController
      */
     public function changePwd()
     {
+        $prModel = new passwordResetModel();
         // Si on arrive via le lien (GET) : afficher la vue avec le token (la vue doit inclure un champ hidden 'token')
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $token = $_GET['token'] ?? '';
@@ -356,6 +356,14 @@ class userController
                 header("Location: index.php?controller=redirection&action=openHomepage");
                 exit();
             }
+
+            $tokenRow = $prModel->getValidTokenRow($token);
+            if (!$tokenRow) {
+                $_SESSION['flash_error'] = "Lien de réinitialisation invalide ou expiré. Veuillez refaire une demande.";
+                header("Location: index.php?controller=redirection&action=openForgotPwd");
+                exit();
+            }
+
             // Afficher la vue changePwdView et fournir le token (la vue doit mettre le token dans le form)
             viewHandler::show("../view/changePwdView", ['token' => $token]);
             return;
@@ -367,22 +375,15 @@ class userController
             $confirmPassword  = $_POST['confirm_password'] ?? '';
             $token = $_POST['token'] ?? '';
 
-            $prModel = new passwordResetModel();
             $tokenRow = $prModel->getValidTokenRow($token);
             if (!$tokenRow) {
-                $data['error'] = "Lien invalide ou expiré.";
-                echo $data['error'];
-                header("Location: /index.php?controller=redirection&action=openForgotPwd");
-                return;
+                $_SESSION['flash_error'] = "Lien de réinitialisation invalide ou expiré.";
+                if (function_exists('log_console')) log_console('ChangePwd: token invalide/expiré', 'error'); // ❌
+                header("Location: index.php?controller=redirection&action=openForgotPwd");
+                exit;
             }
 
-            if (empty($token)) {
-                $data['error'] = "Token manquant.";
-                echo $data['error'];
-                header("Location: /index.php?controller=redirection&action=openChangePwd");
-                return;
-            }
-
+            // Validation de la complexité du mot de passe
             if (strlen($newPassword) < 8) {
                 $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
                 if (function_exists('log_console')) log_console('ChangePwd: mot de passe < 8', 'error'); // ❌
