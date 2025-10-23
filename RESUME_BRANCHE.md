@@ -13,11 +13,10 @@
 - ✅ **Remise à zéro** après connexion réussie
 
 ### 📁 Fichiers Créés
-1. `Modules/model/loginAttemptModel.php` - Gestion des tentatives
-2. `database_setup.sql` - Script SQL pour créer la table
-3. `setup_database.php` - Script automatique de configuration DB
-4. `includes/cleanupLoginAttempts.php` - Nettoyage des anciennes tentatives
-5. `RATE_LIMITING_README.md` - Documentation technique complète
+1. `Modules/model/loginAttemptModel.php` - Gestion des tentatives (utilise les **sessions PHP**)
+2. `RATE_LIMITING_README.md` - Documentation technique complète
+
+**⚡ Avantage** : Aucune modification de base de données nécessaire !
 
 ### 📝 Fichiers Modifiés
 1. `Modules/controller/userController.php` - Logique de vérification
@@ -26,23 +25,16 @@
 
 ---
 
-## 🗄️ Configuration Base de Données
+## ✅ Configuration
 
-### Script SQL à exécuter :
+### Aucune configuration requise !
+Le système utilise les **sessions PHP** - tout fonctionne automatiquement.
 
-```sql
-CREATE TABLE IF NOT EXISTS login_attempts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    ip_address VARCHAR(45) NOT NULL,
-    attempted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_email_time (email, attempted_at),
-    INDEX idx_ip_time (ip_address, attempted_at),
-    INDEX idx_attempted_at (attempted_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE INDEX idx_cleanup ON login_attempts (attempted_at);
-```
+**Avantages :**
+- 🚀 Déploiement instantané
+- 💾 Pas de table SQL à créer
+- 🔄 Nettoyage automatique
+- 🎯 Plus simple à maintenir
 
 ---
 

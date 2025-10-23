@@ -3,6 +3,8 @@
 ## Description
 Cette fonctionnalité implémente un système de sécurité pour limiter les tentatives de connexion échouées et protéger contre les attaques par force brute.
 
+**⚡ Utilise les SESSIONS PHP** - Aucune modification de base de données nécessaire !
+
 ## Fonctionnalités
 
 ### Limitation par Email
@@ -18,11 +20,8 @@ Cette fonctionnalité implémente un système de sécurité pour limiter les ten
 ## Fichiers Modifiés/Créés
 
 ### Nouveaux Fichiers
-1. **`Modules/model/loginAttemptModel.php`** - Modèle pour gérer les tentatives de connexion
-2. **`database_setup.sql`** - Script SQL pour créer la table `login_attempts`
-3. **`setup_database.php`** - Script automatique de configuration
-4. **`includes/cleanupLoginAttempts.php`** - Script de nettoyage des anciennes tentatives
-5. **`RATE_LIMITING_README.md`** - Cette documentation
+1. **`Modules/model/loginAttemptModel.php`** - Modèle pour gérer les tentatives (utilise les sessions)
+2. **`RATE_LIMITING_README.md`** - Cette documentation
 
 ### Fichiers Modifiés
 1. **`Modules/controller/userController.php`** - Intégration du système de rate limiting
@@ -30,15 +29,9 @@ Cette fonctionnalité implémente un système de sécurité pour limiter les ten
 
 ## Installation
 
-### 1. Créer la table de base de données
-Exécutez le script SQL `database_setup.sql` dans votre base de données :
-
-```sql
--- Copier le contenu de database_setup.sql dans votre outil de gestion de base de données
-```
-
-### 2. Configuration automatique
-Le système se configure automatiquement lors de l'utilisation. Aucune configuration supplémentaire n'est requise.
+### ✅ Aucune installation nécessaire !
+Le système utilise les **sessions PHP** - aucune modification de base de données requise.
+Tout fonctionne automatiquement dès que le code est déployé.
 
 ## Utilisation
 
@@ -48,12 +41,13 @@ Le système se configure automatiquement lors de l'utilisation. Aucune configura
 - **IP bloquée** : "Trop de tentatives de connexion depuis cette adresse IP. Veuillez réessayer dans X minute(s)."
 
 ### Nettoyage automatique
-Le système nettoie automatiquement les tentatives de plus de 24 heures. Pour un nettoyage périodique, configurez un cron job :
+Le système nettoie automatiquement les tentatives expirées à chaque vérification.
+Les données sont stockées en **session** et disparaissent naturellement après :
+- Le temps de blocage (15 minutes)
+- La fermeture du navigateur
+- La connexion réussie de l'utilisateur
 
-```bash
-# Exécuter tous les jours à 2h du matin
-0 2 * * * /usr/bin/php /chemin/vers/votre/projet/includes/cleanupLoginAttempts.php
-```
+✅ **Aucune maintenance requise !**
 
 ## Sécurité
 
@@ -62,11 +56,12 @@ Le système nettoie automatiquement les tentatives de plus de 24 heures. Pour un
 - **Attaques distribuées** : Limitation par IP
 - **Tentatives persistantes** : Blocage temporaire
 
-### Données stockées
+### Données stockées (en session PHP)
 - Email de la tentative
-- Adresse IP
-- Timestamp de la tentative
+- Timestamps des tentatives
+- Compteur de tentatives
 - Aucun mot de passe ou données sensibles
+- **Avantage** : Les données disparaissent automatiquement avec la session
 
 ## Configuration Avancée
 
@@ -75,12 +70,8 @@ Dans `Modules/model/loginAttemptModel.php`, vous pouvez modifier :
 
 ```php
 // Limitation par email
-$maxAttempts = 5; // Nombre maximum de tentatives
-$blockDuration = 15; // Durée de blocage en minutes
-
-// Limitation par IP
-$maxAttempts = 10; // Nombre maximum de tentatives par IP
-$blockDuration = 30; // Durée de blocage en minutes
+private const MAX_ATTEMPTS = 5; // Nombre maximum de tentatives
+private const BLOCK_DURATION = 15; // Durée de blocage en minutes
 ```
 
 ### Période de comptage
@@ -92,15 +83,17 @@ $minutes = 15; // Période de comptage en minutes
 ## Dépannage
 
 ### Problèmes courants
-1. **Table non créée** : Vérifiez que le script SQL a été exécuté
+1. **Sessions non démarrées** : Vérifiez que `session_start()` est appelé (déjà fait automatiquement)
 2. **Messages d'erreur non affichés** : Vérifiez que les variables sont passées correctement à la vue
-3. **Blocage permanent** : Le blocage se lève automatiquement après la durée configurée
+3. **Blocage permanent** : Le blocage se lève automatiquement après 15 minutes
 
-### Logs et débogage
-Pour déboguer, vous pouvez consulter directement la table `login_attempts` :
+### Débogage
+Pour déboguer, vous pouvez afficher le contenu de la session :
 
-```sql
-SELECT * FROM login_attempts ORDER BY attempted_at DESC LIMIT 10;
+```php
+echo '<pre>';
+print_r($_SESSION['login_attempts']);
+echo '</pre>';
 ```
 
 ## Support

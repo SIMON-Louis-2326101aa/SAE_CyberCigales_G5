@@ -1,67 +1,110 @@
 <?php
-require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/../../includes/connectionDB.php';
+/**
+ * Modèle de gestion des tentatives de connexion
+ * Utilise les SESSIONS PHP au lieu de la base de données
+ * Plus simple, plus rapide, aucune modification de BDD nécessaire
+ */
 
-class loginAttemptModel extends database
+class loginAttemptModel
 {
-    private connectionDB $db;
+    private const MAX_ATTEMPTS = 5; // Maximum de tentatives par email
+    private const BLOCK_DURATION = 15; // Durée de blocage en minutes
+    private const SESSION_KEY = 'login_attempts';
 
-    public function __construct()
+    /**
+     * Initialise la session si nécessaire
+     */
+    private function initSession(): void
     {
-        $this->db = connectionDB::getInstance();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
+        if (!isset($_SESSION[self::SESSION_KEY])) {
+            $_SESSION[self::SESSION_KEY] = [];
+        }
+    }
+
+    /**
+     * Nettoie les tentatives anciennes pour un email ou une IP
+     * @param string $key La clé (email ou ip_xxx)
+     */
+    private function cleanOldAttempts(string $key): void
+    {
+        $this->initSession();
+        
+        if (!isset($_SESSION[self::SESSION_KEY][$key])) {
+            return;
+        }
+        
+        $cutoffTime = time() - (self::BLOCK_DURATION * 60);
+        $validAttempts = [];
+        
+        foreach ($_SESSION[self::SESSION_KEY][$key]['attempts'] as $timestamp) {
+            if ($timestamp > $cutoffTime) {
+                $validAttempts[] = $timestamp;
+            }
+        }
+        
+        $_SESSION[self::SESSION_KEY][$key]['attempts'] = $validAttempts;
+        $_SESSION[self::SESSION_KEY][$key]['count'] = count($validAttempts);
+        
+        // Supprimer l'entrée si plus de tentatives
+        if (empty($validAttempts)) {
+            unset($_SESSION[self::SESSION_KEY][$key]);
+        }
     }
 
     /**
      * Enregistre une tentative de connexion échouée
      * @param string $email L'email utilisé pour la tentative
-     * @param string $ip L'adresse IP de l'utilisateur
+     * @param string $ip L'adresse IP
      */
     public function recordFailedAttempt(string $email, string $ip): void
     {
-        $sql = "INSERT INTO login_attempts (email, ip_address, attempted_at) VALUES (:email, :ip, NOW())";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute([
-            'email' => $email,
-            'ip' => $ip
-        ]);
+        $this->initSession();
+        
+        // Enregistrer pour l'email
+        if (!isset($_SESSION[self::SESSION_KEY][$email])) {
+            $_SESSION[self::SESSION_KEY][$email] = [
+                'count' => 0,
+                'attempts' => []
+            ];
+        }
+        
+        $_SESSION[self::SESSION_KEY][$email]['attempts'][] = time();
+        $_SESSION[self::SESSION_KEY][$email]['count']++;
+        $this->cleanOldAttempts($email);
+        
+        // Enregistrer pour l'IP
+        $ipKey = 'ip_' . md5($ip);
+        if (!isset($_SESSION[self::SESSION_KEY][$ipKey])) {
+            $_SESSION[self::SESSION_KEY][$ipKey] = [
+                'count' => 0,
+                'attempts' => []
+            ];
+        }
+        
+        $_SESSION[self::SESSION_KEY][$ipKey]['attempts'][] = time();
+        $_SESSION[self::SESSION_KEY][$ipKey]['count']++;
+        $this->cleanOldAttempts($ipKey);
     }
 
     /**
-     * Compte le nombre de tentatives échouées pour un email dans les dernières minutes
+     * Compte le nombre de tentatives échouées pour un email
      * @param string $email L'email à vérifier
-     * @param int $minutes Nombre de minutes à considérer (défaut: 15)
-     * @return int Nombre de tentatives échouées
+     * @return int Nombre de tentatives
      */
-    public function getFailedAttemptsCount(string $email, int $minutes = 15): int
+    public function getFailedAttemptsCount(string $email): int
     {
-        $sql = "SELECT COUNT(*) FROM login_attempts 
-                WHERE email = :email 
-                AND attempted_at > DATE_SUB(NOW(), INTERVAL :minutes MINUTE)";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute([
-            'email' => $email,
-            'minutes' => $minutes
-        ]);
-        return (int) $stmt->fetchColumn();
-    }
-
-    /**
-     * Compte le nombre de tentatives échouées pour une IP dans les dernières minutes
-     * @param string $ip L'adresse IP à vérifier
-     * @param int $minutes Nombre de minutes à considérer (défaut: 15)
-     * @return int Nombre de tentatives échouées
-     */
-    public function getFailedAttemptsCountByIP(string $ip, int $minutes = 15): int
-    {
-        $sql = "SELECT COUNT(*) FROM login_attempts 
-                WHERE ip_address = :ip 
-                AND attempted_at > DATE_SUB(NOW(), INTERVAL :minutes MINUTE)";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute([
-            'ip' => $ip,
-            'minutes' => $minutes
-        ]);
-        return (int) $stmt->fetchColumn();
+        $this->initSession();
+        $this->cleanOldAttempts($email);
+        
+        if (!isset($_SESSION[self::SESSION_KEY][$email])) {
+            return 0;
+        }
+        
+        return $_SESSION[self::SESSION_KEY][$email]['count'];
     }
 
     /**
@@ -71,26 +114,18 @@ class loginAttemptModel extends database
      */
     public function isAccountBlocked(string $email): array
     {
+        $this->initSession();
+        $this->cleanOldAttempts($email);
+        
         $attempts = $this->getFailedAttemptsCount($email);
-        $maxAttempts = 5; // Maximum 5 tentatives
-        $blockDuration = 15; // Bloqué pendant 15 minutes
-
-        if ($attempts >= $maxAttempts) {
-            // Récupérer la dernière tentative pour calculer le temps restant
-            $sql = "SELECT attempted_at FROM login_attempts 
-                    WHERE email = :email 
-                    ORDER BY attempted_at DESC 
-                    LIMIT 1";
-            $stmt = $this->getBdd()->prepare($sql);
-            $stmt->execute(['email' => $email]);
-            $lastAttempt = $stmt->fetchColumn();
-
-            if ($lastAttempt) {
-                $lastAttemptTime = strtotime($lastAttempt);
-                $currentTime = time();
-                $timeElapsed = $currentTime - $lastAttemptTime;
-                $remainingTime = max(0, ($blockDuration * 60) - $timeElapsed);
-
+        
+        if ($attempts >= self::MAX_ATTEMPTS) {
+            // Calculer le temps restant avant déblocage
+            if (isset($_SESSION[self::SESSION_KEY][$email]['attempts'])) {
+                $lastAttempt = max($_SESSION[self::SESSION_KEY][$email]['attempts']);
+                $elapsedTime = time() - $lastAttempt;
+                $remainingTime = max(0, (self::BLOCK_DURATION * 60) - $elapsedTime);
+                
                 return [
                     'blocked' => $remainingTime > 0,
                     'remaining_time' => $remainingTime,
@@ -98,7 +133,7 @@ class loginAttemptModel extends database
                 ];
             }
         }
-
+        
         return [
             'blocked' => false,
             'remaining_time' => 0,
@@ -107,32 +142,45 @@ class loginAttemptModel extends database
     }
 
     /**
-     * Vérifie si une IP est temporairement bloquée
-     * @param string $ip L'adresse IP à vérifier
+     * Compte le nombre de tentatives par IP
+     * @param string $ip L'adresse IP
+     * @return int Nombre de tentatives
+     */
+    public function getFailedAttemptsCountByIP(string $ip): int
+    {
+        $this->initSession();
+        $ipKey = 'ip_' . md5($ip);
+        $this->cleanOldAttempts($ipKey);
+        
+        if (!isset($_SESSION[self::SESSION_KEY][$ipKey])) {
+            return 0;
+        }
+        
+        return $_SESSION[self::SESSION_KEY][$ipKey]['count'];
+    }
+
+    /**
+     * Vérifie si une IP est bloquée
+     * @param string $ip L'adresse IP
      * @return array ['blocked' => bool, 'remaining_time' => int, 'attempts' => int]
      */
     public function isIPBlocked(string $ip): array
     {
+        $maxAttemptsIP = 10; // 10 tentatives max par IP
+        $blockDurationIP = 30; // 30 minutes
+        
+        $this->initSession();
+        $ipKey = 'ip_' . md5($ip);
+        $this->cleanOldAttempts($ipKey);
+        
         $attempts = $this->getFailedAttemptsCountByIP($ip);
-        $maxAttempts = 10; // Maximum 10 tentatives par IP
-        $blockDuration = 30; // Bloqué pendant 30 minutes
-
-        if ($attempts >= $maxAttempts) {
-            // Récupérer la dernière tentative pour calculer le temps restant
-            $sql = "SELECT attempted_at FROM login_attempts 
-                    WHERE ip_address = :ip 
-                    ORDER BY attempted_at DESC 
-                    LIMIT 1";
-            $stmt = $this->getBdd()->prepare($sql);
-            $stmt->execute(['ip' => $ip]);
-            $lastAttempt = $stmt->fetchColumn();
-
-            if ($lastAttempt) {
-                $lastAttemptTime = strtotime($lastAttempt);
-                $currentTime = time();
-                $timeElapsed = $currentTime - $lastAttemptTime;
-                $remainingTime = max(0, ($blockDuration * 60) - $timeElapsed);
-
+        
+        if ($attempts >= $maxAttemptsIP) {
+            if (isset($_SESSION[self::SESSION_KEY][$ipKey]['attempts'])) {
+                $lastAttempt = max($_SESSION[self::SESSION_KEY][$ipKey]['attempts']);
+                $elapsedTime = time() - $lastAttempt;
+                $remainingTime = max(0, ($blockDurationIP * 60) - $elapsedTime);
+                
                 return [
                     'blocked' => $remainingTime > 0,
                     'remaining_time' => $remainingTime,
@@ -140,22 +188,12 @@ class loginAttemptModel extends database
                 ];
             }
         }
-
+        
         return [
             'blocked' => false,
             'remaining_time' => 0,
             'attempts' => $attempts
         ];
-    }
-
-    /**
-     * Nettoie les anciennes tentatives de connexion (plus de 24h)
-     */
-    public function cleanupOldAttempts(): void
-    {
-        $sql = "DELETE FROM login_attempts WHERE attempted_at < DATE_SUB(NOW(), INTERVAL 24 HOUR)";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute();
     }
 
     /**
@@ -164,8 +202,26 @@ class loginAttemptModel extends database
      */
     public function clearFailedAttempts(string $email): void
     {
-        $sql = "DELETE FROM login_attempts WHERE email = :email";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute(['email' => $email]);
+        $this->initSession();
+        
+        if (isset($_SESSION[self::SESSION_KEY][$email])) {
+            unset($_SESSION[self::SESSION_KEY][$email]);
+        }
+    }
+
+    /**
+     * Nettoie toutes les tentatives expirées (appelé périodiquement)
+     */
+    public function cleanupOldAttempts(): void
+    {
+        $this->initSession();
+        
+        if (!isset($_SESSION[self::SESSION_KEY])) {
+            return;
+        }
+        
+        foreach (array_keys($_SESSION[self::SESSION_KEY]) as $key) {
+            $this->cleanOldAttempts($key);
+        }
     }
 }
