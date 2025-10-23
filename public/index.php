@@ -34,7 +34,9 @@ if (!function_exists('log_console')) {
         ];
         $color = $colors[$type] ?? 'white';
         $emoji = $icon[$type] ?? '📄';
-        echo "<script>console.log('%c{$emoji} [LOG DEV Page] " . addslashes($message) . "', 'color: {$color};');</script>";
+        // JSON-encode pour échapper proprement le message dans JS
+        $payload = json_encode("{$emoji} [LOG DEV Page] {$message}", JSON_UNESCAPED_UNICODE);
+        $GLOBALS['dev_log_buffer'] .= "<script>console.log('%c' + {$payload}, 'color: {$color};');</script>\n";
     }
 }
 
@@ -173,7 +175,11 @@ try {
     // Affiche le contenu
     echo $displayContent;
     log_console('Contenu affiché', 'ok'); // ✅
-
+// Flush non-échappé des scripts de debug
+    if (!empty($GLOBALS['dev_log_buffer'])) {
+        echo $GLOBALS['dev_log_buffer'];
+        $GLOBALS['dev_log_buffer'] = '';
+        }
 } catch (Throwable $e) {
     // Gestion d'erreur globale
     http_response_code(500);
