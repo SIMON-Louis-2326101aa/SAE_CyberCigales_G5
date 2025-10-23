@@ -165,20 +165,7 @@ nav {
     padding: 10px 15px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-}
-
-nav a.active {
-    /* Styles will be inherited from .theme-button or handled by parent flex container */
-}
-
-nav a.active:hover {
-    background-color: #AA5010;
-    color: black;
-}
-
-.theme-button:hover {
-    background-color: #AA5010;
-    color: black;
+    margin-right: 20px;
 }
 
 /* Theme Sombre */
