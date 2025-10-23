@@ -26,11 +26,11 @@ class userController
             exit;
         }
 
-        $nom      = trim($_POST['nom'] ?? '');
-        $prenom   = trim($_POST['prenom'] ?? '');
-        $email    = trim($_POST['email'] ?? '');
+        $nom = trim($_POST['nom'] ?? '');
+        $prenom = trim($_POST['prenom'] ?? '');
+        $email = trim($_POST['email'] ?? '');
         $password = $_POST['pwd'] ?? '';
-        $confirm  = $_POST['confirm_pwd'] ?? '';
+        $confirm = $_POST['confirm_pwd'] ?? '';
 
         $emailModel = new emailVerificationModel();
 
@@ -60,7 +60,7 @@ class userController
         if (
             !preg_match($verif_majuscule, $password) ||
             !preg_match($verif_minuscule, $password) ||
-            !preg_match($verif_chiffre, $password)   ||
+            !preg_match($verif_chiffre, $password) ||
             !preg_match($verif_special, $password)
         ) {
             $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
@@ -77,27 +77,18 @@ class userController
             header("Location: index.php?controller=redirection&action=openFormRegister");
             exit;
         }
-            // Vérifier le statut de l'email
-            $emailStatus = $this->userModel->getEmailStatus($email);
+        // Vérifier le statut de l'email
+        $emailStatus = $this->userModel->getEmailStatus($email);
 
-            if ($emailStatus['verified']) {
-                // Le compte existe et est vérifié
-                $error = "Inscription imposible.";
-                // Modification ici
-                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
-                return;
-            }
+        // Stocker l'inscription en attente au lieu de créer le compte immédiatement
+        $emailModel = new emailVerificationModel();
 
-            // Stocker l'inscription en attente au lieu de créer le compte immédiatement
-            $emailModel = new emailVerificationModel();
-
-            if ($emailStatus['pending']) {
-                // Si déjà en attente, renvoyer un nouveau code et afficher la vue de vérification
-                $code = $emailModel->generateAndStoreCode($email);
-
-                $subject = 'Vérification de votre adresse email';
-                // HTML pour le corps de l'email (avec CSS inline)
-                $message = <<<HTML
+        if ($emailStatus['pending']) {
+            // Si déjà en attente, renvoyer un nouveau code et afficher la vue de vérification
+            $code = $emailModel->generateAndStoreCode($email);
+            $subject = 'Vérification de votre adresse email';
+            // HTML pour le corps de l'email (avec CSS inline)
+            $message = '
 <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
@@ -116,116 +107,107 @@ class userController
             </td>
         </tr>
     </table>
-</div>
-HTML;
+</div>';
+            $sent = Mailer::send($email, $subject, $message);
 
-                $sent = Mailer::send($email, $subject, $message);
-
-                $params = ['email' => $email];
-                if ($sent) {
-                    $params['info'] = 'Un nouveau code vous a été envoyé.';
-                } else {
-                    if (class_exists('Constant') && Constant::isDev()) {
-                        $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
-                        $params['devCode'] = $code;
-                    } else {
-                        $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
-                    }
-                }
-
-                viewHandler::show('../view/emailVerificationView', $params);
-                return;
-            }
-
-            // Stocker l'inscription en attente
-            $success = $emailModel->storePendingRegistration($nom, $prenom, $email, password_hash($password, PASSWORD_BCRYPT));
-            //$success = $this->userModel->register($nom, $prenom, $email, $password);
-
-        //if (!$success) {
-        //    $_SESSION['flash_error'] = "Erreur lors de l'inscription.";
-        //    if (function_exists('log_console')) log_console("Register: échec insertion DB ($email)", 'error'); // ❌
-        //    header("Location: index.php?controller=redirection&action=openFormRegister");
-        //    exit;
-        //}
-
-        // Connexion automatique après inscription
-        //$utilisateur = $this->userModel->authenticate($email, $password);
-        //if ($utilisateur) {
-        //    if (session_status() === PHP_SESSION_NONE) {
-        //        session_start([
-        //            'use_strict_mode' => true,
-        //            'cookie_httponly' => true,
-        //            'cookie_secure'   => true,
-        //            'cookie_samesite' => 'None'
-        //        ]);
-        //    }
-            if ($success) {
-                // Générer et envoyer le code, puis afficher la vue de vérification (ne pas auto-login)
-                $code = $emailModel->generateAndStoreCode($email);
-
-                $subject = 'Vérification de votre adresse email';
-                $message = <<<HTML
-<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-        <tr>
-            <td align="center">
-                <table width="600" style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-                    <tr>
-                        <td style="text-align: center;">
-                            <h2 style="color: #333333;">Vérification de votre adresse email</h2>
-                            <p style="font-size: 16px; color: #555555;">Merci de vous être inscrit !</p>
-                            <p style="font-size: 16px; color: #555555;">Votre code de vérification est :</p>
-                            <p style="font-size: 24px; font-weight: bold; color: #007bff; background-color: #e9f7ff; padding: 10px; border-radius: 4px; display: inline-block;">' . htmlspecialchars($code) . '</p>
-                            <p style="font-size: 14px; color: #888888;">Ce code expire dans 10 minutes.</p>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-</div>
-HTML;;
-                $sent = Mailer::send($email, $subject, $message);
-
-            //$_SESSION['utilisateur'] = $utilisateur;
-            //$_SESSION['user_id']     = $utilisateur['id'] ?? null;
-            //$_SESSION['nom']         = $utilisateur['nom'] ?? null;
-            //$_SESSION['prenom']      = $utilisateur['prenom'] ?? null;
-            //$_SESSION['email']       = $utilisateur['email'] ?? null;
-
-            //if (function_exists('log_console')) log_console("Register: inscription + login OK ($email)", 'ok'); // ✅
-            //header("Location: index.php?controller=redirection&action=openHomepage");
-            //exit;
-        //}
-
-        // Fallback : inscrit mais pas loggé
-        //$_SESSION['flash_error'] = "Inscription réussie, mais problème de connexion automatique.";
-        //if (function_exists('log_console')) log_console("Register: login auto échoué ($email)", 'error'); // ❌
-        //header("Location: index.php?controller=redirection&action=openFormConnection");
-        //exit;
-                $params = ['email' => $email];
-                if ($sent) {
-                    $params['info'] = 'Un code vous a été envoyé. Vérifiez votre boîte mail.';
-                } else {
-                    if (class_exists('Constant') && Constant::isDev()) {
-                        $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
-                        $params['devCode'] = $code;
-                    } else {
-                        $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
-                    }
-                }
-
-                viewHandler::show('../view/emailVerificationView', $params);
-                return;
+            $params = ['email' => $email];
+            if ($sent) {
+                $params['info'] = 'Un nouveau code vous a été envoyé.';
             } else {
-                $error = "Erreur lors de l'inscription.";
-                // Modification ici
-                viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
-                return;
+                if (class_exists('Constant') && Constant::isDev()) {
+                    $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
+                    $params['devCode'] = $code;
+                } else {
+                    $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+                }
             }
+            header("Location: index.php?controller=redirection&action=openEmailVerification");
+            return;
         }
+        // Stocker l'inscription en attente
+        $success = $emailModel->storePendingRegistration($nom, $prenom, $email, password_hash($password, PASSWORD_BCRYPT));
+
+        if ($success) {
+            // Générer et envoyer le code, puis afficher la vue de vérification (ne pas auto-login)
+            $code = $emailModel->generateAndStoreCode($email);
+
+            $subject = 'Vérification de votre adresse email';
+            $message = '
+<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="center">
+                <table width="600" style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                    <tr>
+                        <td style="text-align: center;">
+                            <h2 style="color: #333333;">Vérification de votre adresse email</h2>
+                            <p style="font-size: 16px; color: #555555;">Merci de vous être inscrit !</p>
+                            <p style="font-size: 16px; color: #555555;">Votre code de vérification est :</p>
+                            <p style="font-size: 24px; font-weight: bold; color: #007bff; background-color: #e9f7ff; padding: 10px; border-radius: 4px; display: inline-block;">' . htmlspecialchars($code) . '</p>
+                            <p style="font-size: 14px; color: #888888;">Ce code expire dans 10 minutes.</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>';
+            $sent = Mailer::send($email, $subject, $message);
+            $params = ['email' => $email];
+
+            if ($sent) {
+                $params['info'] = 'Un code vous a été envoyé. Vérifiez votre boîte mail.';
+            } else {
+                if (class_exists('Constant') && Constant::isDev()) {
+                    $params['info'] = "Envoi d'email indisponible en local. Utilisez le code affiché ci-dessous.";
+                    $params['devCode'] = $code;
+                } else {
+                    $params['error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+                }
+            }
+            header("Location: index.php?controller=redirection&action=openEmailVerification");
+            return;
+        } else {
+            $_SESSION['flash_error'] = "Erreur lors de l'inscription.";
+            if (function_exists('log_console')) log_console("Register: échec insertion DB ($email)", 'error'); // ❌
+            header("Location: index.php?controller=redirection&action=openFormRegister");
+            exit;
+//            viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
+
+        }
+//          obsolete
+
+//         //Connexion automatique après inscription
+//        $utilisateur = $this->userModel->authenticate($email, $password);
+//        if ($utilisateur) {
+//            if (session_status() === PHP_SESSION_NONE) {
+//                session_start([
+//                    'use_strict_mode' => true,
+//                    'cookie_httponly' => true,
+//                    'cookie_secure'   => true,
+//                    'cookie_samesite' => 'None'
+//                ]);
+//            }
+//
+//            $_SESSION['utilisateur'] = $utilisateur;
+//            $_SESSION['user_id']     = $utilisateur['id'] ?? null;
+//            $_SESSION['nom']         = $utilisateur['nom'] ?? null;
+//            $_SESSION['prenom']      = $utilisateur['prenom'] ?? null;
+//            $_SESSION['email']       = $utilisateur['email'] ?? null;
+//
+//            if (function_exists('log_console')) log_console("Register: inscription + login OK ($email)", 'ok'); // ✅
+//            header("Location: index.php?controller=redirection&action=openHomepage");
+//            exit;
+//        }
+
         header("Location: index.php?controller=redirection&action=openFormRegister");
     }
+
+    // Fallback : inscrit mais pas loggé
+    //$_SESSION['flash_error'] = "Inscription réussie, mais problème de connexion automatique.";
+    //if (function_exists('log_console')) log_console("Register: login auto échoué ($email)", 'error'); // ❌
+    //header("Location: index.php?controller=redirection&action=openFormConnection");
+    //exit;
 
     /**
      * Connexion
@@ -237,26 +219,27 @@ HTML;;
             exit;
         }
 
-        $email    = trim($_POST['email'] ?? '');
+        $email = trim($_POST['email'] ?? '');
         $password = $_POST['pwd'] ?? '';
 
         $utilisateur = $this->userModel->authenticate($email, $password);
+
 
         if ($utilisateur) {
             if (session_status() === PHP_SESSION_NONE) {
                 session_start([
                     'use_strict_mode' => true,
                     'cookie_httponly' => true,
-                    'cookie_secure'   => true,
+                    'cookie_secure' => true,
                     'cookie_samesite' => 'None'
                 ]);
             }
 
             $_SESSION['utilisateur'] = $utilisateur;
-            $_SESSION['user_id']     = $utilisateur['id'] ?? null;
-            $_SESSION['nom']         = $utilisateur['nom'] ?? null;
-            $_SESSION['prenom']      = $utilisateur['prenom'] ?? null;
-            $_SESSION['email']       = $utilisateur['email'] ?? null;
+            $_SESSION['user_id'] = $utilisateur['id'] ?? null;
+            $_SESSION['nom'] = $utilisateur['nom'] ?? null;
+            $_SESSION['prenom'] = $utilisateur['prenom'] ?? null;
+            $_SESSION['email'] = $utilisateur['email'] ?? null;
 
             if (function_exists('log_console')) log_console("Login: succès ($email)", 'ok'); // ✅
             header("Location: index.php?controller=redirection&action=openHomepage");
@@ -295,39 +278,21 @@ HTML;;
      */
     public function forgot()
     {
-        if (!isset($_POST['forgotPwd'])) {
-            header("Location: index.php?controller=redirection&action=openForgotPwd");
-            exit;
-        }
-
-        $email = trim($_POST['email'] ?? '');
-
-        if (!$this->userModel->emailExists($email)) {
-            $_SESSION['flash_error'] = "L'email n'existe pas ! Veuillez retourner en arrière pour vous inscrire.";
-            if (function_exists('log_console')) log_console("Forgot: email inconnu ($email)", 'info'); // ℹ️
-            header("Location: index.php?controller=redirection&action=openForgotPwd");
-            exit;
-        }
-
-        // Mémorise l'email pour le changement de mot de passe
-        $_SESSION['email'] = $email;
-
-    public function forgot(){
         if (isset($_POST['forgotPwd'])) {
             $email = trim($_POST['email'] ?? '');
 
             if (!$this->userModel->emailExists($email)) {
-                $data['error'] = "L'email n'existe pas ! Veuillez retourner en arrière pour vous inscrire.";
-                echo $data['error'];
+                $_SESSION['flash_error'] = "L'email n'existe pas ! Veuillez retourner en arrière pour vous inscrire.";
+                if (function_exists('log_console')) log_console("Forgot: email inconnu ($email)", 'info'); // ℹ️
                 header("Location: index.php?controller=redirection&action=openForgotPwd");
-                return;
+                exit;
             }
 
             $prModel = new passwordResetModel();
             $token = $prModel->createTokenForEmail($email, 60); // token valable 60 minutes
 
             if (!$token) {
-                $data['error'] = "Impossible de générer le token. Réessayez plus tard.";
+                $data['error'] = "Impossible de générer le mail. Réessayez plus tard.";
                 echo $data['error'];
                 header("Location: index.php?controller=redirection&action=openForgotPwd");
                 return;
@@ -337,21 +302,7 @@ HTML;;
             $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
             $resetLink = $scheme . '://' . $host . '/index.php?controller=redirection&action=openChangePwd&token=' . urlencode($token);
 
-        // Envoi du mail (simple)
-        $to      = $email;
-        $subject = 'Reinitialisation du mot de passe';
-        $message = 'Bonjour !
-Pour reinitialiser votre mot de passe cliquez sur le lien suivant: 
-https://escapethecode.alwaysdata.net/index.php?controller=redirection&action=openChangePwd';
-
-        $sent = @mail($to, $subject, $message);
-
-        if ($sent) {
-            $_SESSION['flash_success'] = "Un lien de réinitialisation vous a été envoyé.";
-            if (function_exists('log_console')) log_console("Forgot: mail envoyé ($email)", 'ok'); // ✅
-        } else {
-            $_SESSION['flash_error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";
-            if (function_exists('log_console')) log_console("Forgot: échec envoi mail ($email)", 'error'); // ❌
+            // Envoi du mail (simple)
             $to = $email;
             $subject = 'Réinitialisation du mot de passe';
             $message = '
@@ -380,40 +331,24 @@ https://escapethecode.alwaysdata.net/index.php?controller=redirection&action=ope
                 </table>
             </div>';
             if (Mailer::send($to, $subject, $message)) {
-                $data['success'] = "Un lien de réinitialisation vous a été envoyé.";
-                echo $data['success'];
+                $_SESSION['flash_success'] = "Un lien de réinitialisation vous a été envoyé.";
+                if (function_exists('log_console')) log_console("Forgot: mail envoyé ($email)", 'ok'); // ✅
             } else {
-                if (class_exists('Constant') && Constant::isDev()) {
-                    // Afficher le token en local pour faciliter les tests
-                    $data['info'] = "Envoi d'email indisponible en local. Token: {$token}";
-                    echo $data['info'];
-                } else {
-                    $data['error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";
-                    echo $data['error'];
-                }
+                $_SESSION['flash_error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";
+                if (function_exists('log_console')) log_console("Forgot: échec envoi mail ($email)", 'error'); // ❌
             }
-        }
 
-        header("Location: index.php?controller=redirection&action=openForgotPwd");
-        exit;
+            header("Location: index.php?controller=redirection&action=openForgotPwd");
+            exit;
+        }
     }
+
 
     /**
      * Changement de mot de passe
      */
     public function changePwd()
     {
-        if (!isset($_POST['changePwd'])) {
-            header("Location: index.php?controller=redirection&action=openChangePwd");
-            exit;
-        }
-
-        $newPassword      = $_POST['new_password'] ?? '';
-        $confirmPassword  = $_POST['confirm_password'] ?? '';
-        $email            = $_SESSION['email'] ?? '';
-    }
-
-    public function changePwd(){
         // Si on arrive via le lien (GET) : afficher la vue avec le token (la vue doit inclure un champ hidden 'token')
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $token = $_GET['token'] ?? '';
@@ -428,9 +363,18 @@ https://escapethecode.alwaysdata.net/index.php?controller=redirection&action=ope
 
         // Traitement du POST pour changer le mot de passe
         if (isset($_POST['changePwd'])) {
-            $newPassword = $_POST['new_password'] ?? '';
-            $confirmPassword = $_POST['confirm_password'] ?? '';
+            $newPassword      = $_POST['new_password'] ?? '';
+            $confirmPassword  = $_POST['confirm_password'] ?? '';
             $token = $_POST['token'] ?? '';
+
+            $prModel = new passwordResetModel();
+            $tokenRow = $prModel->getValidTokenRow($token);
+            if (!$tokenRow) {
+                $data['error'] = "Lien invalide ou expiré.";
+                echo $data['error'];
+                header("Location: /index.php?controller=redirection&action=openForgotPwd");
+                return;
+            }
 
             if (empty($token)) {
                 $data['error'] = "Token manquant.";
@@ -439,89 +383,60 @@ https://escapethecode.alwaysdata.net/index.php?controller=redirection&action=ope
                 return;
             }
 
-        if (strlen($newPassword) < 8) {
-            $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
-            if (function_exists('log_console')) log_console('ChangePwd: mot de passe < 8', 'error'); // ❌
-            header("Location: index.php?controller=redirection&action=openChangePwd");
-            exit;
-        }
-            if(strlen($newPassword) < 8) {
-                $error = "Votre mot de passe n'est pas assez long : minimum 8 caractères";
-                viewHandler::show("../view/changePwdView", ['token' => $token]);
-                echo $error;
-                return;
+            if (strlen($newPassword) < 8) {
+                $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
+                if (function_exists('log_console')) log_console('ChangePwd: mot de passe < 8', 'error'); // ❌
+                header("Location: index.php?controller=redirection&action=openChangePwd");
+                //viewHandler::show("../view/changePwdView", ['token' => $token]);
+                exit;
             }
 
-        $verif_majuscule = '/[A-Z]/';
-        $verif_minuscule = '/[a-z]/';
-        $verif_chiffre   = '/[0-9]/';
-        $verif_special   = '/[^a-zA-Z0-9]/';
+            $verif_majuscule = '/[A-Z]/';
+            $verif_minuscule = '/[a-z]/';
+            $verif_chiffre = '/[0-9]/';
+            $verif_special = '/[^a-zA-Z0-9]/';
 
-        if (
-            !preg_match($verif_majuscule, $newPassword) ||
-            !preg_match($verif_minuscule, $newPassword) ||
-            !preg_match($verif_chiffre,   $newPassword) ||
-            !preg_match($verif_special,   $newPassword)
-        ) {
-            $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
-            if (function_exists('log_console')) log_console('ChangePwd: complexité insuffisante', 'error'); // ❌
-            header("Location: index.php?controller=redirection&action=openChangePwd");
-            //viewHandler::show("../view/changePwdView", ['token' => $token]);
-            exit;
-        }
+            if (
+                !preg_match($verif_majuscule, $newPassword) ||
+                !preg_match($verif_minuscule, $newPassword) ||
+                !preg_match($verif_chiffre, $newPassword) ||
+                !preg_match($verif_special, $newPassword)
+            ) {
+                $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.";
+                if (function_exists('log_console')) log_console('ChangePwd: complexité insuffisante', 'error'); // ❌
+                header("Location: index.php?controller=redirection&action=openChangePwd");
+                //viewHandler::show("../view/changePwdView", ['token' => $token]);
+                exit;
+            }
 
-        if (empty($newPassword) || empty($confirmPassword)) {
-            $_SESSION['flash_error'] = "Veuillez remplir les deux champs de mot de passe.";
-            if (function_exists('log_console')) log_console('ChangePwd: champs vides', 'error'); // ❌
-            header("Location: index.php?controller=redirection&action=openChangePwd");
-            exit;
-        }
-
-        if ($newPassword !== $confirmPassword) {
-            $_SESSION['flash_error'] = "Les mots de passe ne correspondent pas.";
-            if (function_exists('log_console')) log_console('ChangePwd: mots de passe différents', 'error'); // ❌
-            header("Location: index.php?controller=redirection&action=openChangePwd");
-            exit;
-        }
-
-        $ok = $this->userModel->changePwd($newPassword, $email);
-        if ($ok) {
-            $_SESSION['flash_success'] = "Votre mot de passe a été modifié avec succès.";
-            if (function_exists('log_console')) log_console("ChangePwd: succès ($email)", 'ok'); // ✅
-        } else {
-            $_SESSION['flash_error'] = "Erreur lors de la modification du mot de passe.";
-            if (function_exists('log_console')) log_console("ChangePwd: échec ($email)", 'error'); // ❌
             if (empty($newPassword) || empty($confirmPassword)) {
-                $data['error'] = "Veuillez remplir les deux champs de mot de passe.";
-                echo $data['error'];
-            } elseif ($newPassword !== $confirmPassword) {
-                $data['error'] = "Les mots de passe ne correspondent pas.";
-                echo $data['error'];
-            } else {
-                $prModel = new passwordResetModel();
-                $tokenRow = $prModel->getValidTokenRow($token);
-                if (!$tokenRow) {
-                    $data['error'] = "Token invalide ou expiré.";
-                    echo $data['error'];
-                    header("Location: /index.php?controller=redirection&action=openForgotPwd");
-                    return;
-                }
-
-                $email = $tokenRow['email'];
-
-                if ($this->userModel->changePwd($newPassword, $email)) {
-                    $prModel->markTokenUsed($token);
-                    $data['success'] = "Votre mot de passe a été modifié avec succès.";
-                    echo $data['success'];
-                } else {
-                    $data['error'] = "Erreur lors de la modification du mot de passe.";
-                    echo $data['error'];
-                }
+                $_SESSION['flash_error'] = "Veuillez remplir les deux champs de mot de passe.";
+                if (function_exists('log_console')) log_console('ChangePwd: champs vides', 'error'); // ❌
+                header("Location: index.php?controller=redirection&action=openChangePwd");
+                exit;
             }
-        }
 
-        header("Location: index.php?controller=redirection&action=openChangePwd");
-        exit;
+            if ($newPassword !== $confirmPassword) {
+                $_SESSION['flash_error'] = "Les mots de passe ne correspondent pas.";
+                if (function_exists('log_console')) log_console('ChangePwd: mots de passe différents', 'error'); // ❌
+                header("Location: index.php?controller=redirection&action=openChangePwd");
+                exit;
+            }
+            $email = $tokenRow['email'];
+
+            $ok = $this->userModel->changePwd($newPassword, $email);
+            if ($ok) {
+                $prModel->markTokenUsed($token);
+                $_SESSION['flash_success'] = "Votre mot de passe a été modifié avec succès.";
+                if (function_exists('log_console')) log_console("ChangePwd: succès ($email)", 'ok'); // ✅
+            } else {
+                $_SESSION['flash_error'] = "Erreur lors de la modification du mot de passe.";
+                if (function_exists('log_console')) log_console("ChangePwd: échec ($email)", 'error'); // ❌
+
+            }
+            header("Location: index.php?controller=redirection&action=openChangePwd");
+            exit;
+        }
     }
 
     /**

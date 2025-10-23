@@ -25,14 +25,14 @@ class redirectionController
     {
         $this->logRedirection('accountView');
 
-        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
-        if (empty($_SESSION['user'])) {
-            if (function_exists('log_console')) {
-                log_console('Tentative d’accès à openAccount sans session', 'error'); // ❌
-            }
-            header('Location: /public/?controller=redirection&action=openFormConnection');
-            exit;
-        }
+//        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
+//        if (empty($_SESSION['user'])) {
+//            if (function_exists('log_console')) {
+//                log_console('Tentative d’accès à openAccount sans session', 'error'); // ❌
+//            }
+//            header('Location: /public/?controller=redirection&action=openFormConnection');
+//            exit;
+//        }
 
         viewHandler::show('/accountView', ['pageTitle' => 'Compte']);
     }
@@ -59,5 +59,11 @@ class redirectionController
     {
         $this->logRedirection('changePwdView');
         viewHandler::show('/changePwdView', ['pageTitle' => 'Changement de mot de passe']);
+    }
+
+    public function openEmailVerification()
+    {
+        $this->logRedirection('emailVerificationView');
+        viewHandler::show('/emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail']);
     }
 }

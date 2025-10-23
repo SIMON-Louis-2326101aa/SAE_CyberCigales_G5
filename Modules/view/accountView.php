@@ -36,7 +36,6 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <?php endforeach; ?>
     </tbody>
 </table></p>
-<a href="index.php?controller=user&action=logout"><button>Déconnexion</button></a>
 
 <?php elseif (isset($_SESSION['user_id'])) : ?>
     <h1>Votre compte</h1>
