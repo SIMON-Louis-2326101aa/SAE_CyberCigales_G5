@@ -106,15 +106,27 @@ h2 {
     background-color: #094868;
     padding: 1.5rem 2rem;
     margin-top: auto;
+    text-align: left;
 }
 
 .footer a {
     color: white;
     text-decoration: none;
+
+    font-size: 0.95rem; /* Taille de police légèrement réduite */
+    font-weight: 500; /* Texte un peu plus épais */
+
+    /* Donner un peu d'espace entre les liens */
+    padding: 0.5rem 1rem;
+    margin: 0 5px;
+
+    transition: text-decoration 0.3s, background-color 0.3s;
 }
 
 .footer a:hover {
     text-decoration: underline;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
 }
 
 form{
@@ -249,6 +261,189 @@ button:hover {
     font-size: 0.9em;
     color: #777;
     text-align: right;
+}
+
+#about-page {
+    text-align: left;
+    padding: 20px;
+}
+
+#about-page section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+#about-page h1 {
+    /* La couleur et la taille de h1 sont déjà dans stylesheet.css */
+    text-align: center;
+    margin-bottom: 30px;
+    color: #094868; /* Une couleur plus douce pour le titre de la page */
+    text-shadow: none;
+}
+
+#about-page h2 {
+    /* La taille de h2 est déjà dans stylesheet.css */
+    color: #094868;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+#about-page h3 {
+    font-size: 1.3em;
+    color: #333;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+#about-page p {
+    margin-bottom: 15px;
+    line-height: 1.7;
+    color: #555;
+}
+
+#about-page strong {
+    font-weight: bold;
+    color: #333;
+}
+
+#about-page ul {
+    list-style: disc;
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+
+#about-page ul li {
+    display: list-item;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+#about-page a {
+    color: #094868;
+    text-decoration: underline;
+}
+
+#about-page a:hover {
+    color: #1d4ed8;
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 25px;
+}
+
+.team-member {
+    background-color: #f7f9fc;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.team-member:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(9, 72, 104, 0.15);
+}
+
+.team-member h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    color: #094868;
+}
+
+.team-member p {
+    margin: 0;
+    font-style: italic;
+    color: #777;
+    font-size: 0.9em;
+}
+
+.tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.tech-category {
+    flex: 1;
+    min-width: 200px;
+    padding: 15px;
+    border: 1px dashed #094868;
+    border-radius: 8px;
+}
+
+.tech-category h3 {
+    color: #094868;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 1px solid #cceeff;
+    padding-bottom: 5px;
+}
+
+.tech-category ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.tech-category ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-left: 0;
+}
+
+.tech-category ul li::before {
+    content: "•";
+    color: #094868;
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+.project-section ul:nth-of-type(2) {
+    list-style: none;
+    margin-left: 0;
+}
+
+.project-section ul:nth-of-type(2) li {
+    padding-left: 0;
+    color: #333;
+}
+
+@media screen and (max-width: 768px) {
+    #about-page {
+        padding: 10px;
+    }
+
+    #about-page section {
+        padding: 15px;
+    }
+
+    .team-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur mobile */
+    }
+
+    .tech-grid {
+        flex-direction: column;
+    }
+
+    .tech-category {
+        min-width: 100%;
+    }
 }
 
 @media screen and (max-width: 768px) {
