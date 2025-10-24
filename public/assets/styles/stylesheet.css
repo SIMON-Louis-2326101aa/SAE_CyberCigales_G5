@@ -173,85 +173,76 @@ button:hover {
 }
 
 #legal-mention {
-    /* Le contenu principal est centré par défaut via 'main' dans stylesheet.css */
-    /* On utilise l'espace par défaut et on aligne le texte à gauche pour la lisibilité */
+
     text-align: left;
     padding: 20px;
-    background-color: white; /* Fond blanc pour mieux lire le texte */
-    border-radius: 8px; /* Bords arrondis comme le formulaire */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre */
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
-    width: 100%; /* S'étale sur la largeur max du main */
-    max-width: 1000px; /* Ajout d'une largeur max pour une meilleure lecture sur très grand écran */
+    width: 100%;
+    max-width: 1000px;
 }
 
-/* Titre principal (Mentions Légales) */
 #legal-mention h1 {
-    /* Le h1 général a un 'text-align: center' et un 'text-shadow' dans stylesheet.css */
-    /* On réaligne à gauche ici, mais on garde la taille et la couleur noire */
+
     color: black;
-    font-size: 2.5em; /* Un peu plus petit que le h1 général pour le contenu */
+    font-size: 2.5em;
     margin-bottom: 30px;
-    text-shadow: none; /* Enlève l'ombre portée pour un style plus sobre ici */
-    text-align: center; /* Centrage pour le titre principal de la page */
+    text-shadow: none;
+    text-align: center;
 }
 
-/* Sous-titres de section (1. Éditeur, 2. Hébergeur, etc.) */
 #legal-mention h2 {
-    /* Basé sur le h2 général, mais ajusté pour les sections */
+
     font-size: 1.8em;
-    font-weight: bold; /* Plus gras pour bien marquer les sections */
-    color: #094868; /* Couleur du menu de navigation pour la cohérence */
+    font-weight: bold;
+    color: #094868;
     margin-top: 30px;
     margin-bottom: 15px;
-    border-bottom: 2px solid #f0f0f0; /* Petite ligne de séparation */
+    border-bottom: 2px solid #f0f0f0;
     padding-bottom: 5px;
-    text-align: left; /* Alignement à gauche */
+    text-align: left;
 }
 
-/* Paragraphes */
 #legal-mention p {
     margin-bottom: 15px;
-    color: #333; /* Couleur de texte par défaut */
+    color: #333;
     line-height: 1.7;
     text-align: left;
 }
 
-/* Listes (équipes, données collectées, objectifs) */
 #legal-mention ul {
-    /* Le style par défaut est 'list-style: none' dans stylesheet.css */
-    list-style: disc; /* Remet des puces pour les listes dans les mentions légales */
+
+    list-style: disc;
     margin-left: 25px;
     margin-bottom: 15px;
     text-align: left;
 }
 
 #legal-mention ul li {
-    /* Le li général a flex-direction: column; dans stylesheet.css, on le change ici */
-    display: list-item; /* Rétablit le comportement normal de l'élément de liste */
-    margin-bottom: 8px; /* Espace réduit entre les éléments de liste */
+
+    display: list-item;
+    margin-bottom: 8px;
     padding-left: 0;
 }
 
-/* Liens hypertexte */
 #legal-mention a {
-    color: #094868; /* Couleur cohérente avec le menu */
-    text-decoration: underline; /* Souligné pour bien les identifier */
+    color: #094868;
+    text-decoration: underline;
     font-weight: bold;
 }
 
 #legal-mention a:hover {
-    color: #0d6efd; /* Changement de couleur au survol (bleu standard) */
+    color: #0d6efd;
     text-decoration: none;
 }
 
-/* Texte en gras à l'intérieur des paragraphes/listes */
 #legal-mention strong {
     font-weight: 700;
     color: #333;
 }
 
-/* Paragraphe de mise à jour */
 #legal-mention em {
     display: block;
     margin-top: 40px;
@@ -260,7 +251,6 @@ button:hover {
     text-align: right;
 }
 
-/* Responsive pour mobile */
 @media screen and (max-width: 768px) {
     #legal-mention {
         padding: 15px;
