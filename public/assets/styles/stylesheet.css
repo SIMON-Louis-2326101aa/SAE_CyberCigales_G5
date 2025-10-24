@@ -34,7 +34,6 @@ body {
 .nav-menu a {
     color: white;
     text-decoration: none;
-    padding: 0.5rem 1rem;
     transition: background-color 0.3s;
 }
 
@@ -50,6 +49,7 @@ body {
 
 #nav-menu-title{
     display: flex;
+    align-items: center;
     color: black;
     margin-left: 2vw;
 }
@@ -164,6 +164,8 @@ h2 {
     border-radius: 4px;
 }
 
+/* Notification dans le site */
+
 .flash {
     margin: 10px auto;
     padding: 12px 18px;
@@ -202,6 +204,7 @@ h2 {
     cursor: pointer;
 }
 
+/* Formulaires */
 form{
     background: #fff;
     padding: 24px;
@@ -555,6 +558,14 @@ body.dark-theme .btn-nav {
 body.dark-theme .btn-nav:hover {
     background-color: #101050;
     color: white;
+}
+
+body.dark-theme .sitemap-list a {
+    background-color: #101010;
+}
+
+body.dark-theme .sitemap-list a:hover {
+    background-color: #404040;
 }
 
 @media (max-width: 768px) {

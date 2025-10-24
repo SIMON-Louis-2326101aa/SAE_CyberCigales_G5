@@ -17,31 +17,67 @@ declare(strict_types=1);
    ============================================================ */
 
 if (!function_exists('log_console')) {
-    function log_console($message, $type = 'info') {
-        $colors = [
-            'ok' => 'lime',
-            'error' => 'red',
-            'warn' => 'orange',
-            'info' => 'cyan',
-            'file' => 'violet',
-        ];
-        $icon = [
-            'ok' => '✅',
+    function log_console(string $message, string $type = 'info'): void
+    {
+        // sécurité du buffer
+        if (!isset($GLOBALS['dev_log_buffer']) || !is_array($GLOBALS['dev_log_buffer'])) {
+            $GLOBALS['dev_log_buffer'] = [];
+        }
+
+        $emoji = match ($type) {
+            'ok'    => '✅',
             'error' => '❌',
-            'warn' => '⚠️',
-            'info' => 'ℹ️',
-            'file' => '📄',
-        ];
-        $color = $colors[$type] ?? 'white';
-        $emoji = $icon[$type] ?? '📄';
-        echo "<script>console.log('%c{$emoji} [LOG DEV Page] " . addslashes($message) . "', 'color: {$color};');</script>";
+            'warn'  => '⚠️',
+            'file'  => '📄',
+            'info'  => 'ℹ️',
+            default => '🔊'
+        };
+
+        $color = match ($type) {
+            'ok'    => 'lime',
+            'error' => 'red',
+            'warn'  => 'orange',
+            'file'  => 'violet',
+            'info'  => 'cyan',
+            default => 'white'
+        };
+
+        // on garde juste le message dans le buffer (pas de script ici)
+//        $GLOBALS['dev_log_buffer'][] = [
+//            'msg' => "{$emoji} [LOG DEV Page] {$message}",
+//            'color' => $color
+//        ];
     }
+}
+
+/* ============================================================
+    Session sécurisée
+   ============================================================ */
+
+// Configuration sécurisée des sessions
+if (session_status() === PHP_SESSION_NONE) {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+
+    $forceSecure = isset($_ENV['FORCE_SECURE']) && $_ENV['FORCE_SECURE'] === '1';
+    $cookieSecure = $forceSecure ? true : $isHttps;
+
+    // Si on n’est pas en HTTPS → on ne met pas SameSite=None
+    $cookieSameSite = $cookieSecure ? 'None' : 'Lax';
+
+    session_start([
+        'use_strict_mode' => true,
+        'cookie_httponly' => true,
+        'cookie_secure'   => $cookieSecure,
+        'cookie_samesite' => $cookieSameSite,
+    ]);
+    log_console('Session démarrée', 'ok'); // ✅
 }
 
 /* ============================================================
    Chemins racine
    ============================================================ */
-
+//$GLOBALS['dev_log_buffer'] = '';
 $ROOT_DIR = dirname(__DIR__);
 log_console("ROOT_DIR={$ROOT_DIR}", 'info'); // ℹ️
 
@@ -104,30 +140,6 @@ if ($appEnv === 'dev') {
 }
 
 /* ============================================================
-    Session sécurisée
-   ============================================================ */
-
-// Configuration sécurisée des sessions
-if (session_status() === PHP_SESSION_NONE) {
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
-
-    $forceSecure = isset($_ENV['FORCE_SECURE']) && $_ENV['FORCE_SECURE'] === '1';
-    $cookieSecure = $forceSecure ? true : $isHttps;
-
-    // Si on n’est pas en HTTPS → on ne met pas SameSite=None
-    $cookieSameSite = $cookieSecure ? 'None' : 'Lax';
-
-    session_start([
-        'use_strict_mode' => true,
-        'cookie_httponly' => true,
-        'cookie_secure'   => $cookieSecure,
-        'cookie_samesite' => $cookieSameSite,
-    ]);
-    log_console('Session démarrée', 'ok'); // ✅
-}
-
-/* ============================================================
     Routage et rendu
    ============================================================ */
 
@@ -173,7 +185,17 @@ try {
     // Affiche le contenu
     echo $displayContent;
     log_console('Contenu affiché', 'ok'); // ✅
-
+// Flush non-échappé des scripts de debug
+//    if (!empty($GLOBALS['dev_log_buffer']) && is_array($GLOBALS['dev_log_buffer'])) {
+//        echo "<script>(function(){";
+//        foreach ($GLOBALS['dev_log_buffer'] as $row) {
+//            $msg   = json_encode($row['msg'], JSON_UNESCAPED_UNICODE);
+//            $style = json_encode('color: ' . ($row['color'] ?? 'white'));
+//            echo "try{console.log('%c'+$msg, $style);}catch(e){}";
+//        }
+//        echo "})();</script>";
+//        $GLOBALS['dev_log_buffer'] = []; // reset propre
+//    }
 } catch (Throwable $e) {
     // Gestion d'erreur globale
     http_response_code(500);

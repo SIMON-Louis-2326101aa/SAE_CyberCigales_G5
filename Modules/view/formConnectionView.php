@@ -3,7 +3,7 @@
     <ul>
         <li>
             <label for="mail">E-mail :</label>
-            <input type="email" id="mail" name="email" required>
+            <input type="email" id="mail" name="email" required value="<?= old('email') ?>">
         </li>
         <li>
             <label for="password">Mot de passe :</label>
@@ -12,6 +12,6 @@
     </ul>
 
     <button type="submit" name="login">Se connecter</button>
-    <a href="index.php?controller=user&action=forgot" class="active">Mot de passe oublié?</a>
+    <a href="index.php?controller=redirection&action=openForgotPwd" class="active">Mot de passe oublié?</a>
 </form>
-<a href="index.php?controller=user&action=register" class="active">Pas encore inscrit ?</a>
+<a href="index.php?controller=redirection&action=openFormRegister" class="active">Pas encore inscrit ?</a>
