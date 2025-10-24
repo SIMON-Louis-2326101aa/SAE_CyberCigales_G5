@@ -58,7 +58,7 @@ class redirectionController
     public function openChangePwd()
     {
         $this->logRedirection('changePwdView');
-        viewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe']);
+        viewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token'] ?? '']);
     }
 
     public function openEmailVerification()
