@@ -10,7 +10,7 @@ final class Mailer
         $headers[] = 'From: no-reply@escapethecode.alwaysdata.net';
         $headers[] = 'Reply-To: no-reply@escapethecode.alwaysdata.net';
         $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-Type: text/plain; charset=UTF-8';
+        $headers[] = 'Content-Type: text/html; charset=UTF-8';
         $headers[] = 'X-Mailer: PHP/' . phpversion();
 
         $result = @mail($to, $subject, $body, implode("\r\n", $headers));
