@@ -160,7 +160,7 @@ h2 {
 
 /* Formulaires */
 form{
-    background: #fff;
+    background: white;
     padding: 24px;
     margin: 40px auto;
     border-radius: 12px;
@@ -567,6 +567,14 @@ body.dark-theme .btn-nav {
 
 body.dark-theme .btn-nav:hover {
     background-color: #101050;
+    color: white;
+}
+
+body.dark-theme form {
+    background-color: #505050;
+}
+
+body.dark-theme form label {
     color: white;
 }
 
