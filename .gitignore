@@ -1,3 +1,39 @@
+# IDE
 .idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Configuration sensible
 /config/
+.env
+.env.local
+
+# Dépendances
 /vendor/
+node_modules/
+
+# Logs
+/logs/*.log
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporaires
+*.tmp
+*.temp
+*.cache
+.cache/
+
+# Backups
+*.bak
+*.backup
+*~
+
+# Uploads (si applicable)
+/public/uploads/*
+!/public/uploads/.gitkeep
