@@ -425,48 +425,6 @@ button:hover {
 }
 
 @media screen and (max-width: 768px) {
-    #about-page {
-        padding: 10px;
-    }
-
-    #about-page section {
-        padding: 15px;
-    }
-
-    .team-grid {
-        grid-template-columns: 1fr; /* Une seule colonne sur mobile */
-    }
-
-    .tech-grid {
-        flex-direction: column;
-    }
-
-    .tech-category {
-        min-width: 100%;
-    }
-}
-
-@media screen and (max-width: 768px) {
-    #legal-mention {
-        padding: 15px;
-        margin: 15px auto;
-    }
-
-    #legal-mention h1 {
-        font-size: 2em;
-    }
-
-    #legal-mention h2 {
-        font-size: 1.4em;
-    }
-
-    #legal-mention ul {
-        margin-left: 20px;
-    }
-}
-
-/* Responsive */
-@media screen and (max-width: 768px) {
     body {
         font-size: 14px;
     }
