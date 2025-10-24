@@ -5,7 +5,7 @@
     <title><?php echo $A_params['pageTitle'] ?? 'CyberCigales'; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="icon" href="./assets/images/favicon.ico">
-    <script src="/assets/js/script.js" defer></script>
+    <script src="./assets/js/script.js" defer></script>
 </head>
 <body>
 <?php
