@@ -497,35 +497,6 @@ button:hover {
     color: #333;
 }
 
-@media screen and (max-width: 768px) {
-    body {
-        font-size: 14px;
-    }
-
-    h1 {
-        font-size: 2rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    main {
-        padding: 1rem;
-    }
-
-    .nav-menu {
-        padding: 1rem;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    #nav-menu-sections,
-    #nav-auth-buttons {
-        justify-content: center;
-    }
-}
-
 .btn {
     font-family: 'Arial', sans-serif;
     display: inline-block;
@@ -584,4 +555,8 @@ body.dark-theme .btn-nav {
 body.dark-theme .btn-nav:hover {
     background-color: #101050;
     color: white;
+}
+
+@media (max-width: 768px) {
+
 }
