@@ -15,7 +15,8 @@ if (session_status() === PHP_SESSION_NONE) {
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=redirection&action=openHomepage" class="active btn-nav">Home</a>
+        <a href="index.php?controller=redirection&action=openHomepage" id="nav-menu-title"><img src="/assets/images/logo.png" alt="logo-escape-the-code"></a>
+        <a href="index.php?controller=redirection&action=openHomepage" class="active btn-nav">Accueil</a>
     </div>
 
     <div id="nav-auth-buttons">

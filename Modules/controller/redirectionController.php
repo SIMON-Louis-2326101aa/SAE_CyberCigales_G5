@@ -60,4 +60,14 @@ class redirectionController
         $this->logRedirection('changePwdView');
         viewHandler::show('/changePwdView', ['pageTitle' => 'Changement de mot de passe']);
     }
+
+    /**
+     * Affiche la page "À propos"
+     *
+     * @return void
+     */
+    public function openAbout()
+    {
+        viewHandler::show('/aboutView', ['pageTitle' => 'À Propos']);
+    }
 }
