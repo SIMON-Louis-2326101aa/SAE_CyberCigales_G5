@@ -20,32 +20,16 @@ class userModel extends database
         $this->eModel = new emailVerificationModel();
     }
 
-    public function register(string $nom, string $prenom, string $email, string $password): bool
-    {
-        try {
-            $sql = "INSERT INTO users (nom, prenom, email, password) VALUES (:nom, :prenom, :email, :password)";
-            $stmt = $this->getBdd()->prepare($sql);
-            $hash = password_hash($password, PASSWORD_DEFAULT);
+    // ANCIEN REGISTER HASH :
+//$hash = password_hash($password, PASSWORD_DEFAULT);
+//
+//$success = $stmt->execute([
+//'nom' => $nom,
+//'prenom' => $prenom,
+//'email' => $email,
+//'password' => $hash
+//]);
 
-            $success = $stmt->execute([
-                'nom' => $nom,
-                'prenom' => $prenom,
-                'email' => $email,
-                'password' => $hash
-            ]);
-
-            if ($success && function_exists('log_console')) {
-                log_console("Nouvel utilisateur créé : $email", 'ok'); // ✅
-            }
-
-            return $success;
-        } catch (Throwable $e) {
-            if (function_exists('log_console')) {
-                log_console("Erreur register($email) : " . $e->getMessage(), 'error'); // ❌
-            }
-            return false;
-        }
-    }
     // Créer le compte utilisateur après vérification
     public function createUserAfterVerification(string $email): bool
     {

@@ -175,38 +175,8 @@ class userController
 //            viewHandler::show("../view/formRegisterView", ['pageTitle' => 'Inscription', 'error' => $error, 'nom' => $nom, 'prenom' => $prenom, 'email' => $email]);
 
         }
-//          obsolete
-
-//         //Connexion automatique après inscription
-//        $utilisateur = $this->userModel->authenticate($email, $password);
-//        if ($utilisateur) {
-//            if (session_status() === PHP_SESSION_NONE) {
-//                session_start([
-//                    'use_strict_mode' => true,
-//                    'cookie_httponly' => true,
-//                    'cookie_secure'   => true,
-//                    'cookie_samesite' => 'None'
-//                ]);
-//            }
-//
-//            $_SESSION['utilisateur'] = $utilisateur;
-//            $_SESSION['user_id']     = $utilisateur['id'] ?? null;
-//            $_SESSION['nom']         = $utilisateur['nom'] ?? null;
-//            $_SESSION['prenom']      = $utilisateur['prenom'] ?? null;
-//            $_SESSION['email']       = $utilisateur['email'] ?? null;
-//
-//            if (function_exists('log_console')) log_console("Register: inscription + login OK ($email)", 'ok'); // ✅
-//            header("Location: index.php?controller=redirection&action=openHomepage");
-//            exit;
-//        }
         header("Location: index.php?controller=redirection&action=openFormRegister");
     }
-
-    // Fallback : inscrit mais pas loggé
-    //$_SESSION['flash_error'] = "Inscription réussie, mais problème de connexion automatique.";
-    //if (function_exists('log_console')) log_console("Register: login auto échoué ($email)", 'error'); // ❌
-    //header("Location: index.php?controller=redirection&action=openFormConnection");
-    //exit;
 
     /**
      * Connexion
