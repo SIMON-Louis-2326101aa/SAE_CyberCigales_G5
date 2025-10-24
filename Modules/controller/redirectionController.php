@@ -70,4 +70,8 @@ class redirectionController
     {
         viewHandler::show('/aboutView', ['pageTitle' => 'À Propos']);
     }
+
+    public function openSiteMap(){
+        viewHandler::show('/siteMapView', ['pageTitle' => 'Plan du site']);
+    }
 }

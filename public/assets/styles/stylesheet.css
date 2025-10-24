@@ -480,6 +480,35 @@ button:hover {
     }
 }
 
+/* Liste du plan du site */
+.sitemap-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.sitemap-container h1 {
+    margin-bottom: 1rem;
+}
+
+.sitemap-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.sitemap-list li {
+    margin: .5rem 0;
+}
+
+.sitemap-list a {
+    text-decoration: none;
+    color: #0a58ca;
+}
+
+.sitemap-list a:hover {
+    text-decoration: underline;
+}
+
 .btn {
     font-family: 'Arial', sans-serif;
     display: inline-block;
