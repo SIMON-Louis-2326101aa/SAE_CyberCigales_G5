@@ -75,6 +75,52 @@ main {
     text-align: center;
 }
 
+/* ======================================= */
+/* SECTION HERO (Conteneur) */
+/* ======================================= */
+
+.hero-container {
+    /* 1. Dimensions et Pleine Largeur */
+    height: 60vh;
+    min-height: 400px;
+    max-width: none; /* Annule le max-width: 1200px de 'main' */
+    margin: 0;
+    width: 100%;
+
+    /* Positionnement */
+    position: relative; /* Point de référence pour l'image et l'overlay */
+    z-index: 1;
+
+    /* Centrage du contenu Hero (h1, p) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    align-items: center; /* Centre horizontalement */
+    text-align: center;
+    overflow: hidden; /* Assure que l'image ne déborde pas */
+}
+
+/* 2. Style de l'Image contenue dans le Hero */
+.hero-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Similaire à background-size: cover; */
+    z-index: -1; /* Place l'image derrière le contenu et l'overlay */
+    opacity: 70%;
+}
+
+/* 4. Style du Contenu (Titre et Paragraphe) */
+.hero-container h1,
+.hero-container p {
+    color: white !important; /* Texte blanc pour le contraste */
+    z-index: 2; /* S'assure que le texte est au-dessus de tout */
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    margin-bottom: 10px; /* Ajout d'une petite marge */
+}
+
 /* Titres */
 h1 {
     color: black;
