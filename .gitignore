@@ -1,39 +1,50 @@
-# IDE
+# IDEs et Éditeurs
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
 
-# Configuration sensible
-/config/
-.env
-.env.local
-
 # Dépendances
 /vendor/
 node_modules/
+composer.phar
+
+# Configuration et Environnement
+/config/
+.env
+.env.local
+.env.*.local
 
 # Logs
-/logs/*.log
+/logs/
 *.log
 
-# OS
+# Fichiers système
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Temporaires
+# Fichiers temporaires
 *.tmp
 *.temp
 *.cache
-.cache/
-
-# Backups
 *.bak
-*.backup
-*~
+*.old
 
-# Uploads (si applicable)
-/public/uploads/*
-!/public/uploads/.gitkeep
+# Fichiers de base de données
+*.sql.gz
+*.sql.zip
+backup_*.sql
+
+# Fichiers uploadés (si vous en avez)
+/uploads/
+/public/uploads/
+
+# Fichiers de build
+/build/
+/dist/
+
+# Fichiers de test
+/tests/coverage/
+phpunit.xml
