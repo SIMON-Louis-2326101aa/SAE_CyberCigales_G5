@@ -3,11 +3,11 @@ require_once __DIR__ . '/database.php';
 require_once __DIR__ . '/../../includes/connectionDB.php';
 class passwordResetModel extends database
 {
-    //private connectionDB $db;
     public function __construct()
     {
-       // $this->db = connectionDB::getInstance();
+        $this->getBdd();
     }
+
 
     // Crée et stocke un token pour l'utilisateur identifié par l'email. Retourne le token ou false.
     public function createTokenForEmail(string $email, int $ttlMinutes = 60)

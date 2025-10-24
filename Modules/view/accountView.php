@@ -36,7 +36,6 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <?php endforeach; ?>
     </tbody>
 </table></p>
-<a href="index.php?controller=user&action=logout"><button>Déconnexion</button></a>
 
 <?php elseif (isset($_SESSION['user_id'])) : ?>
     <h1>Votre compte</h1>
@@ -45,7 +44,7 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <form method="POST" action="index.php?controller=user&action=account">
         <ul>
             <li>
-                <a href="index.php?controller=user&action=changePwd" class="active" id="changemdp">
+                <a href="index.php?controller=redirection&action=openChangePwd" class="active" id="changemdp">
                     <button type="button" name="changePwd">Modifier le mot de passe</button>
                 </a>
             </li>
