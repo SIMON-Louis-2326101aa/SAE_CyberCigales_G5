@@ -4,15 +4,15 @@
         <ul>
             <li>
                 <label for="nom">Nom :</label>
-                <input type="text" id="nom" name="nom" required value="<?= htmlspecialchars($nom ?? '') ?>">
+                <input type="text" id="nom" name="nom" required value="<?= old('nom') ?>">
             </li>
             <li>
                 <label for="prenom">Prenom :</label>
-                <input type="text" id="prenom" name="prenom" required value="<?= htmlspecialchars($prenom ?? '') ?>">
+                <input type="text" id="prenom" name="prenom" required value="<?= old('prenom') ?>">
             </li>
             <li>
                 <label for="mail">E-mail :</label>
-                <input type="email" id="mail" name="email" required value="<?= htmlspecialchars($email ?? '') ?>">
+                <input type="email" id="mail" name="email" required value="<?= old('email') ?>">
             </li>
             <li>
                 <label for="password">Mot de passe :</label>
@@ -26,5 +26,5 @@
 
         <button type="submit" name="register">S'inscrire</button><br>
 
-        <a href="index.php?controller=user&action=login" class="active">Dejà un compte ? Connexion</a>
+        <a href="index.php?controller=redirection&action=openFormConnection" class="active">Dejà un compte ? Connexion</a>
     </form>

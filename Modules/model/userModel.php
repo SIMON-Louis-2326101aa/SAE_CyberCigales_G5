@@ -61,11 +61,10 @@ class userModel extends database
     }
     public function findByEmail($email): bool
     {
-        $sql = "SELECT COUNT(*) as count FROM users WHERE email = :email";
-        $stmt = $this->getBdd()->prepare($sql);
+        $stmt = $this->getBdd()->prepare("SELECT COUNT(*) as count FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['count'] > 0;
+        return ((int)$result['count']) > 0;
     }
 
     public function authenticate($email, $password)

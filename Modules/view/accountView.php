@@ -44,7 +44,7 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <form method="POST" action="index.php?controller=user&action=account">
         <ul>
             <li>
-                <a href="index.php?controller=user&action=changePwd" class="active" id="changemdp">
+                <a href="index.php?controller=redirection&action=openChangePwd" class="active" id="changemdp">
                     <button type="button" name="changePwd">Modifier le mot de passe</button>
                 </a>
             </li>
