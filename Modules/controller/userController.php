@@ -316,6 +316,13 @@ class userController
     public function changePwd()
     {
         $prModel = new passwordResetModel();
+        // Affichage des données reçues pour le jeton 7
+        $token_recu = $_POST['token'] ?? $_GET['token'] ?? 'AUCUN_TOKEN_RECUE';
+        if (function_exists('log_console')) log_console("Token reçu : " . $token_recu, 'info');
+
+// Si vous pouvez, loggez aussi la version DB du token
+ $dbToken = $prModel->getValidTokenRow($token_recu); // Si cette fonction existe
+ if (function_exists('log_console')) log_console("Token en DB : " . $dbToken, 'info');
 
         // Affichage du formulaire via le lien GET
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
