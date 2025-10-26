@@ -386,11 +386,15 @@ class userController
 
             if ($ok) {
                 $prModel->markTokenUsed($token);
-                $_SESSION['flash_success'] = "Votre mot de passe a été modifié avec succès.";
+                $_SESSION['flash_success'] = "Votre mot de passe a été modifié avec succès. Vous pouvez maintenant vous connecter.";
                 if (function_exists('log_console')) log_console("ChangePwd: succès ($email)", 'ok');
+                header("Location: index.php?controller=redirection&action=openFormConnection");
+                exit;
             } else {
                 $_SESSION['flash_error'] = "Erreur lors de la modification du mot de passe.";
                 if (function_exists('log_console')) log_console("ChangePwd: échec ($email)", 'error');
+                header("Location: index.php?controller=redirection&action=openChangePwd&token=" . urlencode($token));
+                exit;
             }
 
             header("Location: index.php?controller=redirection&action=openChangePwd&token=" . urlencode($token));
