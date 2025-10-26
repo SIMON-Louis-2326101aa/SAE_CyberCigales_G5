@@ -43,10 +43,10 @@ if (!function_exists('log_console')) {
         };
 
         // on garde juste le message dans le buffer (pas de script ici)
-//        $GLOBALS['dev_log_buffer'][] = [
-//            'msg' => "{$emoji} [LOG DEV Page] {$message}",
-//            'color' => $color
-//        ];
+        $GLOBALS['dev_log_buffer'][] = [
+            'msg' => "{$emoji} [LOG DEV Page] {$message}",
+            'color' => $color
+        ];
     }
 }
 
@@ -186,16 +186,16 @@ try {
     echo $displayContent;
     log_console('Contenu affiché', 'ok'); // ✅
 // Flush non-échappé des scripts de debug
-//    if (!empty($GLOBALS['dev_log_buffer']) && is_array($GLOBALS['dev_log_buffer'])) {
-//        echo "<script>(function(){";
-//        foreach ($GLOBALS['dev_log_buffer'] as $row) {
-//            $msg   = json_encode($row['msg'], JSON_UNESCAPED_UNICODE);
-//            $style = json_encode('color: ' . ($row['color'] ?? 'white'));
-//            echo "try{console.log('%c'+$msg, $style);}catch(e){}";
-//        }
-//        echo "})();</script>";
-//        $GLOBALS['dev_log_buffer'] = []; // reset propre
-//    }
+    if (!empty($GLOBALS['dev_log_buffer']) && is_array($GLOBALS['dev_log_buffer'])) {
+        echo "<script>(function(){";
+        foreach ($GLOBALS['dev_log_buffer'] as $row) {
+            $msg   = json_encode($row['msg'], JSON_UNESCAPED_UNICODE);
+            $style = json_encode('color: ' . ($row['color'] ?? 'white'));
+            echo "try{console.log('%c'+$msg, $style);}catch(e){}";
+        }
+        echo "})();</script>";
+        $GLOBALS['dev_log_buffer'] = []; // reset propre
+    }
 } catch (Throwable $e) {
     // Gestion d'erreur globale
     http_response_code(500);
