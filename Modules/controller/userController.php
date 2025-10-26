@@ -316,23 +316,26 @@ class userController
     public function changePwd()
     {
         $prModel = new passwordResetModel();
-        // Affichage des données reçues pour le jeton 7
-        $token_recu = $_POST['token'] ?? $_GET['token'] ?? 'AUCUN_TOKEN_RECUE';
-        if (function_exists('log_console')) log_console("Token reçu : " . $token_recu, 'info');
-
-// Si vous pouvez, loggez aussi la version DB du token
- $dbToken = $prModel->getValidTokenRow($token_recu); // Si cette fonction existe
- if (function_exists('log_console')) log_console("Token en DB : " . $dbToken, 'info');
 
         // Affichage du formulaire via le lien GET
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $token = $_GET['token'] ?? '';
+            if (function_exists('log_console')) log_console("GET: Tentative d'accès avec token: " . $token, 'info');
             if (empty($token)) {
                 header("Location: index.php?controller=redirection&action=openHomepage");
                 exit;
             }
 
             $tokenRow = $prModel->getValidTokenRow($token);
+            if (function_exists('log_console')) {
+                if ($tokenRow) {
+                    log_console('GET - Token valide trouvé pour: ' . ($tokenRow['email'] ?? 'N/A'), 'ok');
+                } else {
+                    log_console('GET - ERREUR: Token non valide/expiré pour token: ' . $token, 'error');
+                }
+            }
+
+            //$tokenRow = $prModel->getValidTokenRow($token);
             if (!$tokenRow) {
                 $_SESSION['flash_error'] = "Lien de réinitialisation invalide ou expiré. Veuillez refaire une demande.";
                 header("Location: index.php?controller=redirection&action=openForgotPwd");
@@ -350,7 +353,16 @@ class userController
             $confirmPassword = $_POST['confirm_password'] ?? '';
             $token           = $_POST['token']            ?? '';
 
+            if (function_exists('log_console')) log_console("POST: Soumission avec token: " . $token, 'info');
+
             $tokenRow = $prModel->getValidTokenRow($token);
+
+            // Log de l'état du jeton pour le bloc POST
+            if (function_exists('log_console')) {
+                if (!$tokenRow) {
+                    log_console('POST - ERREUR: Token invalide/expiré pendant la soumission.', 'error');
+                }
+            }
             if (!$tokenRow) {
                 $_SESSION['flash_error'] = "Lien de réinitialisation invalide ou expiré.";
                 if (function_exists('log_console')) log_console('ChangePwd: token invalide/expiré', 'error');
