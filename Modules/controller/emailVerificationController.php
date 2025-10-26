@@ -55,14 +55,14 @@ class emailVerificationController
         $email = $_POST['email'] ?? '';
         $code  = $_POST['code']  ?? '';
 
-        if (!$email || !$code) {
-            $_SESSION['flash_error'] = "Veuillez saisir l'email et le code.";
-            viewHandler::show('emailVerificationView', [
-                'pageTitle' => "Vérification de l'email",
-                'email'     => $email
-            ]);
-            return;
-        }
+//        if (!$email || !$code) {
+//            $_SESSION['flash_error'] = "Veuillez saisir l'email et le code.";
+//            viewHandler::show('emailVerificationView', [
+//                'pageTitle' => "Vérification de l'email",
+//                'email'     => $email
+//            ]);
+//            return;
+//        }
 
         // Validation stricte: 6 chiffres
         if (!preg_match('/^[0-9]{6}$/', $code)) {
