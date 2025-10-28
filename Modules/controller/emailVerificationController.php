@@ -55,14 +55,26 @@ class emailVerificationController
         $email = $_POST['email'] ?? '';
         $code  = $_POST['code']  ?? '';
 
-//        if (!$email || !$code) {
-//            $_SESSION['flash_error'] = "Veuillez saisir l'email et le code.";
-//            viewHandler::show('emailVerificationView', [
-//                'pageTitle' => "Vérification de l'email",
-//                'email'     => $email
-//            ]);
-//            return;
-//        }
+        // AJOUT DE L'ECHO DE DÉBOGAGE
+        echo "--- DEBUG VÉRIFICATION CODE ---<br>";
+        echo "Email reçu : <strong>" . htmlspecialchars($email) . "</strong><br>";
+        echo "Code reçu : <strong>" . htmlspecialchars($code) . "</strong><br>";
+        exit;
+
+        // CORRECTION : Décommenter la vérification du code et de l'email (nécessite le champ caché dans la vue)
+        if (!$email || !$code) {
+            $_SESSION['flash_error'] = "Veuillez saisir l'email et le code.";
+            // Si l'email est manquant, le problème est dans le formulaire de la vue.
+            if (!$email && function_exists('log_console')) {
+                log_console("ERREUR: Email manquant dans la soumission POST. Vérifiez le champ caché 'email' de la vue.", 'error');
+            }
+            viewHandler::show('emailVerificationView', [
+                'pageTitle' => "Vérification de l'email",
+                'email'     => $email
+            ]);
+            return;
+        }
+
 
         // Validation stricte: 6 chiffres
         if (!preg_match('/^[0-9]{6}$/', $code)) {

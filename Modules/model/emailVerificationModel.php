@@ -21,20 +21,6 @@ class emailVerificationModel extends database
         return $code;
     }
 
-    public function validateCode(string $email, string $code): bool
-    {
-        $stmt = $this->getBdd()->prepare(
-            'SELECT id FROM email_verification_codes WHERE email = :email AND code = :code AND expires_at >= NOW() ORDER BY id DESC LIMIT 1'
-        );
-        $stmt->execute([
-            'email' => $email,
-            'code' => $code,
-        ]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return !empty($row);
-    }
-
-    // Vérifier le statut détaillé du code
     // Vérifier le statut détaillé du code
     public function checkCodeStatus(string $email, string $code): array
     {
