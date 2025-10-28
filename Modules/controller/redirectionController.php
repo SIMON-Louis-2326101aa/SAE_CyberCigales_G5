@@ -64,7 +64,7 @@ class redirectionController
     public function openEmailVerification()
     {
         $this->logRedirection('emailVerificationView');
-        viewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail']);
+        viewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail','email' => $_GET['email'] ?? '']);
     }
 
     /**
