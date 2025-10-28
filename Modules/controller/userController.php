@@ -125,7 +125,7 @@ class userController
             // Succès logique → on peut vider le old
             unset($_SESSION['old']);
 
-            header("Location: index.php?controller=redirection&action=openEmailVerification");
+            header("Location: index.php?controller=redirection&action=openEmailVerification&email=" . urlencode($email));
             exit;
         }
 
@@ -173,7 +173,7 @@ class userController
         // Succès logique → on peut vider le old
         unset($_SESSION['old']);
 
-        header("Location: index.php?controller=redirection&action=openEmailVerification");
+        header("Location: index.php?controller=redirection&action=openEmailVerification&email=" . urlencode($email));
         exit;
     }
 

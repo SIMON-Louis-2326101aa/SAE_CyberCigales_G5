@@ -66,12 +66,6 @@ class emailVerificationController
         $email = $_POST['email'] ?? '';
         $code  = $_POST['code']  ?? '';
 
-//        // AJOUT DE L'ECHO DE DÉBOGAGE
-//        echo "--- DEBUG VÉRIFICATION CODE ---<br>";
-//        echo "Email reçu : <strong>" . htmlspecialchars($email) . "</strong><br>";
-//        echo "Code reçu : <strong>" . htmlspecialchars($code) . "</strong><br>";
-//        exit;
-
         //Ajout de l'email à l'URL de redirection en cas d'erreur
         $errorRedirectUrl = 'Location: index.php?controller=redirection&action=openEmailVerification&email=' . urlencode($email);
 
