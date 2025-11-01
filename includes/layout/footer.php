@@ -21,5 +21,3 @@ if (!empty($_SESSION['old'])) {
     unset($_SESSION['old']);
 }
 ?>
-</body>
-</html>
