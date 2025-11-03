@@ -1,24 +1,6 @@
 <main>
     <h1>Vérifier votre email</h1>
 
-    <?php if (!empty($info)): ?>
-        <div style="background-color: #e3f2fd; border: 1px solid #2196f3; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            <p style="color: #1565c0; font-weight: bold; margin: 0;">ℹ️ <?php echo htmlspecialchars($info); ?></p>
-        </div>
-    <?php endif; ?>
-
-    <?php if (!empty($devCode)): ?>
-        <div style="background-color: #fff3e0; border: 2px solid #ff9800; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            <p style="color: #e65100; font-weight: bold; margin: 0;">🔑 <strong>Code (dev/local):</strong> <?php echo htmlspecialchars($devCode); ?></p>
-        </div>
-    <?php endif; ?>
-
-    <?php if (!empty($error)): ?>
-        <div style="background-color: #ffebee; border: 1px solid #f44336; padding: 15px; border-radius: 5px; margin: 15px 0;">
-            <p style="color: #c62828; font-weight: bold; margin: 0;">❌ <?php echo $error; ?></p>
-        </div>
-    <?php endif; ?>
-
     <form action="index.php?controller=emailVerification&action=verify" method="post">
         <ul>
             <li>

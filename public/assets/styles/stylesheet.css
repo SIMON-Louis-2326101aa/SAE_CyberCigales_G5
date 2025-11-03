@@ -145,6 +145,12 @@ h2 {
     border: 1px solid #800000;
 }
 
+.flash-info {
+    background-color: #d2e9ff;
+    color: #004080;
+    border: 1px solid #004080;
+}
+
 .flash.is-hiding { opacity: 0; }
 
 .flash__close {

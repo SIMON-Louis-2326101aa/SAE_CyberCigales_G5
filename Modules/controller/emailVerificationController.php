@@ -103,7 +103,7 @@ class emailVerificationController
 
         // Afficher un message d'erreur spécifique selon la raison
         $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired')
-            ? "Code expiré (10 minutes). <a href=\"index.php?controller=emailVerification&action=request&email=" . urlencode($email) . "\">Renvoyer un code</a>."
+            ? "Code expiré (10 minutes). Utilisez le lien 'Renvoyer un code' ci-dessous."
             : "Code incorrect. Vérifiez et réessayez.";
 
         header($errorRedirectUrl); // Redirection après échec
