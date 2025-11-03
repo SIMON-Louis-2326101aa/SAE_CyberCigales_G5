@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../model/emailVerificationModel.php';
 require_once __DIR__ . '/../../includes/mailer.php';
 require_once __DIR__ . '/../model/userModel.php';
-require_once __DIR__ . '/../../includes/viewHandler.php';
+require_once __DIR__ . '/../../includes/ViewHandler.php';
 
 class emailVerificationController
 {

@@ -85,7 +85,7 @@ log_console("ROOT_DIR={$ROOT_DIR}", 'info'); // ℹ️
     Chargements initiaux
    ============================================================ */
 
-$composerAutoload = $ROOT_DIR . '/vendor/autoload.php';
+$composerAutoload = $ROOT_DIR . '/vendor/Autoload.php';
 
 // Chargement des variables d'environnement depuis le fichier .env
 if (is_file($composerAutoload)) {
@@ -95,13 +95,13 @@ if (is_file($composerAutoload)) {
     log_console('Composer autoload introuvable: /vendor/autoload.php', 'error'); // ❌
 }
 
-$internalAutoload = $ROOT_DIR . '/includes/autoloader.php';
+$internalAutoload = $ROOT_DIR . '/includes/Autoloader.php';
 
 if (is_file($internalAutoload)) {
     require_once $internalAutoload;
     log_console('Autoloader interne chargé', 'ok'); // ✅
 } else {
-    log_console('Autoloader interne introuvable: /includes/autoloader.php', 'error'); // ❌
+    log_console('Autoloader interne introuvable: /includes/AAutoloader.php', 'error'); // ❌
 }
 
 /* ============================================================

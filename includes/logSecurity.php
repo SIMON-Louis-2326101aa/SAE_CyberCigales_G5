@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * logSecurity.php
@@ -10,6 +9,8 @@ declare(strict_types=1);
  * - Rotation simple du fichier si trop volumineux.
  * - En dev, trace aussi via log_dev().
  */
+
+declare(strict_types=1);
 
 if (!function_exists('logSecurityEvent')) {
     /**

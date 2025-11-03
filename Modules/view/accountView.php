@@ -7,7 +7,7 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
 <h1>Bonjour Admin !</h1>
 <p>Voici la base de donnée : <?php
     // Récupérer tous les utilisateurs avec SQL direct
-    require_once __DIR__ . '/../../includes/connectionDB.php';
+    require_once __DIR__ . '/../../includes/ConnectionDB.php';
     $db = connectionDB::getInstance();
     $pdo = $db->getPdo();
 

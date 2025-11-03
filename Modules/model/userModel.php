@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/../../includes/connectionDB.php';
+require_once __DIR__ . '/../../includes/ConnectionDB.php';
 require_once __DIR__ . '/../model/emailVerificationModel.php';
 
 class userModel extends database

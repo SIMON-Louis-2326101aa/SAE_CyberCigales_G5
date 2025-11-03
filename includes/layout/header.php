@@ -16,7 +16,8 @@ if (session_status() === PHP_SESSION_NONE) {
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=redirection&action=openHomepage" id="nav-menu-title"><img src="./assets/images/logo.png" alt="logo-escape-the-code"></a>
+        <a href="index.php?controller=redirection&action=openHomepage" id="nav-menu-title">
+            <img src="./assets/images/logo.png" alt="logo-escape-the-code"></a>
         <a href="index.php?controller=redirection&action=openHomepage" class="active btn-nav">Accueil</a>
     </div>
 
@@ -24,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <?php
         if (isset($_SESSION['utilisateur'])) {
             ?>
-            <!-- Changer de Theme marche comme un bouton mais l'ajout de javascript:void(0) permet de ne pas recharger la page -->
+            <!-- Change Theme marche comme bouton ajout de javascript:void(0) permet de ne pas recharger la page -->
             <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
             <a href="index.php?controller=user&action=logout" class="active btn-nav">Déconnexion</a>
             <a href="index.php?controller=redirection&action=openAccount" class="active btn-nav">Compte</a>
@@ -43,7 +44,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <?php
 if (!function_exists('old')) {
-    function old(string $key, string $default = ''): string {
+    function old(string $key, string $default = ''): string
+    {
         $val = $_SESSION['old'][$key] ?? $default;
 
         // Normalisation & nettoyage agressif
@@ -61,14 +63,14 @@ if (!function_exists('old')) {
 ?>
 
 <!-- Permet d'ajouter les pop up flash dans le header sans trop gêner la page-->
-<?php if (!empty($_SESSION['flash_success'])): ?>
+<?php if (!empty($_SESSION['flash_success'])) : ?>
     <div class="flash flash-success">
         <?= htmlspecialchars($_SESSION['flash_success']); ?>
     </div>
     <?php unset($_SESSION['flash_success']); ?>
 <?php endif; ?>
 
-<?php if (!empty($_SESSION['flash_error'])): ?>
+<?php if (!empty($_SESSION['flash_error'])) : ?>
     <div class="flash flash-error">
         <?= htmlspecialchars($_SESSION['flash_error']); ?>
     </div>
