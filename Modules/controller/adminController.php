@@ -13,37 +13,43 @@ class adminController
             log_console('adminController initialisé', 'ok');
         }
 
-        // Security check for the whole controller
+        // Si non Admin, pas accès aux pages admin
         if (!isset($_SESSION['email']) || $_SESSION['email'] !== 'escapethecode2025@gmail.com') {
             header("Location: index.php?controller=redirection&action=openHomepage");
             exit;
         }
     }
 
+    //Liste les utilisateurs grace au userListView (sous une forme de tableau)
     public function listUsers()
     {
         $users = $this->userModel->getAllUsers();
         viewHandler::show("admin/userListView", ["users" => $users]);
     }
 
+    //Permet de modifier les informations lié aux utilisateur (nom, prénom, email) via userEditView
     public function editUser()
     {
         $userId = $_GET['id'] ?? null;
+        //Si l'ID n'existe pas, alors on revient à la liste des utilisateurs
         if (!$userId) {
             header("Location: index.php?controller=admin&action=listUsers");
             exit;
         }
 
+        //Si on modifie des informations
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nom = $_POST['nom'] ?? '';
             $prenom = $_POST['prenom'] ?? '';
             $email = $_POST['email'] ?? '';
 
+            //Mise à jour des informations
             $this->userModel->updateUser((int)$userId, $nom, $prenom, $email);
 
             header("Location: index.php?controller=admin&action=listUsers");
             exit;
         } else {
+            //Sinon Affichage actuelle des informations
             $user = $this->userModel->getUserById((int)$userId);
             if (!$user) {
                 header("Location: index.php?controller=admin&action=listUsers");
