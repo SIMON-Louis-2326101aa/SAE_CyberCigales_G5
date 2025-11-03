@@ -21,13 +21,13 @@
             <h3>Nos réseaux</h3>
             <div class="social-icons">
                 <a href="#" class="container-link-footer">
-                    <img class='footer-img' src="/assets/images/instagram-logo.webp" alt="Instagram">
+                    <img class='footer-img' src="./assets/images/instagram-logo.webp" alt="Instagram">
                 </a>
                 <a href="#" class="container-link-footer">
-                    <img class='footer-img' src="/assets/images/twitter-logo.webp" alt="Twitter">
+                    <img class='footer-img' src="./assets/images/twitter-logo.webp" alt="Twitter">
                 </a>
                 <a href="#" class="container-link-footer">
-                    <img class="footer-img" src="/assets/images/logo-tiktok.webp" alt="TikTok">
+                    <img class="footer-img" src="./assets/images/logo-tiktok.webp" alt="TikTok">
                 </a>
             </div>
         </div>
