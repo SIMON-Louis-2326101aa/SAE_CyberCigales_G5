@@ -1,8 +1,10 @@
 <?php
 
-require_once __DIR__ . '/database.php';
+//require_once __DIR__ . '/Database.php';
 
-class emailVerificationModel extends database
+namespace SAE_CyberCigales_G5\Modules\model;
+
+class EmailVerificationModel extends Database
 {
     public function generateAndStoreCode(string $email, int $ttlMinutes = 10): string
     {
@@ -26,7 +28,11 @@ class emailVerificationModel extends database
     {
         // 1. Vérifier si le code existe ET est VALIDE (en utilisant l'horloge de la DB)
         $stmtValid = $this->getBdd()->prepare(
-            'SELECT id FROM email_verification_codes WHERE email = :email AND code = :code AND expires_at >= NOW() ORDER BY id DESC LIMIT 1'
+            'SELECT id FROM email_verification_codes 
+          WHERE email = :email 
+            AND code = :code 
+            AND expires_at >= NOW() 
+          ORDER BY id DESC LIMIT 1'
         );
         $stmtValid->execute([
             'email' => $email,
@@ -95,7 +101,4 @@ class emailVerificationModel extends database
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?: null;
     }
-
-
 }
-

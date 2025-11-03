@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Classe abstraite de base pour la gestion de la base de données
  *
@@ -11,9 +12,11 @@
  * - Pattern Singleton pour éviter les connexions multiples
  */
 
-require_once __DIR__ . '/../../includes/ConnectionDB.php';
+//require_once __DIR__ . '/../../includes/ConnectionDB.php';
 
-abstract class database
+namespace SAE_CyberCigales_G5\Modules\model;
+
+abstract class Database
 {
     private static ?PDO $pdo = null;
 

@@ -1,9 +1,12 @@
 <?php
-require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/../../includes/ConnectionDB.php';
-require_once __DIR__ . '/../model/emailVerificationModel.php';
 
-class userModel extends database
+//require_once __DIR__ . '/Database.php';
+//require_once __DIR__ . '/../../includes/ConnectionDB.php';
+//require_once __DIR__ . '/../model/EmailVerificationModel.php';
+
+namespace SAE_CyberCigales_G5\Modules\model;
+
+class UserModel extends Database
 {
     private connectionDB $db;
     private $eModel;
@@ -142,5 +145,4 @@ class userModel extends database
             'pending' => $inPending
         ];
     }
-
 }

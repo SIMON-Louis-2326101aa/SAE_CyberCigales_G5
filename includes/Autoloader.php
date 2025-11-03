@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace SAE_CyberCigales_G5\includes;
 
-require __DIR__ . '/Constant.php';
+//require __DIR__ . '/Constant.php';
 final class Autoloader
 {
     /** Empêche l'instanciation. */

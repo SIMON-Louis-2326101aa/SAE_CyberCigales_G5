@@ -1,6 +1,8 @@
 <?php
 
-class redirectionController
+namespace SAE_CyberCigales_G5\Modules\controller;
+
+class RedirectionController
 {
     private function logRedirection(string $view): void
     {
@@ -58,13 +60,15 @@ class redirectionController
     public function openChangePwd()
     {
         $this->logRedirection('changePwdView');
-        viewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token'] ?? '']);
+        viewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token']
+            ?? '']);
     }
 
     public function openEmailVerification()
     {
         $this->logRedirection('emailVerificationView');
-        viewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail','email' => $_GET['email'] ?? '']);
+        viewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail','email' => $_GET['email']
+            ?? '']);
     }
 
     /**
@@ -76,7 +80,8 @@ class redirectionController
     }
 
     /* Affiche le plan du Site */
-    public function openSiteMap(){
+    public function openSiteMap()
+    {
         viewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
     }
 }
