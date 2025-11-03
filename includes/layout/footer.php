@@ -3,7 +3,8 @@
         <!-- Colonne 1: À propos -->
         <div class="footer-column">
             <h3>ESCAPETHECODE</h3>
-            <p>Explorez les mystères des anciens temples mayas à travers six épreuves immersives. Une aventure unique vous attend dans les profondeurs de la jungle mystique.</p>
+            <p>Explorez les mystères des anciens temples mayas à travers six épreuves immersives. Une aventure unique
+                vous attend dans les profondeurs de la jungle mystique.</p>
         </div>
 
         <!-- Colonne 2: Navigation -->
@@ -11,8 +12,8 @@
             <h3>Navigation</h3>
             <ul>
                 <li><a href="index.php">Accueil</a></li>
-                <li><a href="index.php?controller=redirection&action=openSiteMap">Plan du site</a></li>
-                <li><a href="index.php?controller=contact&action=show">Contact</a></li>
+                <li><a href="index.php?controller=Redirection&action=openSiteMap">Plan du site</a></li>
+                <li><a href="index.php?controller=Contact&action=show">Contact</a></li>
             </ul>
         </div>
 
@@ -39,9 +40,9 @@
     <!-- Bas du footer -->
     <div class="footer-bottom">
         <div class="footer-legal">
-            <a href="index.php?controller=redirection&action=openLegal">Mentions légales</a>
-            <a href="index.php?controller=contact&action=show">Contact</a>
-            <a href="index.php?controller=redirection&action=openAbout">À propos</a>
+            <a href="index.php?controller=Redirection&action=openLegal">Mentions légales</a>
+            <a href="index.php?controller=Contact&action=show">Contact</a>
+            <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
         </div>
         <div class="footer-copyright">
             © 2025 ESCAPETHECODE. Tous droits réservés.

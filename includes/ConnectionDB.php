@@ -1,7 +1,15 @@
 <?php
+
 declare(strict_types=1);
 
-final class connectionDB
+namespace SAE_CyberCigales_G5\includes;
+
+use InvalidArgumentException;
+use PDO;
+use PDOException;
+use RuntimeException;
+
+final class ConnectionDB
 {
     private PDO $pdo;
     private static ?self $instance = null;

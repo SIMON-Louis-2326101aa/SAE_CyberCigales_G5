@@ -1,6 +1,10 @@
 <?php
 
-class redirectionController
+namespace SAE_CyberCigales_G5\Modules\controller;
+
+use SAE_CyberCigales_G5\includes\ViewHandler;
+
+class RedirectionController
 {
     private function logRedirection(string $view): void
     {
@@ -12,13 +16,13 @@ class redirectionController
     public function openHomepage()
     {
         $this->logRedirection('homepageView');
-        viewHandler::show('homepageView', ['pageTitle' => 'Accueil']);
+        ViewHandler::show('homepageView', ['pageTitle' => 'Accueil']);
     }
 
     public function openLegal()
     {
         $this->logRedirection('legalMentionView');
-        viewHandler::show('legalMentionView', ['pageTitle' => 'Mentions Légales']);
+        ViewHandler::show('legalMentionView', ['pageTitle' => 'Mentions Légales']);
     }
 
     public function openAccount()
@@ -34,37 +38,39 @@ class redirectionController
 //            exit;
 //        }
 
-        viewHandler::show('accountView', ['pageTitle' => 'Compte']);
+        ViewHandler::show('accountView', ['pageTitle' => 'Compte']);
     }
 
     public function openFormConnection()
     {
         $this->logRedirection('formConnectionView');
-        viewHandler::show('formConnectionView', ['pageTitle' => 'Connexion']);
+        ViewHandler::show('formConnectionView', ['pageTitle' => 'Connexion']);
     }
 
     public function openFormRegister()
     {
         $this->logRedirection('formRegisterView');
-        viewHandler::show('formRegisterView', ['pageTitle' => 'S\'inscrire']);
+        ViewHandler::show('formRegisterView', ['pageTitle' => 'S\'inscrire']);
     }
 
     public function openForgotPwd()
     {
         $this->logRedirection('forgotPwdView');
-        viewHandler::show('forgotPwdView', ['pageTitle' => 'Mot de passe oublié']);
+        ViewHandler::show('forgotPwdView', ['pageTitle' => 'Mot de passe oublié']);
     }
 
     public function openChangePwd()
     {
         $this->logRedirection('changePwdView');
-        viewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token'] ?? '']);
+        ViewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token']
+            ?? '']);
     }
 
     public function openEmailVerification()
     {
         $this->logRedirection('emailVerificationView');
-        viewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail','email' => $_GET['email'] ?? '']);
+        ViewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail','email' => $_GET['email']
+            ?? '']);
     }
 
     /**
@@ -72,11 +78,12 @@ class redirectionController
      */
     public function openAbout()
     {
-        viewHandler::show('aboutView', ['pageTitle' => 'À Propos']);
+        ViewHandler::show('aboutView', ['pageTitle' => 'À Propos']);
     }
 
     /* Affiche le plan du Site */
-    public function openSiteMap(){
-        viewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
+    public function openSiteMap()
+    {
+        ViewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
     }
 }

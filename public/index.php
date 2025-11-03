@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Point d'entrée de l'application (public/index.php)
  * - Résout les chemins depuis la racine via $ROOT_DIR.
@@ -12,6 +10,11 @@ declare(strict_types=1);
  * - Route via controllerHandler et rend via viewHandler.
  * - Écrit des logs de debug discrets en commentaires HTML.
  */
+
+declare(strict_types=1);
+
+use SAE_CyberCigales_G5\includes\ControllerHandler;
+use SAE_CyberCigales_G5\includes\ViewHandler;
 
 // ============================================================
 // 🔧 CONFIGURATION DU LOG SERVEUR (AVANT TOUT)
@@ -113,7 +116,8 @@ register_shutdown_function(function () {
     Chargements initiaux
    ============================================================ */
 
-$composerAutoload = $ROOT_DIR . '/vendor/autoload.php';
+$composerAutoload = $ROOT_DIR . '/vendor/Autoload.php';
+
 // Chargement des variables d'environnement depuis le fichier .env
 if (is_file($composerAutoload)) {
     require $composerAutoload;
@@ -124,14 +128,16 @@ if (is_file($composerAutoload)) {
 // ❌
 }
 
-$internalAutoload = $ROOT_DIR . '/includes/autoloader.php';
+$internalConstant = $ROOT_DIR . '/includes/Constant.php';
+require_once $internalConstant;
+$internalAutoload = $ROOT_DIR . '/includes/Autoloader.php';
+
 if (is_file($internalAutoload)) {
     require_once $internalAutoload;
     log_console('Autoloader interne chargé', 'ok');
 // ✅
 } else {
-    log_console('Autoloader interne introuvable: /includes/autoloader.php', 'error');
-// ❌
+    log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error'); // ❌
 }
 
 /* ============================================================
@@ -185,14 +191,14 @@ try {
 // 📄
 
     // Paramètres de route par query string
-    $S_controller = $_GET['controller'] ?? 'redirection';
+    $S_controller = $_GET['controller'] ?? 'Redirection';
     $S_action     = $_GET['action'] ?? 'openHomepage';
     log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');
 // 📄
 
     // Démarre le buffer de rendu
-    if (class_exists('viewHandler')) {
-        viewHandler::bufferStart();
+    if (class_exists('ViewHandler')) {
+        ViewHandler::bufferStart();
         log_console('Buffer vue démarré', 'ok');
 // ✅
     } else {
@@ -202,8 +208,8 @@ try {
     }
 
     // Exécute le contrôleur et l'action
-    if (class_exists('controllerHandler')) {
-        $C_controller = new controllerHandler($S_controller, $S_action);
+    if (class_exists('ControllerHandler')) {
+        $C_controller = new ControllerHandler($S_controller, $S_action);
         $C_controller->execute();
         log_console('Contrôleur exécuté', 'ok');
 // ✅
@@ -214,7 +220,7 @@ try {
     }
 
     // Récupère le contenu tamponné
-    $displayContent = viewHandler::bufferCollect();
+    $displayContent = ViewHandler::bufferCollect();
 // Paramètres potentiels exposés par le handler
     $A_params = method_exists($C_controller, 'getParams') ? $C_controller->getParams() : [];
     if (!empty($A_params)) {

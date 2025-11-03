@@ -5,21 +5,21 @@
         if (isset($_SESSION['utilisateur'])) {
             ?>
             <li>
-                <a href="index.php?controller=redirection&action=openHomepage">Accueil</a>
-                <a href="index.php?controller=user&action=logout">Déconnexion</a>
-                <a href="index.php?controller=user&action=account">Compte</a>
-                <a href="index.php?controller=redirection&action=openLegal">Mentions Légales</a>
-                <a href="index.php?controller=redirection&action=openAbout">À propos</a>
+                <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
+                <a href="index.php?controller=User&action=logout">Déconnexion</a>
+                <a href="index.php?controller=User&action=account">Compte</a>
+                <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
+                <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
             </li>
             <?php
         } else {
             ?>
             <li>
-                <a href="index.php?controller=redirection&action=openHomepage">Accueil</a>
-                <a href="index.php?controller=user&action=register">Inscription</a>
-                <a href="index.php?controller=user&action=login">Connexion</a>
-                <a href="index.php?controller=redirection&action=openLegal">Mentions Légales</a>
-                <a href="index.php?controller=redirection&action=openAbout">À propos</a>
+                <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
+                <a href="index.php?controller=User&action=register">Inscription</a>
+                <a href="index.php?controller=User&action=login">Connexion</a>
+                <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
+                <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
             </li>
             <?php
         }

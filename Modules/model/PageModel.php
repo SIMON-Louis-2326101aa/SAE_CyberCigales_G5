@@ -1,12 +1,21 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class pageModel
  * Modèle lié à la page d'accueil (ou pages générales).
  * Hérite de `database` pour récupérer la connexion PDO unique du projet.
  */
-class pageModel extends database
+
+declare(strict_types=1);
+
+namespace SAE_CyberCigales_G5\Module\model;
+
+use PDO;
+use RuntimeException;
+use SAE_CyberCigales_G5\Modules\model\Database;
+use Throwable;
+
+class PageModel extends Database
 {
     /** Connexion PDO locale pour ce modèle. */
     private ?PDO $db = null;

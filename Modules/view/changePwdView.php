@@ -1,4 +1,4 @@
-<form method="POST" action="index.php?controller=user&action=changePwd">
+<form method="POST" action="index.php?controller=User&action=changePwd">
     <h2>Modifier mon mot de passe</h2>
 
     <input type="hidden" name="token" value="<?= htmlspecialchars($token ?? '') ?>">
@@ -16,6 +16,6 @@
 
     <button type="submit" name="changePwd">Valider le changement</button>
 
-    <a href="index.php?controller=redirection&action=openAccount" class="active">Retour</a>
+    <a href="index.php?controller=Redirection&action=openAccount" class="active">Retour</a>
 </form>
 
