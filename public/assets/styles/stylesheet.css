@@ -467,7 +467,6 @@ button:hover {
     margin-bottom: 8vw;
 }
 
-/* ============ Legal Mention ============ */
 #legal-mention {
     text-align: left;
     padding: 40px;
@@ -619,7 +618,6 @@ button:hover {
     text-shadow: 0 0 10px rgba(164, 69, 255, 0.5);
 }
 
-/* ============ Team Grid ============ */
 .team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));

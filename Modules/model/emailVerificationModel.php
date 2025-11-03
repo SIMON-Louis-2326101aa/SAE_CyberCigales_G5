@@ -21,54 +21,47 @@ class emailVerificationModel extends database
         return $code;
     }
 
-    public function validateCode(string $email, string $code): bool
-    {
-        $stmt = $this->getBdd()->prepare(
-            'SELECT id FROM email_verification_codes WHERE email = :email AND code = :code AND expires_at >= NOW() ORDER BY id DESC LIMIT 1'
-        );
-        $stmt->execute([
-            'email' => $email,
-            'code' => $code,
-        ]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return !empty($row);
-    }
-
     // Vérifier le statut détaillé du code
     public function checkCodeStatus(string $email, string $code): array
     {
-        // Vérifier si le code existe (même expiré)
-        $stmt = $this->getBdd()->prepare(
-            'SELECT expires_at FROM email_verification_codes WHERE email = :email AND code = :code ORDER BY id DESC LIMIT 1'
+        // 1. Vérifier si le code existe ET est VALIDE (en utilisant l'horloge de la DB)
+        $stmtValid = $this->getBdd()->prepare(
+            'SELECT id FROM email_verification_codes WHERE email = :email AND code = :code AND expires_at >= NOW() ORDER BY id DESC LIMIT 1'
         );
-        $stmt->execute([
+        $stmtValid->execute([
             'email' => $email,
             'code' => $code,
         ]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!$row) {
-            // Le code n'existe pas du tout
+        if ($stmtValid->fetch(PDO::FETCH_ASSOC)) {
+            // Le code est trouvé et non expiré
             return [
-                'valid' => false,
-                'reason' => 'incorrect'
+                'valid' => true,
+                'reason' => 'valid'
             ];
         }
 
-        // Vérifier si le code est expiré
-        $expiresAt = new DateTime($row['expires_at']);
-        $now = new DateTime();
+        // 2. Le code n'est pas valide (soit incorrect, soit expiré). Vérifier s'il existe du tout.
+        $stmtExists = $this->getBdd()->prepare(
+            'SELECT id FROM email_verification_codes WHERE email = :email AND code = :code ORDER BY id DESC LIMIT 1'
+        );
+        $stmtExists->execute([
+            'email' => $email,
+            'code' => $code,
+        ]);
 
-        if ($expiresAt < $now) {
+        if ($stmtExists->fetch(PDO::FETCH_ASSOC)) {
+            // Il existe, mais la première requête a échoué -> il est EXPIRE
             return [
                 'valid' => false,
                 'reason' => 'expired'
             ];
         }
 
+        // 3. Il n'existe pas du tout
         return [
-            'valid' => true,
-            'reason' => 'valid'
+            'valid' => false,
+            'reason' => 'incorrect'
         ];
     }
 

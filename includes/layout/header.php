@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $A_params['pageTitle'] ?? 'CyberCigales'; ?></title>
+    <title><?php echo $A_params['pageTitle'] ?? 'Escape The Code '; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="icon" href="./assets/images/favicon.ico">
     <script src="./assets/js/script.js"></script>

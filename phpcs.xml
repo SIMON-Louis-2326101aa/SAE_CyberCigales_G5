@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<ruleset name="Custom Standard">
+    <rule ref="PSR12"/>
+
+    <file>./src</file>
+    <file>./index.php</file>
+    <exclude-pattern>./vendor/*</exclude-pattern>
+
+    <arg value="wsp"/>
+    <arg name="colors"/>
+</ruleset>
