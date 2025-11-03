@@ -7,6 +7,11 @@ namespace SAE_CyberCigales\Modules\controller;
 //require_once __DIR__ . '/../model/UserModel.php';
 //require_once __DIR__ . '/../../includes/ViewHandler.php';
 
+use SAE_CyberCigales_G5\includes\Constant;
+use SAE_CyberCigales_G5\includes\Mailer;
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\UserModel;
+
 class EmailVerificationController
 {
     private $eModel;
@@ -14,8 +19,8 @@ class EmailVerificationController
 
     public function __construct()
     {
-        $this->eModel = new emailVerificationModel();
-        $this->user = new userModel();
+        $this->eModel = new EmailVerificationModel();
+        $this->user = new UserModel();
     }
 
     public function request()
@@ -50,8 +55,7 @@ class EmailVerificationController
         $sent = Mailer::send($email, $subject, $message);
 
         // L'email doit être passé dans l'URL pour être récupéré par l'afficheur
-        $url = 'Location: index.php?controller=R
-        edirection&action=openEmailVerification&email=' . urlencode($email);
+        $url = 'Location: index.php?controller=Redirection&action=openEmailVerification&email=' . urlencode($email);
 
         if ($sent) {
             $_SESSION['flash_success'] = "Un code vous a été envoyé.";

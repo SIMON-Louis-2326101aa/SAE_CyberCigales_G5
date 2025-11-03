@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Vue "À propos" - Page de présentation du projet et de l'équipe
  *
@@ -20,7 +21,8 @@
     <!-- Section Équipe -->
     <section class="team-section">
         <h2>Notre Équipe</h2>
-        <p>Nous sommes un groupe d'étudiants en 2ème année de BUT Informatique à Aix-en-Provence, passionnés par la cybersécurité et le développement web.</p>
+        <p>Nous sommes un groupe d'étudiants en 2ème année de BUT Informatique à Aix-en-Provence,
+            passionnés par la cybersécurité et le développement web.</p>
 
         <div class="team-grid">
             <div class="team-member">
@@ -53,13 +55,20 @@
     <!-- Section Projet -->
     <section class="project-section">
         <h2>Le Projet</h2>
-        <p><strong>CyberCigales</strong> est un projet universitaire réalisé dans le cadre de la SAE (Situation d'Apprentissage et d'Évaluation) en 2ème année de BUT Informatique à Aix-en-Provence.</p>
+        <p><strong>CyberCigales</strong> est un projet universitaire réalisé dans le cadre de la SAE
+            (Situation d'Apprentissage et d'Évaluation) en 2ème année de BUT Informatique à Aix-en-Provence.</p>
 
         <h3>Description du Projet</h3>
-        <p>Le projet consiste à créer un <strong>escape game numérique interactif</strong> sur le thème de la cybersécurité et de la cryptographie. Ce jeu a pour objectif de faire découvrir aux lycéennes les bases de la sécurité informatique à travers des énigmes et des mini-jeux ludiques et pédagogiques.</p>
+        <p>Le projet consiste à créer un <strong>escape game numérique interactif</strong>
+            sur le thème de la cybersécurité et de la cryptographie.
+            Ce jeu a pour objectif de faire découvrir aux lycéennes les bases de la sécurité informatique*
+            à travers des énigmes et des mini-jeux ludiques et pédagogiques.</p>
 
         <h3>Présentation Publique</h3>
-        <p>Le projet sera présenté le <strong>18 mars 2026</strong> lors de l'atelier <strong>CYBER Cigales</strong>, organisé en partenariat avec l'association <a href="https://lescigales.org" target="_blank">Les Cigales</a>. Cette association œuvre pour initier les jeunes, et plus particulièrement les filles, aux sciences et aux technologies.</p>
+        <p>Le projet sera présenté le <strong>18 mars 2026</strong> lors de l'atelier <strong>CYBER Cigales</strong>,
+            organisé en partenariat avec l'association <a href="https://lescigales.org" target="_blank">Les Cigales</a>.
+            Cette association œuvre pour initier les jeunes, et plus particulièrement les filles,
+            aux sciences et aux technologies.</p>
 
         <h3>Objectifs Pédagogiques</h3>
         <ul>
@@ -131,7 +140,9 @@
     <!-- Section Contexte -->
     <section class="context-section">
         <h2>Contexte Universitaire</h2>
-        <p>Ce projet s'inscrit dans le cadre de notre formation en <strong>2ème année de BUT Informatique</strong> à <strong>Aix-en-Provence</strong>. Il nous permet de mettre en pratique les concepts théoriques appris en cours :</p>
+        <p>Ce projet s'inscrit dans le cadre de notre formation en <strong>2ème année de BUT Informatique</strong>
+            à <strong>Aix-en-Provence</strong>. Il nous permet de mettre en pratique
+            les concepts théoriques appris en cours :</p>
 
         <ul>
             <li><strong>Développement Web</strong> - Maîtrise des technologies web modernes</li>
@@ -155,6 +166,7 @@
     <!-- Section Remerciements -->
     <section class="thanks-section">
         <h2>Remerciements</h2>
-        <p>Nous remercions nos enseignants pour leur accompagnement et leurs conseils précieux dans la réalisation de ce projet.</p>
+        <p>Nous remercions nos enseignants pour leur accompagnement et
+            leurs conseils précieux dans la réalisation de ce projet.</p>
     </section>
 </div>

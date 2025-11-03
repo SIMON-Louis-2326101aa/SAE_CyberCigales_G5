@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace SAE_CyberCigales_G5\includes;
 
-//require __DIR__ . '/Constant.php';
 final class Autoloader
 {
     /** Empêche l'instanciation. */
@@ -50,11 +49,14 @@ final class Autoloader
      */
     public static function classLoad(string $className): bool
     {
-        // Vérifie la classe Constant (chemins)
-        if (!class_exists('Constant')) {
-            self::log('Classe Constant introuvable (includes/Constant.php non chargé ?)', 'error'); // ❌
-            return false;
+        if (false !== $lastNsPos = strrpos($className, '\\')) {
+            $className = substr($className, $lastNsPos + 1);
         }
+//        // Vérifie la classe Constant (chemins)
+//        if (!class_exists('Constant')) {
+//            self::log('Classe Constant introuvable (includes/Constant.php non chargé ?)', 'error'); // ❌
+//            return false;
+//        }
 
         // Racine projet + dossiers à parcourir (sans slash final)
         $root = rtrim(Constant::indexDir(), '/\\');
@@ -90,7 +92,7 @@ final class Autoloader
 }
 
 // Enregistrement de l’autoload
-spl_autoload_register([autoloader::class, 'classLoad']);
+spl_autoload_register([Autoloader::class, 'classLoad']);
 
 // Log global (on n'appelle pas la méthode privée)
 if (function_exists('log_console')) {

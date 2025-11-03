@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Point d'entrée de l'application (public/index.php)
  * - Résout les chemins depuis la racine via $ROOT_DIR.
@@ -10,6 +10,11 @@ declare(strict_types=1);
  * - Route via controllerHandler et rend via viewHandler.
  * - Écrit des logs de debug discrets en commentaires HTML.
  */
+
+declare(strict_types=1);
+
+use SAE_CyberCigales_G5\includes\ControllerHandler;
+use SAE_CyberCigales_G5\includes\ViewHandler;
 
 /* ============================================================
     Utilitaire de log DEV (commentaires HTML)
@@ -95,13 +100,15 @@ if (is_file($composerAutoload)) {
     log_console('Composer autoload introuvable: /vendor/autoload.php', 'error'); // ❌
 }
 
+$internalConstant = $ROOT_DIR . '/includes/Constant.php';
+require_once $internalConstant;
 $internalAutoload = $ROOT_DIR . '/includes/Autoloader.php';
 
 if (is_file($internalAutoload)) {
     require_once $internalAutoload;
     log_console('Autoloader interne chargé', 'ok'); // ✅
 } else {
-    log_console('Autoloader interne introuvable: /includes/AAutoloader.php', 'error'); // ❌
+    log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error'); // ❌
 }
 
 /* ============================================================
@@ -150,31 +157,23 @@ try {
     log_console("URI demandée: {$uri}", 'file'); // 📄
 
     // Paramètres de route par query string
-    $S_controller = $_GET['controller'] ?? 'redirection';
+    $S_controller = $_GET['controller'] ?? 'Redirection';
     $S_action     = $_GET['action'] ?? 'openHomepage';
     log_console("Route -> controller={$S_controller}, action={$S_action}", 'file'); // 📄
 
     // Démarre le buffer de rendu
-    if (class_exists('viewHandler')) {
-        viewHandler::bufferStart();
-        log_console('Buffer vue démarré', 'ok'); // ✅
-    } else {
-        log_console('Classe viewHandler introuvable', 'error'); // ❌
-        throw new RuntimeException('viewHandler introuvable');
-    }
+    // Utilisation directe de ViewHandler grâce au "use" en haut du fichier
+    ViewHandler::bufferStart();
+    log_console('Buffer vue démarré', 'ok'); // ✅
 
     // Exécute le contrôleur et l'action
-    if (class_exists('controllerHandler')) {
-        $C_controller = new controllerHandler($S_controller, $S_action);
-        $C_controller->execute();
-        log_console('Contrôleur exécuté', 'ok'); // ✅
-    } else {
-        log_console('Classe controllerHandler introuvable', 'error'); //❌
-        throw new RuntimeException('controllerHandler introuvable');
-    }
+    // Utilisation directe de ControllerHandler grâce au "use"
+    $C_controller = new ControllerHandler($S_controller, $S_action);
+    $C_controller->execute();
+    log_console('Contrôleur exécuté', 'ok'); // ✅
 
     // Récupère le contenu tamponné
-    $displayContent = viewHandler::bufferCollect();
+    $displayContent = ViewHandler::bufferCollect();
 
     // Paramètres potentiels exposés par le handler
     $A_params = method_exists($C_controller, 'getParams') ? $C_controller->getParams() : [];
@@ -185,20 +184,17 @@ try {
     // Affiche le contenu
     echo $displayContent;
     log_console('Contenu affiché', 'ok'); // ✅
-// Flush non-échappé des scripts de debug
-//    if (!empty($GLOBALS['dev_log_buffer']) && is_array($GLOBALS['dev_log_buffer'])) {
-//        echo "<script>(function(){";
-//        foreach ($GLOBALS['dev_log_buffer'] as $row) {
-//            $msg   = json_encode($row['msg'], JSON_UNESCAPED_UNICODE);
-//            $style = json_encode('color: ' . ($row['color'] ?? 'white'));
-//            echo "try{console.log('%c'+$msg, $style);}catch(e){}";
-//        }
-//        echo "})();</script>";
-//        $GLOBALS['dev_log_buffer'] = []; // reset propre
-//    }
 } catch (Throwable $e) {
     // Gestion d'erreur globale
     http_response_code(500);
-    echo "<main><h1>Erreur interne</h1><p>Une erreur est survenue.</p></main>";
+
+    // Laissez le mode débogage actif pour l'instant si vous voulez
+    echo "<main><h1>ERREUR FATALE (DÉBOGAGE)</h1>";
+    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>Fichier:</strong> " . htmlspecialchars($e->getFile()) . " (Ligne: " . $e->getLine() . ")</p>";
+    echo "<hr>";
+    echo "<h2>Trace complète (Stack Trace)</h2>";
+    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
+
     log_console('Exception globale capturée', 'error'); // ❌
 }

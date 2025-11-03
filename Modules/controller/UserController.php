@@ -8,13 +8,20 @@ namespace SAE_CyberCigales_G5\Modules\controller;
 //require_once __DIR__ . '/../../includes/ViewHandler.php';
 //require_once __DIR__ . '/../../includes/Mailer.php';
 
+use SAE_CyberCigales_G5\includes\Constant;
+use SAE_CyberCigales_G5\includes\Mailer;
+use SAE_CyberCigales_G5\includes\ViewHandler;
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\PasswordResetModel;
+use SAE_CyberCigales_G5\Modules\model\UserModel;
+
 class UserController
 {
-    private userModel $userModel;
+    private UserModel $userModel;
 
     public function __construct()
     {
-        $this->userModel = new userModel();
+        $this->userModel = new UserModel();
         if (function_exists('log_console')) {
             log_console('userController initialisé', 'ok');
         }
@@ -57,13 +64,13 @@ class UserController
         if ($password !== $confirm) {
             $_SESSION['flash_error'] = "Les mots de passe ne correspondent pas.";
             //if (function_exists('log_console')) log_console('Register: mots de passe différents', 'error');
-            header("Location: index.php?controller=redirection&action=openFormRegister");
+            header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
         if (strlen($password) < 8) {
             $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
             //if (function_exists('log_console')) log_console('Register: mot de passe < 8 caractères', 'error');
-            header("Location: index.php?controller=redirection&action=openFormRegister");
+            header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
         // Complexité
@@ -76,7 +83,7 @@ class UserController
             $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, 
             une minuscule, un chiffre et un caractère spécial.";
             //if (function_exists('log_console')) log_console('Register: complexité insuffisante', 'error');
-            header("Location: index.php?controller=redirection&action=openFormRegister");
+            header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
 
@@ -84,12 +91,12 @@ class UserController
         if ($this->userModel->findByEmail($email)) {
             $_SESSION['flash_error'] = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
             //if (function_exists('log_console')) log_console("Register: email déjà utilisé ($email)", 'info');
-            header("Location: index.php?controller=redirection&action=openFormRegister");
+            header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
 
         // Vérifier si inscription déjà en attente
-        $emailModel  = new emailVerificationModel();
+        $emailModel  = new EmailVerificationModel();
         $emailStatus = $this->userModel->getEmailStatus($email); // suppose un array ['pending' => bool]
 
         if (!empty($emailStatus['pending'])) {
@@ -273,7 +280,7 @@ class UserController
         }
 
         $email   = trim($_POST['email'] ?? '');
-        $prModel = new passwordResetModel();
+        $prModel = new PasswordResetModel();
 
         // Réponse générique (ne pas révéler si un mail existe ou pas)
         if (!$this->userModel->emailExists($email)) {
@@ -340,7 +347,7 @@ class UserController
      */
     public function changePwd()
     {
-        $prModel = new passwordResetModel();
+        $prModel = new PasswordResetModel();
 
         // Affichage du formulaire via le lien GET
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -368,7 +375,7 @@ class UserController
             }
 
             // Affiche la vue avec le token (le form doit contenir un input hidden 'token')
-            viewHandler::show("../view/changePwdView", ['token' => $token]);
+            ViewHandler::show("../view/changePwdView", ['token' => $token]);
             return;
         }
 

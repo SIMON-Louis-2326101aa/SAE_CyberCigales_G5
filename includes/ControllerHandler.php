@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace SAE_CyberCigales_G5\includes;
 
+use RuntimeException;
+
 final class ControllerHandler
 {
     /**
@@ -47,7 +49,7 @@ final class ControllerHandler
 
         // On filtre les caractères autorisés pour éviter l'injection / traversal.
         if (!preg_match('/^[A-Za-z0-9_]+$/', $controller)) {
-            $controller = 'redirection';
+            $controller = 'Redirection';
         }
 
         // Suffixe standard.
@@ -91,30 +93,34 @@ final class ControllerHandler
         $controller = $this->url['controller'];
         $action     = $this->url['action'];
 
-        // Emplacement attendu du fichier contrôleur (au cas où l'autoloader ne l'aurait pas déjà chargé).
-        $controllerFile = Constant::indexDir() . '/Modules/controller/' . $controller . '.php';
+        // Ceci est le namespace où sont rangés tous vos contrôleurs
+        $controllerNamespace = 'SAE_CyberCigales_G5\\Modules\\controller\\';
+        $FQCN = $controllerNamespace . $controller;
 
-        if (is_file($controllerFile)) {
-            require_once $controllerFile;
-            if (function_exists('log_console')) {
-                log_console("Chargement contrôleur (require): {$controllerFile}", 'file'); // 📄
-            }
-        } else {
-            if (function_exists('log_console')) {
-                //log_console("Fichier contrôleur non trouvé
-                // (autoloader prendra le relais) : {$controllerFile}", 'info'); // ℹ️
-            }
-        }
+//        // Emplacement attendu du fichier contrôleur (au cas où l'autoloader ne l'aurait pas déjà chargé).
+//        $controllerFile = Constant::indexDir() . '/Modules/controller/' . $controller . '.php';
+//
+//        if (is_file($controllerFile)) {
+//            require_once $controllerFile;
+//            if (function_exists('log_console')) {
+//                log_console("Chargement contrôleur (require): {$controllerFile}", 'file'); // 📄
+//            }
+//        } else {
+//            if (function_exists('log_console')) {
+//                //log_console("Fichier contrôleur non trouvé
+//                // (autoloader prendra le relais) : {$controllerFile}", 'info'); // ℹ️
+//            }
+//        }
 
         // Vérifie l'existence de la classe contrôleur.
-        if (!class_exists($controller)) {
+        if (!class_exists($FQCN)) {
             if (function_exists('log_console')) {
                 log_console("Contrôleur introuvable: {$controller}", 'error'); // ❌
             }
             throw new RuntimeException("'{$controller}' est introuvable.");
         }
 
-        $controllerInstance = new $controller();
+        $controllerInstance = new $FQCN();
 
         // Vérifie l'existence de l'action.
         if (!method_exists($controllerInstance, $action)) {

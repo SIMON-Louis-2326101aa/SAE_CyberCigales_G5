@@ -16,6 +16,11 @@
 
 namespace SAE_CyberCigales_G5\Modules\model;
 
+use PDO;
+use RuntimeException;
+use SAE_CyberCigales_G5\includes\ConnectionDB;
+use Throwable;
+
 abstract class Database
 {
     private static ?PDO $pdo = null;
@@ -24,7 +29,7 @@ abstract class Database
     private static function setBdd(): void
     {
         try {
-            $connexion = connectionDB::getInstance();
+            $connexion = ConnectionDB::getInstance();
             self::$pdo = $connexion->getPdo();
 
             if (function_exists('log_console')) {

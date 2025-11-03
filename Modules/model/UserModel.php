@@ -6,9 +6,12 @@
 
 namespace SAE_CyberCigales_G5\Modules\model;
 
+use PDO;
+use SAE_CyberCigales_G5\includes\ConnectionDB;
+
 class UserModel extends Database
 {
-    private connectionDB $db;
+    private ConnectionDB $db;
     private $eModel;
 
     public function __construct()
@@ -19,8 +22,8 @@ class UserModel extends Database
         if (function_exists('log_console')) {
             log_console('userModel initialisé', 'ok'); // ✅
         }
-        $this->db = connectionDB::getInstance();
-        $this->eModel = new emailVerificationModel();
+        $this->db = ConnectionDB::getInstance();
+        $this->eModel = new EmailVerificationModel();
     }
 
     // ANCIEN REGISTER HASH :

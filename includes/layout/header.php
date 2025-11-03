@@ -16,9 +16,9 @@ if (session_status() === PHP_SESSION_NONE) {
 <nav class="nav-menu">
 
     <div id="nav-menu-sections">
-        <a href="index.php?controller=redirection&action=openHomepage" id="nav-menu-title">
+        <a href="index.php?controller=Redirection&action=openHomepage" id="nav-menu-title">
             <img src="./assets/images/logo.png" alt="logo-escape-the-code"></a>
-        <a href="index.php?controller=redirection&action=openHomepage" class="active btn-nav">Accueil</a>
+        <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
     </div>
 
     <div id="nav-auth-buttons">
@@ -27,15 +27,15 @@ if (session_status() === PHP_SESSION_NONE) {
             ?>
             <!-- Change Theme marche comme bouton ajout de javascript:void(0) permet de ne pas recharger la page -->
             <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
-            <a href="index.php?controller=user&action=logout" class="active btn-nav">Déconnexion</a>
-            <a href="index.php?controller=redirection&action=openAccount" class="active btn-nav">Compte</a>
+            <a href="index.php?controller=User&action=logout" class="active btn-nav">Déconnexion</a>
+            <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
             <?php
         } else {
             ?>
             <!-- Changer de Theme d(0) -->
             <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
-            <a href="index.php?controller=redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
-            <a href="index.php?controller=redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
+            <a href="index.php?controller=Redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
+            <a href="index.php?controller=Redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
             <?php
         }
         ?>
