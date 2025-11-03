@@ -1,4 +1,9 @@
 <footer class="footer">
+    <div class="container-list-footer">
+        <a href="#" class="container-link-footer"><img class='footer-img' src="/assets/images/instagram-logo.webp" alt="instagram-logo"> </a>
+        <a href="#" class="container-link-footer"><img class='footer-img' src="/assets/images/twitter-logo.webp" alt="twitter-logo"></a>
+        <a href="#" class="container-link-footer"><img class="footer-img" src="/assets/images/logo-tiktok.webp" alt="tiktok-logo" ></a>
+    </div>
     <a href="index.php?controller=redirection&action=openLegal" class="active" id="footer-legal">Mentions Légales</a>
     <a href="index.php?controller=redirection&action=openAbout" class="active" id="footer-about">À propos</a>
     <a href="index.php?controller=redirection&action=openSiteMap" class="active" id="footer-sitemap">Plan du Site</a>
