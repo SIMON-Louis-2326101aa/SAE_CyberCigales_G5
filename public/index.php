@@ -21,7 +21,7 @@ require $ROOT_DIR . '/vendor/autoload.php';
 require_once $ROOT_DIR . '/includes/autoloader.php';
 
 // Chargement des variables d'environnement depuis le fichier de configuration
-$dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config', 'database.env');
+$dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config', '.env');
 $dotenv->load();
 
 // Configuration sécurisée des sessions

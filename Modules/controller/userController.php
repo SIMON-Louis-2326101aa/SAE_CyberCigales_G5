@@ -183,10 +183,20 @@ class userController
                 $accountBlocked = $this->loginAttemptModel->isAccountBlocked($email);
                 if ($accountBlocked['blocked']) {
                     $remainingMinutes = ceil($accountBlocked['remaining_time'] / 60);
-                    $error = "Trop de tentatives de connexion échouées. Votre compte est temporairement bloqué. Veuillez réessayer dans {$remainingMinutes} minute(s).";
+                    $blockDuration = $accountBlocked['block_duration'];
+                    $attempts = $accountBlocked['attempts'];
+                    $error = "Compte temporairement bloqué pour {$remainingMinutes} minute(s). (Tentative {$attempts} - Temps de blocage: {$blockDuration} min)";
                 } else {
-                    $remainingAttempts = 5 - $accountBlocked['attempts'];
-                    $error = "Email ou mot de passe incorrect. Il vous reste {$remainingAttempts} tentative(s) avant le blocage temporaire.";
+                    $attempts = $accountBlocked['attempts'];
+                    $remainingAttempts = 4 - $attempts; // Blocage à partir de 4 tentatives
+                    
+                    if ($attempts < 3) {
+                        // Premières tentatives : message simple
+                        $error = "Email ou mot de passe incorrect. Il vous reste {$remainingAttempts} tentative(s) avant le premier blocage.";
+                    } else {
+                        // Dernière tentative avant blocage
+                        $error = "⚠️ Email ou mot de passe incorrect. Attention : prochaine tentative échouée = blocage de 1 minute !";
+                    }
                 }
                 
                 viewHandler::show("../view/formConnectionView", ['pageTitle' => 'Connexion', 'error' => $error]);

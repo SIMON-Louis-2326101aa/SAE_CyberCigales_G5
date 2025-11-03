@@ -7,8 +7,9 @@
 
 class loginAttemptModel
 {
-    private const MAX_ATTEMPTS = 5; // Maximum de tentatives par email
-    private const BLOCK_DURATION = 15; // Durée de blocage en minutes
+    private const MAX_ATTEMPTS = 5; // Maximum de tentatives avant premier blocage
+    private const INITIAL_BLOCK_DURATION = 1; // Durée initiale de blocage (1 minute à la 4ème tentative)
+    private const MAX_BLOCK_DURATION = 60; // Durée maximale de blocage (cap à 1 heure)
     private const SESSION_KEY = 'login_attempts';
 
     /**
@@ -37,7 +38,8 @@ class loginAttemptModel
             return;
         }
         
-        $cutoffTime = time() - (self::BLOCK_DURATION * 60);
+        // Utiliser le temps de blocage maximum pour le nettoyage
+        $cutoffTime = time() - (self::MAX_BLOCK_DURATION * 60);
         $validAttempts = [];
         
         foreach ($_SESSION[self::SESSION_KEY][$key]['attempts'] as $timestamp) {
@@ -91,6 +93,34 @@ class loginAttemptModel
     }
 
     /**
+     * Calcule le temps de blocage en fonction du nombre de tentatives (exponentiel)
+     * @param int $attempts Nombre de tentatives échouées
+     * @return int Temps de blocage en minutes
+     */
+    private function calculateBlockDuration(int $attempts): int
+    {
+        // Pas de blocage pour les 3 premières tentatives
+        if ($attempts < 4) {
+            return 0;
+        }
+        
+        // Progression exponentielle :
+        // 4ème tentative : 1 minute
+        // 5ème tentative : 2 minutes
+        // 6ème tentative : 4 minutes
+        // 7ème tentative : 8 minutes
+        // 8ème tentative : 16 minutes
+        // 9ème tentative : 32 minutes
+        // 10ème+ tentative : 60 minutes (cap à 1 heure)
+        
+        // Calcul exponentiel : 2^(attempts - 4)
+        $blockMinutes = self::INITIAL_BLOCK_DURATION * pow(2, $attempts - 4);
+        
+        // Cap au maximum (1 heure)
+        return min($blockMinutes, self::MAX_BLOCK_DURATION);
+    }
+
+    /**
      * Compte le nombre de tentatives échouées pour un email
      * @param string $email L'email à vérifier
      * @return int Nombre de tentatives
@@ -110,7 +140,7 @@ class loginAttemptModel
     /**
      * Vérifie si un compte est temporairement bloqué
      * @param string $email L'email à vérifier
-     * @return array ['blocked' => bool, 'remaining_time' => int, 'attempts' => int]
+     * @return array ['blocked' => bool, 'remaining_time' => int, 'attempts' => int, 'block_duration' => int]
      */
     public function isAccountBlocked(string $email): array
     {
@@ -119,17 +149,22 @@ class loginAttemptModel
         
         $attempts = $this->getFailedAttemptsCount($email);
         
-        if ($attempts >= self::MAX_ATTEMPTS) {
+        // Blocage progressif à partir de 4 tentatives
+        if ($attempts >= 4) {
+            // Calculer le temps de blocage exponentiel
+            $blockDuration = $this->calculateBlockDuration($attempts);
+            
             // Calculer le temps restant avant déblocage
-            if (isset($_SESSION[self::SESSION_KEY][$email]['attempts'])) {
+            if (isset($_SESSION[self::SESSION_KEY][$email]['attempts']) && $blockDuration > 0) {
                 $lastAttempt = max($_SESSION[self::SESSION_KEY][$email]['attempts']);
                 $elapsedTime = time() - $lastAttempt;
-                $remainingTime = max(0, (self::BLOCK_DURATION * 60) - $elapsedTime);
+                $remainingTime = max(0, ($blockDuration * 60) - $elapsedTime);
                 
                 return [
                     'blocked' => $remainingTime > 0,
                     'remaining_time' => $remainingTime,
-                    'attempts' => $attempts
+                    'attempts' => $attempts,
+                    'block_duration' => $blockDuration
                 ];
             }
         }
@@ -137,7 +172,8 @@ class loginAttemptModel
         return [
             'blocked' => false,
             'remaining_time' => 0,
-            'attempts' => $attempts
+            'attempts' => $attempts,
+            'block_duration' => 0
         ];
     }
 
