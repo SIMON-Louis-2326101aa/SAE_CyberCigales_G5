@@ -143,4 +143,25 @@ class userModel extends database
         ];
     }
 
+    public function getAllUsers(): array
+    {
+        return $this->db->getAll('users');
+    }
+
+    public function updateUser(int $id, string $nom, string $prenom, string $email): bool
+    {
+        $data = [
+            'nom' => $nom,
+            'prenom' => $prenom,
+            'email' => $email
+        ];
+        $where = ['id' => $id];
+        return $this->db->update('users', $data, $where) > 0;
+    }
+
+    public function getUserById(int $id): ?array
+    {
+        $users = $this->db->getAll('users', ['id' => $id], 1);
+        return $users[0] ?? null;
+    }
 }

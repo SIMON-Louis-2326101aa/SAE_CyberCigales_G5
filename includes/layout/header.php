@@ -28,6 +28,9 @@ if (session_status() === PHP_SESSION_NONE) {
             <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
             <a href="index.php?controller=user&action=logout" class="active btn-nav">Déconnexion</a>
             <a href="index.php?controller=redirection&action=openAccount" class="active btn-nav">Compte</a>
+            <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com'): ?>
+                <a href="index.php?controller=admin&action=listUsers" class="active btn-nav">Admin</a>
+            <?php endif; ?>
             <?php
         } else {
             ?>
