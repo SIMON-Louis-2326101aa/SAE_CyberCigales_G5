@@ -823,36 +823,46 @@ button:hover {
 
 .social-icons {
     display: flex;
+    gap: 1rem; /* Ajout d'espace entre les icônes */
 }
 
 .footer-img {
     width: 30px;
     height: 30px;
+    object-fit: contain;
+    display: block;
+    position: relative; /* Ajout pour contrôle précis */
 }
 
-.container-link-footer{
+.container-link-footer {
     display: flex;
     width: 40px;
     height: 40px;
     background-color: var(--bg-light);
     border: 2px solid var(--primary);
-    margin-right: 2%;
     border-radius: 10px;
-    justify-content: center;
-    align-items: center;
     transition: var(--transition);
+    flex-shrink: 0;
+    padding: 0;
+    box-sizing: border-box; /* Important ! */
+    text-decoration: none;
+    position: relative;
+}
+
+/* Force le centrage absolu */
+.container-link-footer img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
 }
 
 .container-link-footer:hover {
     background-color: var(--border-light);
-    opacity: 1;
     transform: translateY(-2px);
     box-shadow: 0 4px 15px var(--border-light);
-}
-
-.container-link-footer img {
-    display: block;
-    margin: auto;
 }
 
 /* Theme Sombre */
@@ -1135,6 +1145,17 @@ body.dark-theme .btn-nav:hover {
         line-height: 1.4;
     }
 
+    .footer-column a {
+        font-size: 0.95rem;
+        padding: 0;
+        display: block;
+    }
+
+    .footer-legal a {
+        font-size: 0.9rem;
+        padding: 0;
+    }
+
     #nav-auth-buttons a {
         padding: var(--space-3);
         font-size: 0.9rem;
@@ -1230,9 +1251,67 @@ body.dark-theme .btn-nav:hover {
         gap: var(--space-4);
     }
 
+    .footer-img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .social-icons {
+        gap: 1rem;
+        justify-content: flex-start;
+    }
+
     .container-link-footer {
-        width: 48px;
-        height: 48px;
+        width: 56px;
+        height: 56px;
+    }
+
+    .footer-top {
+        gap: 2.5rem;
+    }
+
+    .footer-column:first-child {
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .footer-column h3 {
+        font-size: 1.1rem;
+        color: var(--success);
+        letter-spacing: 1.5px;
+        margin-bottom: 1.25rem;
+    }
+
+    .footer-column p {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--text-secondary);
+    }
+
+    .footer-column ul li {
+        margin-bottom: 0;
+    }
+
+    /* Section réseaux sociaux */
+    .footer-column:last-child h3 {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Liens légaux */
+    .footer-legal {
+        flex-direction: column;
+        gap: 0.875rem;
+        align-items: flex-start;
+    }
+
+    .footer-copyright {
+        font-size: 0.85rem;
+        text-align: left;
+        color: var(--text-muted);
+    }
+
+    .footer-separator {
+        margin: 2rem 0 1.5rem;
     }
 }
 
