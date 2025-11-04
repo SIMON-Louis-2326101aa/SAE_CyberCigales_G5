@@ -823,15 +823,15 @@ button:hover {
 
 .social-icons {
     display: flex;
-    gap: 1rem; /* Ajout d'espace entre les icônes */
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .footer-img {
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     object-fit: contain;
     display: block;
-    position: relative; /* Ajout pour contrôle précis */
 }
 
 .container-link-footer {
@@ -844,25 +844,33 @@ button:hover {
     transition: var(--transition);
     flex-shrink: 0;
     padding: 0;
-    box-sizing: border-box; /* Important ! */
+    box-sizing: border-box;
     text-decoration: none;
     position: relative;
+    overflow: hidden;
 }
 
-/* Force le centrage absolu */
+/* Force le centrage absolu de l'icône */
 .container-link-footer img {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 30px;
-    height: 30px;
+    max-width: 60%;
+    max-height: 60%;
+    width: auto;
+    height: auto;
 }
 
 .container-link-footer:hover {
     background-color: var(--border-light);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px var(--border-light);
+}
+
+/* Compense le translateY du hover pour garder l'icône centrée */
+.container-link-footer:hover img {
+    transform: translate(-50%, -50%);
 }
 
 /* Theme Sombre */

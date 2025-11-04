@@ -15,3 +15,5 @@
     <a href="index.php?controller=Redirection&action=openForgotPwd" class="active">Mot de passe oublié?</a>
 </form>
 <a href="index.php?controller=Redirection&action=openFormRegister" class="active">Pas encore inscrit ?</a>
+<br>
+<br>
