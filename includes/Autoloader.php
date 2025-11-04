@@ -90,11 +90,3 @@ final class Autoloader
         return false;
     }
 }
-
-// Enregistrement de l’autoload
-spl_autoload_register([Autoloader::class, 'classLoad']);
-
-// Log global (on n'appelle pas la méthode privée)
-if (function_exists('log_console')) {
-    log_console('Autoloader enregistré', 'info'); // ℹ️
-}

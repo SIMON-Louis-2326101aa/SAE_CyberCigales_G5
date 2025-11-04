@@ -138,6 +138,17 @@ if (is_file($internalAutoload)) {
 } else {
     log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error'); // ❌
 }
+if (is_file($internalAutoload)) {
+    require_once $internalAutoload;
+    log_console('Autoloader interne chargé', 'ok');
+// ✅
+    // >> NOUVELLES LIGNES : Enregistrement de l'autoloader
+    \spl_autoload_register([\SAE_CyberCigales_G5\includes\Autoloader::class, 'classLoad']);
+    log_console('Autoloader enregistré', 'info'); // ℹ️
+
+} else {
+    log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error'); // ❌
+}
 
 /* ============================================================
     Variables d'environnement (.env dans /config)
