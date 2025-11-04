@@ -143,6 +143,7 @@ class userModel extends database
         ];
     }
 
+    //Table users
     public function getAllUsers(): array
     {
         return $this->db->getAll('users');

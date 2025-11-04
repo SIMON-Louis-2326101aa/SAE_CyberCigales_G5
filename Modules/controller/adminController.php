@@ -58,4 +58,18 @@ class adminController
             viewHandler::show("admin/userEditView", ["user" => $user]);
         }
     }
+
+    public function deleteUser()
+    {
+        $userId = $_GET['id'] ?? null;
+        if ($userId) {
+            $user = $this->userModel->getUserById((int)$userId);
+            if ($user) {
+                $this->userModel->delete($user['email']);
+            }
+        }
+
+        header("Location: index.php?controller=admin&action=listUsers");
+        exit;
+    }
 }

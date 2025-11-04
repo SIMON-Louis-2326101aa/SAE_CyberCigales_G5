@@ -21,6 +21,7 @@
                 <td><?php echo htmlspecialchars($user['created_at']); ?></td>
                 <td>
                     <a href="index.php?controller=admin&action=editUser&id=<?php echo $user['id']; ?>">Modifier</a>
+                    <a href="index.php?controller=admin&action=deleteUser&id=<?php echo $user['id']; ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</a>
                 </td>
             </tr>
         <?php endforeach; ?>
