@@ -1,6 +1,6 @@
     <h1>Inscription</h1>
 
-    <form action="index.php?controller=User&action=register" method="post" id="formulaire">
+    <form action="index.php?controller=User&action=register" method="post">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
