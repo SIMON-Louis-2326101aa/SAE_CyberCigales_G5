@@ -12,6 +12,7 @@
  * @author SAE CyberCigales G5
  * @version 1.0
  */
+
 ?>
 
 <!-- Page À propos - Présentation du projet CyberCigales -->
