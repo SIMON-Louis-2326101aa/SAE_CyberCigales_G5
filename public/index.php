@@ -187,35 +187,30 @@ try {
 // Normalisation et nettoyage de l'URI
     $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
     $uri = '/' . trim($uri, '/');
-    log_console("URI demandée: {$uri}", 'file');
-// 📄
+    log_console("URI demandée: {$uri}", 'file');// 📄
 
     // Paramètres de route par query string
     $S_controller = $_GET['controller'] ?? 'Redirection';
     $S_action     = $_GET['action'] ?? 'openHomepage';
-    log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');
-// 📄
+    log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');// 📄
+
 
     // Démarre le buffer de rendu
-    if (class_exists('ViewHandler')) {
+    if (class_exists(ViewHandler::class)) {
         ViewHandler::bufferStart();
-        log_console('Buffer vue démarré', 'ok');
-// ✅
+        log_console('Buffer vue démarré', 'ok');// ✅
     } else {
-        log_console('Classe viewHandler introuvable', 'error');
-    // ❌
-        throw new RuntimeException('viewHandler introuvable');
+        log_console('Classe viewHandler introuvable', 'error');// ❌
+        throw new RuntimeException('ViewHandler introuvable');
     }
 
     // Exécute le contrôleur et l'action
-    if (class_exists('ControllerHandler')) {
+    if (class_exists(ControllerHandler::class)) {
         $C_controller = new ControllerHandler($S_controller, $S_action);
         $C_controller->execute();
-        log_console('Contrôleur exécuté', 'ok');
-// ✅
+        log_console('Contrôleur exécuté', 'ok');// ✅
     } else {
-        log_console('Classe controllerHandler introuvable', 'error');
-    //❌
+        log_console('Classe controllerHandler introuvable', 'error');//❌
         throw new RuntimeException('controllerHandler introuvable');
     }
 
@@ -235,6 +230,14 @@ try {
 } catch (Throwable $e) {
 // Gestion d'erreur globale
     http_response_code(500);
-    echo "<main><h1>Erreur interne</h1><p>Une erreur est survenue.</p></main>";
+
+    // Laissez le mode débogage actif pour l'instant si vous voulez
+    echo "<main><h1>ERREUR FATALE (DÉBOGAGE)</h1>";
+    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>Fichier:</strong> " . htmlspecialchars($e->getFile()) . " (Ligne: " . $e->getLine() . ")</p>";
+    echo "<hr>";
+    echo "<h2>Trace complète (Stack Trace)</h2>";
+    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
+
     log_console('Exception globale capturée', 'error'); // ❌
 }

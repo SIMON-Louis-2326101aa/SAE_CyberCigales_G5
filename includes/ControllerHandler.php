@@ -97,27 +97,17 @@ final class ControllerHandler
         $controllerNamespace = 'SAE_CyberCigales_G5\\Modules\\controller\\';
         $FQCN = $controllerNamespace . $controller;
 
-//        // Emplacement attendu du fichier contrôleur (au cas où l'autoloader ne l'aurait pas déjà chargé).
-//        $controllerFile = Constant::indexDir() . '/Modules/controller/' . $controller . '.php';
-//
-//        if (is_file($controllerFile)) {
-//            require_once $controllerFile;
-//            if (function_exists('log_console')) {
-//                log_console("Chargement contrôleur (require): {$controllerFile}", 'file'); // 📄
-//            }
-//        } else {
-//            if (function_exists('log_console')) {
-//                //log_console("Fichier contrôleur non trouvé
-//                // (autoloader prendra le relais) : {$controllerFile}", 'info'); // ℹ️
-//            }
-//        }
-
-        // Vérifie l'existence de la classe contrôleur.
+        // Vérifie l'existence de la classe contrôleur.(au cas où l'autoloader ne l'aurait pas déjà chargé).
         if (!class_exists($FQCN)) {
             if (function_exists('log_console')) {
                 log_console("Contrôleur introuvable: {$controller}", 'error'); // ❌
             }
             throw new RuntimeException("'{$controller}' est introuvable.");
+        } else {
+            if (function_exists('log_console')) {
+                //log_console("Fichier contrôleur non trouvé
+                // (autoloader prendra le relais) : {$controllerFile}", 'info'); // ℹ️
+            }
         }
 
         $controllerInstance = new $FQCN();
