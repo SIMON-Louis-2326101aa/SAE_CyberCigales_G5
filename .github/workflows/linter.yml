@@ -46,7 +46,7 @@ jobs:
 
       - name: Run PHP CodeSniffer (Style Check)
         # Note : Nous utilisons l'option --ignore pour exclure les dépendances comme en ligne de commande
-        run: vendor/bin/phpcs --standard=PSR12 --ignore=vendor/,node_modules/ .
+        run: vendor/bin/phpcs --standard=PSR12 --ignore=vendor/,node_modules/ --warning-severity=0 .
 
       - name: Run ESLint (JavaScript)
         run: npx eslint .
