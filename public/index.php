@@ -47,7 +47,7 @@ if (!function_exists('log_console')) {
             'warn'  => 'WARNING',
             default => 'INFO',
         };
-    // Ajoute un ID de requête pour suivre un flux
+        // Ajoute un ID de requête pour suivre un flux
         if (!isset($GLOBALS['req_id'])) {
             try {
                 $GLOBALS['req_id'] = bin2hex(random_bytes(4));
@@ -59,9 +59,9 @@ if (!function_exists('log_console')) {
         // Nettoie le contexte
         unset($context['pwd'], $context['password'], $context['confirm_pwd'], $context['token'], $context['code']);
         $ctx = $context ? (' ' . json_encode($context, JSON_UNESCAPED_UNICODE)) : '';
-    // [date] [LEVEL] [req:abcd1234] message {ctx}
+        // [date] [LEVEL] [req:abcd1234] message {ctx}
         $line = sprintf('[%s] [%s] [req:%s] %s%s', date('c'), $label, $GLOBALS['req_id'], $message, $ctx);
-    // écrit côté serveur (AlwaysData ou app.log selon ini_set plus haut)
+        // écrit côté serveur (AlwaysData ou app.log selon ini_set plus haut)
         error_log($line);
     }
 
@@ -116,7 +116,7 @@ register_shutdown_function(function () {
     Chargements initiaux
    ============================================================ */
 
-$composerAutoload = $ROOT_DIR . '/vendor/Autoload.php';
+$composerAutoload = $ROOT_DIR . '/vendor/autoload.php';
 
 // Chargement des variables d'environnement depuis le fichier .env
 if (is_file($composerAutoload)) {
@@ -124,8 +124,7 @@ if (is_file($composerAutoload)) {
     log_console('Composer autoload chargé', 'ok');
 // ✅
 } else {
-    log_console('Composer autoload introuvable: /vendor/autoload.php', 'error');
-// ❌
+    log_console('Composer autoload introuvable: ' . $composerAutoload, 'error');
 }
 
 $internalConstant = $ROOT_DIR . '/includes/Constant.php';
@@ -149,10 +148,10 @@ try {
         $dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config');
         $dotenv->load();
         log_console('Fichier .env chargé', 'ok');
-    // ✅
+        // ✅
     } else {
         log_console('Dotenv non disponible (classe introuvable)', 'file');
-    // 📄
+        // 📄
     }
 } catch (Throwable $e) {
     log_console('Erreur chargement .env (vérifier /config/.env)', 'error');
@@ -220,7 +219,7 @@ try {
     $A_params = method_exists($C_controller, 'getParams') ? $C_controller->getParams() : [];
     if (!empty($A_params)) {
         log_console('Params contrôleur collectés', 'file');
-    // 📄
+        // 📄
     }
 
     // Affiche le contenu
@@ -230,14 +229,6 @@ try {
 } catch (Throwable $e) {
 // Gestion d'erreur globale
     http_response_code(500);
-
-    // Laissez le mode débogage actif pour l'instant si vous voulez
-    echo "<main><h1>ERREUR FATALE (DÉBOGAGE)</h1>";
-    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
-    echo "<p><strong>Fichier:</strong> " . htmlspecialchars($e->getFile()) . " (Ligne: " . $e->getLine() . ")</p>";
-    echo "<hr>";
-    echo "<h2>Trace complète (Stack Trace)</h2>";
-    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
-
+    echo "<main><h1>Erreur interne</h1><p>Une erreur est survenue.</p></main>";
     log_console('Exception globale capturée', 'error'); // ❌
 }
