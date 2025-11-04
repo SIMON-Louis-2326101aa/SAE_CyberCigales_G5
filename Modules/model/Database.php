@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Classe abstraite de base pour la gestion de la base de données
  *
@@ -11,9 +12,16 @@
  * - Pattern Singleton pour éviter les connexions multiples
  */
 
-require_once __DIR__ . '/../../includes/connectionDB.php';
+//require_once __DIR__ . '/../../includes/ConnectionDB.php';
 
-abstract class database
+namespace SAE_CyberCigales_G5\Modules\model;
+
+use PDO;
+use RuntimeException;
+use SAE_CyberCigales_G5\includes\ConnectionDB;
+use Throwable;
+
+abstract class Database
 {
     private static ?PDO $pdo = null;
 
@@ -21,7 +29,7 @@ abstract class database
     private static function setBdd(): void
     {
         try {
-            $connexion = connectionDB::getInstance();
+            $connexion = ConnectionDB::getInstance();
             self::$pdo = $connexion->getPdo();
 
             if (function_exists('log_console')) {

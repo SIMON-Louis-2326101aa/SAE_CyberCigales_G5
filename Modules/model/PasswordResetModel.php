@@ -1,7 +1,13 @@
 <?php
-require_once __DIR__ . '/database.php';
-require_once __DIR__ . '/../../includes/connectionDB.php';
-class passwordResetModel extends database
+
+declare(strict_types=1);
+
+//require_once __DIR__ . '/Database.php';
+//require_once __DIR__ . '/../../includes/ConnectionDB.php';
+
+namespace SAE_CyberCigales_G5\Modules\model;
+
+class PasswordResetModel extends Database
 {
     public function __construct()
     {
@@ -22,7 +28,9 @@ class passwordResetModel extends database
         $token = bin2hex(random_bytes(32));
         $expires = date('Y-m-d H:i:s', time() + $ttlMinutes * 60);
 
-        $ins = $this->getBdd()->prepare('INSERT INTO password_reset_tokens (user_id, token, expires_at, used, created_at) VALUES (?, ?, ?, 0, NOW())');
+        $ins = $this->getBdd()->
+        prepare('INSERT INTO password_reset_tokens (user_id, token, expires_at, used, created_at) 
+VALUES (?, ?, ?, 0, NOW())');
         $ins->execute([$user['id'], $token, $expires]);
 
         return $token;

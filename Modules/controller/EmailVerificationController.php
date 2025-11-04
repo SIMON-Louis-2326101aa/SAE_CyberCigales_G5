@@ -1,18 +1,26 @@
 <?php
-require_once __DIR__ . '/../model/emailVerificationModel.php';
-require_once __DIR__ . '/../../includes/mailer.php';
-require_once __DIR__ . '/../model/userModel.php';
-require_once __DIR__ . '/../../includes/viewHandler.php';
 
-class emailVerificationController
+namespace SAE_CyberCigales\Modules\controller;
+
+//require_once __DIR__ . '/../model/EmailVerificationModel.php';
+//require_once __DIR__ . '/../../includes/Mailer.php';
+//require_once __DIR__ . '/../model/UserModel.php';
+//require_once __DIR__ . '/../../includes/ViewHandler.php';
+
+use SAE_CyberCigales_G5\includes\Constant;
+use SAE_CyberCigales_G5\includes\Mailer;
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\UserModel;
+
+class EmailVerificationController
 {
     private $eModel;
     private $user ;
 
     public function __construct()
     {
-        $this->eModel = new emailVerificationModel();
-        $this->user = new userModel();
+        $this->eModel = new EmailVerificationModel();
+        $this->user = new UserModel();
     }
 
     public function request()
@@ -20,7 +28,7 @@ class emailVerificationController
         $email = $_GET['email'] ?? '';
         if (!$email) {
             $_SESSION['flash_error'] = "Adresse e-mail manquante.";
-            header('Location: index.php?controller=redirection&action=openFormRegister');
+            header('Location: index.php?controller=Redirection&action=openFormRegister');
             exit;
         }
 
@@ -31,12 +39,14 @@ class emailVerificationController
         $message = '
 <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
   <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td align="center">
-    <table width="600" style="background:#ffffff; padding:20px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
+    <table width="600" style="background:#ffffff; padding:20px; border-radius:8px; box-shadow:0 4px 8px 
+    rgba(0,0,0,0.1);">
       <tr><td style="text-align:center;">
         <h2 style="color:#333333;">Vérification de votre adresse email</h2>
         <p style="font-size:16px; color:#555555;">Merci de vous être inscrit !</p>
         <p style="font-size:16px; color:#555555;">Votre code de vérification est :</p>
-        <p style="font-size:24px; font-weight:bold; color:#007bff; background:#e9f7ff; padding:10px; border-radius:4px; display:inline-block;">' . htmlspecialchars($code) . '</p>
+        <p style="font-size:24px; font-weight:bold; color:#007bff; background:#e9f7ff; 
+        padding:10px; border-radius:4px; display:inline-block;">' . htmlspecialchars($code) . '</p>
         <p style="font-size:14px; color:#888888;">Ce code expire dans 10 minutes.</p>
       </td></tr>
     </table>
@@ -45,12 +55,12 @@ class emailVerificationController
         $sent = Mailer::send($email, $subject, $message);
 
         // L'email doit être passé dans l'URL pour être récupéré par l'afficheur
-        $url = 'Location: index.php?controller=redirection&action=openEmailVerification&email=' . urlencode($email);
+        $url = 'Location: index.php?controller=Redirection&action=openEmailVerification&email=' . urlencode($email);
 
         if ($sent) {
             $_SESSION['flash_success'] = "Un code vous a été envoyé.";
         } else {
-            if (class_exists('Constant') && method_exists('Constant','isDev') && Constant::isDev()) {
+            if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
                 $_SESSION['flash_info'] = "Le mail n'a pas été envoyé. Code pour dev: {$code}";
             } else {
                 $_SESSION['flash_error'] = "Erreur lors de l'envoi du code.";
@@ -67,7 +77,8 @@ class emailVerificationController
         $code  = $_POST['code']  ?? '';
 
         //Ajout de l'email à l'URL de redirection en cas d'erreur
-        $errorRedirectUrl = 'Location: index.php?controller=redirection&action=openEmailVerification&email=' . urlencode($email);
+        $errorRedirectUrl = 'Location: index.php?controller=Redirection&action=openEmailVerification&email='
+            . urlencode($email);
 
         // Si l'un des deux manque (email ou code)
         if (!$email || !$code) {
@@ -91,7 +102,7 @@ class emailVerificationController
             if ($this->user->createUserAfterVerification($email)) {
                 // Succès : Redirection vers la page de connexion
                 $_SESSION['flash_success'] = "Compte créé. Vous pouvez vous connecter.";
-                header('Location: index.php?controller=redirection&action=openFormConnection');
+                header('Location: index.php?controller=Redirection&action=openFormConnection');
                 exit;
             } else {
                 // Erreur lors de la création du compte
@@ -103,7 +114,8 @@ class emailVerificationController
 
         // Afficher un message d'erreur spécifique selon la raison
         $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired')
-            ? "Code expiré (10 minutes). <a href=\"index.php?controller=emailVerification&action=request&email=" . urlencode($email) . "\">Renvoyer un code</a>."
+            ? "Code expiré (10 minutes). <a href=\"index.php?controller=emailVerification&action=request&email="
+            . urlencode($email) . "\">Renvoyer un code</a>."
             : "Code incorrect. Vérifiez et réessayez.";
 
         header($errorRedirectUrl); // Redirection après échec

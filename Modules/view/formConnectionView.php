@@ -1,5 +1,5 @@
 <h1> Connexion </h1>
-<form action="index.php?controller=user&action=login"  method="post">
+<form action="index.php?controller=User&action=login"  method="post">
     <ul>
         <li>
             <label for="mail">E-mail :</label>
@@ -12,6 +12,6 @@
     </ul>
 
     <button type="submit" name="login">Se connecter</button>
-    <a href="index.php?controller=redirection&action=openForgotPwd" class="active">Mot de passe oublié?</a>
+    <a href="index.php?controller=Redirection&action=openForgotPwd" class="active">Mot de passe oublié?</a>
 </form>
-<a href="index.php?controller=redirection&action=openFormRegister" class="active">Pas encore inscrit ?</a>
+<a href="index.php?controller=Redirection&action=openFormRegister" class="active">Pas encore inscrit ?</a>

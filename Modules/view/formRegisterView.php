@@ -1,6 +1,6 @@
     <h1>Inscription</h1>
 
-    <form action="index.php?controller=user&action=register" method="post" id="formulaire">
+    <form action="index.php?controller=User&action=register" method="post" id="formulaire">
         <ul>
             <li>
                 <label for="nom">Nom :</label>
@@ -26,5 +26,5 @@
 
         <button type="submit" name="register">S'inscrire</button><br>
 
-        <a href="index.php?controller=redirection&action=openFormConnection" class="active">Dejà un compte ? Connexion</a>
+        <a href="index.php?controller=Redirection&action=openFormConnection" class="active">Dejà un compte ? Connexion</a>
     </form>

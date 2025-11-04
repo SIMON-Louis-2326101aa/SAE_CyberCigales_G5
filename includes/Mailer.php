@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Mailer.php
+ * Utilitaire simple pour l'envoi d'emails.
+ * Utilise la fonction mail() de PHP avec des en-têtes basiques.
+ * Note: Pour une application en production, envisager une bibliothèque plus robuste.
+ */
+
+declare(strict_types=1);
+
+namespace SAE_CyberCigales_G5\includes;
 
 final class Mailer
 {
@@ -23,5 +33,3 @@ final class Mailer
         return $result;
     }
 }
-
-

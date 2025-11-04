@@ -3,17 +3,17 @@
 $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com';
 ?>
 
-<?php if ($isAdmin): ?>
+<?php if ($isAdmin) : ?>
 <h1>Bonjour Admin !</h1>
 <p>Voici la base de donnée : <?php
     // Récupérer tous les utilisateurs avec SQL direct
-    require_once __DIR__ . '/../../includes/connectionDB.php';
+    require_once __DIR__ . '/../../includes/ConnectionDB.php';
     $db = connectionDB::getInstance();
     $pdo = $db->getPdo();
 
     $stmt = $pdo->query("SELECT * FROM users");
-    $users = $stmt->fetchAll();
-    ?></p>
+    $users = $stmt->fetchAll(); ?>
+</p>
 <table class="db-table">
     <thead>
     <tr>
@@ -25,7 +25,7 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($users as $user): ?>
+    <?php foreach ($users as $user) : ?>
         <tr>
             <td><?php echo htmlspecialchars($user['id']); ?></td>
             <td><?php echo htmlspecialchars($user['nom']); ?></td>
@@ -41,10 +41,10 @@ $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode202
     <h1>Votre compte</h1>
     <p>Vous etes connecter au compte <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?></p>
 
-    <form method="POST" action="index.php?controller=user&action=account">
+    <form method="POST" action="index.php?controller=User&action=account">
         <ul>
             <li>
-                <a href="index.php?controller=redirection&action=openChangePwd" class="active" id="changemdp">
+                <a href="index.php?controller=Redirection&action=openChangePwd" class="active" id="changemdp">
                     <button type="button" name="changePwd">Modifier le mot de passe</button>
                 </a>
             </li>

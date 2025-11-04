@@ -23,7 +23,7 @@ function setupFlashMessages(options = {}) {
         return;
     }
 
-    flashes.forEach((flash, index) => {
+    flashes.forEach((flash) => {
         // Accessibilité
         flash.setAttribute('role', 'alert');
         flash.setAttribute('aria-live', 'polite');
