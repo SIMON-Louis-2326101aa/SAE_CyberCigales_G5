@@ -9,11 +9,34 @@ namespace SAE_CyberCigales_G5\Modules\model;
 use PDO;
 use SAE_CyberCigales_G5\includes\ConnectionDB;
 
+/**
+ * Modèle utilisateur
+ * 
+ * Gère toutes les opérations liées aux utilisateurs : authentification,
+ * inscription, mise à jour, suppression, gestion des mots de passe, etc.
+ * 
+ * @package SAE_CyberCigales_G5\Modules\model
+ * @author Équipe CyberCigales
+ */
 class UserModel extends Database
 {
+    /**
+     * Instance de connexion à la base de données
+     * @var ConnectionDB
+     */
     private ConnectionDB $db;
+    
+    /**
+     * Instance du modèle de vérification d'email
+     * @var EmailVerificationModel
+     */
     private $eModel;
 
+    /**
+     * Constructeur du modèle utilisateur
+     * 
+     * Initialise la connexion à la base de données et le modèle de vérification d'email.
+     */
     public function __construct()
     {
         // On initialise simplement la connexion de la classe parente

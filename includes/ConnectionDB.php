@@ -9,6 +9,15 @@ use PDO;
 use PDOException;
 use RuntimeException;
 
+/**
+ * Gestionnaire de connexion à la base de données
+ * 
+ * Implémente le pattern Singleton pour garantir une seule instance de connexion PDO.
+ * Lit les informations de connexion depuis les variables d'environnement (.env).
+ * 
+ * @package SAE_CyberCigales_G5\includes
+ * @author Équipe CyberCigales
+ */
 final class ConnectionDB
 {
     private PDO $pdo;

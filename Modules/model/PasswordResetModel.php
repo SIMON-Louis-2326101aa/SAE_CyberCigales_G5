@@ -7,15 +7,37 @@ declare(strict_types=1);
 
 namespace SAE_CyberCigales_G5\Modules\model;
 
+/**
+ * Modèle de réinitialisation de mot de passe
+ * 
+ * Gère la génération, le stockage et la validation des tokens de réinitialisation
+ * de mot de passe. Les tokens expirent après un délai défini (par défaut 60 minutes).
+ * 
+ * @package SAE_CyberCigales_G5\Modules\model
+ * @author Équipe CyberCigales
+ */
 class PasswordResetModel extends Database
 {
+    /**
+     * Constructeur
+     * 
+     * Initialise la connexion à la base de données.
+     */
     public function __construct()
     {
         $this->getBdd();
     }
 
-
-    // Crée et stocke un token pour l'utilisateur identifié par l'email. Retourne le token ou false.
+    /**
+     * Crée et stocke un token de réinitialisation pour un email
+     * 
+     * Génère un token sécurisé unique et le stocke en base de données
+     * avec une date d'expiration. Supprime tout token existant pour cet email.
+     * 
+     * @param string $email Email de l'utilisateur
+     * @param int $ttlMinutes Durée de validité du token en minutes (par défaut 60)
+     * @return string|false Le token généré ou false si l'email n'existe pas
+     */
     public function createTokenForEmail(string $email, int $ttlMinutes = 60)
     {
         $stmt = $this->getBdd()->prepare('SELECT id FROM users WHERE email = ? LIMIT 1');
