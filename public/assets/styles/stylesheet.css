@@ -891,7 +891,7 @@ body.dark-theme .btn-nav:hover {
 /* ============ Responsive ============ */
 
 /* Tablettes (portrait et paysage) */
-@media (width <= 1024px) {
+@media screen and (width <= 1024px) {
     .nav-menu img {
         height: 5vw;
     }
@@ -910,7 +910,7 @@ body.dark-theme .btn-nav:hover {
 }
 
 /* Tablettes (portrait) et petits écrans */
-@media (width <= 768px) {
+@media screen and (width <= 768px) {
     /* Navigation mobile - PLUS GRANDE */
     nav, .nav-menu {
         flex-direction: column;
@@ -1066,7 +1066,7 @@ body.dark-theme .btn-nav:hover {
 }
 
 /* Smartphones */
-@media (width <= 480px) {
+@media screen and (width <= 480px) {
     /* Titres adaptés */
     h1 {
         font-size: 1.75rem;
