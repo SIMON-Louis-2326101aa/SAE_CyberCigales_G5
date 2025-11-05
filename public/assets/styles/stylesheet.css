@@ -1,10 +1,6 @@
 :root {
     /* Couleurs de la palette - Modèle exact */
-    --dark-bg: #0a1b2a;          /* Fond principal sombre */
-    --cyan: #2bd9fe;              /* Cyan brillant */
-    --purple: #a445ff;            /* Violet/Purple */
-    --light-text: #e5e9f0;        /* Texte clair */
-    --gray: #a8b3c4;              /* Gris pour texte secondaire */
+    --dark-bg: #0a1b2a;
 
     /* Mapping des couleurs */
     --primary: #2bd9fe;
@@ -97,7 +93,7 @@ nav, .nav-menu {
     background: linear-gradient(135deg, rgb(10 27 42 / 98%), rgb(164 69 255 / 15%));
     backdrop-filter: blur(10px);
     border-bottom: 3px solid transparent;
-    border-image: linear-gradient(90deg, var(--purple), var(--cyan)) 1;
+    border-image: linear-gradient(90deg, var(--secondary), var(--primary)) 1;
     box-shadow: 0 4px 30px rgb(164 69 255 / 30%);
     padding: var(--space-4) var(--space-8);
     position: sticky;
@@ -128,7 +124,7 @@ nav, .nav-menu {
 }
 
 a {
-    color: var(--cyan);
+    color: var(--primary);
     transition: var(--transition);
 }
 
@@ -185,14 +181,14 @@ h1 {
 h2 {
     font-size: 2em;
     font-weight: 700;
-    color: var(--cyan);
+    color: var(--primary);
     margin-bottom: 40px;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
 
 form h2 {
-    color: var(--cyan);
+    color: var(--primary);
     font-size: 1.5rem;
     margin-bottom: var(--space-4);
 }
@@ -307,7 +303,7 @@ main {
     text-align: center;
     overflow: hidden;
     border-bottom: 3px solid transparent;
-    border-image: linear-gradient(90deg, var(--purple), var(--cyan)) 1;
+    border-image: linear-gradient(90deg, var(--secondary), var(--primary)) 1;
 }
 
 .hero-container img {
@@ -336,7 +332,7 @@ main {
 h3 {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--purple);
+    color: var(--secondary);
     margin-bottom: var(--space-4);
 }
 
@@ -419,7 +415,7 @@ li {
 label {
     margin-bottom: 6px;
     font-weight: 600;
-    color: var(--cyan);
+    color: var(--primary);
     text-transform: uppercase;
     font-size: 0.875rem;
     letter-spacing: 1px;
@@ -429,13 +425,14 @@ input, textarea {
     padding: 10px;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    color: var(--text-primary);
+    color: var(--bg-dark);
     font-size: 14px;
     transition: var(--transition);
 }
 
 input:focus, textarea:focus {
     outline: none;
+    color: var(--text-primary);
     border-color: var(--primary);
     box-shadow: 0 0 0 3px var(--border);
     background: var(--bg-dark);
@@ -500,7 +497,7 @@ button:hover {
 #legal-mention h2 {
     font-size: 1.8em;
     font-weight: bold;
-    color: var(--purple);
+    color: var(--secondary);
     margin-top: 30px;
     margin-bottom: 15px;
     border-bottom: 2px solid var(--border);
@@ -557,7 +554,6 @@ button:hover {
     align-items: center;
     margin-bottom: 10px;
     padding-left: 0;
-    color: var(--text-secondary);
 }
 
 .footer-column ul li {
@@ -577,20 +573,20 @@ button:hover {
 }
 
 #legal-mention a {
-    color: var(--cyan);
+    color: var(--primary);
     text-decoration: underline;
     font-weight: bold;
     transition: var(--transition);
 }
 
 #about-page a {
-    color: var(--cyan);
+    color: var(--primary);
     text-decoration: underline;
     transition: var(--transition);
 }
 
 #legal-mention a:hover {
-    color: var(--purple);
+    color: var(--secondary);
     text-shadow: 0 0 10px #A445FF7F;
 }
 
@@ -631,8 +627,8 @@ button:hover {
 }
 
 #about-page h2 {
-    color: var(--cyan);
-    border-bottom: 2px solid var(--purple);
+    color: var(--primary);
+    border-bottom: 2px solid var(--secondary);
     padding-bottom: 10px;
     margin-bottom: 25px;
     font-weight: 600;
@@ -641,15 +637,15 @@ button:hover {
 .team-member h3 {
     margin: 0 0 5px;
     font-size: 1.1em;
-    color: var(--cyan);
+    color: var(--primary);
 }
 
 .tech-category h3 {
-    color: var(--cyan);
+    color: var(--primary);
     margin-top: 0;
     margin-bottom: 15px;
     text-align: center;
-    border-bottom: 2px solid var(--purple);
+    border-bottom: 2px solid var(--secondary);
     padding-bottom: 10px;
 }
 
@@ -694,7 +690,7 @@ button:hover {
 }
 
 #about-page a:hover {
-    color: var(--purple);
+    color: var(--secondary);
     text-shadow: 0 0 10px rgb(164 69 255 / 50%);
 }
 
@@ -717,7 +713,7 @@ button:hover {
 
 .team-member:hover {
     transform: translateY(-5px);
-    border-color: var(--cyan);
+    border-color: var(--primary);
     box-shadow: 0 0 30px rgb(43 217 254 / 40%), 0 0 15px rgb(164 69 255 / 30%);
 }
 
@@ -734,7 +730,7 @@ button:hover {
     flex: 1;
     min-width: 200px;
     padding: 20px;
-    border: 2px dashed var(--purple);
+    border: 2px dashed var(--secondary);
     border-radius: var(--radius-lg);
     background: rgb(164 69 255 / 5%);
     transition: var(--transition);
@@ -742,13 +738,13 @@ button:hover {
 
 .tech-category:hover {
     background: rgb(164 69 255 / 15%);
-    border-color: var(--cyan);
+    border-color: var(--primary);
     box-shadow: 0 0 25px rgb(164 69 255 / 40%);
 }
 
 .tech-category ul li::before {
     content: "•";
-    color: var(--purple);
+    color: var(--secondary);
     font-weight: bold;
     display: inline-block;
     width: 1em;
@@ -757,7 +753,7 @@ button:hover {
 
 .db-table th {
     background: var(--bg-dark);
-    color: var(--cyan);
+    color: var(--primary);
     padding: var(--space-3);
     border: 1px solid var(--border);
     text-transform: uppercase;
@@ -781,7 +777,7 @@ button:hover {
     background: linear-gradient(135deg, rgb(10 27 42 / 98%), rgb(164 69 255 / 15%));
     backdrop-filter: blur(10px);
     border-top: 3px solid transparent;
-    border-image: linear-gradient(90deg, var(--cyan), var(--purple)) 1;
+    border-image: linear-gradient(90deg, var(--primary), var(--secondary)) 1;
     padding: 3rem 4rem 2rem;
     margin-top: auto;
     box-shadow: 0 -4px 30px rgb(164 69 255 / 30%);
@@ -891,7 +887,7 @@ body.dark-theme .btn-nav:hover {
 /* ============ Responsive ============ */
 
 /* Tablettes (portrait et paysage) */
-@media (width <= 1024px) {
+@media screen and (width <= 1024px) {
     .nav-menu img {
         height: 5vw;
     }
@@ -910,7 +906,7 @@ body.dark-theme .btn-nav:hover {
 }
 
 /* Tablettes (portrait) et petits écrans */
-@media (width <= 768px) {
+@media screen and (width <= 768px) {
     /* Navigation mobile - PLUS GRANDE */
     nav, .nav-menu {
         flex-direction: column;
@@ -1066,7 +1062,7 @@ body.dark-theme .btn-nav:hover {
 }
 
 /* Smartphones */
-@media (width <= 480px) {
+@media screen and (width <= 480px) {
     /* Titres adaptés */
     h1 {
         font-size: 1.75rem;
@@ -1160,8 +1156,9 @@ body.dark-theme .btn-nav:hover {
     }
 
     .footer-legal a {
-        font-size: 0.9rem;
+        font-size: 1rem;
         padding: 0;
+        color: var(--text-secondary);
     }
 
     #nav-auth-buttons a {
@@ -1248,10 +1245,12 @@ body.dark-theme .btn-nav:hover {
     }
 
     .footer {
-        padding: var(--space-8) var(--space-4);
+        padding: var(--space-10) var(--space-5);
         min-height: auto;
         flex-direction: column;
-        gap: var(--space-6);
+        gap: 0;
+        text-align: left;
+        background: linear-gradient(180deg, rgb(10 27 42 / 98%), rgb(6 19 32 / 98%));
     }
 
     .container-list-footer {
@@ -1260,40 +1259,61 @@ body.dark-theme .btn-nav:hover {
     }
 
     .footer-img {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
     }
 
     .social-icons {
-        gap: 1rem;
+        gap: 1.25rem;
         justify-content: flex-start;
+        margin-top: 0.5rem;
     }
 
     .container-link-footer {
-        width: 56px;
-        height: 56px;
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background-color: rgb(26 41 66 / 80%);
+        border: 2px solid rgb(43 217 254 / 40%);
     }
 
     .footer-top {
-        gap: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 3rem;
+        margin-bottom: 0;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+        padding-top: 0;
     }
 
     .footer-column:first-child {
-        padding-bottom: 1rem;
+        padding-bottom: 2rem;
         border-bottom: 1px solid var(--border);
+        margin-bottom: 2rem;
     }
 
     .footer-column h3 {
         font-size: 1.1rem;
-        color: var(--success);
+        color: var(--text-primary);
         letter-spacing: 1.5px;
         margin-bottom: 1.25rem;
     }
 
     .footer-column p {
-        font-size: 0.95rem;
-        line-height: 1.7;
+        font-size: 1rem;
+        line-height: 1.8;
         color: var(--text-secondary);
+    }
+
+    .footer-column ul {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
     }
 
     .footer-column ul li {
@@ -1302,24 +1322,27 @@ body.dark-theme .btn-nav:hover {
 
     /* Section réseaux sociaux */
     .footer-column:last-child h3 {
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.75rem;
     }
 
     /* Liens légaux */
     .footer-legal {
         flex-direction: column;
-        gap: 0.875rem;
+        gap: 1rem;
         align-items: flex-start;
+        width: 100%;
     }
 
     .footer-copyright {
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         text-align: left;
         color: var(--text-muted);
+        line-height: 1.6;
     }
 
     .footer-separator {
-        margin: 2rem 0 1.5rem;
+        margin: 3rem 0 2rem;
+        background: linear-gradient(90deg, transparent, var(--border), transparent);
     }
 }
 

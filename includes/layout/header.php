@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $A_params['pageTitle'] ?? 'Escape The Code '; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="icon" href="./assets/images/favicon.ico">
