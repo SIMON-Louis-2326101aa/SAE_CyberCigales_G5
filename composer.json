@@ -6,12 +6,19 @@
             "email": "lou.contrucci@etu.univ-amu.fr"
         }
     ],
+    "require": {
+        "php": "^8.0",
+        "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.6"
+    },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",
-        "overtrue/phplint": "^9.0"
+        "overtrue/phplint": "^3.0",
+        "phpunit/phpunit": "^9.5"
     },
-  "require": {
-    "ext-pdo": "*",
-        "vlucas/phpdotenv": "^5.6"
-  }
+    "autoload": {
+        "psr-4": {
+            "SAE_CyberCigales_G5\\": ""
+        }
+    }
 }
