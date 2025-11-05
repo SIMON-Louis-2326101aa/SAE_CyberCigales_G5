@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// --- Confirmation de suppression de compte  ---
 function confirmDelete(userId) {
     if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
         const form = document.getElementById('userForm');

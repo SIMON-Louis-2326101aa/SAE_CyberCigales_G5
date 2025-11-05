@@ -35,7 +35,6 @@ if (session_status() === PHP_SESSION_NONE) {
             <?php
         } else {
             ?>
-            <!-- Changer de Theme d(0) -->
             <a href="javascript:void(0)" id="theme-changer" class="btn-nav">Changer de Theme</a>
             <a href="index.php?controller=redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
             <a href="index.php?controller=redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
