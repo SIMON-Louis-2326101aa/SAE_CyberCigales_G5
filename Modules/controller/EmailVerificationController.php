@@ -1,6 +1,6 @@
 <?php
 
-namespace SAE_CyberCigales\Modules\controller;
+namespace SAE_CyberCigales_G5\Modules\controller;
 
 //require_once __DIR__ . '/../model/EmailVerificationModel.php';
 //require_once __DIR__ . '/../../includes/Mailer.php';
@@ -114,7 +114,7 @@ class EmailVerificationController
 
         // Afficher un message d'erreur spécifique selon la raison
         $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired')
-            ? "Code expiré (10 minutes). <a href=\"index.php?controller=emailVerification&action=request&email="
+            ? "Code expiré (10 minutes). <a href=\"index.php?controller=EmailVerification&action=request&email="
             . urlencode($email) . "\">Renvoyer un code</a>."
             : "Code incorrect. Vérifiez et réessayez.";
 
