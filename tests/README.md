@@ -82,20 +82,32 @@ public function emailProvider(): array
 }
 ```
 
+## 🔒 Tests d'intégration et sécurité
+
+Les tests d'intégration utilisent la **vraie base de données** mais avec un système de **transactions** :
+- Chaque test démarre dans une transaction (`BEGIN TRANSACTION`)
+- Toutes les modifications sont annulées automatiquement à la fin (`ROLLBACK`)
+- **Aucune donnée n'est persistée** en base de données réelle
+
+Cela permet de tester avec des données réelles sans risque de pollution de la base.
+
+### Tests d'intégration disponibles
+- ✅ EmailVerificationModelIntegrationTest (6 tests)
+- ✅ UserModelIntegrationTest (6 tests)
+- ✅ PasswordResetModelIntegrationTest (6 tests)
+
 ## 🎯 À développer
 
 ### Tests à ajouter
-- [ ] Tests pour UserModel (création, authentification)
-- [ ] Tests pour PasswordResetModel (génération token)
-- [ ] Tests d'intégration avec base de données de test
 - [ ] Tests pour les contrôleurs
 - [ ] Tests pour les sessions et flash messages
+- [ ] Tests de rate limiting
+- [ ] Tests end-to-end
 
 ### Configuration à améliorer
-- [ ] Base de données de test séparée
-- [ ] Fixtures pour les données de test
 - [ ] Mock des dépendances externes (mail, etc.)
 - [ ] CI/CD avec GitHub Actions
+- [ ] Tests de performance
 
 ## 📚 Ressources
 

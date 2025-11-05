@@ -20,5 +20,10 @@
         "psr-4": {
             "SAE_CyberCigales_G5\\": ""
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     }
 }
