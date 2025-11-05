@@ -104,7 +104,7 @@ nav, .nav-menu {
 .nav-menu img {
     height: 3vw;
     width: auto;
-    border-radius: 10px;
+    border-radius: var(--radius);
 }
 
 #nav-menu-title {
@@ -832,7 +832,7 @@ button:hover {
     display: flex;
     width: 40px;
     height: 40px;
-    background-color: var(--bg-light);
+    background-color: var(--border-light);
     border: 2px solid var(--primary);
     border-radius: 10px;
     transition: var(--transition);
