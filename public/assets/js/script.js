@@ -114,3 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+function confirmDelete(userId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+        const form = document.getElementById('userForm');
+        if (form) {
+            form.action = `index.php?controller=admin&action=deleteUser&id=${userId}`;
+            form.submit();
+        }
+    }
+}

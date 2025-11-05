@@ -20,8 +20,7 @@
                 <td><?php echo htmlspecialchars($user['email']); ?></td>
                 <td><?php echo htmlspecialchars($user['created_at']); ?></td>
                 <td>
-                    <a href="index.php?controller=admin&action=editUser&id=<?php echo $user['id']; ?>">Modifier</a>
-                    <a href="index.php?controller=admin&action=deleteUser&id=<?php echo $user['id']; ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">Supprimer</a>
+                    <button type="button" onclick="window.location.href='index.php?controller=admin&action=editUser&id=<?php echo $user['id']; ?>'">Modifier</button>
                 </td>
             </tr>
         <?php endforeach; ?>
