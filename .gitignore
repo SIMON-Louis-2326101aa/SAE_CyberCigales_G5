@@ -4,3 +4,5 @@
 /node_modules/
 # Fichiers de cache des linters
 /.phplint.cache/
+# Dossier de logs
+/var/
