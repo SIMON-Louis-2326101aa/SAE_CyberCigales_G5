@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="icon" href="./assets/images/favicon.ico">
     <script src="./assets/js/script.js"></script>
+    <?php if (isset($_GET['controller']) && $_GET['controller'] === 'admin'): ?>
+        <!-- Si Admin, alors le script pour admin est chargé -->
+        <script src="./assets/js/admin.js"></script>
+    <?php endif; ?>
 </head>
 <body>
 <?php
@@ -28,6 +32,10 @@ if (session_status() === PHP_SESSION_NONE) {
             <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
             <a href="index.php?controller=User&action=logout" class="active btn-nav">Déconnexion</a>
             <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
+            <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com'): ?>
+                <!-- Si Admin, alors le bouton Admin est accessible -->
+                <a href="index.php?controller=admin&action=listUsers" class="active btn-nav">Admin</a>
+            <?php endif; ?>
             <?php
         } else {
             ?>
