@@ -23,6 +23,13 @@ class EmailVerificationController
         $this->user = new UserModel();
     }
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     public function request()
     {
         $email = $_GET['email'] ?? '';
@@ -53,16 +60,21 @@ class EmailVerificationController
   </td></tr></table>
 </div>';
         $sent = Mailer::send($email, $subject, $message);
+        self::log("Envoi du code de vérification à {$email} : " . ($sent ? 'Succès' : 'Échec'), $sent ? 'ok' : 'error');
 
         // L'email doit être passé dans l'URL pour être récupéré par l'afficheur
         $url = 'Location: index.php?controller=Redirection&action=openEmailVerification&email=' . urlencode($email);
+        self::log("Redirection vers : {$url}", 'file');
 
         if ($sent) {
             $_SESSION['flash_success'] = "Un code vous a été envoyé.";
+            self::log("Code de vérification envoyé à {$email}", 'ok');
         } else {
             if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
                 $_SESSION['flash_info'] = "Le mail n'a pas été envoyé. Code pour dev: {$code}";
+                self::log("Mode DEV: affichage du code de vérification pour {$email}", 'info');
             } else {
+                self::log("Échec d'envoi du code de vérification à {$email}", 'error');
                 $_SESSION['flash_error'] = "Erreur lors de l'envoi du code.";
             }
         }
@@ -102,11 +114,13 @@ class EmailVerificationController
             if ($this->user->createUserAfterVerification($email)) {
                 // Succès : Redirection vers la page de connexion
                 $_SESSION['flash_success'] = "Compte créé. Vous pouvez vous connecter.";
+                self::log("Compte créé pour {$email} après vérification.", 'ok');
                 header('Location: index.php?controller=Redirection&action=openFormConnection');
                 exit;
             } else {
                 // Erreur lors de la création du compte
                 $_SESSION['flash_error'] = "Erreur lors de la création du compte. Réessayez.";
+                self::log("Échec de création du compte pour {$email} après vérification.", 'error');
                 header($errorRedirectUrl); // Redirection après échec
                 exit;
             }
@@ -117,6 +131,7 @@ class EmailVerificationController
             ? "Code expiré (10 minutes). <a href=\"index.php?controller=EmailVerification&action=request&email="
             . urlencode($email) . "\">Renvoyer un code</a>."
             : "Code incorrect. Vérifiez et réessayez.";
+        self::log("Échec de vérification du code pour {$email} : " . $codeStatus['reason'], 'error');
 
         header($errorRedirectUrl); // Redirection après échec
         exit;

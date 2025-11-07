@@ -9,7 +9,25 @@ class RedirectionController
     private function logRedirection(string $view): void
     {
         if (function_exists('log_console')) {
-            log_console("Redirection vers $view", 'info'); // ℹ️
+            log_console("Redirection vers $view", 'info');
+        }
+    }
+    // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
+    private function requireAuth(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        if (empty($_SESSION['user_id'])) {
+            if (function_exists('log_console')) {
+                log_console('Accès refusé: non authentifié', 'warn', [
+                    'uri' => $_SERVER['REQUEST_URI'] ?? null
+                ]);
+            }
+            $_SESSION['flash_error'] = "Vous devez être connecté pour accéder à cette page.";
+            $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+            header('Location: ' . $base . '/index.php?controller=Redirection&action=openFormConnection');
+            exit;
         }
     }
 
@@ -28,16 +46,8 @@ class RedirectionController
     public function openAccount()
     {
         $this->logRedirection('accountView');
-
-//        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
-//        if (empty($_SESSION['user'])) {
-//            if (function_exists('log_console')) {
-//                log_console('Tentative d’accès à openAccount sans session', 'error'); // ❌
-//            }
-//            header('Location: /public/?controller=redirection&action=openFormConnection');
-//            exit;
-//        }
-
+        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
+        $this->requireAuth();
         ViewHandler::show('accountView', ['pageTitle' => 'Compte']);
     }
 
@@ -78,12 +88,14 @@ class RedirectionController
      */
     public function openAbout()
     {
+        $this->logRedirection('openAbout');
         ViewHandler::show('aboutView', ['pageTitle' => 'À Propos']);
     }
 
     /* Affiche le plan du Site */
     public function openSiteMap()
     {
+        $this->logRedirection('openSiteMap');
         ViewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
     }
 }

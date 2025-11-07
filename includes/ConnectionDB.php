@@ -11,6 +11,12 @@ use RuntimeException;
 
 final class ConnectionDB
 {
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
     private PDO $pdo;
     private static ?self $instance = null;
 
@@ -23,9 +29,7 @@ final class ConnectionDB
         $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
 
         if (!$host || !$name || !$user) {
-            if (function_exists('log_console')) {
-                log_console("Variables DB manquantes", 'error'); // ❌
-            }
+            self::log("Variables DB manquantes", 'error');
             throw new RuntimeException("Les variables d'environnement DB sont manquantes.");
         }
 
@@ -38,13 +42,9 @@ final class ConnectionDB
 
         try {
             $this->pdo = new PDO($dsn, $user, $pass, $options);
-            if (function_exists('log_console')) {
-                log_console("Connexion DB réussie ($host / $name)", 'ok'); // ✅
-            }
+            self::log("Connexion DB réussie ($host / $name)", 'ok');
         } catch (PDOException $e) {
-            if (function_exists('log_console')) {
-                log_console("Erreur PDO: " . $e->getMessage(), 'error'); // ❌
-            }
+            self::log("Erreur PDO: " . $e->getMessage(), 'error');
             throw new RuntimeException("Erreur de connexion à la base de données.");
         }
     }
@@ -113,10 +113,7 @@ final class ConnectionDB
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-
-        if (function_exists('log_console')) {
-            log_console("INSERT sur $table réussi", 'ok'); // ✅
-        }
+        self::log("INSERT sur $table réussi", 'ok');
 
         return (int)$this->pdo->lastInsertId();
     }
@@ -132,10 +129,7 @@ final class ConnectionDB
         $sql = "DELETE FROM `$table`" . $whereSql;
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-
-        if (function_exists('log_console')) {
-            log_console("DELETE sur $table : {$stmt->rowCount()} ligne(s)", 'file'); // 📄
-        }
+        self::log("DELETE sur $table : {$stmt->rowCount()} ligne(s)", 'file');
 
         return $stmt->rowCount();
     }
@@ -167,10 +161,7 @@ final class ConnectionDB
         $sql = "UPDATE `$table` SET " . implode(', ', $setParts) . $whereSql;
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-
-        if (function_exists('log_console')) {
-            log_console("UPDATE sur $table : {$stmt->rowCount()} ligne(s)", 'file'); // 📄
-        }
+        self::log("UPDATE sur $table : {$stmt->rowCount()} ligne(s)", 'file');
 
         return $stmt->rowCount();
     }
@@ -187,10 +178,7 @@ final class ConnectionDB
 
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-
-        if (function_exists('log_console')) {
-            log_console("SELECT * FROM $table", 'file'); // 📄
-        }
+        self::log("SELECT * FROM $table", 'file');
 
         return $stmt->fetchAll();
     }
@@ -209,10 +197,7 @@ final class ConnectionDB
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         $row = $stmt->fetch();
-
-        if (function_exists('log_console')) {
-            log_console("SELECT `$field` FROM `$table` réussi", 'ok'); // ✅
-        }
+        self::log("SELECT `$field` FROM `$table` réussi", 'ok');
 
         return $row[$field] ?? null;
     }

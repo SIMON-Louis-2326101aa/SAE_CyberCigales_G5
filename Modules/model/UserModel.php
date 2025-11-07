@@ -14,13 +14,20 @@ class UserModel extends Database
     private ConnectionDB $db;
     private $eModel;
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     public function __construct()
     {
         // On initialise simplement la connexion de la classe parente
         $this->getBdd();
 
         if (function_exists('log_console')) {
-            log_console('userModel initialisé', 'ok'); // ✅
+            log_console('userModel initialisé', 'ok');
         }
         $this->db = ConnectionDB::getInstance();
         $this->eModel = new EmailVerificationModel();
@@ -81,15 +88,11 @@ class UserModel extends Database
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
-            if (function_exists('log_console')) {
-                log_console("Authentification réussie : $email", 'ok'); // ✅
-            }
+            self::log("Authentification réussie : $email", 'ok');
             return $user;
         }
 
-        if (function_exists('log_console')) {
-            log_console("Échec d’authentification : $email", 'warn'); // ⚠️
-        }
+        self::log("Échec d’authentification : $email", 'warn');
 
         return null;
     }
@@ -119,9 +122,7 @@ class UserModel extends Database
         $stmt = $this->getBdd()->prepare($sql);
         $success = $stmt->execute(['email' => $email]);
 
-        if ($success && function_exists('log_console')) {
-            log_console("Utilisateur supprimé : $email", 'file'); // 📄
-        }
+        self::log("Utilisateur supprimé : $email", 'file');
 
         return $success;
     }
