@@ -162,15 +162,14 @@ h1 {
     letter-spacing: 3px;
 }
 
-.hero-container h1,
-.hero-container p {
+.hero-container-main h1,
+.hero-container-main p {
     color: white !important;
     z-index: 2;
-    text-shadow: 0 0 20px var(--primary-dark), 2px 2px 5px #0000007F;
     margin-bottom: 10px;
 }
 
-.hero-container h1 {
+.hero-container-main h1 {
     font-size: 3em;
     text-transform: uppercase;
     letter-spacing: 3px;
@@ -283,47 +282,6 @@ main {
     justify-content: center;
     align-items: center;
     text-align: center;
-}
-
-.hero-container {
-    height: 60vh;
-    min-height: 400px;
-    max-width: none;
-    margin: 0;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    overflow: hidden;
-    border-bottom: 3px solid transparent;
-    border-image: linear-gradient(90deg, var(--secondary), var(--primary)) 1;
-}
-
-.hero-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    opacity: 0.4;
-    filter: brightness(0.6) contrast(1.2);
-}
-
-.hero-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg,var(--bg-card) 100%);
-    z-index: 0;
 }
 
 h3 {
