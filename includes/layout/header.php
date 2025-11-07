@@ -42,26 +42,6 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
 </nav>
 
-<?php
-if (!function_exists('old')) {
-    function old(string $key, string $default = ''): string
-    {
-        $val = $_SESSION['old'][$key] ?? $default;
-
-        // Normalisation & nettoyage agressif
-        $val = (string)$val;
-        $val = strip_tags($val);                 // vire <script>...</script> & toutes balises
-        $val = preg_replace('/[\x00-\x1F\x7F]/', '', $val); // caractères de contrôle
-        $val = preg_replace('/\s+/', ' ', $val); // espaces multiples
-        $val = trim($val);
-        $val = mb_substr($val, 0, 120);         // limite défensive
-
-        // Sortie sûre pour un attribut HTML
-        return htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
-    }
-}
-?>
-
 <!-- Permet d'ajouter les pop up flash dans le header sans trop gêner la page-->
 <?php if (!empty($_SESSION['flash_success'])) : ?>
     <div class="flash flash-success">

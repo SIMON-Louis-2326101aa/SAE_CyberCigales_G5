@@ -11,6 +11,7 @@
         "overtrue/phplint": "^9.0"
     },
   "require": {
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.6"
   }
 }

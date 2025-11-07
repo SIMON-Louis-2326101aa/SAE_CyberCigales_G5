@@ -17,16 +17,12 @@ final class Autoloader
     {
     }
 
-    /**
-     * Charge un fichier PHP s'il est lisible
-     */
-    private static function log(string $message, string $type = 'info'): void
+    private static function log(string $message, string $type): void
     {
         if (function_exists('log_console')) {
-            log_console($message, $type); // ℹ️ ✅ ❌ 📄 🔊
+            log_console($message, $type);
         }
     }
-
     /**
      * Tente de charger un fichier si lisible.
      * @param string $path Chemin absolu vers le fichier.
@@ -35,10 +31,10 @@ final class Autoloader
     {
         if (is_readable($path)) {
             require $path;
-            self::log("Chargé: {$path}", 'ok');     // ✅
+            self::log("Chargé: {$path}", 'ok');
             return true;
         }
-        self::log("Non lisible: {$path}", 'file');   // 📄
+        self::log("Non lisible: {$path}", 'file');
         return false;
     }
 
@@ -52,11 +48,11 @@ final class Autoloader
         if (false !== $lastNsPos = strrpos($className, '\\')) {
             $className = substr($className, $lastNsPos + 1);
         }
-//        // Vérifie la classe Constant (chemins)
-//        if (!class_exists('Constant')) {
-//            self::log('Classe Constant introuvable (includes/Constant.php non chargé ?)', 'error'); // ❌
-//            return false;
-//        }
+        // Vérifie la classe Constant (chemins)
+        if (!class_exists(Constant::class)) {
+            self::log('Classe Constant introuvable (includes/Constant.php non chargé ?)', 'error');
+            return false;
+        }
 
         // Racine projet + dossiers à parcourir (sans slash final)
         $root = rtrim(Constant::indexDir(), '/\\');
@@ -85,8 +81,7 @@ final class Autoloader
         if (self::loadFile($fallback)) {
             return true;
         }
-
-        self::log("Classe non trouvée: {$className}", 'error'); // ❌
+        self::log("Classe non trouvée: {$className}", 'error');
         return false;
     }
 }

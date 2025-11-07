@@ -22,10 +22,10 @@ final class Constant
     public const CONTROLLER_DIR = '/Modules/controller/';
     public const INCLUDES_DIR   = '/includes/';
 
-    private static function log(string $message, string $type = 'info'): void
+    private static function log(string $message, string $type): void
     {
         if (function_exists('log_console')) {
-            log_console($message, $type); // ℹ️ ✅ ❌ 📄 🔊
+            log_console($message, $type);
         }
     }
 
@@ -56,13 +56,13 @@ final class Constant
         if ($resolved === false) {
             // En cas d'échec improbable, on retombe sur calcul brut
             $fallback = self::normalize(__DIR__ . '/..');
-            self::log("realpath a échoué, fallback sur {$fallback}", 'file'); // 📄
+            self::log("realpath a échoué, fallback sur {$fallback}", 'file');
             $root = $fallback;
             return $root;
         }
 
         $root = self::normalize($resolved);
-        self::log("Racine projet détectée: {$root}", 'info'); // ℹ️
+        self::log("Racine projet détectée: {$root}", 'info');
         return $root;
     }
 
@@ -72,7 +72,7 @@ final class Constant
     public static function viewDir(): string
     {
         $dir = self::normalize(self::indexDir() . self::VIEW_DIR);
-        self::log("viewDir: {$dir}", 'file'); // décommente pour tracer
+        self::log("viewDir: {$dir}", 'file');
         return $dir;
     }
 

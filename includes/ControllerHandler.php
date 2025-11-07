@@ -22,6 +22,13 @@ final class ControllerHandler
     /** Paramètres collectés depuis le contrôleur exécuté. */
     private array $params = [];
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     /**
      * @param ?string $S_controller Identifiant de contrôleur (ex: "user")
      * @param ?string $S_action     Identifiant d'action (ex: "login")
@@ -30,11 +37,8 @@ final class ControllerHandler
     {
         $this->url['controller'] = $this->controllerName($S_controller);
         $this->url['action']     = $this->actionName($S_action);
-
-        if (function_exists('log_console')) {
-            //log_console("Résolution route -> controller={$this->url['controller']},
-            // action={$this->url['action']}", 'file'); // 📄
-        }
+        self::log("Résolution route -> controller={$this->url['controller']},
+        action={$this->url['action']}", 'file');
     }
 
     /**
@@ -99,37 +103,27 @@ final class ControllerHandler
 
         // Vérifie l'existence de la classe contrôleur.(au cas où l'autoloader ne l'aurait pas déjà chargé).
         if (!class_exists($FQCN)) {
-            if (function_exists('log_console')) {
-                log_console("Contrôleur introuvable: {$controller}", 'error'); // ❌
-            }
+            self::log("Contrôleur introuvable: {$controller}", 'error');
             throw new RuntimeException("'{$controller}' est introuvable.");
         } else {
-            if (function_exists('log_console')) {
-                //log_console("Fichier contrôleur non trouvé
-                // (autoloader prendra le relais) : {$controllerFile}", 'info'); // ℹ️
-            }
+            log_console("Fichier contrôleur non trouvé
+              (autoloader prendra le relais) : {$FQCN}", 'info');
         }
 
         $controllerInstance = new $FQCN();
 
         // Vérifie l'existence de l'action.
         if (!method_exists($controllerInstance, $action)) {
-            if (function_exists('log_console')) {
-                log_console("Action introuvable: {$controller}::{$action}", 'error'); // ❌
-            }
+            self::log("Action introuvable: {$controller}::{$action}", 'error');
             throw new RuntimeException("L'action '{$action}' est introuvable dans le contrôleur '{$controller}'.");
         }
 
         // Exécute l'action.
         try {
-            if (function_exists('log_console')) {
-                log_console("Exécution: {$controller}::{$action}()", 'file'); // 📄
-            }
+            self::log("Exécution: {$controller}::{$action}()", 'file');
             call_user_func_array([$controllerInstance, $action], []);
         } catch (\Throwable $e) {
-            if (function_exists('log_console')) {
-                log_console("Exception pendant {$controller}::{$action}() - " . $e->getMessage(), 'error'); // ❌
-            }
+            self::log("Exception pendant {$controller}::{$action}() - " . $e->getMessage(), 'error');
             throw new RuntimeException("Erreur lors de l'exécution de l'action '{$action}' : "
                 . $e->getMessage(), (int)$e->getCode(), $e);
         }
@@ -137,9 +131,7 @@ final class ControllerHandler
         // Récupère d'éventuels paramètres exposés par le contrôleur.
         if (method_exists($controllerInstance, 'getParams')) {
             $this->params = $controllerInstance->getParams();
-            if (function_exists('log_console')) {
-                log_console("Params récupérés depuis {$controller}::getParams()", 'file'); // 📄
-            }
+            self::log("Params récupérés depuis {$controller}::getParams()", 'file');
         }
     }
 

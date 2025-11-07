@@ -25,6 +25,13 @@ abstract class Database
 {
     private static ?PDO $pdo = null;
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     /** Initialise la connexion PDO unique via connectionDB */
     private static function setBdd(): void
     {
@@ -32,13 +39,9 @@ abstract class Database
             $connexion = ConnectionDB::getInstance();
             self::$pdo = $connexion->getPdo();
 
-            if (function_exists('log_console')) {
-                log_console('Connexion PDO initialisée avec succès', 'ok'); // ✅
-            }
+            self::log('Connexion PDO initialisée avec succès', 'ok');
         } catch (Throwable $e) {
-            if (function_exists('log_console')) {
-                log_console('Erreur lors de l’initialisation de PDO : ' . $e->getMessage(), 'error'); // ❌
-            }
+            self::log('Erreur lors de l’initialisation de PDO : ' . $e->getMessage(), 'error');
             throw new RuntimeException('Impossible d’établir la connexion PDO.');
         }
     }
@@ -50,9 +53,7 @@ abstract class Database
             self::setBdd();
         }
 
-        if (function_exists('log_console')) {
-            log_console('Connexion PDO récupérée depuis Database', 'file'); // 📄
-        }
+        self::log('Connexion PDO récupérée depuis Database', 'file');
 
         return self::$pdo;
     }

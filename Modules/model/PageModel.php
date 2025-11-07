@@ -20,6 +20,13 @@ class PageModel extends Database
     /** Connexion PDO locale pour ce modèle. */
     private ?PDO $db = null;
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     /**
      * Constructeur
      * - Récupère la connexion PDO via la classe parente `database`.
@@ -31,13 +38,9 @@ class PageModel extends Database
             // Appelle la méthode héritée pour obtenir la connexion à la base.
             $this->db = $this->getBdd();
 
-            if (function_exists('log_console')) {
-                log_console('pageModel initialisé : PDO prêt', 'ok'); // ✅
-            }
+            self::log('pageModel initialisé : PDO prêt', 'ok');
         } catch (Throwable $e) {
-            if (function_exists('log_console')) {
-                log_console('pageModel : échec initialisation PDO - ' . $e->getMessage(), 'error'); // ❌
-            }
+            self::log('pageModel : échec initialisation PDO - ' . $e->getMessage(), 'error');
             // On relance une exception plus neutre pour le haut de pile.
             throw new RuntimeException("Impossible d'initialiser pageModel.");
         }

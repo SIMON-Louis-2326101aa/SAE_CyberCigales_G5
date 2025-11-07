@@ -17,11 +17,17 @@ use SAE_CyberCigales_G5\includes\ControllerHandler;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 
 // ============================================================
-// 🔧 CONFIGURATION DU LOG SERVEUR (AVANT TOUT)
+//  CONFIGURATION DU LOG SERVEUR (AVANT TOUT)
 // ============================================================
 
 // Détermine le dossier racine du projet
 $ROOT_DIR = dirname(__DIR__);
+
+require_once $ROOT_DIR . '/includes/functions.php';
+
+// ============================================================
+//  Configuration des logs (1 fichier par jour, max 7 fichiers)
+// ============================================================
 
 // Dossier de logs
 $logDir = $ROOT_DIR . '/var/log';
@@ -29,43 +35,16 @@ if (!is_dir($logDir)) {
     @mkdir($logDir, 0775, true);
 }
 
+// Nom du fichier du jour
+$today = date('Y-m-d');
+$logFile = "{$logDir}/app-{$today}.log";
+
 // Active le log PHP côté serveur
+// Change dynamiquement le fichier de log PHP
 ini_set('log_errors', '1');
-ini_set('error_log', $logDir . '/app.log');
+ini_set('error_log', $logFile);
 
-/* ============================================================
-    Utilitaire de log DEV (commentaires HTML)
-    Types: ok, error, file, song, info
-   ============================================================ */
-
-if (!function_exists('log_console')) {
-    function log_console(string $message, string $type = 'info', array $context = []): void
-    {
-        // map niveau → libellé
-        $label = match ($type) {
-            'error' => 'ERROR',
-            'warn'  => 'WARNING',
-            default => 'INFO',
-        };
-    // Ajoute un ID de requête pour suivre un flux
-        if (!isset($GLOBALS['req_id'])) {
-            try {
-                $GLOBALS['req_id'] = bin2hex(random_bytes(4));
-            } catch (\Throwable $e) {
-                $GLOBALS['req_id'] = '00000000';
-            }
-        }
-
-        // Nettoie le contexte
-        unset($context['pwd'], $context['password'], $context['confirm_pwd'], $context['token'], $context['code']);
-        $ctx = $context ? (' ' . json_encode($context, JSON_UNESCAPED_UNICODE)) : '';
-    // [date] [LEVEL] [req:abcd1234] message {ctx}
-        $line = sprintf('[%s] [%s] [req:%s] %s%s', date('c'), $label, $GLOBALS['req_id'], $message, $ctx);
-    // écrit côté serveur (AlwaysData ou app.log selon ini_set plus haut)
-        error_log($line);
-    }
-
-}
+registerLogRotation($logDir, $logFile);
 
 /* ============================================================
     Session sécurisée
@@ -85,8 +64,9 @@ if (session_status() === PHP_SESSION_NONE) {
         'cookie_secure'   => $cookieSecure,
         'cookie_samesite' => $cookieSameSite,
     ]);
-    log_console('Session démarrée', 'ok');
-// ✅
+    if (function_exists('log_console')) {
+        log_console('Session démarrée', 'ok');
+    }
 }
 
 set_error_handler(function ($severity, $message, $file, $line) {
@@ -95,16 +75,20 @@ set_error_handler(function ($severity, $message, $file, $line) {
     if (!(error_reporting() & $severity)) {
         return false;
     }
-    log_console("$message @ $file:$line", 'warn');
+    if (function_exists('log_console')) {
+        log_console("$message @ $file:$line", 'warn');
+    }
     return false;
-// laisse PHP continuer si besoin
 });
-set_exception_handler(function (Throwable $e) {
 
-    log_console($e->getMessage() . " @ {$e->getFile()}:{$e->getLine()}", 'error', [
-        'trace' => substr($e->getTraceAsString(), 0, 2000),
-    ]);
+set_exception_handler(function (Throwable $e) {
+    if (function_exists('log_console')) {
+        log_console($e->getMessage() . " @ {$e->getFile()}:{$e->getLine()}", 'error', [
+            'trace' => substr($e->getTraceAsString(), 0, 2000),
+        ]);
+    }
 });
+
 register_shutdown_function(function () {
 
     $e = error_get_last();
@@ -121,11 +105,13 @@ $composerAutoload = $ROOT_DIR . '/vendor/Autoload.php';
 // Chargement des variables d'environnement depuis le fichier .env
 if (is_file($composerAutoload)) {
     require $composerAutoload;
-    log_console('Composer autoload chargé', 'ok');
-// ✅
+    if (function_exists('log_console')) {
+        log_console('Composer autoload chargé', 'ok');
+    }
 } else {
-    log_console('Composer autoload introuvable: /vendor/autoload.php', 'error');
-// ❌
+    if (function_exists('log_console')) {
+        log_console('Composer autoload introuvable: /vendor/autoload.php', 'error');
+    }
 }
 
 $internalConstant = $ROOT_DIR . '/includes/Constant.php';
@@ -134,10 +120,13 @@ $internalAutoload = $ROOT_DIR . '/includes/Autoloader.php';
 
 if (is_file($internalAutoload)) {
     require_once $internalAutoload;
-    log_console('Autoloader interne chargé', 'ok');
-// ✅
+    if (function_exists('log_console')) {
+        log_console('Autoloader interne chargé', 'ok');
+    }
 } else {
-    log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error'); // ❌
+    if (function_exists('log_console')) {
+        log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error');
+    }
 }
 
 /* ============================================================
@@ -148,15 +137,18 @@ try {
     if (class_exists(\Dotenv\Dotenv::class)) {
         $dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config');
         $dotenv->load();
-        log_console('Fichier .env chargé', 'ok');
-    // ✅
+        if (function_exists('log_console')) {
+            log_console('Fichier .env chargé', 'ok');
+        }
     } else {
-        log_console('Dotenv non disponible (classe introuvable)', 'file');
-    // 📄
+        if (function_exists('log_console')) {
+            log_console('Dotenv non disponible (classe introuvable)', 'warn');
+        }
     }
 } catch (Throwable $e) {
-    log_console('Erreur chargement .env (vérifier /config/.env)', 'error');
-// ❌
+    if (function_exists('log_console')) {
+        log_console('Erreur chargement .env (vérifier /config/.env)', 'error');
+    }
 }
 
 /* ============================================================
@@ -169,14 +161,16 @@ if ($appEnv === 'dev') {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
     error_reporting(E_ALL);
-    log_console('Mode DEV: reporting erreurs activé', 'info');
-// ℹ️
+    if (function_exists('log_console')) {
+        log_console('Mode DEV: reporting erreurs activé', 'file');
+    }
 } else {
     ini_set('display_errors', '0');
     ini_set('display_startup_errors', '0');
     error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT);
-    log_console('Mode PROD: reporting erreurs restreint', 'file');
-// 📄
+    if (function_exists('log_console')) {
+        log_console('Mode PROD: reporting erreurs restreint', 'file');
+    }
 }
 
 /* ============================================================
@@ -187,20 +181,28 @@ try {
 // Normalisation et nettoyage de l'URI
     $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
     $uri = '/' . trim($uri, '/');
-    log_console("URI demandée: {$uri}", 'file');// 📄
+    if (function_exists('log_console')) {
+        log_console("URI demandée: {$uri}", 'file');
+    }
 
     // Paramètres de route par query string
     $S_controller = $_GET['controller'] ?? 'Redirection';
     $S_action     = $_GET['action'] ?? 'openHomepage';
-    log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');// 📄
+    if (function_exists('log_console')) {
+        log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');
+    }
 
 
     // Démarre le buffer de rendu
     if (class_exists(ViewHandler::class)) {
         ViewHandler::bufferStart();
-        log_console('Buffer vue démarré', 'ok');// ✅
+        if (function_exists('log_console')) {
+            log_console('Buffer vue démarré', 'ok');
+        }
     } else {
-        log_console('Classe viewHandler introuvable', 'error');// ❌
+        if (function_exists('log_console')) {
+            log_console('Classe viewHandler introuvable', 'error');
+        }
         throw new RuntimeException('ViewHandler introuvable');
     }
 
@@ -208,9 +210,13 @@ try {
     if (class_exists(ControllerHandler::class)) {
         $C_controller = new ControllerHandler($S_controller, $S_action);
         $C_controller->execute();
-        log_console('Contrôleur exécuté', 'ok');// ✅
+        if (function_exists('log_console')) {
+            log_console('Contrôleur exécuté', 'ok');
+        }
     } else {
-        log_console('Classe controllerHandler introuvable', 'error');//❌
+        if (function_exists('log_console')) {
+            log_console('Classe controllerHandler introuvable', 'error');
+        }
         throw new RuntimeException('controllerHandler introuvable');
     }
 
@@ -219,14 +225,16 @@ try {
 // Paramètres potentiels exposés par le handler
     $A_params = method_exists($C_controller, 'getParams') ? $C_controller->getParams() : [];
     if (!empty($A_params)) {
-        log_console('Params contrôleur collectés', 'file');
-    // 📄
+        if (function_exists('log_console')) {
+            log_console('Params contrôleur collectés', 'file');
+        }
     }
 
     // Affiche le contenu
     echo $displayContent;
-    log_console('Contenu affiché', 'ok');
-// ✅
+    if (function_exists('log_console')) {
+        log_console('Contenu affiché', 'ok');
+    }
 } catch (Throwable $e) {
 // Gestion d'erreur globale
     http_response_code(500);
@@ -239,5 +247,7 @@ try {
     echo "<h2>Trace complète (Stack Trace)</h2>";
     echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
 
-    log_console('Exception globale capturée', 'error'); // ❌
+    if (function_exists('log_console')) {
+        log_console('Exception globale capturée', 'error');
+    }
 }

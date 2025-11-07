@@ -19,6 +19,13 @@ class UserController
 {
     private UserModel $userModel;
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     public function __construct()
     {
         $this->userModel = new UserModel();
@@ -34,7 +41,7 @@ class UserController
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['register'])) {
             $_SESSION['flash_error'] = "Accès invalide au formulaire d'inscription.";
-            //if (function_exists('log_console')) log_console('Register: accès direct ou mauvaise méthode', 'error');
+            self::log('Register: accès direct ou mauvaise méthode', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -63,13 +70,13 @@ class UserController
         // Vérification mots de passe
         if ($password !== $confirm) {
             $_SESSION['flash_error'] = "Les mots de passe ne correspondent pas.";
-            //if (function_exists('log_console')) log_console('Register: mots de passe différents', 'error');
+            self::log('Register: mots de passe différents', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
         if (strlen($password) < 8) {
             $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
-            //if (function_exists('log_console')) log_console('Register: mot de passe < 8 caractères', 'error');
+            self::log('Register: mot de passe < 8 caractères', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -82,7 +89,7 @@ class UserController
         ) {
             $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, 
             une minuscule, un chiffre et un caractère spécial.";
-            //if (function_exists('log_console')) log_console('Register: complexité insuffisante', 'error');
+            self::log('Register: complexité insuffisante', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -90,7 +97,7 @@ class UserController
         // E-mail déjà utilisé ?
         if ($this->userModel->findByEmail($email)) {
             $_SESSION['flash_error'] = "Impossible de créer le compte. Veuillez vérifier les informations saisies.";
-            //if (function_exists('log_console')) log_console("Register: email déjà utilisé ($email)", 'info');
+            self::log("Register: email déjà utilisé ($email)", 'info');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -123,17 +130,16 @@ class UserController
 
             if ($sent) {
                 $_SESSION['flash_success'] = "Un nouveau code vous a été envoyé.";
-                //if (function_exists('log_console')) log_console("Register: renvoi code OK ($email)", 'ok');
+                self::log("Register: renvoi code OK ($email)", 'ok');
             } else {
                 // En local on peut exposer le code dans les logs console
                 if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
                     $_SESSION['flash_success'] = "Envoi d'email indisponible en local. 
                     Utilisez le code affiché en console.";
-                    //if (function_exists('log_console')) log_console
-                    //("Register: email non envoyé (local) — code: {$code}, 'info');
+                    self::log("Register: email non envoyé (local) — code: {$code}", 'info');
                 } else {
                     $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
-                    //if (function_exists('log_console')) log_console("Register: échec envoi mail ($email)", 'error');
+                    self::log("Register: échec envoi mail ($email)", 'error');
                 }
             }
 
@@ -150,7 +156,7 @@ class UserController
         storePendingRegistration($nom, $prenom, $email, password_hash($password, PASSWORD_BCRYPT));
         if (!$stored) {
             $_SESSION['flash_error'] = "Erreur lors de l'inscription.";
-            //if (function_exists('log_console')) log_console("Register: échec insertion DB ($email)", 'error');
+            self::log("Register: échec insertion DB ($email)", 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -178,15 +184,14 @@ class UserController
 
         if ($sent) {
             $_SESSION['flash_success'] = "Un code vous a été envoyé. Vérifiez votre boîte mail.";
-            //if (function_exists('log_console')) log_console("Register: code envoyé ($email)", 'ok');
+            self::log("Register: code envoyé ($email)", 'ok');
         } else {
             if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
                 $_SESSION['flash_success'] = "Envoi d'email indisponible en local. Utilisez le code affiché en console";
-                //if (function_exists('log_console')) log_console("Register: email non envoyé (local)
-                // — code: {$code}", 'info');
+                self::log("Register: email non envoyé (local) — code: {$code}", 'info');
             } else {
                 $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
-                //if (function_exists('log_console')) log_console("Register: échec envoi mail ($email)", 'error');
+                self::log("Register: échec envoi mail ($email)", 'error');
             }
         }
 
@@ -222,7 +227,7 @@ class UserController
             $_SESSION['email']       = $utilisateur['email']  ?? null;
 
             $_SESSION['flash_success'] = "Connexion réussie.";
-            //if (function_exists('log_console')) log_console("Login: succès ($email)", 'ok');
+            self::log("Login: succès ($email)", 'ok');
 
             // Succès → on peut nettoyer le old
             unset($_SESSION['old']);
@@ -235,7 +240,7 @@ class UserController
         $_SESSION['old'] = ['email' => $email];
 
         $_SESSION['flash_error'] = "Email ou mot de passe incorrect.";
-        //if (function_exists('log_console')) log_console("Login: échec ($email)", 'error');
+        self::log("Login: échec ($email)", 'error');
         header("Location: index.php?controller=Redirection&action=openFormConnection");
         exit;
     }
@@ -262,7 +267,7 @@ class UserController
         session_regenerate_id(true);
 
         $_SESSION['flash_success'] = "Vous avez été déconnecté.";
-        //if (function_exists('log_console')) log_console('Logout: user data cleared', 'info');
+        self::log('Logout: user data cleared', 'info');
 
         header("Location: index.php?controller=Redirection&action=openHomepage");
         exit;
@@ -285,7 +290,7 @@ class UserController
         // Réponse générique (ne pas révéler si un mail existe ou pas)
         if (!$this->userModel->emailExists($email)) {
             $_SESSION['flash_success'] = "Si l'email existe, un lien de réinitialisation vous a été envoyé.";
-            //if (function_exists('log_console')) log_console("Forgot: email inconnu ($email)", 'info');
+            self::log("Forgot: email inconnu ($email)", 'info');
             header("Location: index.php?controller=Redirection&action=openForgotPwd");
             exit;
         }
@@ -293,7 +298,7 @@ class UserController
         $token = $prModel->createTokenForEmail($email, 60);
         if (!$token) {
             $_SESSION['flash_error'] = "Impossible de générer le lien. Veuillez réessayer.";
-            //if (function_exists('log_console')) log_console("Forgot: échec génération token ($email)", 'error');
+            self::log("Forgot: échec génération token ($email)", 'error');
             header("Location: index.php?controller=Redirection&action=openForgotPwd");
             exit;
         }
@@ -332,10 +337,10 @@ class UserController
 
         if (Mailer::send($to, $subject, $message)) {
             $_SESSION['flash_success'] = "Si l'email existe, un lien de réinitialisation vous a été envoyé.";
-            //if (function_exists('log_console')) log_console("Forgot: mail envoyé ($email)", 'ok');
+            self::log("Forgot: mail envoyé ($email)", 'ok');
         } else {
             $_SESSION['flash_error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";
-            //if (function_exists('log_console')) log_console("Forgot: échec envoi mail ($email)", 'error');
+            self::log("Forgot: échec envoi mail ($email)", 'error');
         }
 
         header("Location: index.php?controller=Redirection&action=openForgotPwd");
@@ -352,19 +357,17 @@ class UserController
         // Affichage du formulaire via le lien GET
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $token = $_GET['token'] ?? '';
-            //if (function_exists('log_console')) log_console("GET: Tentative d'accès avec token: " . $token, 'info');
+            self::log("GET: Tentative d'accès avec token: " . $token, 'info');
             if (empty($token)) {
                 header("Location: index.php?controller=Redirection&action=openHomepage");
                 exit;
             }
 
             $tokenRow = $prModel->getValidTokenRow($token);
-            if (function_exists('log_console')) {
-                if ($tokenRow) {
-                    log_console('GET - Token valide trouvé pour: ' . ($tokenRow['email'] ?? 'N/A'), 'ok');
-                } else {
-                    log_console('GET - ERREUR: Token non valide/expiré pour token: ' . $token, 'error');
-                }
+            if ($tokenRow) {
+                self::log('GET - Token valide trouvé pour: ' . ($tokenRow['email'] ?? 'N/A'), 'ok');
+            } else {
+                self::log('GET - ERREUR: Token non valide/expiré pour token: ' . $token, 'error');
             }
 
             //$tokenRow = $prModel->getValidTokenRow($token);
@@ -385,26 +388,24 @@ class UserController
             $confirmPassword = $_POST['confirm_password'] ?? '';
             $token           = $_POST['token']            ?? '';
 
-            //if (function_exists('log_console')) log_console("POST: Soumission avec token: " . $token, 'info');
+            self::log("POST: Soumission avec token: " . $token, 'info');
 
             $tokenRow = $prModel->getValidTokenRow($token);
 
             // Log de l'état du jeton pour le bloc POST
-            if (function_exists('log_console')) {
-                if (!$tokenRow) {
-                    log_console('POST - ERREUR: Token invalide/expiré pendant la soumission.', 'error');
-                }
+            if (!$tokenRow) {
+                self::log('POST - ERREUR: Token invalide/expiré pendant la soumission.', 'error');
             }
             if (!$tokenRow) {
                 $_SESSION['flash_error'] = "Lien de réinitialisation invalide ou expiré.";
-                //if (function_exists('log_console')) log_console('ChangePwd: token invalide/expiré', 'error');
+                self::log('ChangePwd: token invalide/expiré', 'error');
                 header("Location: index.php?controller=Redirection&action=openForgotPwd");
                 exit;
             }
 
             if (strlen($newPassword) < 8) {
                 $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
-                //if (function_exists('log_console')) log_console('ChangePwd: mot de passe < 8', 'error');
+                self::log('ChangePwd: mot de passe < 8', 'error');
                 header("Location: index.php?controller=Redirection&action=openChangePwd&token=" . urlencode($token));
                 exit;
             }
@@ -416,19 +417,19 @@ class UserController
             ) {
                 $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule,
                 une minuscule, un chiffre et un caractère spécial.";
-                //if (function_exists('log_console')) log_console('ChangePwd: complexité insuffisante', 'error');
+                self::log('ChangePwd: complexité insuffisante', 'error');
                 header("Location: index.php?controller=Redirection&action=openChangePwd&token=" . urlencode($token));
                 exit;
             }
             if (empty($newPassword) || empty($confirmPassword)) {
                 $_SESSION['flash_error'] = "Veuillez remplir les deux champs de mot de passe.";
-                //if (function_exists('log_console')) log_console('ChangePwd: champs vides', 'error');
+                self::log('ChangePwd: champs vides', 'error');
                 header("Location: index.php?controller=Redirection&action=openChangePwd&token=" . urlencode($token));
                 exit;
             }
             if ($newPassword !== $confirmPassword) {
                 $_SESSION['flash_error'] = "Les mots de passe ne correspondent pas.";
-                //if (function_exists('log_console')) log_console('ChangePwd: mots de passe différents', 'error');
+                self::log('ChangePwd: mots de passe différents', 'error');
                 header("Location: index.php?controller=Redirection&action=openChangePwd&token=" . urlencode($token));
                 exit;
             }
@@ -440,12 +441,12 @@ class UserController
                 $prModel->markTokenUsed($token);
                 $_SESSION['flash_success'] = "Votre mot de passe a été modifié avec succès.
                  Vous pouvez maintenant vous connecter.";
-                //if (function_exists('log_console')) log_console("ChangePwd: succès ($email)", 'ok');
+                self::log("ChangePwd: succès ($email)", 'ok');
                 header("Location: index.php?controller=Redirection&action=openFormConnection");
                 exit;
             } else {
                 $_SESSION['flash_error'] = "Erreur lors de la modification du mot de passe.";
-                //if (function_exists('log_console')) log_console("ChangePwd: échec ($email)", 'error');
+                self::log("ChangePwd: échec ($email)", 'error');
                 header("Location: index.php?controller=Redirection&action=openChangePwd&token=" . urlencode($token));
                 exit;
             }
@@ -464,7 +465,7 @@ class UserController
             $email = $_SESSION['email'] ?? null;
 
             if ($email && $this->userModel->delete($email)) {
-                //if (function_exists('log_console')) log_console("Account: suppression utilisateur ($email)", 'file');
+                self::log("Account: suppression utilisateur ($email)", 'file');
                 session_destroy();
                 $_SESSION['flash_success'] = "Votre compte a été supprimé.";
                 header("Location: index.php?controller=Redirection&action=openHomepage");
@@ -472,7 +473,7 @@ class UserController
             }
 
             $_SESSION['flash_error'] = "Une erreur est survenue lors de la suppression de votre compte.";
-            //if (function_exists('log_console')) log_console("Account: échec suppression ($email)", 'error');
+            self::log("Account: échec suppression ($email)", 'error');
         }
 
         header("Location: index.php?controller=Redirection&action=openAccount");
