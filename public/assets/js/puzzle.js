@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const openLetterBtn = document.getElementById("openLetterBtn");
+    const openLetterBtn = document.getElementById("open-letter-btn");
     const letterContent = document.getElementById("letterContent");
 
     if (openLetterBtn && letterContent) {

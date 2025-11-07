@@ -13,7 +13,7 @@
     </div><br>
 
     <div >
-    <button class="active btn-nav" id="openLetterBtn">Ouvrir la lettre</button>
+    <button id="open-letter-btn" class="active btn-nav" >Ouvrir la lettre</button>
     </div><br>
 
     <div id="letterContent" class="letter-content">
@@ -31,8 +31,8 @@
             ubbu fkyiiu kd zekh secfhudthu
         </p>
         <p>qlus jekju bq judthuiiu gku bu ludj d q fqi ucfehjuu jui whqdti fqhudji gky j qycudj
-        </p>
-        <p>10/10/2010</p>
+        </p><br>
+        <p class="clue-letter2">10/10/2010</p>
     </div>
 
 
@@ -51,7 +51,7 @@
     </div><br>
 
     <div >
-    <button class="active btn-nav" id="openLetterBtn">Ouvrir la lettre</button>
+    <button id="open-letter-btn" class="active btn-nav" id="openLetterBtn">Ouvrir la lettre</button>
     </div><br>
 
     <div id="letterContent" class="letter-content">
@@ -68,7 +68,7 @@
             xydbo rscdysbo mkmroo nkxc voc zvsc ne dowzc
         </p>
         <p>kfom v’oczysb aeo voc mrowsxc zobnec co mbyscoxd k xyefoke doc qbkxnczkboxdc aes dkswoxd
-        </p>
+        </p><br>
         <p>10/10/2010</p>
     </div>
 <?php endif; ?><?php
