@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="icon" href="./assets/images/favicon.ico">
     <script src="./assets/js/script.js"></script>
+    <?php if (isset($_GET['controller']) && $_GET['controller'] === 'admin'): ?>
+        <!-- Si Admin, alors le script pour admin est chargé -->
+        <script src="./assets/js/admin.js"></script>
+    <?php endif; ?>
 </head>
 <body>
 <?php

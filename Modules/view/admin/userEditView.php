@@ -11,5 +11,5 @@
     <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>"><br><br>
 
     <button type="submit">Enregistrer la modification</button>
-    <button type="button" onclick="confirmDelete(<?php echo $user['id']; ?>)">Supprimer le compte</button>
+    <button type="button" class="delete-user-account-btn" data-user-id="<?php echo $user['id']; ?>">Supprimer le compte</button>
 </form>

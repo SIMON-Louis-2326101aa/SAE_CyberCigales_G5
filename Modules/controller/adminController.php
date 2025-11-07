@@ -76,4 +76,29 @@ class adminController
         header("Location: index.php?controller=admin&action=listUsers");
         exit;
     }
+
+    public function approveRegistration()
+    {
+        $pendingId = $_GET['id'] ?? null;
+        if ($pendingId) {
+            $pendingUser = $this->emailVerificationModel->getPendingRegistrationById((int)$pendingId);
+            if ($pendingUser) {
+                $this->userModel->createUserAfterVerification($pendingUser['email']);
+            }
+        }
+
+        header("Location: index.php?controller=admin&action=listUsers");
+        exit;
+    }
+
+    public function deleteRegistration()
+    {
+        $pendingId = $_GET['id'] ?? null;
+        if ($pendingId) {
+            $this->emailVerificationModel->deletePendingRegistrationById((int)$pendingId);
+        }
+
+        header("Location: index.php?controller=admin&action=listUsers");
+        exit;
+    }
 }

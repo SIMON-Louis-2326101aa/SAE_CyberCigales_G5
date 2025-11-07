@@ -104,4 +104,22 @@ class emailVerificationModel extends database
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getPendingRegistrationById(int $id): ?array
+    {
+        $stmt = $this->getBdd()->prepare(
+            'SELECT * FROM pending_registrations WHERE id = :id'
+        );
+        $stmt->execute(['id' => $id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
+
+    public function deletePendingRegistrationById(int $id): bool
+    {
+        $stmt = $this->getBdd()->prepare(
+            'DELETE FROM pending_registrations WHERE id = :id'
+        );
+        return $stmt->execute(['id' => $id]);
+    }
 }
