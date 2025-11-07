@@ -16,9 +16,11 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Charge .env depuis la racine du projet
 $rootDir = dirname(__DIR__);
-if (class_exists(Dotenv\Dotenv::class)) {
-    Dotenv\Dotenv::createImmutable($rootDir)->load();
-    //if (function_exists('log_console')) log_console('Fichier .env chargé', 'info'); // ℹ️
+if (class_exists(\Dotenv\Dotenv::class)) {
+    $dotenv = Dotenv\Dotenv::createImmutable($rootDir . '/config');
+    $dotenv->load();
+    log_console('Fichier .env chargé pour backub bd', 'ok');
+    // ✅
 }
 
 // Récupère les paramètres DB
