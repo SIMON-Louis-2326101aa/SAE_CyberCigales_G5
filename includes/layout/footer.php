@@ -3,8 +3,8 @@
         <!-- Colonne 1: À propos -->
         <div class="footer-column">
             <h3>ESCAPETHECODE</h3>
-            <p>Explorez les mystères des anciens temples mayas à travers six épreuves immersives. Une aventure unique
-                vous attend dans les profondeurs de la jungle mystique.</p>
+            <p>Plongez au cœur de notre escape game et laissez-vous entraîner dans un univers rempli d’énigmes,
+                de secrets bien gardés et de rebondissements inattendus. </p>
         </div>
 
         <!-- Colonne 2: Navigation -->

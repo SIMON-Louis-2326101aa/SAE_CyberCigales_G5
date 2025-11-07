@@ -8,7 +8,7 @@ namespace SAE_CyberCigales_G5\Modules\controller;
 //require_once __DIR__ . '/../../includes/ViewHandler.php';
 //require_once __DIR__ . '/../../includes/Mailer.php';
 
-use SAE_CyberCigales_G5\includes\Constant;
+//use SAE_CyberCigales_G5\includes\Constant;
 use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
@@ -125,16 +125,8 @@ class UserController
                 $_SESSION['flash_success'] = "Un nouveau code vous a été envoyé.";
                 //if (function_exists('log_console')) log_console("Register: renvoi code OK ($email)", 'ok');
             } else {
-                // En local on peut exposer le code dans les logs console
-                if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
-                    $_SESSION['flash_success'] = "Envoi d'email indisponible en local. 
-                    Utilisez le code affiché en console.";
-                    //if (function_exists('log_console')) log_console
-                    //("Register: email non envoyé (local) — code: {$code}, 'info');
-                } else {
                     $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
                     //if (function_exists('log_console')) log_console("Register: échec envoi mail ($email)", 'error');
-                }
             }
 
             // Succès logique → on peut vider le old
@@ -180,14 +172,8 @@ class UserController
             $_SESSION['flash_success'] = "Un code vous a été envoyé. Vérifiez votre boîte mail.";
             //if (function_exists('log_console')) log_console("Register: code envoyé ($email)", 'ok');
         } else {
-            if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
-                $_SESSION['flash_success'] = "Envoi d'email indisponible en local. Utilisez le code affiché en console";
-                //if (function_exists('log_console')) log_console("Register: email non envoyé (local)
-                // — code: {$code}", 'info');
-            } else {
                 $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
                 //if (function_exists('log_console')) log_console("Register: échec envoi mail ($email)", 'error');
-            }
         }
 
         // Succès logique → on peut vider le old
