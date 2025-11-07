@@ -303,6 +303,13 @@ h4 {
     text-align: left;
 }
 
+h5 {
+    font-size: 3em;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-align: left;
+}
+
 .hero-container-main {
     margin-top: 6rem;
     margin-bottom: 6rem;
@@ -313,6 +320,22 @@ h4 {
     padding: 0 var(--space-6);
 }
 
+.hero-container-welcome{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 var(--space-6);
+}
+
+.hero-container-welcome p{
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0;
+}
 .hero-question {
     font-size: 4rem;
     font-weight: 800;
