@@ -6,7 +6,7 @@ namespace SAE_CyberCigales_G5\Modules\model;
 
 use PDO;
 
-class EmailVerificationModel extends Database
+class emailVerificationModel extends database
 {
     public function generateAndStoreCode(string $email, int $ttlMinutes = 10): string
     {
@@ -102,5 +102,32 @@ class EmailVerificationModel extends Database
         $stmt->execute(['email' => $email]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?: null;
+    }
+
+    public function getAllPendingRegistrations(): array
+    {
+        $stmt = $this->getBdd()->prepare(
+            'SELECT * FROM pending_registrations ORDER BY id ASC'
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getPendingRegistrationById(int $id): ?array
+    {
+        $stmt = $this->getBdd()->prepare(
+            'SELECT * FROM pending_registrations WHERE id = :id'
+        );
+        $stmt->execute(['id' => $id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ?: null;
+    }
+
+    public function deletePendingRegistrationById(int $id): bool
+    {
+        $stmt = $this->getBdd()->prepare(
+            'DELETE FROM pending_registrations WHERE id = :id'
+        );
+        return $stmt->execute(['id' => $id]);
     }
 }

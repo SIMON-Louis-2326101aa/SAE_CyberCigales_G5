@@ -1381,3 +1381,12 @@ body.dark-theme .btn-nav:hover {
     background-color: var(--primary);
     color: var(--bg-dark);
 }
+
+/* ============ Admin ============ */
+.delete-pending-btn, .delete-user-account-btn {
+    background: var(--error);
+}
+
+#admin-button {
+    background: #ffc800;
+}

@@ -231,6 +231,13 @@ try {
 } catch (Throwable $e) {
 // Gestion d'erreur globale
     http_response_code(500);
-    echo "<main><h1>Erreur interne</h1><p>Une erreur est survenue.</p></main>";
+    // Laissez le mode débogage actif pour l'instant si vous voulez
+    echo "<main><h1>ERREUR FATALE (DÉBOGAGE)</h1>";
+    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>Fichier:</strong> " . htmlspecialchars($e->getFile()) . " (Ligne: " . $e->getLine() . ")</p>";
+    echo "<hr>";
+    echo "<h2>Trace complète (Stack Trace)</h2>";
+    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
+
     log_console('Exception globale capturée', 'error'); // ❌
 }
