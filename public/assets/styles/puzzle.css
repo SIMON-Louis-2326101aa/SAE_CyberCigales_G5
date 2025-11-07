@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+
+
+/* ============ Enigme - Lettre animée ============ */
+
+.letter-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 1s ease, opacity 1s ease;
+    background: var(--bg-letter);
+    border: 1px solid var(--border);
+    padding: 0 2rem;
+    color: var(--bg-dark);
+    font-size : 1.5rem;
+    text-align: justify;
+    margin: 2rem 25rem;
+    font-family: Handlee, cursive;
+}
+
+/* Quand la lettre est ouverte */
+.letter-content.open {
+    max-height: 800px; /* adapte selon la taille de ta lettre */
+    opacity: 1;
+    padding: 2rem;
+}
+
+.intro-letter-content {
+    color: var(--text-primary);
+    font-size : 1.3rem;
+    margin-top: 2rem ;
+}
+
+.intro-letter-content p {
+    text-align: justify;
+    margin-left: 16rem;
+    margin-right: 16rem;
+}
+
+.clue-letter {
+    font-style: italic;
+    font-family: "Dancing Script", "Segoe UI", Arial, sans-serif;
+    font-size : 1.5rem;
+}
+
+.clue-letter2{
+    text-align: end;
+}
+
+#open-letter-btn {
+    width: auto !important; /* écrase le width:100% global */
+    display: inline-block;
+}

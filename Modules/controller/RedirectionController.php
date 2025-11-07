@@ -98,4 +98,13 @@ class RedirectionController
         $this->logRedirection('openSiteMap');
         ViewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
     }
+
+    /**
+     * Affiche la page d'introduction de la lettre de mission
+     */
+    public function openLetterIntro()
+    {
+        $this->logRedirection('letterIntroView');
+        ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
+    }
 }
