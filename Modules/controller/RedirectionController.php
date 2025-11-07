@@ -86,4 +86,10 @@ class RedirectionController
     {
         ViewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
     }
+
+    public  function openContact()
+    {
+        ViewHandler::show('contactView', ['pageTitle' => 'Contact']);
+    }
+
 }
