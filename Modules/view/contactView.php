@@ -11,7 +11,7 @@
         </li>
         <li>
             <label for="message">Message :</label>
-            <input type="text" id="message" required>
+            <textarea id="message" name="message" rows="5" required></textarea>
         </li>
     </ul>
     <br>
