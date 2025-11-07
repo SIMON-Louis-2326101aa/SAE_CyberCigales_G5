@@ -96,6 +96,12 @@ class emailVerificationModel extends database
         return $result ?: null;
     }
 
-
+    public function getAllPendingRegistrations(): array
+    {
+        $stmt = $this->getBdd()->prepare(
+            'SELECT * FROM pending_registrations ORDER BY id ASC'
+        );
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
-

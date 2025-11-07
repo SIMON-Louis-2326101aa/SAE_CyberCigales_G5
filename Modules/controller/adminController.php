@@ -1,14 +1,17 @@
 <?php
 require_once __DIR__ . '/../model/userModel.php';
+require_once __DIR__ . '/../model/emailVerificationModel.php';
 require_once __DIR__ . '/../../includes/viewHandler.php';
 
 class adminController
 {
     private userModel $userModel;
+    private emailVerificationModel $emailVerificationModel;
 
     public function __construct()
     {
         $this->userModel = new userModel();
+        $this->emailVerificationModel = new emailVerificationModel();
         if (function_exists('log_console')) {
             log_console('adminController initialisé', 'ok');
         }
@@ -24,7 +27,8 @@ class adminController
     public function listUsers()
     {
         $users = $this->userModel->getAllUsers();
-        viewHandler::show("admin/userListView", ["users" => $users]);
+        $pendingUsers = $this->emailVerificationModel->getAllPendingRegistrations();
+        viewHandler::show("admin/userListView", ["users" => $users, "pendingUsers" => $pendingUsers]);
     }
 
     //Permet de modifier les informations lié aux utilisateur (nom, prénom, email) via userEditView
