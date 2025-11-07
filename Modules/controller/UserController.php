@@ -134,7 +134,6 @@ class UserController
             } else {
                     $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
                     self::log("Register: échec envoi mail ($email)", 'error');
-                }
             }
 
             // Succès logique → on peut vider le old
@@ -182,7 +181,6 @@ class UserController
         } else {
                 $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
                 self::log("Register: échec envoi mail ($email)", 'error');
-            }
         }
 
         // Succès logique → on peut vider le old
