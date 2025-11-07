@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     editButtons.forEach(button => {
         button.addEventListener('click', function () {
             const userId = this.dataset.userId;
-            window.location.href = `index.php?controller=admin&action=editUser&id=${userId}`;
+            window.location.href = `index.php?controller=Admin&action=editUser&id=${userId}`;
         });
     });
 
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
                 const userId = this.dataset.userId;
-                window.location.href = `index.php?controller=admin&action=deleteUser&id=${userId}`;
+                window.location.href = `index.php?controller=Admin&action=deleteUser&id=${userId}`;
             }
         });
     });
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             if (confirm('Êtes-vous sûr de vouloir approuver cet utilisateur ?')) {
                 const pendingId = this.dataset.pendingId;
-                window.location.href = `index.php?controller=admin&action=approveRegistration&id=${pendingId}`;
+                window.location.href = `index.php?controller=Admin&action=approveRegistration&id=${pendingId}`;
             }
         });
     });
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         button.addEventListener('click', function () {
             if (confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) {
                 const pendingId = this.dataset.pendingId;
-                window.location.href = `index.php?controller=admin&action=deleteRegistration&id=${pendingId}`;
+                window.location.href = `index.php?controller=Admin&action=deleteRegistration&id=${pendingId}`;
             }
         });
     });

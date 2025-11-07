@@ -24,7 +24,7 @@ class AdminController
 
         // Si non Admin, pas accès aux pages admin
         if (!isset($_SESSION['email']) || $_SESSION['email'] !== 'escapethecode2025@gmail.com') {
-            header("Location: index.php?controller=redirection&action=openHomepage");
+            header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }
     }
@@ -41,7 +41,7 @@ class AdminController
     public function editUser()
     {
         $userId = $_GET['id'] ?? null;
-// Bloquage de la modification du compte Admin
+        // Bloquage de la modification du compte Admin
         if ($userId == 5) {
             $_SESSION['flash_error'] = 'Le compte administrateur ne peut pas être modifié.';
             header("Location: index.php?controller=Admin&action=listUsers");
