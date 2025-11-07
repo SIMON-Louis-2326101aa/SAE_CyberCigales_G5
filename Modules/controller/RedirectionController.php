@@ -92,6 +92,7 @@ class RedirectionController
      */
     public function openLetterIntro()
     {
+        $this->logRedirection('letterIntroView');
         ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
     }
 }

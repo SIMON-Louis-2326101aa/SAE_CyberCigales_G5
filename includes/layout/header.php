@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="icon" href="./assets/images/favicon.ico">
     <script src="./assets/js/script.js"></script>
+    <script src="./assets/js/puzzle.js"></script>
 </head>
 <body>
 <?php

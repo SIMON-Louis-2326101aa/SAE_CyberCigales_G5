@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+
+
 :root {
     /* Mapping des couleurs */
     --primary: #2bd9fe;
@@ -1380,4 +1384,53 @@ body.dark-theme .btn-nav:hover {
 ::selection {
     background-color: var(--primary);
     color: var(--bg-dark);
+}
+
+/* ============ Enigme - Lettre animée ============ */
+
+/* Contenu de la lettre cachée + animation */
+#letterContent {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 1s ease, opacity 1s ease;
+    margin-top: 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 0 2rem;
+}
+
+/* Quand la lettre est ouverte */
+#letterContent.open {
+    max-height: 800px; /* adapte selon la taille de ta lettre */
+    opacity: 1;
+    padding: 2rem;
+}
+
+
+.intro-letter-content {
+    color: var(--text-primary);
+    font-size : 1.3rem;
+}
+
+.intro-letter-content p {
+    text-align: justify;
+    margin-right: 16rem;
+    margin-left: 16rem;
+}
+
+.clue-letter {
+    font-style: italic;
+    font-family: "Dancing Script", "Segoe UI", Arial, sans-serif;
+    font-size : 1.5rem;
+}
+
+.letter-content {
+    color: var(--text-primary);
+    font-size : 1.5rem;
+    text-align: justify;
+    margin-right: 25rem;
+    margin-left: 25rem;
+    font-family: Handlee, cursive;
 }
