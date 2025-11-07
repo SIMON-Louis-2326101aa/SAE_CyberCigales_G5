@@ -1,19 +1,25 @@
 <?php
-require_once __DIR__ . '/../model/userModel.php';
-require_once __DIR__ . '/../model/emailVerificationModel.php';
-require_once __DIR__ . '/../../includes/viewHandler.php';
 
-class adminController
+//require_once __DIR__ . '/../model/userModel.php';
+//require_once __DIR__ . '/../model/emailVerificationModel.php';
+//require_once __DIR__ . '/../../includes/viewHandler.php';
+
+namespace SAE_CyberCigales_G5\Modules\controller ;
+
+use SAE_CyberCigales_G5\includes\ViewHandler;
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\UserModel;
+
+class AdminController
 {
     private userModel $userModel;
     private emailVerificationModel $emailVerificationModel;
-
     public function __construct()
     {
         $this->userModel = new userModel();
         $this->emailVerificationModel = new emailVerificationModel();
         if (function_exists('log_console')) {
-            log_console('adminController initialisé', 'ok');
+            log_console('AdminController initialisé', 'ok');
         }
 
         // Si non Admin, pas accès aux pages admin
@@ -35,17 +41,16 @@ class adminController
     public function editUser()
     {
         $userId = $_GET['id'] ?? null;
-
-        // Bloquage de la modification du compte Admin
+// Bloquage de la modification du compte Admin
         if ($userId == 5) {
             $_SESSION['flash_error'] = 'Le compte administrateur ne peut pas être modifié.';
-            header("Location: index.php?controller=admin&action=listUsers");
+            header("Location: index.php?controller=Admin&action=listUsers");
             exit;
         }
 
         //Si l'ID n'existe pas, alors on revient à la liste des utilisateurs
         if (!$userId) {
-            header("Location: index.php?controller=admin&action=listUsers");
+            header("Location: index.php?controller=Admin&action=listUsers");
             exit;
         }
 
@@ -54,18 +59,16 @@ class adminController
             $nom = $_POST['nom'] ?? '';
             $prenom = $_POST['prenom'] ?? '';
             $email = $_POST['email'] ?? '';
-
-            //Mise à jour des informations
+//Mise à jour des informations
             $this->userModel->updateUser((int)$userId, $nom, $prenom, $email);
-
             $_SESSION['flash_success'] = "L'utilisateur a été modifié avec succès.";
-            header("Location: index.php?controller=admin&action=listUsers");
+            header("Location: index.php?controller=Admin&action=listUsers");
             exit;
         } else {
-            //Sinon Affichage actuelle des informations
+        //Sinon Affichage actuelle des informations
             $user = $this->userModel->getUserById((int)$userId);
             if (!$user) {
-                header("Location: index.php?controller=admin&action=listUsers");
+                header("Location: index.php?controller=Admin&action=listUsers");
                 exit;
             }
             viewHandler::show("admin/userEditView", ["user" => $user]);
@@ -75,11 +78,10 @@ class adminController
     public function deleteUser()
     {
         $userId = $_GET['id'] ?? null;
-
-        // Bloquage de la suppression du compte Admin
+// Bloquage de la suppression du compte Admin
         if ($userId == 5) {
             $_SESSION['flash_error'] = 'Le compte administrateur ne peut pas être supprimé.';
-            header("Location: index.php?controller=admin&action=listUsers");
+            header("Location: index.php?controller=Admin&action=listUsers");
             exit;
         }
 
@@ -91,7 +93,7 @@ class adminController
             }
         }
 
-        header("Location: index.php?controller=admin&action=listUsers");
+        header("Location: index.php?controller=Admin&action=listUsers");
         exit;
     }
 
@@ -105,7 +107,7 @@ class adminController
             }
         }
 
-        header("Location: index.php?controller=admin&action=listUsers");
+        header("Location: index.php?controller=Admin&action=listUsers");
         exit;
     }
 
@@ -116,7 +118,7 @@ class adminController
             $this->emailVerificationModel->deletePendingRegistrationById((int)$pendingId);
         }
 
-        header("Location: index.php?controller=admin&action=listUsers");
+        header("Location: index.php?controller=Admin&action=listUsers");
         exit;
     }
 }
