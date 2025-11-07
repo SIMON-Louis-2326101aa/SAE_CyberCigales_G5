@@ -1,7 +1,4 @@
 :root {
-    /* Couleurs de la palette - Modèle exact */
-    --dark-bg: #0a1b2a;
-
     /* Mapping des couleurs */
     --primary: #2bd9fe;
     --primary-dark: #1ba8cc;
@@ -14,7 +11,7 @@
     --error: #f44;
 
     /* Backgrounds */
-    --bg-main: #0a1b2a;
+    --dark-bg: #0a1b2a;
     --bg-dark: #061320;
     --bg-card: #0f1b2e99;
     --bg-light: #1a2942;
@@ -107,6 +104,7 @@ nav, .nav-menu {
 .nav-menu img {
     height: 3vw;
     width: auto;
+    border-radius: var(--radius);
 }
 
 #nav-menu-title {
@@ -287,7 +285,6 @@ main {
     text-align: center;
 }
 
-/* ============ Hero Container ============ */
 .hero-container {
     height: 60vh;
     min-height: 400px;
@@ -334,6 +331,59 @@ h3 {
     font-weight: 600;
     color: var(--secondary);
     margin-bottom: var(--space-4);
+}
+
+h4 {
+    font-size: 3em;
+    font-weight: 800;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-align: left;
+}
+
+.hero-container-main {
+    margin-top: 6rem;
+    margin-bottom: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 0 var(--space-6);
+}
+
+.hero-question {
+    font-size: 4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    text-align: center;
+    line-height: 1.2;
+    max-width: 900px;
+    margin: 0;
+    text-shadow: 0 0 30px #2BD9FE4C;
+}
+
+.btn-hero {
+    background: var(--primary);
+    color: var(--bg-dark);
+    padding: 1.5rem 4rem;
+    border-radius: var(--radius-xl);
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: var(--transition);
+    box-shadow: 0 8px 30px #2BD9FE66;
+    border: 2px solid var(--primary);
+}
+
+.btn-hero:hover {
+    background: var(--primary-light);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px #2BD9FE66;
 }
 
 .flash {
@@ -834,7 +884,7 @@ button:hover {
     display: flex;
     width: 40px;
     height: 40px;
-    background-color: var(--bg-light);
+    background-color: var(--border-light);
     border: 2px solid var(--primary);
     border-radius: 10px;
     transition: var(--transition);
