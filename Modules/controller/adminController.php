@@ -35,6 +35,14 @@ class adminController
     public function editUser()
     {
         $userId = $_GET['id'] ?? null;
+
+        // Bloquage de la modification du compte Admin
+        if ($userId == 5) {
+            $_SESSION['flash_error'] = 'Le compte administrateur ne peut pas être modifié.';
+            header("Location: index.php?controller=admin&action=listUsers");
+            exit;
+        }
+
         //Si l'ID n'existe pas, alors on revient à la liste des utilisateurs
         if (!$userId) {
             header("Location: index.php?controller=admin&action=listUsers");
@@ -50,6 +58,7 @@ class adminController
             //Mise à jour des informations
             $this->userModel->updateUser((int)$userId, $nom, $prenom, $email);
 
+            $_SESSION['flash_success'] = "L'utilisateur a été modifié avec succès.";
             header("Location: index.php?controller=admin&action=listUsers");
             exit;
         } else {
@@ -66,10 +75,19 @@ class adminController
     public function deleteUser()
     {
         $userId = $_GET['id'] ?? null;
+
+        // Bloquage de la suppression du compte Admin
+        if ($userId == 5) {
+            $_SESSION['flash_error'] = 'Le compte administrateur ne peut pas être supprimé.';
+            header("Location: index.php?controller=admin&action=listUsers");
+            exit;
+        }
+
         if ($userId) {
             $user = $this->userModel->getUserById((int)$userId);
             if ($user) {
                 $this->userModel->delete($user['email']);
+                $_SESSION['flash_success'] = "L'utilisateur a été supprimé avec succès.";
             }
         }
 
