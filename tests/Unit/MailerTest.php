@@ -15,6 +15,11 @@ class MailerTest extends TestCase
     /**
      * Teste la validation du format d'email
      * 
+     * Vérifie que la fonction filter_var() avec FILTER_VALIDATE_EMAIL
+     * valide correctement différents formats d'emails (valides et invalides).
+     * 
+     * @param string $email L'adresse email à tester
+     * @param bool $expected La valeur attendue (true si valide, false sinon)
      * @dataProvider emailProvider
      */
     public function testEmailValidation(string $email, bool $expected): void
@@ -24,7 +29,15 @@ class MailerTest extends TestCase
     }
     
     /**
-     * Fournisseur de données pour les emails
+     * Fournisseur de données pour les tests de validation d'email
+     * 
+     * Retourne un tableau de cas de test couvrant :
+     * - Emails valides standards (user@example.com)
+     * - Emails valides avec sous-domaines
+     * - Emails valides avec caractères spéciaux (+ et -)
+     * - Emails invalides (sans @, sans domaine, avec espaces)
+     * 
+     * @return array Tableau associatif de cas de test [nom => [email, valeurAttendue]]
      */
     public function emailProvider(): array
     {
@@ -41,6 +54,13 @@ class MailerTest extends TestCase
     
     /**
      * Teste le nettoyage des emails (trim et lowercase)
+     * 
+     * Vérifie que les emails sont correctement nettoyés :
+     * - Suppression des espaces en début et fin (trim)
+     * - Conversion en minuscules (strtolower)
+     * 
+     * Cela permet d'assurer une normalisation des emails avant stockage
+     * et de traiter "User@Example.COM" et "user@example.com" comme identiques.
      */
     public function testEmailSanitization(): void
     {

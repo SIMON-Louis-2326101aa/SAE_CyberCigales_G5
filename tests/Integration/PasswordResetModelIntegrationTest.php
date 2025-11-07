@@ -14,6 +14,13 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
 {
     private PasswordResetModel $model;
     
+    /**
+     * Initialise l'environnement de test avant chaque test
+     * 
+     * Appelle setUp() de la classe parente (DatabaseTestCase) qui démarre
+     * une transaction, puis crée une nouvelle instance de PasswordResetModel
+     * pour chaque test.
+     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -22,6 +29,14 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
     
     /**
      * Teste la création d'un token pour un email existant
+     * 
+     * Vérifie que la méthode createTokenForEmail() :
+     * 1. Génère un token sécurisé de 64 caractères (hexadécimal)
+     * 2. Stocke le token dans la base de données avec l'email
+     * 3. Assigne une date d'expiration au token
+     * 
+     * Le token est généré à partir de 32 bytes aléatoires convertis en hexadécimal,
+     * ce qui donne une chaîne de 64 caractères (ex: "a1b2c3d4...").
      */
     public function testCreateTokenForExistingEmail(): void
     {
@@ -55,6 +70,13 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
     
     /**
      * Teste que createToken retourne false pour un email inexistant
+     * 
+     * Vérifie que la méthode createTokenForEmail() retourne false
+     * lorsqu'on essaie de créer un token pour un email qui n'existe pas
+     * dans la base de données.
+     * 
+     * Ce test garantit qu'on ne peut pas créer de token de réinitialisation
+     * pour un utilisateur qui n'existe pas (sécurité).
      */
     public function testCreateTokenReturnsFalseForNonExistentEmail(): void
     {
@@ -65,6 +87,17 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
     
     /**
      * Teste la recherche d'un token valide
+     * 
+     * Vérifie que la méthode getValidTokenRow() (ou équivalent) peut
+     * récupérer un token valide depuis la base de données.
+     * 
+     * Étapes du test :
+     * 1. Crée un utilisateur
+     * 2. Génère un token pour cet utilisateur
+     * 3. Vérifie que le token existe bien dans la base de données
+     * 
+     * Ce test garantit que les tokens sont correctement stockés
+     * et peuvent être récupérés pour la réinitialisation du mot de passe.
      */
     public function testGetValidTokenRowReturnsRecordWhenValid(): void
     {
@@ -95,6 +128,12 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
     
     /**
      * Teste qu'un token invalide n'est pas trouvé
+     * 
+     * Vérifie que la méthode getValidTokenRow() retourne false
+     * lorsqu'on cherche un token qui n'existe pas dans la base de données.
+     * 
+     * Ce test garantit la sécurité en vérifiant qu'un token invalide
+     * ou inexistant ne peut pas être utilisé pour réinitialiser un mot de passe.
      */
     public function testGetValidTokenRowReturnsFalseForInvalidToken(): void
     {
@@ -105,6 +144,15 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
     
     /**
      * Teste qu'un nouveau token remplace l'ancien
+     * 
+     * Vérifie que lorsqu'on génère un nouveau token pour un email qui a
+     * déjà un token, le nouveau token est créé (et peut remplacer l'ancien).
+     * 
+     * Ce test garantit que :
+     * 1. Plusieurs tokens peuvent être générés pour le même email
+     * 2. Les tokens générés sont différents
+     * 3. L'utilisateur peut demander un nouveau token si nécessaire
+     * (par exemple si l'ancien token a expiré)
      */
     public function testNewTokenReplacesOldToken(): void
     {
@@ -138,6 +186,15 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase
     
     /**
      * Teste que le token a une date d'expiration valide
+     * 
+     * Vérifie que chaque token créé a une date d'expiration :
+     * 1. La date d'expiration n'est pas null
+     * 2. La date d'expiration est dans le futur
+     * 3. La date d'expiration correspond au TTL fourni (avec une marge d'erreur)
+     * 
+     * Ce test garantit que les tokens ont une durée de vie limitée,
+     * ce qui améliore la sécurité en évitant que des tokens anciens
+     * puissent être utilisés indéfiniment.
      */
     public function testTokenHasExpirationDate(): void
     {

@@ -15,7 +15,14 @@ class EmailVerificationModelTest extends TestCase
 {
     /**
      * Teste la génération d'un code de vérification
-     * Le code doit être une chaîne de 6 chiffres
+     * 
+     * Vérifie que le code généré respecte le format attendu :
+     * - Doit être une chaîne de caractères (string)
+     * - Doit contenir exactement 6 caractères
+     * - Doit contenir uniquement des chiffres (0-9)
+     * - Les codes courts doivent être complétés avec des zéros à gauche
+     * 
+     * Exemple : "42" devient "000042"
      */
     public function testGenerateCodeReturns6DigitString(): void
     {
@@ -30,6 +37,12 @@ class EmailVerificationModelTest extends TestCase
     
     /**
      * Teste que le code est bien formaté avec des zéros initiaux
+     * 
+     * Vérifie que la fonction str_pad() remplit correctement les codes courts
+     * avec des zéros à gauche pour atteindre 6 caractères.
+     * 
+     * Exemple : "42" → "000042", "1234" → "001234"
+     * Cela garantit que tous les codes ont la même longueur, même les petits nombres.
      */
     public function testCodeHasLeadingZeros(): void
     {
@@ -39,7 +52,14 @@ class EmailVerificationModelTest extends TestCase
     }
     
     /**
-     * Teste que le TTL est limité entre 1 et 60 minutes
+     * Teste que le TTL (Time To Live) est limité entre 1 et 60 minutes
+     * 
+     * Vérifie que la fonction de limitation du TTL fonctionne correctement :
+     * - Les valeurs trop petites (< 1) sont remontées à 1
+     * - Les valeurs trop grandes (> 60) sont limitées à 60
+     * - Les valeurs dans la plage valide (1-60) restent inchangées
+     * 
+     * Cela évite les codes de vérification avec une durée de vie invalide.
      */
     public function testTtlIsWithinValidRange(): void
     {

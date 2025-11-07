@@ -35,6 +35,16 @@ abstract class DatabaseTestCase extends TestCase
     
     /**
      * Initialise la connexion et démarre une transaction avant chaque test
+     * 
+     * Cette méthode s'exécute automatiquement avant chaque test d'intégration.
+     * Elle :
+     * 1. Charge les variables d'environnement depuis le fichier .env
+     * 2. Récupère une connexion à la base de données
+     * 3. Démarre une transaction (BEGIN TRANSACTION)
+     * 
+     * Grâce aux transactions, toutes les modifications faites pendant le test
+     * seront annulées automatiquement à la fin (ROLLBACK), ce qui garantit
+     * que les tests n'affectent jamais la vraie base de données.
      */
     protected function setUp(): void
     {
@@ -59,7 +69,17 @@ abstract class DatabaseTestCase extends TestCase
     
     /**
      * Annule la transaction après chaque test (ROLLBACK)
-     * Toutes les modifications sont annulées automatiquement
+     * 
+     * Cette méthode s'exécute automatiquement après chaque test d'intégration.
+     * Elle annule toutes les modifications faites pendant le test en appelant
+     * rollBack() sur la transaction.
+     * 
+     * Ainsi, même si un test insère, modifie ou supprime des données,
+     * la base de données revient à son état initial après le test.
+     * Cela permet de :
+     * - Tester avec des données réelles sans risque
+     * - Exécuter les tests plusieurs fois sans pollution
+     * - Garantir que chaque test commence avec une base propre
      */
     protected function tearDown(): void
     {
@@ -74,7 +94,14 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * Helper : Nettoie une table spécifique (pour setup de test)
      * 
+     * Supprime toutes les lignes d'une table. Utile pour préparer
+     * un état de base de données connu avant un test.
+     * 
+     * Note : Comme cette méthode est appelée dans une transaction,
+     * les suppressions seront annulées après le test (ROLLBACK).
+     * 
      * @param string $tableName Nom de la table à vider
+     * @return void
      */
     protected function truncateTable(string $tableName): void
     {
@@ -84,8 +111,11 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * Helper : Compte le nombre de lignes dans une table
      * 
-     * @param string $tableName Nom de la table
-     * @return int Nombre de lignes
+     * Utile pour vérifier qu'un test a bien inséré ou supprimé
+     * le nombre attendu de lignes.
+     * 
+     * @param string $tableName Nom de la table à compter
+     * @return int Nombre de lignes dans la table
      */
     protected function countRowsInTable(string $tableName): int
     {
@@ -96,8 +126,14 @@ abstract class DatabaseTestCase extends TestCase
     /**
      * Helper : Récupère la dernière ligne insérée d'une table
      * 
+     * Récupère la ligne avec l'ID le plus élevé (supposant que la table
+     * a une colonne 'id' auto-incrémentée).
+     * 
+     * Utile pour vérifier les données d'un enregistrement qui vient
+     * d'être créé pendant un test.
+     * 
      * @param string $tableName Nom de la table
-     * @return array|false Tableau associatif ou false
+     * @return array|false Tableau associatif avec les données de la ligne, ou false si aucune ligne
      */
     protected function getLastInsertedRow(string $tableName): array|false
     {
