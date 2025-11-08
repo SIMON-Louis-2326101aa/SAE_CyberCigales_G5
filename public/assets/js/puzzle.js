@@ -15,6 +15,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+document.addEventListener("DOMContentLoaded", function () {
+    const openLetterBtn = document.getElementById("open-letter-btn");
+    const letterContent = document.getElementById("solutionLetter");
+
+    if (openLetterBtn && letterContent) {
+        openLetterBtn.addEventListener("click", function () {
+            letterContent.classList.toggle("open");
+
+            // Change le texte du bouton selon l'état
+            if (letterContent.classList.contains("open")) {
+                openLetterBtn.textContent = "Fermer la lettre";
+            } else {
+                openLetterBtn.textContent = "Ouvrir la lettre";
+            }
+        });
+    }
+});
 
 // ===== Marque-page latéral (Info Tab) =====
 document.addEventListener("DOMContentLoaded", function () {

@@ -67,7 +67,6 @@
     right: 580px; /* la largeur du panneau */
 }
 
-/* Petit onglet visible */
 .tab-handle {
     position: absolute;
     left: -60px; /* décalé pour coller au bord droit */
@@ -150,7 +149,7 @@
     transition: max-height 1s ease, opacity 1s ease;
     background: var(--bg-letter);
     border: 1px solid var(--border);
-    padding: 0 2rem;
+    padding: 2rem;
     color: var(--bg-dark);
     font-size : 1.5rem;
     text-align: justify;
@@ -158,17 +157,45 @@
     font-family: Handlee, cursive;
 }
 
+.solution-letter-content{
+    color: var(--text-primary);
+    font-size : 1.3rem;
+    padding: 2rem ;
+    text-align: center;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 1s ease, max-height 1s ease;
+}
+
 /* Quand la lettre est ouverte */
 .letter-content.open {
     max-height: 800px; /* adapte selon la taille de ta lettre */
     opacity: 1;
-    padding: 2rem;
+}
+
+.solution-letter-content.open{
+    max-height: 500px; /* adapte selon la taille de ta lettre */
+    opacity: 1;
 }
 
 .intro-letter-content {
     color: var(--text-primary);
     font-size : 1.3rem;
     margin-top: 2rem ;
+}
+
+.solution-letter-content textarea {
+    width: 50%; /* Ajustez la largeur */
+    min-height: 80px; /* Hauteur minimale pour la zone de texte */
+    padding: 1rem;
+    font-size: 1.2rem;
+    resize: vertical; /* Permet uniquement le redimensionnement vertical */
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 10px var(--border-light);
 }
 
 .intro-letter-content p {
