@@ -47,9 +47,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const delayClue2 = 900000; // 15 minute
     const delayClue3 = 1800000; // 30 minutes
 
+    const delayTabInfo = 300000; // 5 minutes
+
     const clue1 = document.getElementById("clue-text-1");
     const clue2 = document.getElementById("clue-text-2");
     const clue3 = document.getElementById("clue-text-3");
+
+    const infoTab = document.getElementById("info-handle");
 
     // Fonction pour afficher l'indice
     function showClue(element) {
@@ -58,7 +62,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Minuteur 1 : Révéler l'indice 2 après 1 minute
+    // Minuteur tab info : Révéler tab d'info
+    if (infoTab) {
+        setTimeout(function() {
+            infoTab.classList.remove("disabled");
+            console.log("L'onglet d'info est activer !"); // Pour le débogage
+        }, delayTabInfo);
+    }
+
+    // Minuteur 1 : Révéler l'indice 1 après 0 minute
     if (clue1) {
         setTimeout(function() {
             showClue(clue1);
@@ -66,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, delayClue1);
     }
 
-    // Minuteur 2 : Révéler l'indice 2 après 1 minute
+    // Minuteur 2 : Révéler l'indice 2 après 15 minute
     if (clue2) {
         setTimeout(function() {
             showClue(clue2);
@@ -74,8 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }, delayClue2);
     }
 
-    // Minuteur 3 : Révéler l'indice 3 après 3 minutes
-    // (Note : le minuteur démarre en même temps que la page, pas après l'indice 2)
+    // Minuteur 3 : Révéler l'indice 3 après 30 minutes
     if (clue3) {
         setTimeout(function() {
             showClue(clue3);

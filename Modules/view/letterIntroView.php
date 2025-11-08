@@ -1,6 +1,6 @@
 <!-- Marque-page latéral -->
 <div id="info-tab">
-    <div id="info-handle" class="tab-handle">ℹ️</div>
+    <div id="info-handle" class="tab-handle disabled">ℹ️</div>
     <div id="info-content" class="tab-content">
         <h3>Informations</h3>
         <h4>Le Chiffrement de César</h4>

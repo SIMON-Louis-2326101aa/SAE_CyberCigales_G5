@@ -28,6 +28,19 @@
     opacity: 1;
 }
 
+/* ============ Onglets temporels ============ */
+
+/* Désactive l'interactivité des poignées initialement inaccessibles */
+.tab-handle.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.tab-handle.disabled:hover {
+    transform: none; /* Annule l'effet de survol */
+    background: var(--primary-dark); /* Garde la couleur de base */
+}
+
 /* ============ Marque-page latéral corrigé ============ */
 #info-tab {
     position: fixed;
