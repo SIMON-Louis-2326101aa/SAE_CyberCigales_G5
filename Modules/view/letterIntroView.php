@@ -8,16 +8,16 @@
             Il a été utilisé par Jules César pour envoyer des messages secrets à ses généraux.</p>
         <ul>
             <li>
-                L’idée est simple :
+                L’idée est simple :<br>
                 ➡ Chaque lettre du message est décalée d’un certain nombre de positions dans l’alphabet.
             </li>
-            <li>Exemple :
-                Clé = 3
-                A → D
-                B → E
-                C → F
-                ...
-                Z → C
+            <li>Exemple :<br>
+                Clé = 3<br>
+                A → D<br>
+                B → E<br>
+                C → F<br>
+                ...<br>
+                Z → C<br>
 
                 Ainsi, le mot “BONJOUR” devient “ERQMRXU”.</li>
             <li>Comment déchiffrer ?</li>
@@ -26,7 +26,7 @@
                 Si le message a été codé avec une clé de +3, il faut le décaler de −3.
             </li>
             <li>
-                Exemple :
+                Exemple :<br>
                 “ERQMRXU” (clé +3) → “BONJOUR”</li>
         </ul>
         <p>mais pour cela, il faut connaître la clé utilisée.</p>

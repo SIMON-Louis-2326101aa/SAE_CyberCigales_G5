@@ -104,6 +104,8 @@
     transition: transform 0.6s ease, opacity 0.6s ease;
     backdrop-filter: blur(8px);
     opacity: 0;
+    max-height: 650px;
+    overflow-y: auto;
 }
 
 /* Quand ouvert → le panneau glisse dans la vue */
