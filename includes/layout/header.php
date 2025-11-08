@@ -28,6 +28,13 @@ if (session_status() === PHP_SESSION_NONE) {
         <h5><strong>Escape The Code</strong></h5>
     </div>
 
+    <?php
+    if (isset($_GET['action']) && $_GET['action'] === 'openLetterIntro') : ?>
+        <div id="game-timer">
+            Chrono : <span id="time-display">00:00:00</span>
+        </div>
+    <?php endif; ?>
+
     <div id="nav-auth-buttons">
         <?php
         if (isset($_SESSION['utilisateur'])) {

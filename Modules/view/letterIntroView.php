@@ -29,9 +29,7 @@
                 Exemple :
                 “ERQMRXU” (clé +3) → “BONJOUR”</li>
         </ul>
-        <p>
-
-            mais pour cela, il faut connaître la clé utilisée.</p>
+        <p>mais pour cela, il faut connaître la clé utilisée.</p>
     </div>
 </div>
 <div id="clue-tab">

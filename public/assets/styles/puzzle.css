@@ -2,6 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
 
 
+/* ============ Style du chronomètre ============ */
+#game-timer {
+    color: var(--text-secondary); /* Ou une autre couleur visible */
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    /* Ajuster la position dans la barre de nav */
+    margin: 0 20px;
+    padding: 0 15px;
+    border: 2px solid var(--border-light);
+    border-radius: 5px;
+}
+
 /* ============ Indices temporels ============ */
 
 /* Masque les indices qui doivent apparaître au fil du temps */

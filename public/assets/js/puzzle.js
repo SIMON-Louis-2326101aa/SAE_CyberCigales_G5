@@ -85,3 +85,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Si vous voulez un vrai chrono visible, vous pouvez utiliser setInterval et mettre à jour un élément HTML
 });
+
+// ===== Chronomètre de jeu (Game Timer) =====
+document.addEventListener("DOMContentLoaded", function () {
+    const timeDisplay = document.getElementById("time-display");
+
+    // Vérifie si l'élément du chronomètre existe sur la page (il n'existe que sur la page de jeu grâce au PHP)
+    if (!timeDisplay) {
+        return; // Ne fait rien si on n'est pas sur la page de jeu
+    }
+
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+
+    // Fonction pour formater le temps (ajout de '0' si < 10)
+    function formatTime(val) {
+        return val < 10 ? "0" + val : val;
+    }
+
+    // Fonction de mise à jour du chronomètre
+    function updateTimer() {
+        seconds++;
+        if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes === 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
+
+        // Affichage du temps
+        timeDisplay.textContent =
+            formatTime(hours) + ":" +
+            formatTime(minutes) + ":" +
+            formatTime(seconds);
+    }
+
+    // Démarrage du chronomètre : mise à jour toutes les 1000 ms (1 seconde)
+    const timerInterval = setInterval(updateTimer, 1000);
+
+    //clearInterval(timerInterval)
+    // quand l'énigme est résolue.
+
+
+});
