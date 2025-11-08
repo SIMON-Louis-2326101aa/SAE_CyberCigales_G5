@@ -2,6 +2,19 @@
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
 
 
+/* ============ Indices temporels ============ */
+
+/* Masque les indices qui doivent apparaître au fil du temps */
+.timed-clue {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+/* Affiche l'indice lorsque la classe 'show' est ajoutée par JavaScript */
+.timed-clue.show {
+    opacity: 1;
+}
+
 /* ============ Marque-page latéral corrigé ============ */
 #info-tab {
     position: fixed;

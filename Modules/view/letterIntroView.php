@@ -40,11 +40,11 @@
         <h3>Indice</h3>
         <ul>
             <li>Indice 1 : </li>
-            <li>La clée ce cache dans la date</li>
+            <li><span id="clue-text-1" class="timed-clue">La clée est cacher dans la lettre.</span></li>
             <li>Indice 2 :</li>
-            <li></li>
+            <li><span id="clue-text-2" class="timed-clue">La clée ce cache dans la date. </span></li>
             <li>Solution :</li>
-            <li>La clée est 10</li>
+            <li><span id="clue-text-3" class="timed-clue">La clée est 10.</span></li>
         </ul>
     </div>
 </div>
