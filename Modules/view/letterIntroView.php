@@ -1,3 +1,53 @@
+<!-- Marque-page latéral -->
+<div id="info-tab">
+    <div id="info-handle" class="tab-handle">ℹ️</div>
+    <div id="info-content" class="tab-content">
+        <h3>Informations</h3>
+        <h4>Le Chiffrement de César</h4>
+        <p>Le chiffrement de César est l’un des plus anciens systèmes de cryptographie.
+            Il a été utilisé par Jules César pour envoyer des messages secrets à ses généraux.</p>
+        <ul>
+            <li>
+                L’idée est simple :
+                ➡ Chaque lettre du message est décalée d’un certain nombre de positions dans l’alphabet.
+            </li>
+            <li>Exemple :
+                Clé = 3
+                A → D
+                B → E
+                C → F
+                ...
+                Z → C
+
+                Ainsi, le mot “BONJOUR” devient “ERQMRXU”.</li>
+            <li>Comment déchiffrer ?</li>
+            <li>
+                Pour retrouver le texte d’origine, il suffit de faire l’inverse du décalage.
+                Si le message a été codé avec une clé de +3, il faut le décaler de −3.
+            </li>
+            <li>
+                Exemple :
+                “ERQMRXU” (clé +3) → “BONJOUR”</li>
+        </ul>
+        <p>
+
+            mais pour cela, il faut connaître la clé utilisée.</p>
+    </div>
+</div>
+<div id="clue-tab">
+    <div id="clue-handle" class="tab-handle">💡</div>
+    <div id="clue-content" class="tab-content">
+        <h3>Indice</h3>
+        <ul>
+            <li>Indice 1 : </li>
+            <li>La clée ce cache dans la date</li>
+            <li>Indice 2 :</li>
+            <li></li>
+            <li>Solution :</li>
+            <li>La clée est 10</li>
+        </ul>
+    </div>
+</div>
 <?php if (isset($_SESSION['user_id'])) : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage d'Alice, une jeune lycéenne de 16 ans, vivant aux alentours de Marseille avec

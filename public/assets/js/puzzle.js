@@ -15,3 +15,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// ===== Marque-page latéral (Info Tab) =====
+document.addEventListener("DOMContentLoaded", function () {
+    const infoTab = document.getElementById("info-tab");
+    const tabHandle = document.getElementById("info-handle");
+
+    if (infoTab && tabHandle) {
+        tabHandle.addEventListener("click", function () {
+            infoTab.classList.toggle("open");
+        });
+    }
+});
+
+// ===== Marque-page latéral (Clue Tab) ===== // 💡 NOUVEAU BLOC
+document.addEventListener("DOMContentLoaded", function () {
+    const clueTab = document.getElementById("clue-tab");
+    const clueHandle = document.getElementById("clue-handle"); // 💡 Nouvel ID
+
+    if (clueTab && clueHandle) {
+        clueHandle.addEventListener("click", function () {
+            clueTab.classList.toggle("open");
+        });
+    }
+});
