@@ -13,11 +13,11 @@ use SAE_CyberCigales_G5\Modules\model\UserModel;
 class AdminController
 {
     private userModel $userModel;
-    private emailVerificationModel $emailVerificationModel;
+    private EmailVerificationModel $emailVerificationModel;
     public function __construct()
     {
         $this->userModel = new userModel();
-        $this->emailVerificationModel = new emailVerificationModel();
+        $this->emailVerificationModel = new EmailVerificationModel();
         if (function_exists('log_console')) {
             log_console('AdminController initialisé', 'ok');
         }
