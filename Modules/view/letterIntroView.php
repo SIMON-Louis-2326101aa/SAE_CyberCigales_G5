@@ -125,4 +125,10 @@
         </p><br>
         <p>10/10/2010</p>
     </div>
+    <div id="solutionLetter" class="solution-letter-content">
+        <label>
+            Qu'est ce que ca veut dire ?<br>
+            <textarea placeholder="Qu'est ce que ca veut dire ?"> </textarea>
+        </label>
+    </div>
 <?php endif; ?><?php

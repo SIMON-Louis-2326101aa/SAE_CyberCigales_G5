@@ -175,7 +175,7 @@
 }
 
 .solution-letter-content.open{
-    max-height: 500px; /* adapte selon la taille de ta lettre */
+    max-height: 900px; /* adapte selon la taille de ta lettre */
     opacity: 1;
 }
 
@@ -187,7 +187,7 @@
 
 .solution-letter-content textarea {
     width: 50%; /* Ajustez la largeur */
-    min-height: 80px; /* Hauteur minimale pour la zone de texte */
+    min-height: 480px; /* Hauteur minimale pour la zone de texte */
     padding: 1rem;
     font-size: 1.2rem;
     resize: vertical; /* Permet uniquement le redimensionnement vertical */
