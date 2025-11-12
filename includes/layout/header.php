@@ -6,7 +6,7 @@
     <title><?php echo $A_params['pageTitle'] ?? 'Escape The Code '; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="stylesheet" href="./assets/styles/puzzle.css">
-    <link rel="icon" href="./assets/images/favicon.ico">
+    <link rel="icon" href="./assets/images/faviconBis.ico">
     <script src="./assets/js/script.js"></script>
     <script src="./assets/js/puzzle.js"></script>
     <?php if (isset($_GET['controller']) && $_GET['controller'] === 'Admin') : ?>
