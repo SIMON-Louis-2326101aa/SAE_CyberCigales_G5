@@ -184,8 +184,11 @@
     top: 0;
     left: 0;
     padding: 2rem;
-    font-family: Handlee, cursive;
-    background: var(--bg-letter);
+    font-family: "Handlee", cursive;
+    background-image: url("/assets/images/fond-lettre.webp");
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
     color: var(--bg-dark);
     border: 1px solid var(--border);
 }
@@ -200,6 +203,7 @@
 .letter-back {
     transform: rotateY(180deg) scaleX(-1);
     font-size : 1.2rem;
+    display: flex;
     z-index: 1;
 }
 
