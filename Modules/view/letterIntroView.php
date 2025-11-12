@@ -64,24 +64,37 @@
     <button id="open-letter-btn" class="active btn-nav" >Ouvrir la lettre</button>
     </div><br>
 
-    <div id="letterContent" class="letter-content">
-        <p>cq sxuhu tyqdu </p>
-        <p> iy jk byi sui bywdui s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu deki du iqledi fqi su gku
-            bq lyu j q huiuhlu cqyi deki uifuhedi gk ubbu j q evvuhj qkjqdj tu hqyiedi t qycuh gku tu fqhtedduh
-        </p>
-        <p>yb uij tui rbuiikhui gku b ed jqyj jhef bedwjucfi sheoqdj gk ubbui tyifqhqyjhedj t ubbui cucui cqyi bu
-            iybudsu du ieywdu fqi yb udtehj iukbucudj bq tekbukh
-        </p>
-        <p>deki qledi lk tqdi bu huwqht tu jq vybbu qbysu sujju cucu bkukh gku jk qlqyi udvqdj subbu tu bq skhyeiyju
-            uj tk sekhqwu cubui du bq bqyiiu fqi i ujuydthu cucu iy bu cedtu judju tu bq seklhyh t ecrhu
-        </p>
-        <p>jekj su gku deki qledi sedijhkyj jekj su gku deki qledi sqsxu deki b qledi vqyj fekh gku gkubgk kd seccu
-            ubbu fkyiiu kd zekh secfhudthu
-        </p>
-        <p>qlus jekju bq judthuiiu gku bu ludj d q fqi ucfehjuu jui whqdti fqhudji gky j qycudj
-        </p><br>
-        <p class="clue-letter2">10/10/2010</p>
+    <div id="letterContainer" class="letter-wrapper">
+        <div id="letterContent" class="letter-content" role="button" tabindex="0" aria-pressed="false">
+
+            <div class="letter-face letter-front">
+                    <p>cq sxuhu tyqdu </p>
+                    <p> iy jk byi sui bywdui s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu deki du iqledi
+                        fqi su gku bq lyu j q huiuhlu cqyi deki uifuhedi gk ubbu j q evvuhj qkjqdj tu hqyiedi t qycuh
+                        gku tu fqhtedduh
+                    </p>
+                    <p>yb uij tui rbuiikhui gku b ed jqyj jhef bedwjucfi sheoqdj gk ubbui tyifqhqyjhedj t ubbui cucui
+                        cqyi bu iybudsu du ieywdu fqi yb udtehj iukbucudj bq tekbukh
+                    </p>
+                    <p>deki qledi lk tqdi bu huwqht tu jq vybbu qbysu sujju cucu bkukh gku jk qlqyi udvqdj subbu tu bq
+                        skhyeiyju uj tk sekhqwu cubui du bq bqyiiu fqi i ujuydthu cucu iy bu cedtu judju tu bq seklhyh
+                        t ecrhu
+                    </p>
+                    <p>jekj su gku deki qledi sedijhkyj jekj su gku deki qledi sqsxu deki b qledi vqyj fekh gku gkubgk
+                        kd seccu ubbu fkyiiu kd zekh secfhudthu
+                    </p>
+                    <p>qlus jekju bq judthuiiu gku bu ludj d q fqi ucfehjuu jui whqdti fqhudji gky j qycudj
+                    </p><br>
+                    <p class="clue-letter2">10/10/2010</p>
+            </div>
+
+            <div class="letter-face letter-back">
+                <p style="text-align: center;">Le papillon garde la mémoire</p>
+            </div>
+
+        </div>
     </div>
+
     <div id="solutionLetter" class="solution-letter-content">
         <label>
             Qu'est ce que ca veut dire ?<br>
@@ -105,25 +118,35 @@
     </div><br>
 
     <div >
-    <button id="open-letter-btn" class="active btn-nav" id="openLetterBtn">Ouvrir la lettre</button>
+        <button id="open-letter-btn" class="active btn-nav">Ouvrir la lettre</button>
     </div><br>
 
-    <div id="letterContent" class="letter-content">
-        <p>wk mrobo mvkbk </p>
-        <p> vo dowzc xyec k qvscco oxdbo voc nysqdc mywwo ne cklvo wksc kfkxd ae’sv xo nsczkbkscco mywzvodowoxd xyec
-            fyevsyxc do myxpsob moc wydc</p>
-        <p>sv x’i k zkc no pkedo dbyz kxmsoxxo zyeb odbo zkbnyxxoo xs no nscdkxmo dbyz qbkxno zyeb odbo pbkxmrso zkbpysc
-            vk fso xyec cozkbo xyx zyeb xyec zexsb wksc zyeb xyec kzzboxnbo k bofoxsb
-        </p>
-        <p>dyx psvc lyl zyccono notk moddo pvkwwo aeo xyec kfyxc bomyxxeo  vk cysp no mywzboxnbo n’kvvob kenovk noc
-            ofsnoxmoc ksnovo k omyedob mo ae’yx xo nsd zkc k vsbo mo ae’yx xo wyxdbo zvec
-        </p>
-        <p>mo aeo xyec kfyxc vkscco nobbsobo xyec x’ocd zkc ex dbocyb n’yb ye no zsobbo wksc ex wocckqo exo zkbd no
-            xydbo rscdysbo mkmroo nkxc voc zvsc ne dowzc
-        </p>
-        <p>kfom v’oczysb aeo voc mrowsxc zobnec co mbyscoxd k xyefoke doc qbkxnczkboxdc aes dkswoxd
-        </p><br>
-        <p>10/10/2010</p>
+    <div id="letterContainer" class="letter-wrapper">
+        <div id="letterContent" class="letter-content" role="button" tabindex="0" aria-pressed="false">
+
+            <div class="letter-face letter-front">
+                <p>wk mrobo mvkbk </p>
+                <p> vo dowzc xyec k qvscco oxdbo voc nysqdc mywwo ne cklvo wksc kfkxd ae'sv xo nsczkbkscco mywzvodowoxd
+                    xyec fyevsyxc do myxpsob moc wydc</p>
+                <p>sv x'i k zkc no pkedo dbyz kxmsoxxo zyeb odbo zkbnyxxoo xs no nscdkxmo dbyz qbkxno zyeb odbo pbkxmrso
+                    zkbpysc vk fso xyec cozkbo xyx zyeb xyec zexsb wksc zyeb xyec kzzboxnbo k bofoxsb
+                </p>
+                <p>dyx psvc lyl zyccono notk moddo pvkwwo aeo xyec kfyxc bomyxxeo  vk cysp no mywzboxnbo n'kvvob kenovk
+                    noc ofsnoxmoc ksnovo k omyedob mo ae'yx xo nsd zkc k vsbo mo ae'yx xo wyxdbo zvec
+                </p>
+                <p>mo aeo xyec kfyxc vkscco nobbsobo xyec x'ocd zkc ex dbocyb n'yb ye no zsobbo wksc ex wocckqo exo zkbd
+                    no xydbo rscdysbo mkmroo nkxc voc zvsc ne dowzc
+                </p>
+                <p>kfom v'oczysb aeo voc mrowsxc zobnec co mbyscoxd k xyefoke doc qbkxnczkboxdc aes dkswoxd
+                </p><br>
+                <p class="clue-letter2">10/10/2010</p>
+            </div>
+
+            <div class="letter-face letter-back">
+                <p style="text-align: center;">Le papillon garde la mémoire</p>
+            </div>
+
+        </div>
     </div>
     <div id="solutionLetter" class="solution-letter-content">
         <label>

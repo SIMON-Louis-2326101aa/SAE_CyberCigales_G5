@@ -1,40 +1,49 @@
 document.addEventListener("DOMContentLoaded", function () {
     const openLetterBtn = document.getElementById("open-letter-btn");
-    const letterContent = document.getElementById("letterContent");
+    const letterContent = document.getElementById("letterContent"); // C'est maintenant l'élément pivotant
+    const solutionLetter = document.getElementById("solutionLetter"); // Le conteneur de la solution
 
-    if (openLetterBtn && letterContent) {
+    // ===============================================
+    // 1. Gestion de l'ouverture/fermeture (Bouton)
+    // ===============================================
+    if (openLetterBtn && letterContent && solutionLetter) {
         openLetterBtn.addEventListener("click", function () {
+            // Révèle le message codé (qui est l'élément pivotant)
             letterContent.classList.toggle("open");
+            // Révèle la zone de solution
+            solutionLetter.classList.toggle("open");
 
-            // Change le texte du bouton selon l'état
+            // Met à jour le texte du bouton
             if (letterContent.classList.contains("open")) {
                 openLetterBtn.textContent = "Fermer la lettre";
             } else {
                 openLetterBtn.textContent = "Ouvrir la lettre";
+                // Assure que la carte revient à sa position initiale quand on la ferme
+                letterContent.classList.remove("turn");
             }
         });
     }
-});
-document.addEventListener("DOMContentLoaded", function () {
-    const openLetterBtn = document.getElementById("open-letter-btn");
-    const letterContent = document.getElementById("solutionLetter");
 
-    if (openLetterBtn && letterContent) {
-        openLetterBtn.addEventListener("click", function () {
-            letterContent.classList.toggle("open");
-
-            // Change le texte du bouton selon l'état
+    // ===============================================
+    // 2. Gestion de la rotation (Clic sur le contenu)
+    // ===============================================
+    if (letterContent) {
+        letterContent.addEventListener("click", function (event) {
+            // Empêche la rotation si la carte est masquée (non 'open')
             if (letterContent.classList.contains("open")) {
-                openLetterBtn.textContent = "Fermer la lettre";
-            } else {
-                openLetterBtn.textContent = "Ouvrir la lettre";
+                // Applique la classe 'turn' pour la rotation 3D
+                letterContent.classList.toggle("turn");
             }
+            // Empêche la propagation si l'on clique sur un élément interactif à l'intérieur
+            event.stopPropagation();
         });
     }
 });
 
-// ===== Marque-page latéral (Info Tab) =====
+
+// ===== Marque-page latéral (Info Tab) & (Clue Tab) =====
 document.addEventListener("DOMContentLoaded", function () {
+    // Info Tab
     const infoTab = document.getElementById("info-tab");
     const tabHandle = document.getElementById("info-handle");
 
@@ -43,13 +52,10 @@ document.addEventListener("DOMContentLoaded", function () {
             infoTab.classList.toggle("open");
         });
     }
-});
 
-// ===== Marque-page latéral (Clue Tab) ===== // 💡 NOUVEAU BLOC
-document.addEventListener("DOMContentLoaded", function () {
+    // Clue Tab
     const clueTab = document.getElementById("clue-tab");
-    const clueHandle = document.getElementById("clue-handle"); // 💡 Nouvel ID
-
+    const clueHandle = document.getElementById("clue-handle");
     if (clueTab && clueHandle) {
         clueHandle.addEventListener("click", function () {
             clueTab.classList.toggle("open");
@@ -57,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ===== Révélation des indices avec délai (setTimeout) =====
+// ===== Révélation des indices avec délai (setTimeout) & Chronomètre (pas de changement) =====
 document.addEventListener("DOMContentLoaded", function () {
     // Délai en millisecondes avant l'apparition de chaque indice (exemple : 2 minutes = 120000 ms)
     const delayClue1 = 600000; // 10 minutes
@@ -111,14 +117,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }, delayClue3);
     }
 
-    // Si vous voulez un vrai chrono visible, vous pouvez utiliser setInterval et mettre à jour un élément HTML
-});
-
-// ===== Chronomètre de jeu (Game Timer) =====
-document.addEventListener("DOMContentLoaded", function () {
+    // Chronomètre de jeu (Game Timer)
     const timeDisplay = document.getElementById("time-display");
 
-    // Vérifie si l'élément du chronomètre existe sur la page (il n'existe que sur la page de jeu grâce au PHP)
     if (!timeDisplay) {
         return; // Ne fait rien si on n'est pas sur la page de jeu
     }
@@ -127,12 +128,10 @@ document.addEventListener("DOMContentLoaded", function () {
     let minutes = 0;
     let hours = 0;
 
-    // Fonction pour formater le temps (ajout de '0' si < 10)
     function formatTime(val) {
         return val < 10 ? "0" + val : val;
     }
 
-    // Fonction de mise à jour du chronomètre
     function updateTimer() {
         seconds++;
         if (seconds === 60) {
@@ -144,18 +143,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
-        // Affichage du temps
         timeDisplay.textContent =
             formatTime(hours) + ":" +
             formatTime(minutes) + ":" +
             formatTime(seconds);
     }
 
-    // Démarrage du chronomètre : mise à jour toutes les 1000 ms (1 seconde)
     const timerInterval = setInterval(updateTimer, 1000);
-
-    //clearInterval(timerInterval)
-    // quand l'énigme est résolue.
-
-
 });
