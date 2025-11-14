@@ -34,5 +34,7 @@
         <h1 class="hero-question">Serez-vous capable de résoudre le mystère ?</h1>
         <a  href="index.php?controller=Redirection&action=openFormConnection"
             class="active btn-nav">SE CONNECTER POUR JOUER</a>
+        <a  href="index.php?controller=Redirection&action=openButterflyWay"
+            class="active btn-nav">Un papillon ?</a>
     </div>
 <?php endif; ?>

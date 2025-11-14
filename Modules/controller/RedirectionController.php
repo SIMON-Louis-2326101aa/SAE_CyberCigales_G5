@@ -107,4 +107,15 @@ class RedirectionController
         $this->logRedirection('letterIntroView');
         ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
     }
+
+    public function openButterflyWay()
+    {
+        $this->logRedirection('ButterflyWayView');
+        ViewHandler::show('butterflyWayView', ['pageTitle' => 'Un Papillon ?']);
+    }
+    public function openButterFlyOneView()
+    {
+        $this->logRedirection('butterflyOneView');
+        ViewHandler::show('butterflyOneView', ['pageTitle' => 'Épreuve du Papillon']);
+    }
 }
