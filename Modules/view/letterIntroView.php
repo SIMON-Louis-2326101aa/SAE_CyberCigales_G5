@@ -1,4 +1,4 @@
-<?php if (isset($_SESSION['user_id'])) : ?>
+<?php if ($_SESSION['team'] === "alice") : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage d'Alice, une jeune lycéenne de 16 ans, vivant aux alentours de Marseille avec
             ses parents. Une après-midi de fin d’hiver, vous rangez discrètement les chaussures de votre mère que vous

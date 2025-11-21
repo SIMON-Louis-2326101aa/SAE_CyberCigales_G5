@@ -104,7 +104,20 @@ class RedirectionController
      */
     public function openLetterIntro()
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         $this->logRedirection('letterIntroView');
         ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
+    }
+
+    /**
+     * Affiche la page de choix du personnage
+     */
+    public function openChoice()
+    {
+        $this->logRedirection('choiceView');
+        ViewHandler::show('choiceView', ['pageTitle' => 'Choix du personnage']);
     }
 }

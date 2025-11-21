@@ -915,6 +915,56 @@ body.dark-theme .btn-nav:hover {
     color: var(--bg-dark);
 }
 
+
+/* ============ Choix de teem ============ */
+.team-select {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 80px;
+}
+
+/* Boutons généraux */
+.team-select a {
+    padding: 22px 50px;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: 2px solid var(--border-light);
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 0 15px var(--border-light);
+}
+
+/* Hover effet */
+.team-select a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--primary);
+    border-color: var(--primary);
+}
+
+/* Style neutre pour A et B */
+.team-select a.team-a {
+    border-bottom: 3px solid var(--primary);
+}
+
+.team-select a.team-b {
+    border-bottom: 3px solid var(--secondary);
+}
+
+/* Hover spécifique */
+.team-select a.team-a:hover {
+    box-shadow: 0 0 25px var(--primary-light);
+}
+
+.team-select a.team-b:hover {
+    box-shadow: 0 0 25px var(--secondary-dark);
+}
+
+
+
 /* ============ Responsive ============ */
 
 /* Tablettes (portrait et paysage) */
