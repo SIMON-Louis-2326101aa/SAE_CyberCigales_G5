@@ -6,7 +6,7 @@ namespace SAE_CyberCigales_G5\Modules\model;
 
 use PDO;
 
-class EmailVerificationModel extends database
+class EmailVerificationModel extends Database
 {
     public function generateAndStoreCode(string $email, int $ttlMinutes = 10): string
     {
