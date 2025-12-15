@@ -19,6 +19,10 @@ class TeamController
 
         $_SESSION['team'] = $team;
 
+        if (!isset($_SESSION['game_start_time'])) {
+            $_SESSION['game_start_time'] = time();
+        }
+
         if ($team === "alice") {
             header("Location: index.php?controller=Redirection&action=openLetterIntro&team=alice");
         } else {

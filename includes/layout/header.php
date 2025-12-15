@@ -14,6 +14,12 @@
         <script src="./assets/js/admin.js"></script>
     <?php endif; ?>
 </head>
+<?php if (isset($_SESSION['game_start_time'])) : ?>
+    <script>
+        const GAME_START_TIME = <?= $_SESSION['game_start_time'] ?> * 1000;
+    </script>
+<?php endif; ?>
+
 <body>
 <?php
 if (session_status() === PHP_SESSION_NONE) {
@@ -28,8 +34,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <h5><strong>Escape The Code</strong></h5>
     </div>
 
-    <?php
-    if (isset($_GET['action']) && $_GET['action'] === 'openLetterIntro') : ?>
+    <?php if (isset($_SESSION['game_start_time'])) : ?>
         <div id="game-timer">
             Chrono : <span id="time-display">00:00:00</span>
         </div>

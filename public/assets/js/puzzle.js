@@ -125,34 +125,33 @@ document.addEventListener("DOMContentLoaded", function () {
     // Chronomètre de jeu (Game Timer)
     const timeDisplay = document.getElementById("time-display");
 
-    if (!timeDisplay) {
-        return; // Ne fait rien si on n'est pas sur la page de jeu
-    }
+    if (timeDisplay && typeof GAME_START_TIME !== "undefined") {
 
-    let seconds = 0;
-    let minutes = 0;
-    let hours = 0;
+        function updateTimer() {
+            // Heure actuelle
+            const now = Date.now();
 
-    function formatTime(val) {
-        return val < 10 ? "0" + val : val;
-    }
+            // Différence en secondes
+            // eslint-disable-next-line no-undef
+            const diff = Math.floor((now - GAME_START_TIME) / 1000);
 
-    function updateTimer() {
-        seconds++;
-        if (seconds === 60) {
-            seconds = 0;
-            minutes++;
-            if (minutes === 60) {
-                minutes = 0;
-                hours++;
-            }
+            // Conversion en h / min / sec
+            const hours = Math.floor(diff / 3600);
+            const minutes = Math.floor((diff % 3600) / 60);
+            const seconds = diff % 60;
+
+            // Affichage formaté
+            timeDisplay.textContent =
+                String(hours).padStart(2, "0") + ":" +
+                String(minutes).padStart(2, "0") + ":" +
+                String(seconds).padStart(2, "0");
         }
 
-        timeDisplay.textContent =
-            formatTime(hours) + ":" +
-            formatTime(minutes) + ":" +
-            formatTime(seconds);
+        // Mise à jour immédiate
+        updateTimer();
+
+        // Puis toutes les secondes
+        setInterval(updateTimer, 1000);
     }
 
-    const timerInterval = setInterval(updateTimer, 1000);
 });
