@@ -49,6 +49,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (infoTab && tabHandle) {
         tabHandle.addEventListener("click", function () {
+            // Si l'onglet est désactivé, on ne fait rien
+            if (tabHandle.classList.contains("disabled")) {
+                return;
+            }
+
             infoTab.classList.toggle("open");
         });
     }

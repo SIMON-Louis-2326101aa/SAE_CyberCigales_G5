@@ -89,7 +89,7 @@
             </div>
 
             <div class="letter-face letter-back">
-                <p style="text-align: center;">Le papillon garde la mémoire</p>
+                <p style="text-align: center;">La clé ouvre le passé.</p>
             </div>
 
         </div>
