@@ -120,4 +120,13 @@ class RedirectionController
         $this->logRedirection('choiceView');
         ViewHandler::show('choiceView', ['pageTitle' => 'Choix du personnage']);
     }
+
+    /**
+     * Affiche la page de choix du personnage
+     */
+    public function openPicturePuzzle()
+    {
+        $this->logRedirection('openpicturePuzzleView');
+        ViewHandler::show('picturePuzzleView', ['pageTitle' => 'Enigme de l\'image']);
+    }
 }

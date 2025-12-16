@@ -78,9 +78,9 @@ class TeamController
                 header("Location: index.php?controller=Redirection&action=openLetterIntro");
                 break;
 
-//            case 2:
-//                header("Location: index.php?controller=Redirection&action=openPuzzleCesar");
-//                break;
+            case 2:
+                header("Location: index.php?controller=Redirection&action=openPicturePuzzle");
+                break;
 //
 //            case 3:
 //                header("Location: index.php?controller=Redirection&action=openPuzzleSuivant");

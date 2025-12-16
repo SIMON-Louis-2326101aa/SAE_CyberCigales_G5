@@ -89,21 +89,31 @@
             </div>
 
             <div class="letter-face letter-back">
-                <p style="text-align: center;">La clé ouvre le passé.</p>
+                <p style="text-align: center;">·−· · ··−· ·−·· · − </p>
             </div>
 
         </div>
     </div>
 
     <div id="solutionLetter" class="solution-letter-content">
+    <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
+            <label>
+                Qu'est-ce veut dire cette lettre ?<br>
+                <textarea name="answer1" required></textarea>
+            </label>
+
         <label>
-            Qu'est ce que ca veut dire ?<br>
-            <textarea placeholder="Qu'est ce que ca veut dire ?"> </textarea>
+            Qu'est-ce que ça veut dire c'est signe ?<br>
+            <textarea name="answer2" required></textarea>
         </label>
+
+        <button type="submit" class="active btn-nav">
+            Valider
+        </button>
+    </form>
     </div>
 
-
-<?php else : ?>
+<?php elseif ($_SESSION['team'] === "bob") : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage de Bob, un jeune lycéen de 17 ans, vivant aux alentours de Marseille avec ses
             parents. Une après-midi de fin d’hiver, vous êtes de corvée pour ranger les décorations de Noël au grenier.
@@ -143,15 +153,28 @@
             </div>
 
             <div class="letter-face letter-back">
-                <p style="text-align: center;">Le papillon garde la mémoire</p>
+                <p style="text-align: center;">·−· · ··−· ·−·· · − </p>
             </div>
 
         </div>
     </div>
     <div id="solutionLetter" class="solution-letter-content">
-        <label>
-            Qu'est ce que ca veut dire ?<br>
-            <textarea placeholder="Qu'est ce que ca veut dire ?"> </textarea>
-        </label>
+        <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
+            <label>
+                Qu'est-ce veut dire cette lettre ?<br>
+                <textarea name="answer1" required></textarea>
+            </label>
+
+            <label>
+                Qu'est-ce que ça veut dire c'est signe ?<br>
+                <textarea name="answer2" required></textarea>
+            </label>
+
+            <button type="submit" class="active btn-nav">
+                Valider
+            </button>
+        </form>
     </div>
+<?php else : ?>
+    <p>Erreur : Veuillez choisir une equipe ou vous reconnecter</p>
 <?php endif; ?><?php

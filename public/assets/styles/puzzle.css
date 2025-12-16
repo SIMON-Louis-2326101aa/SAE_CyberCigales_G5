@@ -201,7 +201,7 @@
 }
 
 .letter-back {
-    transform: rotateY(180deg) scaleX(-1);
+    transform: rotateY(180deg);
     font-size : 1.2rem;
     display: flex;
     z-index: 1;
@@ -229,6 +229,10 @@
 .solution-letter-content.open{
     max-height: 900px; /* adapte selon la taille de ta lettre */
     opacity: 1;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .intro-letter-content {
@@ -236,10 +240,21 @@
     font-size : 1.3rem;
     margin-top: 2rem ;
 }
+.solution-letter-content form {
+    width: 100%;
+    max-width: 1000px;   /* largeur “lettre” confortable */
+    margin: 0 auto;      /* ← centrage réel */
+    text-align: left;    /* évite l’effet carte étroite */
+}
+
+.solution-letter-content label {
+    display: block;
+    width: 100%;
+}
 
 .solution-letter-content textarea {
-    width: 50%; /* Ajustez la largeur */
-    min-height: 480px; /* Hauteur minimale pour la zone de texte */
+    width: 100%;
+    min-height: 280px; /* Hauteur minimale pour la zone de texte */
     padding: 1rem;
     font-size: 1.2rem;
     resize: vertical; /* Permet uniquement le redimensionnement vertical */
