@@ -13,7 +13,7 @@
 
     <div class="hero-container-main">
         <h1 class="hero-question">Serez-vous capable de résoudre le mystère ?</h1>
-        <a  href='index.php?controller=Redirection&action=openChoice'
+        <a  href='index.php?controller=Team&action=play'
             class="active btn-nav">JOUER</a>
     </div>
 
