@@ -107,4 +107,10 @@ class RedirectionController
         $this->logRedirection('letterIntroView');
         ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
     }
+
+    public  function openContact()
+    {
+        ViewHandler::show('contactView', ['pageTitle' => 'Contact']);
+    }
+
 }
