@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAE_CyberCigales_G5\includes;
+namespace SAE_CyberCigales_G5\Modules\controller;
 
 use SAE_CyberCigales_G5\includes\Mailer;
 
