@@ -104,14 +104,35 @@ class RedirectionController
      */
     public function openLetterIntro()
     {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         $this->logRedirection('letterIntroView');
         ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
     }
 
-    public  function openContact()
+    public function openContact()
     {
         $this->logRedirection('contactView');
         ViewHandler::show('contactView', ['pageTitle' => 'Contact']);
     }
 
+    /**
+     * Affiche la page de choix du personnage
+     */
+    public function openChoice()
+    {
+        $this->logRedirection('choiceView');
+        ViewHandler::show('choiceView', ['pageTitle' => 'Choix du personnage']);
+    }
+
+    /**
+     * Affiche la page de choix du personnage
+     */
+    public function openPicturePuzzle()
+    {
+        $this->logRedirection('openpicturePuzzleView');
+        ViewHandler::show('picturePuzzleView', ['pageTitle' => 'Enigme de l\'image']);
+    }
 }

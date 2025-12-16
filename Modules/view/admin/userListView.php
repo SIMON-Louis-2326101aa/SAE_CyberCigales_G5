@@ -20,7 +20,8 @@
                 <td><?php echo htmlspecialchars($user['email']); ?></td>
                 <td><?php echo htmlspecialchars($user['created_at']); ?></td>
                 <td>
-                    <button type="button" class="edit-user-btn" data-user-id="<?php echo $user['id']; ?>">Modifier</button>
+                    <button type="button" class="edit-user-btn" data-user-id="<?php echo $user['id']; ?>">
+                        Modifier</button>
                 </td>
             </tr>
         <?php endforeach; ?>
@@ -52,8 +53,10 @@
                     <td><?php echo htmlspecialchars($pendingUser['email']); ?></td>
                     <td><?php echo htmlspecialchars($pendingUser['created_at']); ?></td>
                     <td>
-                        <button type="button" class="approve-pending-btn" data-pending-id="<?php echo $pendingUser['id']; ?>">Approuver</button>
-                        <button type="button" class="delete-pending-btn" data-pending-id="<?php echo $pendingUser['id']; ?>">Supprimer</button>
+                        <button type="button" class="approve-pending-btn" data-pending-id="
+                        <?php echo $pendingUser['id']; ?>">Approuver</button>
+                        <button type="button" class="delete-pending-btn" data-pending-id="
+                        <?php echo $pendingUser['id']; ?>">Supprimer</button>
                     </td>
                 </tr>
             <?php endforeach; ?>

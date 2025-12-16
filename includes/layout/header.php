@@ -6,7 +6,7 @@
     <title><?php echo $A_params['pageTitle'] ?? 'Escape The Code '; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="stylesheet" href="./assets/styles/puzzle.css">
-    <link rel="icon" href="./assets/images/favicon.ico">
+    <link rel="icon" href="./assets/images/faviconBis.ico">
     <script src="./assets/js/script.js"></script>
     <script src="./assets/js/puzzle.js"></script>
     <?php if (isset($_GET['controller']) && $_GET['controller'] === 'Admin') : ?>
@@ -14,6 +14,12 @@
         <script src="./assets/js/admin.js"></script>
     <?php endif; ?>
 </head>
+<?php if (isset($_SESSION['game_start_time'])) : ?>
+    <script>
+        const GAME_START_TIME = <?= $_SESSION['game_start_time'] ?> * 1000;
+    </script>
+<?php endif; ?>
+
 <body>
 <?php
 if (session_status() === PHP_SESSION_NONE) {
@@ -27,6 +33,12 @@ if (session_status() === PHP_SESSION_NONE) {
             <img src="./assets/images/logoBis.webp" alt="logo-escape-the-code"></a>
         <h5><strong>Escape The Code</strong></h5>
     </div>
+
+    <?php if (isset($_SESSION['game_start_time'])) : ?>
+        <div id="game-timer">
+            Chrono : <span id="time-display">00:00:00</span>
+        </div>
+    <?php endif; ?>
 
     <div id="nav-auth-buttons">
         <?php
@@ -51,25 +63,6 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
 </nav>
 
-<?php
-if (!function_exists('old')) {
-    function old(string $key, string $default = ''): string
-    {
-        $val = $_SESSION['old'][$key] ?? $default;
-
-        // Normalisation & nettoyage agressif
-        $val = (string)$val;
-        $val = strip_tags($val);                 // vire <script>...</script> & toutes balises
-        $val = preg_replace('/[\x00-\x1F\x7F]/', '', $val); // caractères de contrôle
-        $val = preg_replace('/\s+/', ' ', $val); // espaces multiples
-        $val = trim($val);
-        $val = mb_substr($val, 0, 120);         // limite défensive
-
-        // Sortie sûre pour un attribut HTML
-        return htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
-    }
-}
-?>
 
 <!-- Permet d'ajouter les pop up flash dans le header sans trop gêner la page-->
 <?php if (!empty($_SESSION['flash_success'])) : ?>

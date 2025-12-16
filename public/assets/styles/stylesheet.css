@@ -214,6 +214,19 @@ form h2 {
     display: block;
 }
 
+.team-select a {
+    padding: 22px 50px;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: 2px solid var(--border-light);
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 0 15px var(--border-light);
+}
+
 body.dark-theme h1,
 body.dark-theme h2,
 body.dark-theme a,
@@ -245,6 +258,12 @@ body.dark-theme .db-table {
 
 .footer-legal a:hover {
     color: var(--primary);
+}
+
+.team-select a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--primary);
+    border-color: var(--primary);
 }
 
 #nav-auth-buttons a {
@@ -336,6 +355,7 @@ h5 {
     max-width: 800px;
     margin: 0;
 }
+
 .hero-question {
     font-size: 4rem;
     font-weight: 800;
@@ -1412,4 +1432,30 @@ body.dark-theme .btn-nav:hover {
 
 #admin-button {
     background: #ffc800;
+}
+
+/* ============ Choix de teem ============ */
+.team-select {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 80px;
+}
+
+/* Style neutre pour A et B */
+.team-select a.team-a {
+    border-bottom: 3px solid var(--primary);
+}
+
+.team-select a.team-b {
+    border-bottom: 3px solid var(--secondary);
+}
+
+/* Hover spécifique */
+.team-select a.team-a:hover {
+    box-shadow: 0 0 25px var(--primary-light);
+}
+
+.team-select a.team-b:hover {
+    box-shadow: 0 0 25px var(--secondary-dark);
 }
