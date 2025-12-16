@@ -1,5 +1,5 @@
 <h1>Contact</h1>
-<form id="form-contact" action="index.php?controller=User&action=contact" method="post">
+<form id="form-contact" action="index.php?controller=EmailContact&action=sendContactEmail" method="post">
     <ul>
         <li>
             <label for="mail">E-mail :</label>
