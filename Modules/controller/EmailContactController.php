@@ -60,25 +60,25 @@ class EmailContactController {
     /**
      * Valide les données du formulaire
      */
-//    private function validateData(string $email, string $sujet, string $message): array {
-//        if (empty($email) || empty($sujet) || empty($message)) {
-//            return ['valid' => false, 'error' => 'Tous les champs sont obligatoires.'];
-//        }
-//
-//        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-//            return ['valid' => false, 'error' => 'L\'adresse email n\'est pas valide.'];
-//        }
-//
-//        if (strlen($sujet) < 3) {
-//            return ['valid' => false, 'error' => 'Le sujet doit contenir au moins 3 caractères.'];
-//        }
-//
-//        if (strlen($message) < 10) {
-//            return ['valid' => false, 'error' => 'Le message doit contenir au moins 10 caractères.'];
-//        }
-//
-//        return ['valid' => true];
-//    }
+    private function validateData(string $email, string $sujet, string $message): array {
+        if (empty($email) || empty($sujet) || empty($message)) {
+            return ['valid' => false, 'error' => 'Tous les champs sont obligatoires.'];
+        }
+
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return ['valid' => false, 'error' => 'L\'adresse email n\'est pas valide.'];
+        }
+
+        if (strlen($sujet) < 3) {
+            return ['valid' => false, 'error' => 'Le sujet doit contenir au moins 3 caractères.'];
+        }
+
+        if (strlen($message) < 10) {
+            return ['valid' => false, 'error' => 'Le message doit contenir au moins 10 caractères.'];
+        }
+
+        return ['valid' => true];
+    }
 
     /**
      * Formate le corps de l'email en HTML
