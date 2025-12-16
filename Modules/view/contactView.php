@@ -1,5 +1,8 @@
 <h1>Contact</h1>
 <form id="form-contact" action="index.php?controller=EmailContact&action=sendContactEmail" method="post">
+
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token ?? ''); ?>">
+
     <ul>
         <li>
             <label for="mail">E-mail :</label>
