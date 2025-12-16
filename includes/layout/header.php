@@ -6,12 +6,14 @@
     <title><?php echo $A_params['pageTitle'] ?? 'Escape The Code '; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="stylesheet" href="./assets/styles/puzzle.css">
+    <link rel="stylesheet" href="./assets/styles/colorblind.css">
     <link rel="icon" href="./assets/images/favicon.ico">
-    <script src="./assets/js/script.js"></script>
-    <script src="./assets/js/puzzle.js"></script>
+    <script src="./assets/js/script.js" defer></script>
+    <script src="./assets/js/puzzle.js" defer></script>
+    <script src="./assets/js/colorblind.js" defer></script>
     <?php if (isset($_GET['controller']) && $_GET['controller'] === 'Admin') : ?>
         <!-- Si Admin, alors le script pour admin est chargé -->
-        <script src="./assets/js/admin.js"></script>
+        <script src="./assets/js/admin.js" defer></script>
     <?php endif; ?>
 </head>
 <body>
@@ -26,6 +28,15 @@ if (session_status() === PHP_SESSION_NONE) {
         <a href="index.php?controller=Redirection&action=openHomepage" id="nav-menu-title">
             <img src="./assets/images/logoBis.webp" alt="logo-escape-the-code"></a>
         <h5><strong>Escape The Code</strong></h5>
+    </div>
+
+    <div class="theme-switcher-container">
+        <label for="theme-selector" class="visually-hidden">Choisir un thème</label>
+        <select id="theme-selector">
+            <option value="default">Thème par défaut</option>
+            <option value="deuteranopia-protanopia">Deutéranopie-Protanopie (Rouge-Vert)</option>
+            <option value="tritanopia">Tritanopie (Bleu-Jaune)</option>
+        </select>
     </div>
 
     <div id="nav-auth-buttons">
