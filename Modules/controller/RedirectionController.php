@@ -110,6 +110,7 @@ class RedirectionController
 
     public  function openContact()
     {
+        $this->logRedirection('contactView');
         ViewHandler::show('contactView', ['pageTitle' => 'Contact']);
     }
 
