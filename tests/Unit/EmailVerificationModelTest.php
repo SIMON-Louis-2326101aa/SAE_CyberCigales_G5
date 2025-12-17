@@ -1,75 +1,135 @@
-<?php
+<?php // Balise d'ouverture PHP
 
-namespace Tests\Unit;
+namespace Tests\Unit; // Déclare le namespace Tests\Unit
 
-use PHPUnit\Framework\TestCase;
-use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use PHPUnit\Framework\TestCase; // Importe TestCase de PHPUnit
+
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel; // Importe EmailVerificationModel du projet
 
 /**
  * Tests unitaires pour EmailVerificationModel
  * 
+ * @testdox Tests unitaires - Génération de codes de vérification email
  * @group unit
  * @covers \SAE_CyberCigales_G5\Modules\model\EmailVerificationModel
  */
-class EmailVerificationModelTest extends TestCase
+class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour avoir les méthodes de test PHPUnit
 {
     /**
-     * Teste la génération d'un code de vérification
-     * 
-     * Vérifie que le code généré respecte le format attendu :
-     * - Doit être une chaîne de caractères (string)
-     * - Doit contenir exactement 6 caractères
-     * - Doit contenir uniquement des chiffres (0-9)
-     * - Les codes courts doivent être complétés avec des zéros à gauche
-     * 
-     * Exemple : "42" devient "000042"
+     * @testdox Génère un code de vérification de 6 chiffres (utilise random_int(0-999999) puis str_pad avec zéros à gauche pour garantir 6 caractères, valide avec regex /^\d{6}$/)
      */
-    public function testGenerateCodeReturns6DigitString(): void
+    public function testGenerateCodeReturns6DigitString(): void // Test : le code généré doit être une chaîne de 6 chiffres
     {
-        // Ce test nécessite une base de données de test
-        // Pour l'instant, on teste juste le format du code généré
-        $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+        $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT); // Génère un nombre aléatoire (0-999999), le convertit en string, puis complète à gauche avec des zéros pour avoir 6 caractères
         
-        $this->assertIsString($code);
-        $this->assertEquals(6, strlen($code));
-        $this->assertMatchesRegularExpression('/^\d{6}$/', $code);
+        $message = sprintf(
+            "\n┌─ ERREUR DE GÉNÉRATION DE CODE ──────────────────────────────────\n" .
+            "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
+            "│ Test               : testGenerateCodeReturns6DigitString() ligne 21\n" .
+            "│ \n" .
+            "│ Code généré        : '%s'\n" .
+            "│ Longueur           : %d caractères\n" .
+            "│ Longueur attendue  : 6 caractères\n" .
+            "│ Format attendu     : 6 chiffres (0-9)\n" .
+            "│ \n" .
+            "│ CORRECTION : Vérifiez la ligne 23 du test\n" .
+            "│    Assurez-vous que str_pad() génère bien 6 caractères.\n" .
+            "└─────────────────────────────────────────────────────────────────\n",
+            $code,
+            strlen($code)
+        );
+        
+        $this->assertIsString($code, $message); // Vérifie que $code est une chaîne de caractères
+        
+        $this->assertEquals(6, strlen($code), $message); // Vérifie que la longueur de $code est exactement 6 caractères
+        
+        $this->assertMatchesRegularExpression('/^\d{6}$/', $code, $message); // Vérifie que $code contient exactement 6 chiffres (0-9) avec une expression régulière
     }
     
     /**
-     * Teste que le code est bien formaté avec des zéros initiaux
-     * 
-     * Vérifie que la fonction str_pad() remplit correctement les codes courts
-     * avec des zéros à gauche pour atteindre 6 caractères.
-     * 
-     * Exemple : "42" → "000042", "1234" → "001234"
-     * Cela garantit que tous les codes ont la même longueur, même les petits nombres.
+     * @testdox Formate les codes courts avec des zéros à gauche (utilise str_pad avec STR_PAD_LEFT, "42" devient "000042" pour garantir toujours 6 chiffres)
      */
-    public function testCodeHasLeadingZeros(): void
+    public function testCodeHasLeadingZeros(): void // Test : les codes courts doivent être complétés avec des zéros à gauche
     {
-        $code = str_pad('42', 6, '0', STR_PAD_LEFT);
+        $code = str_pad('42', 6, '0', STR_PAD_LEFT); // Complète '42' à gauche avec des zéros pour avoir 6 caractères → '000042'
         
-        $this->assertEquals('000042', $code);
+        $message = sprintf(
+            "\n┌─ ERREUR DE FORMATAGE DE CODE ───────────────────────────────────\n" .
+            "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
+            "│ Test               : testCodeHasLeadingZeros() ligne 35\n" .
+            "│ \n" .
+            "│ Code original      : '42'\n" .
+            "│ Code formaté       : '%s'\n" .
+            "│ Code attendu       : '000042'\n" .
+            "│ \n" .
+            "│ Le formatage devrait ajouter des zéros à gauche avec str_pad()\n" .
+            "│ pour garantir toujours 6 caractères.\n" .
+            "│ \n" .
+            "│ CORRECTION : Vérifiez la ligne 37 du test\n" .
+            "└─────────────────────────────────────────────────────────────────\n",
+            $code
+        );
+        
+        $this->assertEquals('000042', $code, $message); // Vérifie que le code complété correspond à '000042'
     }
     
     /**
-     * Teste que le TTL (Time To Live) est limité entre 1 et 60 minutes
-     * 
-     * Vérifie que la fonction de limitation du TTL fonctionne correctement :
-     * - Les valeurs trop petites (< 1) sont remontées à 1
-     * - Les valeurs trop grandes (> 60) sont limitées à 60
-     * - Les valeurs dans la plage valide (1-60) restent inchangées
-     * 
-     * Cela évite les codes de vérification avec une durée de vie invalide.
+     * @testdox Limite le TTL entre 1 et 60 minutes (utilise max(1, min(60, valeur)), TTL 0 devient 1, TTL 100 devient 60, TTL 10 reste 10)
      */
-    public function testTtlIsWithinValidRange(): void
+    public function testTtlIsWithinValidRange(): void // Test : le TTL doit être limité entre 1 et 60 minutes
     {
-        $ttlTooSmall = max(1, min(60, 0));
-        $ttlTooLarge = max(1, min(60, 100));
-        $ttlValid = max(1, min(60, 10));
+        $ttlTooSmall = max(1, min(60, 0)); // Limite 0 entre 1 et 60 → résultat = 1 (valeur trop petite remontée à 1)
         
-        $this->assertEquals(1, $ttlTooSmall);
-        $this->assertEquals(60, $ttlTooLarge);
-        $this->assertEquals(10, $ttlValid);
+        $ttlTooLarge = max(1, min(60, 100)); // Limite 100 entre 1 et 60 → résultat = 60 (valeur trop grande limitée à 60)
+        
+        $ttlValid = max(1, min(60, 10)); // Limite 10 entre 1 et 60 → résultat = 10 (valeur valide reste inchangée)
+        
+        $messageTooSmall = sprintf(
+            "\n┌─ ERREUR DE LIMITE TTL (TROP PETIT) ─────────────────────────────\n" .
+            "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
+            "│ Test               : testTtlIsWithinValidRange() ligne 45\n" .
+            "│ \n" .
+            "│ TTL testé          : 0 minutes\n" .
+            "│ TTL obtenu         : %d minutes\n" .
+            "│ TTL attendu        : 1 minute (minimum)\n" .
+            "│ \n" .
+            "│ CORRECTION : Vérifiez la ligne 47 - le TTL doit être >= 1\n" .
+            "└─────────────────────────────────────────────────────────────────\n",
+            $ttlTooSmall
+        );
+        
+        $messageTooLarge = sprintf(
+            "\n┌─ ERREUR DE LIMITE TTL (TROP GRAND) ─────────────────────────────\n" .
+            "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
+            "│ Test               : testTtlIsWithinValidRange() ligne 45\n" .
+            "│ \n" .
+            "│ TTL testé          : 100 minutes\n" .
+            "│ TTL obtenu         : %d minutes\n" .
+            "│ TTL attendu        : 60 minutes (maximum)\n" .
+            "│ \n" .
+            "│ CORRECTION : Vérifiez la ligne 49 - le TTL doit être <= 60\n" .
+            "└─────────────────────────────────────────────────────────────────\n",
+            $ttlTooLarge
+        );
+        
+        $messageValid = sprintf(
+            "\n┌─ ERREUR DE LIMITE TTL (VALEUR VALIDE) ──────────────────────────\n" .
+            "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
+            "│ Test               : testTtlIsWithinValidRange() ligne 45\n" .
+            "│ \n" .
+            "│ TTL testé          : 10 minutes\n" .
+            "│ TTL obtenu         : %d minutes\n" .
+            "│ TTL attendu        : 10 minutes (devrait rester inchangé)\n" .
+            "│ \n" .
+            "│ CORRECTION : Vérifiez la ligne 51\n" .
+            "└─────────────────────────────────────────────────────────────────\n",
+            $ttlValid
+        );
+        
+        $this->assertEquals(1, $ttlTooSmall, $messageTooSmall); // Vérifie que la valeur trop petite a été remontée à 1
+        
+        $this->assertEquals(60, $ttlTooLarge, $messageTooLarge); // Vérifie que la valeur trop grande a été limitée à 60
+        
+        $this->assertEquals(10, $ttlValid, $messageValid); // Vérifie que la valeur valide est restée à 10
     }
 }
-

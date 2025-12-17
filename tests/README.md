@@ -13,31 +13,53 @@ tests/
 
 ## 🚀 Exécuter les tests
 
+> **Note Windows :** Utilisez `php vendor/phpunit/phpunit/phpunit` au lieu de `vendor/bin/phpunit`
+
 ### Tous les tests
 ```bash
-vendor/bin/phpunit
+php vendor/phpunit/phpunit/phpunit
 ```
 
 ### Tests unitaires seulement
 ```bash
-vendor/bin/phpunit --testsuite="Unit Tests"
+php vendor/phpunit/phpunit/phpunit --testsuite="Unit Tests"
 ```
 
 ### Tests d'intégration seulement
 ```bash
-vendor/bin/phpunit --testsuite="Integration Tests"
+php vendor/phpunit/phpunit/phpunit --testsuite="Integration Tests"
+```
+
+### Un fichier de test spécifique
+```bash
+php vendor/phpunit/phpunit/phpunit tests/Unit/PasswordValidationTest.php
+```
+
+### Un test spécifique dans un fichier
+```bash
+php vendor/phpunit/phpunit/phpunit --filter testPasswordMinimumLength
 ```
 
 ### Avec couverture de code (nécessite Xdebug)
 ```bash
-vendor/bin/phpunit --coverage-html coverage/
+php vendor/phpunit/phpunit/phpunit --coverage-html coverage/
 ```
 
 ### Filtrer par groupe
 ```bash
-vendor/bin/phpunit --group unit
-vendor/bin/phpunit --group password
-vendor/bin/phpunit --group mailer
+php vendor/phpunit/phpunit/phpunit --group unit
+php vendor/phpunit/phpunit/phpunit --group password
+php vendor/phpunit/phpunit/phpunit --group mailer
+```
+
+### Mode verbose (détails)
+```bash
+php vendor/phpunit/phpunit/phpunit --verbose
+```
+
+### Arrêter au premier échec
+```bash
+php vendor/phpunit/phpunit/phpunit --stop-on-failure
 ```
 
 ## 📝 Conventions

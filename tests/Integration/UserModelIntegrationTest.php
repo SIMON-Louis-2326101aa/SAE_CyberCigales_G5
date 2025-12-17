@@ -1,215 +1,147 @@
-<?php
+<?php // Balise d'ouverture PHP
 
-namespace Tests\Integration;
+namespace Tests\Integration; // Déclare le namespace Tests\Integration
 
-use SAE_CyberCigales_G5\Modules\model\UserModel;
+use SAE_CyberCigales_G5\Modules\model\UserModel; // Importe UserModel du projet
 
 /**
  * Tests d'intégration pour UserModel
  * 
+ * @testdox Tests d'intégration - Gestion des utilisateurs
  * @group integration
  * @group database
  */
-class UserModelIntegrationTest extends DatabaseTestCase
+class UserModelIntegrationTest extends DatabaseTestCase // Hérite de DatabaseTestCase (fournit connexion DB et transactions)
 {
-    private UserModel $model;
+    private UserModel $model; // Instance de UserModel utilisée dans les tests
     
-    /**
-     * Initialise l'environnement de test avant chaque test
-     * 
-     * Appelle setUp() de la classe parente (DatabaseTestCase) qui démarre
-     * une transaction, puis crée une nouvelle instance de UserModel
-     * pour chaque test.
-     */
-    protected function setUp(): void
+    protected function setUp(): void // Méthode appelée AVANT chaque test
     {
-        parent::setUp();
-        $this->model = new UserModel();
+        parent::setUp(); // Appelle setUp() de DatabaseTestCase (charge .env, crée connexion PDO, démarre transaction)
+        
+        $this->model = new UserModel(); // Crée une nouvelle instance de UserModel pour chaque test
     }
     
     /**
-     * Teste la recherche d'un utilisateur par email (utilisateur existant)
-     * 
-     * Vérifie que la méthode findByEmail() retourne true lorsqu'un utilisateur
-     * avec l'email fourni existe dans la base de données.
-     * 
-     * Étapes du test :
-     * 1. Crée un utilisateur de test directement en base de données
-     * 2. Appelle findByEmail() avec l'email de l'utilisateur créé
-     * 3. Vérifie que le résultat est true
+     * @testdox Retourne true lorsqu'un utilisateur existe avec l'email donné (insère un utilisateur en base avec INSERT, puis findByEmail() le retrouve et retourne true)
      */
-    public function testFindByEmailReturnsTrueWhenExists(): void
+    public function testFindByEmailReturnsTrueWhenExists(): void // Test : findByEmail() retourne true pour un utilisateur existant
     {
-        // Créer un utilisateur de test directement en base
-        $email = 'testuser@example.com';
-        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        $email = 'testuser@example.com'; // Email de test pour créer et chercher l'utilisateur
         
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
-        );
-        $stmt->execute(['Test', 'User', $email, $password]);
+        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe avec bcrypt, stocke dans $password
         
-        // Chercher l'utilisateur (findByEmail retourne bool)
-        $result = $this->model->findByEmail($email);
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare la requête SQL d'insertion avec placeholders
         
-        $this->assertTrue($result);
+        $stmt->execute(['Test', 'User', $email, $password]); // Exécute la requête en remplaçant les placeholders (insère l'utilisateur en base)
+        
+        $result = $this->model->findByEmail($email); // Appelle findByEmail() pour chercher l'utilisateur, stocke le résultat (true/false) dans $result
+        
+        $this->assertTrue($result); // Vérifie que $result est true (l'utilisateur a été trouvé)
     }
     
     /**
-     * Teste que findByEmail retourne false pour un email inexistant
-     * 
-     * Vérifie que la méthode findByEmail() retourne false lorsqu'aucun
-     * utilisateur avec l'email fourni n'existe dans la base de données.
-     * 
-     * Ce test garantit que la méthode gère correctement le cas où
-     * l'utilisateur n'existe pas (pas d'erreur, retourne simplement false).
+     * @testdox Retourne false lorsqu'aucun utilisateur n'existe avec l'email donné (cherche un email inexistant en base, findByEmail() retourne false car aucune ligne trouvée)
      */
-    public function testFindByEmailReturnsFalseWhenNotExists(): void
+    public function testFindByEmailReturnsFalseWhenNotExists(): void // Test : findByEmail() retourne false pour un email inexistant
     {
-        $user = $this->model->findByEmail('nonexistent@example.com');
+        $user = $this->model->findByEmail('nonexistent@example.com'); // Cherche un utilisateur qui n'existe pas, stocke le résultat dans $user
         
-        $this->assertFalse($user);
+        $this->assertFalse($user); // Vérifie que $user est false (l'utilisateur n'existe pas)
     }
     
     /**
-     * Teste la création d'un utilisateur après vérification d'email
-     * 
-     * Vérifie que la méthode createUserAfterVerification() crée correctement
-     * un utilisateur dans la table users à partir d'une inscription en attente
-     * (pending_registrations).
-     * 
-     * Étapes du test :
-     * 1. Crée une inscription en attente dans pending_registrations
-     * 2. Appelle createUserAfterVerification() avec l'email
-     * 3. Vérifie que l'utilisateur a bien été créé dans la table users
-     * 4. Vérifie que les données de l'utilisateur sont correctes
+     * @testdox Crée un utilisateur depuis pending_registrations après vérification (insère dans pending_registrations, puis createUserAfterVerification() copie les données vers users, vérifie avec SELECT)
      */
-    public function testCreateUserAfterVerificationInsertsNewRecord(): void
+    public function testCreateUserAfterVerificationInsertsNewRecord(): void // Test : createUserAfterVerification() crée un utilisateur depuis pending_registrations
     {
-        $nom = 'Nouveau';
-        $prenom = 'Utilisateur';
-        $email = 'nouveau@example.com';
-        $password = password_hash('SecurePass123!', PASSWORD_DEFAULT);
+        $nom = 'Nouveau'; // Nom de l'utilisateur
+        $prenom = 'Utilisateur'; // Prénom de l'utilisateur
+        $email = 'nouveau@example.com'; // Email de l'utilisateur
+        $password = password_hash('SecurePass123!', PASSWORD_DEFAULT); // Hash le mot de passe
         
-        // D'abord créer une inscription en attente
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO pending_registrations (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
-        );
-        $stmt->execute([$nom, $prenom, $email, $password]);
+        $stmt = $this->pdo->prepare('INSERT INTO pending_registrations (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion dans pending_registrations
         
-        // Créer l'utilisateur après vérification
-        $result = $this->model->createUserAfterVerification($email);
+        $stmt->execute([$nom, $prenom, $email, $password]); // Insère l'inscription en attente dans pending_registrations
         
-        $this->assertTrue($result);
+        $result = $this->model->createUserAfterVerification($email); // Crée l'utilisateur depuis pending_registrations, stocke le résultat dans $result
         
-        // Vérifier que l'utilisateur est bien en base
-        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = ?');
-        $stmt->execute([$email]);
-        $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $this->assertTrue($result); // Vérifie que $result est true (l'utilisateur a été créé)
         
-        $this->assertIsArray($user);
-        $this->assertEquals($email, $user['email']);
+        $stmt = $this->pdo->prepare('SELECT * FROM users WHERE email = ?'); // Prépare la requête pour vérifier que l'utilisateur existe
+        
+        $stmt->execute([$email]); // Exécute la requête avec l'email
+        
+        $user = $stmt->fetch(\PDO::FETCH_ASSOC); // Récupère la ligne sous forme de tableau associatif, stocke dans $user
+        
+        $this->assertIsArray($user); // Vérifie que $user est un tableau (l'utilisateur existe)
+        
+        $this->assertEquals($email, $user['email']); // Vérifie que l'email correspond
     }
     
     /**
-     * Teste l'authentification avec un mot de passe correct
-     * 
-     * Vérifie que la méthode authenticate() retourne les données de l'utilisateur
-     * lorsque l'email et le mot de passe sont corrects.
-     * 
-     * Étapes du test :
-     * 1. Crée un utilisateur avec un mot de passe hashé
-     * 2. Appelle authenticate() avec l'email et le mot de passe en clair
-     * 3. Vérifie que la méthode retourne un tableau avec les données de l'utilisateur
-     * 4. Vérifie que l'email correspond
-     * 
-     * Note : Le mot de passe est hashé avec password_hash() et vérifié
-     * avec password_verify() dans la méthode authenticate().
+     * @testdox L'authentification réussit avec le bon mot de passe (hash le mot de passe avec password_hash(), stocke en base, puis authenticate() utilise password_verify() pour comparer, retourne l'utilisateur)
      */
-    public function testAuthenticationSucceedsWithCorrectPassword(): void
+    public function testAuthenticationSucceedsWithCorrectPassword(): void // Test : l'authentification réussit avec le bon mot de passe
     {
-        $email = 'auth@example.com';
-        $password = 'MyPassword123!';
-        $hash = password_hash($password, PASSWORD_DEFAULT);
+        $email = 'auth@example.com'; // Email de test
         
-        // Créer un utilisateur
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
-        );
-        $stmt->execute(['Auth', 'Test', $email, $hash]);
+        $password = 'MyPassword123!'; // Mot de passe en clair (sera utilisé pour l'authentification)
         
-        // Tester l'authentification
-        $user = $this->model->authenticate($email, $password);
+        $hash = password_hash($password, PASSWORD_DEFAULT); // Hash le mot de passe pour le stocker en base
         
-        $this->assertIsArray($user);
-        $this->assertEquals($email, $user['email']);
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion de l'utilisateur
+        
+        $stmt->execute(['Auth', 'Test', $email, $hash]); // Insère l'utilisateur avec le mot de passe hashé
+        
+        $user = $this->model->authenticate($email, $password); // Authentifie avec email + mot de passe en clair (password_verify compare avec le hash), stocke le résultat dans $user
+        
+        $this->assertIsArray($user); // Vérifie que $user est un tableau (authentification réussie)
+        
+        $this->assertEquals($email, $user['email']); // Vérifie que l'email correspond (bon utilisateur retourné)
     }
     
     /**
-     * Teste que l'authentification échoue avec un mauvais mot de passe
-     * 
-     * Vérifie que la méthode authenticate() ne retourne pas les données
-     * de l'utilisateur lorsque le mot de passe est incorrect.
-     * 
-     * Étapes du test :
-     * 1. Crée un utilisateur avec un mot de passe hashé
-     * 2. Appelle authenticate() avec l'email et un mauvais mot de passe
-     * 3. Vérifie que la méthode retourne false ou un tableau vide
-     * 
-     * Ce test garantit la sécurité en vérifiant qu'un utilisateur ne peut
-     * pas s'authentifier avec un mot de passe incorrect.
+     * @testdox L'authentification échoue avec un mauvais mot de passe (stocke un hash du bon mot de passe, puis authenticate() avec un mauvais mot de passe échoue car password_verify() retourne false)
      */
-    public function testAuthenticationFailsWithWrongPassword(): void
+    public function testAuthenticationFailsWithWrongPassword(): void // Test : l'authentification échoue avec un mauvais mot de passe
     {
-        $email = 'wrongauth@example.com';
-        $correctPassword = 'CorrectPass123!';
-        $wrongPassword = 'WrongPass123!';
-        $hash = password_hash($correctPassword, PASSWORD_DEFAULT);
+        $email = 'wrongauth@example.com'; // Email de test
         
-        // Créer un utilisateur
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
-        );
-        $stmt->execute(['Wrong', 'Auth', $email, $hash]);
+        $correctPassword = 'CorrectPass123!'; // Bon mot de passe (sera hashé et stocké)
         
-        // Tester l'authentification avec le mauvais mot de passe
-        $user = $this->model->authenticate($email, $wrongPassword);
+        $wrongPassword = 'WrongPass123!'; // Mauvais mot de passe (sera utilisé pour l'authentification, devrait échouer)
         
-        // L'authentification échoue (retourne false ou null selon l'implémentation)
-        $this->assertEmpty($user);
+        $hash = password_hash($correctPassword, PASSWORD_DEFAULT); // Hash le BON mot de passe
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion
+        
+        $stmt->execute(['Wrong', 'Auth', $email, $hash]); // Insère l'utilisateur avec le hash du BON mot de passe
+        
+        $user = $this->model->authenticate($email, $wrongPassword); // Essaie de s'authentifier avec le MAUVAIS mot de passe, stocke le résultat dans $user (devrait être false)
+        
+        $this->assertEmpty($user); // Vérifie que $user est vide (false/null) - l'authentification a bien échoué
     }
     
     /**
-     * Teste la méthode emailExists
-     * 
-     * Vérifie que la méthode emailExists() retourne :
-     * - true si l'email existe dans la base de données
-     * - false si l'email n'existe pas
-     * 
-     * Ce test couvre deux cas :
-     * 1. Un email existant doit retourner true
-     * 2. Un email inexistant doit retourner false
-     * 
-     * Utile pour vérifier la disponibilité d'un email lors de l'inscription.
+     * @testdox Retourne true pour un email existant et false pour un email inexistant (emailExists() fait un SELECT COUNT(*), retourne true si > 0, false sinon, teste les deux cas)
      */
-    public function testEmailExistsReturnsTrueForExistingEmail(): void
+    public function testEmailExistsReturnsTrueForExistingEmail(): void // Test : emailExists() retourne true pour un email existant, false sinon
     {
-        $email = 'exists@example.com';
-        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        $email = 'exists@example.com'; // Email de test
         
-        // Créer un utilisateur
-        $stmt = $this->pdo->prepare(
-            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
-        );
-        $stmt->execute(['Exists', 'Test', $email, $password]);
+        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe
         
-        // Vérifier que l'email existe
-        $exists = $this->model->emailExists($email);
-        $this->assertTrue($exists);
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion
         
-        // Vérifier qu'un email inexistant retourne false
-        $notExists = $this->model->emailExists('notexists@example.com');
-        $this->assertFalse($notExists);
+        $stmt->execute(['Exists', 'Test', $email, $password]); // Insère l'utilisateur
+        
+        $exists = $this->model->emailExists($email); // Vérifie si l'email existe, stocke le résultat dans $exists
+        
+        $this->assertTrue($exists); // Vérifie que $exists est true (l'email existe)
+        
+        $notExists = $this->model->emailExists('notexists@example.com'); // Vérifie un email qui n'existe pas, stocke dans $notExists
+        
+        $this->assertFalse($notExists); // Vérifie que $notExists est false (l'email n'existe pas)
     }
 }
-

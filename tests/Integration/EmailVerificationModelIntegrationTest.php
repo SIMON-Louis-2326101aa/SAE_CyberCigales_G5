@@ -1,219 +1,161 @@
-<?php
+<?php // Balise d'ouverture PHP
 
-namespace Tests\Integration;
+namespace Tests\Integration; // Déclare le namespace Tests\Integration
 
-use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel; // Importe EmailVerificationModel du projet
 
 /**
  * Tests d'intégration pour EmailVerificationModel
  * 
- * Ces tests utilisent la vraie base de données mais dans des transactions
- * qui sont annulées automatiquement (ROLLBACK) après chaque test.
- * 
+ * @testdox Tests d'intégration - Vérification d'email avec base de données
  * @group integration
  * @group database
  */
-class EmailVerificationModelIntegrationTest extends DatabaseTestCase
+class EmailVerificationModelIntegrationTest extends DatabaseTestCase // Hérite de DatabaseTestCase (fournit connexion DB et transactions)
 {
-    private EmailVerificationModel $model;
+    private EmailVerificationModel $model; // Instance de EmailVerificationModel utilisée dans les tests
     
-    /**
-     * Initialise l'environnement de test avant chaque test
-     * 
-     * Appelle setUp() de la classe parente (DatabaseTestCase) qui démarre
-     * une transaction, puis crée une nouvelle instance de EmailVerificationModel
-     * pour chaque test.
-     */
-    protected function setUp(): void
+    protected function setUp(): void // Méthode appelée AVANT chaque test
     {
-        parent::setUp();
-        $this->model = new EmailVerificationModel();
+        parent::setUp(); // Appelle setUp() de DatabaseTestCase (charge .env, crée connexion PDO, démarre transaction)
+        
+        $this->model = new EmailVerificationModel(); // Crée une nouvelle instance de EmailVerificationModel pour chaque test
     }
     
     /**
-     * Teste la génération et le stockage d'un code de vérification
-     * 
-     * Vérifie que la méthode generateAndStoreCode() :
-     * 1. Génère un code de 6 chiffres
-     * 2. Stocke le code dans la base de données avec l'email
-     * 3. Assigne une date d'expiration au code
-     * 
-     * Le code généré doit respecter le format : 6 chiffres (ex: "123456")
-     * et être stocké dans la table email_verification_codes.
+     * @testdox Génère et stocke un code de vérification valide de 6 chiffres en base de données (generateAndStoreCode() crée un code, l'insère dans email_verification_codes avec expires_at, puis vérifie en base avec SELECT)
      */
-    public function testGenerateAndStoreCodeCreatesValidCode(): void
+    public function testGenerateAndStoreCodeCreatesValidCode(): void // Test : generateAndStoreCode() génère et stocke un code valide de 6 chiffres
     {
-        $email = 'test@example.com';
+        $email = 'test@example.com'; // Email de test pour lequel générer le code
         
-        // Générer et stocker un code
-        $code = $this->model->generateAndStoreCode($email, 10);
+        $code = $this->model->generateAndStoreCode($email, 10); // Génère un code de 6 chiffres, le stocke en base avec expiration (10 min), retourne le code
         
-        // Vérifications
-        $this->assertIsString($code);
-        $this->assertEquals(6, strlen($code));
-        $this->assertMatchesRegularExpression('/^\d{6}$/', $code);
+        $this->assertIsString($code); // Vérifie que $code est une chaîne de caractères
         
-        // Vérifier que le code est bien en base
-        $stmt = $this->pdo->prepare(
-            'SELECT * FROM email_verification_codes WHERE email = ? AND code = ?'
-        );
-        $stmt->execute([$email, $code]);
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $this->assertEquals(6, strlen($code)); // Vérifie que la longueur de $code est exactement 6 caractères
         
-        $this->assertIsArray($result);
-        $this->assertEquals($email, $result['email']);
-        $this->assertEquals($code, $result['code']);
-        $this->assertNotNull($result['expires_at']);
+        $this->assertMatchesRegularExpression('/^\d{6}$/', $code); // Vérifie que $code contient exactement 6 chiffres (0-9) avec une regex
+        
+        $stmt = $this->pdo->prepare('SELECT * FROM email_verification_codes WHERE email = ? AND code = ?'); // Prépare la requête pour chercher le code en base
+        
+        $stmt->execute([$email, $code]); // Exécute la requête avec l'email et le code
+        
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC); // Récupère la ligne sous forme de tableau associatif, stocke dans $result
+        
+        $this->assertIsArray($result); // Vérifie que $result est un tableau (le code a été trouvé en base)
+        
+        $this->assertEquals($email, $result['email']); // Vérifie que l'email correspond
+        
+        $this->assertEquals($code, $result['code']); // Vérifie que le code correspond
+        
+        $this->assertNotNull($result['expires_at']); // Vérifie que la date d'expiration n'est pas null
     }
     
     /**
-     * Teste la vérification d'un code valide
-     * 
-     * Vérifie que la méthode checkCodeStatus() retourne un statut valide
-     * lorsque le code fourni correspond au code stocké pour l'email.
-     * 
-     * Étapes du test :
-     * 1. Génère et stocke un code pour un email
-     * 2. Appelle checkCodeStatus() avec l'email et le code correct
-     * 3. Vérifie que le statut indique que le code est valide
+     * @testdox Retourne un statut valide pour un code de vérification correct (génère un code, puis checkCodeStatus() le compare avec celui en base, retourne ['valid' => true, 'reason' => 'valid'])
      */
-    public function testCheckCodeStatusReturnsValidForCorrectCode(): void
+    public function testCheckCodeStatusReturnsValidForCorrectCode(): void // Test : checkCodeStatus() retourne un statut valide pour un code correct
     {
-        $email = 'valid@example.com';
-        $code = $this->model->generateAndStoreCode($email, 10);
+        $email = 'valid@example.com'; // Email de test
         
-        // Vérifier le statut
-        $status = $this->model->checkCodeStatus($email, $code);
+        $code = $this->model->generateAndStoreCode($email, 10); // Génère et stocke un code pour cet email
         
-        $this->assertIsArray($status);
-        $this->assertTrue($status['valid']);
-        $this->assertEquals('valid', $status['reason']);
+        $status = $this->model->checkCodeStatus($email, $code); // Vérifie le statut du code, stocke le résultat dans $status
+        
+        $this->assertIsArray($status); // Vérifie que $status est un tableau
+        
+        $this->assertTrue($status['valid']); // Vérifie que le statut indique que le code est valide
+        
+        $this->assertEquals('valid', $status['reason']); // Vérifie que la raison est 'valid'
     }
     
     /**
-     * Teste la vérification d'un code incorrect
-     * 
-     * Vérifie que la méthode checkCodeStatus() retourne un statut invalide
-     * lorsque le code fourni ne correspond pas au code stocké pour l'email.
-     * 
-     * Étapes du test :
-     * 1. Génère et stocke un code pour un email
-     * 2. Appelle checkCodeStatus() avec l'email et un mauvais code
-     * 3. Vérifie que le statut indique que le code est incorrect
-     * 
-     * Ce test garantit la sécurité en vérifiant qu'un code incorrect
-     * ne peut pas être utilisé pour vérifier un email.
+     * @testdox Retourne un statut invalide pour un code de vérification incorrect (génère un code, puis checkCodeStatus() avec un code différent retourne ['valid' => false, 'reason' => 'incorrect'])
      */
-    public function testCheckCodeStatusReturnsIncorrectForWrongCode(): void
+    public function testCheckCodeStatusReturnsIncorrectForWrongCode(): void // Test : checkCodeStatus() retourne un statut invalide pour un code incorrect
     {
-        $email = 'test@example.com';
-        $this->model->generateAndStoreCode($email, 10);
+        $email = 'test@example.com'; // Email de test
         
-        // Vérifier avec un mauvais code
-        $status = $this->model->checkCodeStatus($email, '999999');
+        $this->model->generateAndStoreCode($email, 10); // Génère et stocke un code pour cet email
         
-        $this->assertIsArray($status);
-        $this->assertFalse($status['valid']);
-        $this->assertEquals('incorrect', $status['reason']);
+        $status = $this->model->checkCodeStatus($email, '999999'); // Vérifie le statut avec un MAUVAIS code, stocke dans $status
+        
+        $this->assertIsArray($status); // Vérifie que $status est un tableau
+        
+        $this->assertFalse($status['valid']); // Vérifie que le statut indique que le code est invalide
+        
+        $this->assertEquals('incorrect', $status['reason']); // Vérifie que la raison est 'incorrect'
     }
     
     /**
-     * Teste le stockage d'une inscription en attente
-     * 
-     * Vérifie que la méthode storePendingRegistration() crée correctement
-     * un enregistrement dans la table pending_registrations avec les données
-     * de l'utilisateur (nom, prénom, email, mot de passe hashé).
-     * 
-     * Les inscriptions en attente sont stockées temporairement jusqu'à
-     * ce que l'utilisateur vérifie son email et que son compte soit créé.
+     * @testdox Crée un enregistrement dans pending_registrations pour une inscription en attente (storePendingRegistration() insère nom, prenom, email, password hashé, puis vérifie avec SELECT que les données sont correctes)
      */
-    public function testStorePendingRegistrationCreatesRecord(): void
+    public function testStorePendingRegistrationCreatesRecord(): void // Test : storePendingRegistration() crée un enregistrement dans pending_registrations
     {
-        $nom = 'Dupont';
-        $prenom = 'Jean';
-        $email = 'jean.dupont@example.com';
-        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        $nom = 'Dupont'; // Nom de l'utilisateur
+        $prenom = 'Jean'; // Prénom de l'utilisateur
+        $email = 'jean.dupont@example.com'; // Email de l'utilisateur
+        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe
         
-        // Stocker l'inscription en attente
-        $result = $this->model->storePendingRegistration($nom, $prenom, $email, $password);
+        $result = $this->model->storePendingRegistration($nom, $prenom, $email, $password); // Stocke l'inscription en attente, stocke le résultat dans $result
         
-        $this->assertTrue($result);
+        $this->assertTrue($result); // Vérifie que $result est true (l'inscription a été créée)
         
-        // Vérifier en base
-        $stmt = $this->pdo->prepare('SELECT * FROM pending_registrations WHERE email = ?');
-        $stmt->execute([$email]);
-        $record = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $stmt = $this->pdo->prepare('SELECT * FROM pending_registrations WHERE email = ?'); // Prépare la requête pour vérifier en base
         
-        $this->assertIsArray($record);
-        $this->assertEquals($nom, $record['nom']);
-        $this->assertEquals($prenom, $record['prenom']);
-        $this->assertEquals($email, $record['email']);
+        $stmt->execute([$email]); // Exécute la requête avec l'email
+        
+        $record = $stmt->fetch(\PDO::FETCH_ASSOC); // Récupère la ligne sous forme de tableau associatif, stocke dans $record
+        
+        $this->assertIsArray($record); // Vérifie que $record est un tableau (l'inscription existe)
+        
+        $this->assertEquals($nom, $record['nom']); // Vérifie que le nom correspond
+        
+        $this->assertEquals($prenom, $record['prenom']); // Vérifie que le prénom correspond
+        
+        $this->assertEquals($email, $record['email']); // Vérifie que l'email correspond
     }
     
     /**
-     * Teste qu'un nouveau code remplace l'ancien pour le même email
-     * 
-     * Vérifie que lorsqu'on génère un nouveau code pour un email qui a
-     * déjà un code, le nouveau code est généré (et peut remplacer l'ancien).
-     * 
-     * Ce test garantit que :
-     * 1. Plusieurs codes peuvent être générés pour le même email
-     * 2. Les codes générés sont différents
-     * 3. L'utilisateur peut demander un nouveau code si nécessaire
+     * @testdox Un nouveau code de vérification remplace l'ancien pour le même email (génère un premier code, compte les codes, génère un second code, les deux codes sont différents mais le nouveau existe en base)
      */
-    public function testGeneratingNewCodeReplacesOldOne(): void
+    public function testGeneratingNewCodeReplacesOldOne(): void // Test : générer un nouveau code pour le même email crée un code différent
     {
-        $email = 'replace@example.com';
+        $email = 'replace@example.com'; // Email de test
         
-        // Générer un premier code
-        $code1 = $this->model->generateAndStoreCode($email, 10);
+        $code1 = $this->model->generateAndStoreCode($email, 10); // Génère un premier code, stocke dans $code1
         
-        // Compter les codes pour cet email
-        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM email_verification_codes WHERE email = ?');
-        $stmt->execute([$email]);
-        $count1 = $stmt->fetchColumn();
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM email_verification_codes WHERE email = ?'); // Prépare la requête pour compter les codes
         
-        // Générer un second code
-        $code2 = $this->model->generateAndStoreCode($email, 10);
+        $stmt->execute([$email]); // Exécute la requête avec l'email
         
-        // Compter à nouveau
-        $stmt->execute([$email]);
-        $count2 = $stmt->fetchColumn();
+        $count1 = $stmt->fetchColumn(); // Récupère le nombre de codes, stocke dans $count1
         
-        // Les deux codes doivent être différents
-        $this->assertNotEquals($code1, $code2);
+        $code2 = $this->model->generateAndStoreCode($email, 10); // Génère un second code, stocke dans $code2
         
-        // Il peut y avoir plusieurs codes en base (pas de suppression automatique dans le modèle actuel)
-        $this->assertGreaterThanOrEqual($count1, $count2);
+        $stmt->execute([$email]); // Réexécute la requête pour compter à nouveau
+        
+        $count2 = $stmt->fetchColumn(); // Récupère le nouveau nombre de codes, stocke dans $count2
+        
+        $this->assertNotEquals($code1, $code2); // Vérifie que les deux codes sont différents
+        
+        $this->assertGreaterThanOrEqual($count1, $count2); // Vérifie que le nombre de codes est >= au nombre initial (peut y avoir plusieurs codes)
     }
     
     /**
-     * Teste que le TTL (Time To Live) est bien limité entre 1 et 60 minutes
-     * 
-     * Vérifie que la méthode generateAndStoreCode() limite correctement
-     * la valeur du TTL :
-     * - Les valeurs < 1 sont remontées à 1 minute
-     * - Les valeurs > 60 sont limitées à 60 minutes
-     * - Les valeurs entre 1 et 60 restent inchangées
-     * 
-     * Cela garantit que les codes de vérification ont une durée de vie
-     * raisonnable et sécurisée.
+     * @testdox Limite le TTL entre 1 et 60 minutes (valeurs invalides sont ajustées) (génère des codes avec TTL 0, 100 et 15, le système limite automatiquement à 1-60, aucune exception ne doit être levée)
      */
-    public function testTtlIsClampedToValidRange(): void
+    public function testTtlIsClampedToValidRange(): void // Test : le TTL est limité entre 1 et 60 minutes
     {
-        $email = 'ttl@example.com';
+        $email = 'ttl@example.com'; // Email de test
         
-        // Tester avec un TTL trop petit (devrait être 1)
-        $this->model->generateAndStoreCode($email, 0);
+        $this->model->generateAndStoreCode($email, 0); // Génère un code avec TTL trop petit (0) - devrait être remonté à 1
         
-        // Tester avec un TTL trop grand (devrait être 60)
-        $this->model->generateAndStoreCode($email, 100);
+        $this->model->generateAndStoreCode($email, 100); // Génère un code avec TTL trop grand (100) - devrait être limité à 60
         
-        // Tester avec un TTL valide
-        $this->model->generateAndStoreCode($email, 15);
+        $this->model->generateAndStoreCode($email, 15); // Génère un code avec TTL valide (15) - devrait rester à 15
         
-        // Si pas d'exception, le test passe
-        $this->assertTrue(true);
+        $this->assertTrue(true); // Si aucune exception n'est levée, le test passe (les TTL sont bien limités)
     }
 }
-

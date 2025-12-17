@@ -1,144 +1,85 @@
-<?php
+<?php // Balise d'ouverture PHP
 
-namespace Tests\Integration;
+namespace Tests\Integration; // Déclare le namespace Tests\Integration
 
-use PHPUnit\Framework\TestCase;
-use SAE_CyberCigales_G5\includes\ConnectionDB;
-use PDO;
+use PHPUnit\Framework\TestCase; // Importe TestCase de PHPUnit
+
+use SAE_CyberCigales_G5\includes\ConnectionDB; // Importe ConnectionDB (gère la connexion à la base de données)
+
+use PDO; // Importe PDO (interface pour accéder à la base de données)
 
 /**
  * Classe de base pour les tests d'intégration avec base de données
  * 
- * Utilise des transactions pour isoler les tests :
- * - BEGIN TRANSACTION avant chaque test
- * - ROLLBACK après chaque test
- * 
- * Ainsi les tests n'affectent jamais réellement la base de données.
- * 
  * @group integration
  */
-abstract class DatabaseTestCase extends TestCase
-{
-    /**
-     * Connexion PDO pour les tests
-     * 
-     * @var PDO
-     */
-    protected PDO $pdo;
+abstract class DatabaseTestCase extends TestCase // Classe abstraite : ne peut pas être instanciée directement, sert de base pour d'autres tests
+{ 
+    protected PDO $pdo; // Connexion PDO à la base de données (accessible dans cette classe et ses classes filles)
     
-    /**
-     * Instance de ConnectionDB
-     * 
-     * @var ConnectionDB
-     */
-    protected ConnectionDB $db;
+    protected ConnectionDB $db; // Instance de ConnectionDB (accessible dans cette classe et ses classes filles)
     
     /**
      * Initialise la connexion et démarre une transaction avant chaque test
-     * 
-     * Cette méthode s'exécute automatiquement avant chaque test d'intégration.
-     * Elle :
-     * 1. Charge les variables d'environnement depuis le fichier .env
-     * 2. Récupère une connexion à la base de données
-     * 3. Démarre une transaction (BEGIN TRANSACTION)
-     * 
-     * Grâce aux transactions, toutes les modifications faites pendant le test
-     * seront annulées automatiquement à la fin (ROLLBACK), ce qui garantit
-     * que les tests n'affectent jamais la vraie base de données.
      */
-    protected function setUp(): void
+    protected function setUp(): void // Méthode appelée automatiquement AVANT chaque test
     {
-        parent::setUp();
+        parent::setUp(); // Appelle setUp() de la classe parente (TestCase) pour initialiser PHPUnit
         
-        // Charger les variables d'environnement si nécessaire
-        if (!isset($_ENV['DB_HOST'])) {
-            $rootDir = dirname(__DIR__, 2);
-            if (file_exists($rootDir . '/config/.env')) {
-                $dotenv = \Dotenv\Dotenv::createImmutable($rootDir . '/config', '.env');
-                $dotenv->load();
+        if (!isset($_ENV['DB_HOST'])) { // Si la variable d'environnement DB_HOST n'existe pas
+            $rootDir = dirname(__DIR__, 2); // Remonte de 2 niveaux dans l'arborescence pour trouver la racine du projet
+            
+            if (file_exists($rootDir . '/config/.env')) { // Si le fichier .env existe
+                $dotenv = \Dotenv\Dotenv::createImmutable($rootDir . '/config', '.env'); // Crée une instance Dotenv pour charger le fichier .env
+                
+                $dotenv->load(); // Charge les variables du fichier .env dans $_ENV (DB_HOST, DB_NAME, etc.)
             }
         }
         
-        // Récupérer la connexion
-        $this->db = ConnectionDB::getInstance();
-        $this->pdo = $this->db->getPdo();
+        $this->db = ConnectionDB::getInstance(); // Récupère l'instance singleton de ConnectionDB
         
-        // Démarrer une transaction pour isoler le test
-        $this->pdo->beginTransaction();
+        $this->pdo = $this->db->getPdo(); // Récupère l'objet PDO depuis ConnectionDB (connexion à la base de données)
+        
+        $this->pdo->beginTransaction(); // Démarre une transaction SQL (toutes les modifications seront annulées à la fin du test avec rollBack)
     }
     
     /**
      * Annule la transaction après chaque test (ROLLBACK)
-     * 
-     * Cette méthode s'exécute automatiquement après chaque test d'intégration.
-     * Elle annule toutes les modifications faites pendant le test en appelant
-     * rollBack() sur la transaction.
-     * 
-     * Ainsi, même si un test insère, modifie ou supprime des données,
-     * la base de données revient à son état initial après le test.
-     * Cela permet de :
-     * - Tester avec des données réelles sans risque
-     * - Exécuter les tests plusieurs fois sans pollution
-     * - Garantir que chaque test commence avec une base propre
      */
-    protected function tearDown(): void
+    protected function tearDown(): void // Méthode appelée automatiquement APRÈS chaque test
     {
-        // Annuler toutes les modifications du test
-        if ($this->pdo->inTransaction()) {
-            $this->pdo->rollBack();
+        if ($this->pdo->inTransaction()) { // Si une transaction est en cours
+            $this->pdo->rollBack(); // Annule toutes les modifications faites dans la transaction (INSERT, UPDATE, DELETE sont annulés)
         }
         
-        parent::tearDown();
+        parent::tearDown(); // Appelle tearDown() de la classe parente (TestCase) pour nettoyer PHPUnit
     }
     
     /**
      * Helper : Nettoie une table spécifique (pour setup de test)
-     * 
-     * Supprime toutes les lignes d'une table. Utile pour préparer
-     * un état de base de données connu avant un test.
-     * 
-     * Note : Comme cette méthode est appelée dans une transaction,
-     * les suppressions seront annulées après le test (ROLLBACK).
-     * 
-     * @param string $tableName Nom de la table à vider
-     * @return void
      */
-    protected function truncateTable(string $tableName): void
+    protected function truncateTable(string $tableName): void // Méthode helper pour vider une table (supprimer toutes les lignes)
     {
-        $this->pdo->exec("DELETE FROM {$tableName}");
+        $this->pdo->exec("DELETE FROM {$tableName}"); // Exécute une requête SQL DELETE pour supprimer toutes les lignes de la table (sera annulé par rollBack)
     }
     
     /**
      * Helper : Compte le nombre de lignes dans une table
-     * 
-     * Utile pour vérifier qu'un test a bien inséré ou supprimé
-     * le nombre attendu de lignes.
-     * 
-     * @param string $tableName Nom de la table à compter
-     * @return int Nombre de lignes dans la table
      */
-    protected function countRowsInTable(string $tableName): int
+    protected function countRowsInTable(string $tableName): int // Méthode helper pour compter le nombre de lignes dans une table
     {
-        $stmt = $this->pdo->query("SELECT COUNT(*) FROM {$tableName}");
-        return (int)$stmt->fetchColumn();
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM {$tableName}"); // Exécute une requête SQL COUNT pour compter les lignes, stocke le résultat dans $stmt
+        
+        return (int)$stmt->fetchColumn(); // Récupère la première colonne (le nombre de lignes) et la convertit en entier, puis retourne cette valeur
     }
     
     /**
      * Helper : Récupère la dernière ligne insérée d'une table
-     * 
-     * Récupère la ligne avec l'ID le plus élevé (supposant que la table
-     * a une colonne 'id' auto-incrémentée).
-     * 
-     * Utile pour vérifier les données d'un enregistrement qui vient
-     * d'être créé pendant un test.
-     * 
-     * @param string $tableName Nom de la table
-     * @return array|false Tableau associatif avec les données de la ligne, ou false si aucune ligne
      */
-    protected function getLastInsertedRow(string $tableName): array|false
+    protected function getLastInsertedRow(string $tableName): array|false // Méthode helper pour récupérer la dernière ligne insérée (celle avec l'ID le plus élevé)
     {
-        $stmt = $this->pdo->query("SELECT * FROM {$tableName} ORDER BY id DESC LIMIT 1");
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $this->pdo->query("SELECT * FROM {$tableName} ORDER BY id DESC LIMIT 1"); // Exécute une requête SQL pour récupérer la dernière ligne (triée par id décroissant, limitée à 1)
+        
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Récupère une ligne et la retourne sous forme de tableau associatif (clés = noms de colonnes), ou false si aucune ligne
     }
 }
-
