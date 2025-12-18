@@ -900,19 +900,78 @@ button:hover {
     transform: translate(-50%, -50%);
 }
 
-/* Theme Sombre */
-body.dark-theme {
-    background: #020817;
-    color: var(--text-primary);
+/* Styles pour le conteneur du sélecteur de thème */
+.theme-switcher-container {
+    position: relative;
 }
 
-body.dark-theme .btn-nav {
+/* Cache le label visuellement mais le garde accessible pour les lecteurs d'écran */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* Style du menu déroulant */
+#theme-selector {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--primary);
+    background-color: var(--bg-dark);
     color: var(--primary);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
 }
 
-body.dark-theme .btn-nav:hover {
-    background-color: var(--primary);
-    color: var(--bg-dark);
+/* ========================= THÈMES DALTONIENS ============================== */
+
+/* ================= Thème Deuteranopie/Protanopie (rouge/vert) ========================== */
+body[data-theme="deuteranopia-protanopia"] {
+    --primary: #0072B2;
+    --primary-dark: #005A8E;
+    --primary-light: #3398D0;
+    --secondary: #E69F00;
+    --secondary-dark: #B87F00;
+    --accent: #E69F00;
+    --success: #56B4E9;
+    --warning: #F0E442;
+    --error: #D55E00;
+
+    --border: rgba(0, 114, 178, 0.2);
+    --border-light: rgba(0, 114, 178, 0.3);
+}
+
+/* ========================== Thème Tritanopie (bleu-jaune) ============================== */
+body[data-theme="tritanopia"] {
+    --primary: #CC79A7;
+    --primary-dark: #A36185;
+    --primary-light: #E096C1;
+    --secondary: #009E73;
+    --secondary-dark: #007E5C;
+    --accent: #009E73;
+    --success: #009E73;
+    --warning: #F0E442;
+    --error: #D55E00;
+
+    --border: rgba(204, 121, 167, 0.2);
+    --border-light: rgba(204, 121, 167, 0.3);
+}
+
+/* Assure que le bouton admin reste visible dans tous les thèmes */
+#admin-button {
+    background: #ffc800;
+    color: #000 !important;
+}
+
+body[data-theme="deuteranopia-protanopia"] #admin-button,
+body[data-theme="tritanopia"] #admin-button {
+    background-color: #F0E442;
+    color: #000 !important;
 }
 
 /* ============ Responsive ============ */
