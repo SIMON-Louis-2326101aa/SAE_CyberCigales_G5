@@ -28,35 +28,42 @@ if (session_status() === PHP_SESSION_NONE) {
         <h5><strong>Escape The Code</strong></h5>
     </div>
 
-    <div id="nav-auth-buttons">
-        <?php
-        if (isset($_SESSION['utilisateur'])) {
-            ?>
-            <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
-            <a href="index.php?controller=User&action=logout" class="active btn-nav">Déconnexion</a>
-            <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
-            <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com') : ?>
-                <!-- Si Admin, alors le bouton Admin est accessible -->
-                <a href="index.php?controller=Admin&action=listUsers" class="active btn-nav" id="admin-button">Admin</a>
-            <?php endif; ?>
+    <div class="nav-right-side">
+        <div id="nav-auth-buttons">
             <?php
-        } else {
+            if (isset($_SESSION['utilisateur'])) {
+                ?>
+                <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
+                <a href="index.php?controller=User&action=logout" class="active btn-nav">Déconnexion</a>
+                <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
+                <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com') : ?>
+                    <!-- Si Admin, alors le bouton Admin est accessible -->
+                    <a href="index.php?controller=Admin&action=listUsers" class="active btn-nav" id="admin-button">Admin</a>
+                <?php endif; ?>
+                <?php
+            } else {
+                ?>
+                <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
+                <a href="index.php?controller=Redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
+                <a href="index.php?controller=Redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
+                <?php
+            }
             ?>
-            <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
-            <a href="index.php?controller=Redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
-            <a href="index.php?controller=Redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
-            <?php
-        }
-        ?>
-    </div>
+        </div>
 
-    <div class="theme-switcher-container">
-        <label for="theme-selector" class="visually-hidden">Choisir un thème</label>
-        <select id="theme-selector">
-            <option value="default">Thème par défaut</option>
-            <option value="deuteranopia-protanopia">Deutéranopie-Protanopie (Rouge-Vert)</option>
-            <option value="tritanopia">Tritanopie (Bleu-Jaune)</option>
-        </select>
+        <div class="settings-menu-container">
+            <button id="settings-button" class="settings-button" aria-label="Ouvrir les paramètres" aria-haspopup="true" aria-expanded="false">
+                ⚙️
+            </button>
+            <div id="settings-menu" class="settings-menu" role="menu">
+                <div class="settings-menu-header">Thèmes d'accessibilité</div>
+                <div id="theme-selector-buttons">
+                    <button class="theme-button" data-theme="default" role="menuitem">Thème par défaut</button>
+                    <button class="theme-button" data-theme="deuteranopia-protanopia" role="menuitem">Deutéranopie (Rouge-Vert)</button>
+                    <button class="theme-button" data-theme="tritanopia" role="menuitem">Tritanopie (Bleu-Jaune)</button>
+                </div>
+            </div>
+        </div>
     </div>
 </nav>
 

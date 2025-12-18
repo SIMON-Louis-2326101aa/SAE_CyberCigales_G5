@@ -900,32 +900,105 @@ button:hover {
     transform: translate(-50%, -50%);
 }
 
-/* Styles pour le conteneur du sélecteur de thème */
-.theme-switcher-container {
+/* ============ Settings Menu ============ */
+.settings-menu-container {
     position: relative;
 }
 
-/* Cache le label visuellement mais le garde accessible pour les lecteurs d'écran */
-.visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
+.settings-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
     padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+    margin: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--text-secondary);
+    transition: background-color 0.3s, color 0.3s;
 }
 
-/* Style du menu déroulant */
-#theme-selector {
-    padding: 0.5rem 1rem;
-    border: 1px solid var(--primary);
-    background-color: var(--bg-dark);
+.settings-button:hover,
+.settings-button:focus {
+    background-color: var(--border);
     color: var(--primary);
-    cursor: pointer;
+    outline: none;
+}
+
+.settings-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.settings-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
+    padding: var(--space-4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    width: 280px;
+    z-index: 1100;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+.settings-menu.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+}
+
+.settings-menu-header {
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Thème pour les daltoniens */
+#theme-selector-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.theme-button {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--bg-light);
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     font-size: 0.9rem;
+}
+
+.theme-button:hover {
+    background-color: var(--border);
+    color: var(--primary);
+    transform: none;
+}
+
+.theme-button.active {
+    background-color: var(--primary);
+    color: var(--bg-dark);
+    font-weight: bold;
+    border-color: var(--primary-dark);
 }
 
 /* ========================= THÈMES DALTONIENS ============================== */
@@ -1471,4 +1544,10 @@ body[data-theme="tritanopia"] #admin-button {
 
 #admin-button {
     background: #ffc800;
+}
+
+.nav-right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
 }
