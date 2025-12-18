@@ -920,19 +920,157 @@ button:hover {
     transform: translate(-50%, -50%);
 }
 
-/* Theme Sombre */
-body.dark-theme {
-    background: #020817;
-    color: var(--text-primary);
+/* ============ Settings Menu ============ */
+.settings-menu-container {
+    position: relative;
 }
 
-body.dark-theme .btn-nav {
+.settings-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--text-secondary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.settings-button:hover,
+.settings-button:focus {
+    background-color: var(--border);
     color: var(--primary);
+    outline: none;
 }
 
-body.dark-theme .btn-nav:hover {
+.settings-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.settings-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    width: 280px;
+    z-index: 1100;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+.settings-menu.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+}
+
+.settings-menu-header {
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Thème pour les daltoniens */
+#theme-selector-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.theme-button {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--bg-light);
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    font-size: 0.9rem;
+}
+
+.theme-button:hover {
+    background-color: var(--border);
+    color: var(--primary);
+    transform: none;
+}
+
+.theme-button.active {
     background-color: var(--primary);
     color: var(--bg-dark);
+    font-weight: bold;
+    border-color: var(--primary-dark);
+}
+
+/* ========================= THÈMES DALTONIENS ============================== */
+
+/* ================= Thème Deuteranopie/Protanopie (rouge/vert) ========================== */
+body[data-theme="deuteranopia-protanopia"] {
+    --primary: #0072B2;
+    --primary-dark: #005A8E;
+    --primary-light: #3398D0;
+    --secondary: #E69F00;
+    --secondary-dark: #B87F00;
+    --accent: #E69F00;
+    --success: #56B4E9;
+    --warning: #F0E442;
+    --error: #D55E00;
+
+    --border: rgba(0, 114, 178, 0.2);
+    --border-light: rgba(0, 114, 178, 0.3);
+}
+
+.nav-right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* ========================== Thème Tritanopie (bleu-jaune) ============================== */
+body[data-theme="tritanopia"] {
+    --primary: #CC79A7;
+    --primary-dark: #A36185;
+    --primary-light: #E096C1;
+    --secondary: #009E73;
+    --secondary-dark: #007E5C;
+    --accent: #009E73;
+    --success: #009E73;
+    --warning: #F0E442;
+    --error: #D55E00;
+
+    --border: rgba(204, 121, 167, 0.2);
+    --border-light: rgba(204, 121, 167, 0.3);
+}
+
+/* Assure que le bouton admin reste visible dans tous les thèmes */
+#admin-button {
+    background: #ffc800;
+    color: #000 !important;
+}
+
+body[data-theme="deuteranopia-protanopia"] #admin-button,
+body[data-theme="tritanopia"] #admin-button {
+    background-color: #F0E442;
+    color: #000 !important;
 }
 
 /* ============ Responsive ============ */
