@@ -1019,6 +1019,12 @@ body[data-theme="deuteranopia-protanopia"] {
     --border-light: rgba(0, 114, 178, 0.3);
 }
 
+.nav-right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
 /* ========================== Thème Tritanopie (bleu-jaune) ============================== */
 body[data-theme="tritanopia"] {
     --primary: #CC79A7;
@@ -1544,10 +1550,4 @@ body[data-theme="tritanopia"] #admin-button {
 
 #admin-button {
     background: #ffc800;
-}
-
-.nav-right-side {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
 }
