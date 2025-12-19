@@ -1,22 +1,13 @@
-<h1>Contact</h1>
-<form id="form-contact" action="index.php?controller=EmailContact&action=sendContactEmail" method="post">
-
+<form action="index.php?controller=EmailContact&action=sendContactEmail" method="POST">
     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token ?? ''); ?>">
 
-    <ul>
-        <li>
-            <label for="mail">E-mail :</label>
-            <input type="email" id="mail" name="email" required>
-        </li>
-        <li>
-            <label for="sujet">Sujet : </label>
-            <input type="text" id="sujet" name="sujet" required>
-        </li>
-        <li>
-            <label for="message">Message :</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
-        </li>
-    </ul>
-    <br>
+    <input type="email" name="email" placeholder="Votre email" required
+           value="<?= htmlspecialchars($_SESSION['old']['email'] ?? '') ?>">
+
+    <input type="text" name="sujet" placeholder="Sujet" required
+           value="<?= htmlspecialchars($_SESSION['old']['sujet'] ?? '') ?>">
+
+    <textarea name="message" required><?= htmlspecialchars($_SESSION['old']['message'] ?? '') ?></textarea>
+
     <button type="submit">Envoyer</button>
 </form>
