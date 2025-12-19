@@ -81,10 +81,34 @@ class TeamController
             case 2:
                 header("Location: index.php?controller=Redirection&action=openPicturePuzzle");
                 break;
-//
-//            case 3:
-//                header("Location: index.php?controller=Redirection&action=openPuzzleSuivant");
-//                break;
+
+            case 3:
+                header("Location: index.php?controller=Redirection&action=openButterflyWay");
+                break;
+
+            case 4:
+                header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+                break;
+
+            case 5:
+                header("Location: index.php?controller=Redirection&action=openPasswordGame");
+                break;
+
+            case 6:
+                header("Location: index.php?controller=Redirection&action=openSummaryClue");
+                break;
+
+            case 7:
+                header("Location: index.php?controller=Redirection&action=openSearchSM");
+                break;
+
+            case 8:
+                header("Location: index.php?controller=Redirection&action=openMeetingPwd");
+                break;
+
+            case 9:
+                header("Location: index.php?controller=Redirection&action=openEndText");
+                break;
 
             default:
                 header("Location: index.php?controller=Redirection&action=openHomepage");
