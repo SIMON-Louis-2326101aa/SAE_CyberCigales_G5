@@ -41,7 +41,7 @@
     <div class="footer-bottom">
         <div class="footer-legal">
             <a href="index.php?controller=Redirection&action=openLegal">Mentions légales</a>
-            <a href="index.php?controller=Contact&action=show">Contact</a>
+            <a href="index.php?controller=Redirection&action=openContact">Contact</a>
             <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
         </div>
         <div class="footer-copyright">
