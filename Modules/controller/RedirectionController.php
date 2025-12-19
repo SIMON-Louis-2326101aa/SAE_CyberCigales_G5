@@ -100,7 +100,7 @@ class RedirectionController
     }
 
     /**
-     * Affiche la page d'introduction de la lettre de mission
+     * Affiche la page d'introduction de la lettre
      */
     public function openLetterIntro()
     {
@@ -128,11 +128,74 @@ class RedirectionController
     }
 
     /**
-     * Affiche la page de choix du personnage
+     * Affiche la page du puzzle de l'image
      */
     public function openPicturePuzzle()
     {
         $this->logRedirection('openpicturePuzzleView');
         ViewHandler::show('picturePuzzleView', ['pageTitle' => 'Enigme de l\'image']);
+    }
+
+    /**
+     * Affiche la page de l'enigme du papillon
+     */
+    public function openButterflyWay()
+    {
+        $this->logRedirection('openbutterflyWayView');
+        ViewHandler::show('butterflyWayView', ['pageTitle' => 'Enigme du papillon']);
+    }
+
+    /**
+     * Affiche la page de l'enigme du mail
+     */
+    public function openPhishingPuzzle()
+    {
+        $this->logRedirection('openPhishingPuzzleView');
+        ViewHandler::show('phishingPuzzleView', ['pageTitle' => 'Enigme du mail']);
+    }
+
+    /**
+     * Affiche la page du jeu du mot de passe
+     */
+    public function openPasswordGame()
+    {
+        $this->logRedirection('openPasswordGameView');
+        ViewHandler::show('passwordGameView', ['pageTitle' => 'Enigme du jeu du mot de passe']);
+    }
+
+    /**
+     * Affiche la page de resumé d'indices
+     */
+    public function openSummaryClue()
+    {
+        $this->logRedirection('openSummaryClueView');
+        ViewHandler::show('summaryClueView', ['pageTitle' => 'Enigme du resumé d\'indices']);
+    }
+
+    /**
+     * Affiche la page de recherche du cousin sur les réseaux
+     */
+    public function openSearchSM()
+    {
+        $this->logRedirection('openSearchSMView');
+        ViewHandler::show('searchSMView', ['pageTitle' => 'Enigme de recherche']);
+    }
+
+    /**
+     * Affiche la page de rencontre des deux equipes et mot de passe
+     */
+    public function openMeetingPwd()
+    {
+        $this->logRedirection('openMeetingPwdView');
+        ViewHandler::show('meetingPasswordView', ['pageTitle' => 'rassemblement des équipes']);
+    }
+
+    /**
+     * Affiche la page de rencontre des deux equipes et mot de passe
+     */
+    public function openEndText()
+    {
+        $this->logRedirection('openendTextView');
+        ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
 }
