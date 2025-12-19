@@ -24,23 +24,14 @@ class EmailContactController {
             session_start();
         }
 
-        // 1. Vérification méthode POST
+        //Vérification méthode POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['flash_error'] = "Méthode non autorisée.";
             $this->redirect();
             return;
         }
 
-        // 2. Vérification CSRF
-        $csrfToken = $_POST['csrf_token'] ?? '';
-        if (!$this->_checkCsrfToken($csrfToken)) {
-            $_SESSION['flash_error'] = "Requête invalide. Veuillez réessayer.";
-            self::log("Contact: Échec CSRF", "error");
-            $this->redirect();
-            return;
-        }
-
-        // 3. Récupération et nettoyage
+        //Récupération et nettoyage
         $email   = trim($_POST['email'] ?? '');
         $sujet   = trim($_POST['sujet'] ?? '');
         $message = trim($_POST['message'] ?? '');
@@ -52,7 +43,7 @@ class EmailContactController {
             'message' => htmlspecialchars($message, ENT_QUOTES, 'UTF-8')
         ];
 
-        // 4. Validation
+        //  Validation
         $validation = $this->validateData($email, $sujet, $message);
         if (!$validation['valid']) {
             $_SESSION['flash_error'] = $validation['error'];
@@ -61,7 +52,7 @@ class EmailContactController {
             return;
         }
 
-        // 5. Envoi email
+        // Envoi email
         try {
             $sujetFinal = "Contact Escape The Code : " . $sujet;
             $corpsEmail = $this->formatEmailBody($email, $sujet, $message);
@@ -121,33 +112,6 @@ class EmailContactController {
             </table>
           </td></tr></table>
         </div>";
-    }
-
-    public function getCsrfToken(): string {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        if (empty($_SESSION['csrf_token'])) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        }
-        return $_SESSION['csrf_token'];
-    }
-
-    private function _checkCsrfToken(string $token): bool {
-        $sessionToken = $_SESSION['csrf_token'] ?? '';
-
-        if (empty($token) || empty($sessionToken)) {
-            return false;
-        }
-
-        $isValid = hash_equals($sessionToken, $token);
-
-        // ✅ CORRECTION : Régénérer au lieu de détruire
-        if ($isValid) {
-            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        }
-
-        return $isValid;
     }
 
     private function redirect(): void {
