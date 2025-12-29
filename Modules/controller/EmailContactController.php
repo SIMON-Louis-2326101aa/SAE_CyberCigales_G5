@@ -6,8 +6,8 @@ namespace SAE_CyberCigales_G5\Modules\controller;
 
 use SAE_CyberCigales_G5\includes\Mailer;
 
-class EmailContactController {
-
+class EmailContactController
+{
     private const ADMIN_EMAIL = 'escapethecode2025@gmail.com';
 
     private static function log(string $message, string $type): void
@@ -19,7 +19,8 @@ class EmailContactController {
         error_log("[{$type}] {$message}");
     }
 
-    public function sendContactEmail(): void {
+    public function sendContactEmail(): void
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -74,7 +75,8 @@ class EmailContactController {
         $this->redirect();
     }
 
-    private function validateData(string $email, string $sujet, string $message): array {
+    private function validateData(string $email, string $sujet, string $message): array
+    {
         if (empty($email) || empty($sujet) || empty($message)) {
             return ['valid' => false, 'error' => 'Tous les champs sont obligatoires.'];
         }
@@ -90,7 +92,8 @@ class EmailContactController {
         return ['valid' => true];
     }
 
-    private function formatEmailBody(string $email, string $sujet, string $message): string {
+    private function formatEmailBody(string $email, string $sujet, string $message): string
+    {
         $date = date('d/m/Y à H:i:s');
         $safeEmail = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
         $safeSujet = htmlspecialchars($sujet, ENT_QUOTES, 'UTF-8');
@@ -99,9 +102,11 @@ class EmailContactController {
         return "
         <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;'>
           <table width='100%' border='0' cellspacing='0' cellpadding='0'><tr><td align='center'>
-            <table width='600' style='background:#ffffff; padding:20px; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.1);'>
+            <table width='600' style='background:#ffffff; padding:20px; border-radius:8px; box-shadow:0 4px 8px 
+            rgba(0,0,0,0.1);'>
               <tr><td>
-                <h2 style='color:#333; border-bottom: 2px solid #007bff; padding-bottom: 10px;'>Nouveau Message Contact</h2>
+                <h2 style='color:#333; border-bottom: 2px solid #007bff; padding-bottom: 10px;'>
+                Nouveau Message Contact</h2>
                 <p><strong>De :</strong> {$safeEmail}</p>
                 <p><strong>Sujet :</strong> {$safeSujet}</p>
                 <div style='background:#f9f9f9; padding:15px; border-left:4px solid #007bff; margin:20px 0;'>
@@ -114,7 +119,8 @@ class EmailContactController {
         </div>";
     }
 
-    private function redirect(): void {
+    private function redirect(): void
+    {
         header("Location: index.php?controller=Redirection&action=openContact");
         exit;
     }
