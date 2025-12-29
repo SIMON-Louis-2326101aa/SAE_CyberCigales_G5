@@ -180,11 +180,10 @@
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
     top: 0;
     left: 0;
     padding: 2rem;
-    font-family: "Handlee", cursive;
+    font-family: Handlee, cursive;
     background-image: url("/assets/images/fond-lettre.webp");
     background-size: cover;
     background-position: bottom;
@@ -202,7 +201,7 @@
 
 .letter-back {
     transform: rotateY(180deg);
-    font-size : 1.2rem;
+    font-size : 2.5rem;
     display: flex;
     z-index: 1;
 }
@@ -240,6 +239,7 @@
     font-size : 1.3rem;
     margin-top: 2rem ;
 }
+
 .solution-letter-content form {
     width: 100%;
     max-width: 1000px;   /* largeur “lettre” confortable */

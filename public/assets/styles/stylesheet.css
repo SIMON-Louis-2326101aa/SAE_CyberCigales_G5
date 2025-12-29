@@ -961,7 +961,7 @@ button:hover {
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     padding: var(--space-4);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 30px var(--bg-dark);
     width: 280px;
     z-index: 1100;
     visibility: hidden;
@@ -1035,8 +1035,9 @@ body[data-theme="deuteranopia-protanopia"] {
     --warning: #F0E442;
     --error: #D55E00;
 
-    --border: rgba(0, 114, 178, 0.2);
-    --border-light: rgba(0, 114, 178, 0.3);
+    /* border colors */
+    --border: #0072B233;        /* rgba(0, 114, 178, 0.2) */
+    --border-light: #0072B24D;  /* rgba(0, 114, 178, 0.3) */
 }
 
 .nav-right-side {
@@ -1057,8 +1058,9 @@ body[data-theme="tritanopia"] {
     --warning: #F0E442;
     --error: #D55E00;
 
-    --border: rgba(204, 121, 167, 0.2);
-    --border-light: rgba(204, 121, 167, 0.3);
+    /* border colors */
+    --border: #CC79A733;        /* rgba(204, 121, 167, 0.2) */
+    --border-light: #CC79A74D;  /* rgba(204, 121, 167, 0.3) */
 }
 
 /* Assure que le bouton admin reste visible dans tous les thèmes */
