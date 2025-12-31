@@ -49,7 +49,7 @@
             <img src="./assets/images/photoFamille.png" alt="photodefamille">
         </div>
         <div class="photo-face photo-back">
-            <p class="backImage">
+            <p class="back-image">
                     La clé ouvre le passé.
             </p>
         </div>
@@ -60,7 +60,7 @@
     </div>
 
     <div class="enigma-form">
-        <form method="POST" action="index.php?controller=Game&action=validatePhotoEnigma">
+        <form method="POST" action="index.php?controller=Puzzle&action=validatePhoto">
             <label>
                 Quoi retenir de ça ? (2 mot attendu)<br>
                 <textarea name="answer" required></textarea>
