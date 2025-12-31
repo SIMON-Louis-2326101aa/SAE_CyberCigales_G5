@@ -155,3 +155,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+// ===== Carte photo retournable =====
+document.addEventListener('DOMContentLoaded', () => {
+    const card = document.getElementById('photoCard');
+
+    if (!card) return;
+
+    card.addEventListener('click', () => {
+        card.classList.toggle('turn');
+    });
+});

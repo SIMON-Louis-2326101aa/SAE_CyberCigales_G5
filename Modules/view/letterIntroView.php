@@ -68,22 +68,22 @@
         <div id="letterContent" class="letter-content" role="button" tabindex="0" aria-pressed="false">
 
             <div class="letter-face letter-front">
-                    <p>cq sxuhu tyqdu </p>
-                    <p> iy jk byi sui bywdui s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu deki du iqledi
-                        fqi su gku bq lyu j q huiuhlu cqyi deki uifuhedi gk ubbu j q evvuhj qkjqdj tu hqyiedi t qycuh
-                        gku tu fqhtedduh
+                    <p>cq sxuhu tyqdu, </p>
+                    <p> iy jk byi sui bywdui, s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu. deki du iqledi
+                        fqi su gku bq lyu j q huiuhlu, cqyi deki uifuhedi gk ubbu j q evvuhj qkjqdj tu hqyiedi t qycuh
+                        gku tu fqhtedduh.
                     </p>
-                    <p>yb uij tui rbuiikhui gku b ed jqyj jhef bedwjucfi sheoqdj gk ubbui tyifqhqyjhedj t ubbui cucui
-                        cqyi bu iybudsu du ieywdu fqi yb udtehj iukbucudj bq tekbukh
+                    <p>yb uij tui rbuiikhui gku b ed jqyj jhef bedwjucfi, sheoqdj gk ubbui tyifqhqyjhedj t ubbui cucui.
+                        cqyi bu iybudsu du ieywdu fqi, yb udtehj iukbucudj bq tekbukh
                     </p>
-                    <p>deki qledi lk tqdi bu huwqht tu jq vybbu qbysu sujju cucu bkukh gku jk qlqyi udvqdj subbu tu bq
-                        skhyeiyju uj tk sekhqwu cubui du bq bqyiiu fqi i ujuydthu cucu iy bu cedtu judju tu bq seklhyh
-                        t ecrhu
+                    <p>deki qledi lk, tqdi bu huwqht tu jq vybbu qbysu, sujju cucu bkukh gku jk qlqyi udvqdj subbu tu bq
+                        skhyeiyju uj tk sekhqwu cubui. du bq bqyiiu fqi i ujuydthu, cucu iy bu cedtu judju tu bq seklhyh
+                        t ecrhu.
                     </p>
-                    <p>jekj su gku deki qledi sedijhkyj jekj su gku deki qledi sqsxu deki b qledi vqyj fekh gku gkubgk
-                        kd seccu ubbu fkyiiu kd zekh secfhudthu
+                    <p>jekj su gku deki qledi sedijhkyj, jekj su gku deki qledi sqsxu, deki b qledi vqyj fekh gku gkubgk
+                        kd seccu ubbu fkyiiu kd zekh secfhudthu.
                     </p>
-                    <p>qlus jekju bq judthuiiu gku bu ludj d q fqi ucfehjuu jui whqdti fqhudji gky j qycudj
+                    <p>qlus jekju bq judthuiiu gku bu ludj d q fqi ucfehjuu. jui whqdti fqhudji gky j qycudj.
                     </p><br>
                     <p class="clue-letter2">10/10/2010</p>
             </div>

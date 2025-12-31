@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&display=swap');
 
 
 /* ============ Style du chronomètre ============ */
@@ -284,4 +285,75 @@
 #open-letter-btn {
     width: auto !important; /* écrase le width:100% global */
     display: inline-block;
+}
+
+/* ============ Enigme - Photo retournable ============ */
+.enigma-container {
+    max-width: 800px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.enigma-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.photo-card {
+    width: 320px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 4px 15px var(--border-light);
+}
+
+.photo-card.turn {
+    transform: rotateY(180deg);
+}
+
+.photo-face {
+    backface-visibility: hidden;
+    border-radius: 4px;
+}
+
+.photo-front {
+    position: relative;
+    display: block;
+}
+
+.photo-front img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    filter: blur(20px);
+}
+
+.photo-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f8f8f8;
+    text-align: center;
+}
+
+.back-image{
+    transform: scaleX(-1);
+    color: black;
+    font-family: "Dancing Script", "Segoe UI", Arial, sans-serif;
+    opacity: 0.85;
+    font-size: 1.6rem;
 }

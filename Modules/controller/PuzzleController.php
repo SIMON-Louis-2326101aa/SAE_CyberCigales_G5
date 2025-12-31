@@ -119,4 +119,54 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openPicturePuzzle");
         exit;
     }
+
+    public function validatePhoto()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $answer = strtolower(trim($_POST['answer'] ?? ''));
+        if ($answer === '') {
+            $_SESSION['flash_error'] = "Réponse vide.";
+            header("Location: index.php?controller=Redirection&action=openPicturePuzzle");
+            exit;
+        }
+
+        $solutions = [
+            'alice' => ['mémoire', 'papillon'],
+            'bob'   => ['passé', 'clé']
+        ];
+
+        $team = $_SESSION['team'];
+        $isValid = false;
+
+        foreach ($solutions[$team] as $word) {
+            if (str_contains($answer, $word)) {
+                $isValid = true;
+                break;
+            }
+        }
+
+        if (!$isValid) {
+            $_SESSION['flash_error'] = "Ce n’est pas la bonne interprétation.";
+            header("Location: index.php?controller=Redirection&action=openPicturePuzzle");
+            exit;
+        }
+
+        // ✅ Niveau suivant
+        $userId = $_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+        $progressModel->updateLevel($userId, 3);
+
+        $_SESSION['flash_success'] = "Bien joué, tu avances dans l’enquête.";
+
+        header("Location: index.php?controller=Redirection&action=openButterflyWay");
+        exit;
+    }
 }
