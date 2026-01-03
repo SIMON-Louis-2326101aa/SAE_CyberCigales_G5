@@ -1,24 +1,24 @@
 <?php
+
 namespace SAE_CyberCigales_G5\Modules\model;
 
-use PDO;
 use SAE_CyberCigales_G5\includes\ConnectionDB;
 
 class UserModel extends Database
 {
     private ConnectionDB $db;
-    private EmailVerificationModel $eModel;
+    private PendingRegistrationModel $pendingModel;
 
     public function __construct()
     {
         $this->db = ConnectionDB::getInstance();
-        $this->eModel = new EmailVerificationModel();
+        $this->pendingModel = new PendingRegistrationModel();
     }
 
     // Créer le compte utilisateur après vérification
     public function createUserAfterVerification(string $email): bool
     {
-        $pending = $this->eModel->getPendingRegistration($email);
+        $pending = $this->pendingModel->getPendingRegistration($email);
         if (!$pending) {
             return false;
         }

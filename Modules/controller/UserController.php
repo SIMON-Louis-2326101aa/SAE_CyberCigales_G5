@@ -13,6 +13,7 @@ use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
 use SAE_CyberCigales_G5\Modules\model\PasswordResetModel;
+use SAE_CyberCigales_G5\Modules\model\PendingRegistrationModel;
 use SAE_CyberCigales_G5\Modules\model\UserModel;
 
 class UserController
@@ -104,6 +105,7 @@ class UserController
 
         // Vérifier si inscription déjà en attente
         $emailModel  = new EmailVerificationModel();
+        $pendingModel = new PendingRegistrationModel();
         $emailStatus = $this->userModel->getEmailStatus($email); // suppose un array ['pending' => bool]
 
         if (!empty($emailStatus['pending'])) {
@@ -145,7 +147,7 @@ class UserController
         }
 
         // Créer l’inscription en attente
-        $stored = $emailModel->
+        $stored = $pendingModel->
         storePendingRegistration($nom, $prenom, $email, password_hash($password, PASSWORD_BCRYPT));
         if (!$stored) {
             $_SESSION['flash_error'] = "Erreur lors de l'inscription.";
