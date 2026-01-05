@@ -1,35 +1,269 @@
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Handlee&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@0;1&display=swap');
 
+
+/* ============ Style du chronomètre ============ */
+#game-timer {
+    color: var(--text-secondary); /* Ou une autre couleur visible */
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    /* Ajuster la position dans la barre de nav */
+    margin: 0 20px;
+    padding: 0 15px;
+    border: 2px solid var(--border-light);
+    border-radius: 5px;
+}
+
+/* ============ Indices temporels ============ */
+
+/* Masque les indices qui doivent apparaître au fil du temps */
+.timed-clue {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+/* Affiche l'indice lorsque la classe 'show' est ajoutée par JavaScript */
+.timed-clue.show {
+    opacity: 1;
+}
+
+/* ============ Onglets temporels ============ */
+
+/* Désactive l'interactivité des poignées initialement inaccessibles */
+.tab-handle.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.tab-handle.disabled:hover {
+    transform: none; /* Annule l'effet de survol */
+    background: var(--primary-dark); /* Garde la couleur de base */
+}
+
+/* ============ Marque-page latéral corrigé ============ */
+#info-tab {
+    position: fixed;
+    top: 20%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 2000;
+}
+
+#clue-tab {
+    position: fixed;
+    top: 30%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 2000;
+}
+
+/* Quand on ouvre le panneau, tout le bloc glisse */
+#info-tab.open {
+    right: 580px; /* la largeur du panneau */
+}
+
+#clue-tab.open {
+    right: 580px; /* la largeur du panneau */
+}
+
+.tab-handle {
+    position: absolute;
+    left: -60px; /* décalé pour coller au bord droit */
+    top : 0;
+    background: var(--primary-dark);
+    color: var(--bg-dark);
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 1rem;
+    border-top-left-radius: var(--radius-xl);
+    border-bottom-left-radius: var(--radius-xl);
+    cursor: pointer;
+    box-shadow: 0 4px 20px var(--border-light);
+    transition: var(--transition);
+}
+
+.tab-handle:hover {
+    background: var(--primary-light);
+    transform: translateX(-3px);
+}
+
+/* Panneau masqué par défaut (en dehors de l’écran) */
+.tab-content {
+    position: absolute;
+    right: -600px; /* totalement caché */
+    top : -30px;
+    width: 580px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+    padding: 1.5rem;
+    color: var(--text-primary);
+    box-shadow: 0 0 30px var(--border-light);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    max-height: 650px;
+    overflow-y: auto;
+}
+
+/* Quand ouvert → le panneau glisse dans la vue */
+#info-tab.open .tab-content {
+    opacity: 1;
+    right: -580px; /* ajusté pour être visible */
+}
+
+#clue-tab.open .tab-content {
+    opacity: 1;
+    right: -580px; /* ajusté pour être visible */
+}
+
+.tab-content h3 {
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.tab-content ul {
+    list-style: disc;
+    margin-left: 1.2rem;
+    margin-top: 0.5rem;
+    text-align: left;
+}
+
+.tab-content p {
+    text-align: justify;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
 
 /* ============ Enigme - Lettre animée ============ */
 
-.letter-content {
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: max-height 1s ease, opacity 1s ease;
-    background: var(--bg-letter);
-    border: 1px solid var(--border);
-    padding: 0 2rem;
-    color: var(--bg-dark);
-    font-size : 1.5rem;
-    text-align: justify;
-    margin: 2rem 25rem;
-    font-family: Handlee, cursive;
+.letter-wrapper {
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem auto;
+    height: 600px;
+    width: 800px;
 }
 
-/* Quand la lettre est ouverte */
+.letter-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s ease;
+    box-shadow: 0 4px 15px var(--border-light);
+    cursor: pointer;
+    background: transparent;
+    opacity: 0;
+    pointer-events: none;
+}
+
 .letter-content.open {
-    max-height: 800px; /* adapte selon la taille de ta lettre */
     opacity: 1;
+    pointer-events: auto;
+}
+
+.letter-content.open.turn {
+    transform: rotateY(180deg);
+}
+
+/* Les deux FACES (recto et verso) */
+.letter-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    top: 0;
+    left: 0;
     padding: 2rem;
+    font-family: Handlee, cursive;
+    background-image: url("/assets/images/fond-lettre.webp");
+    background-size: cover;
+    background-position: bottom;
+    background-repeat: no-repeat;
+    color: var(--bg-dark);
+    border: 1px solid var(--border);
+}
+
+.letter-front {
+    font-size : 1.4rem;
+    text-align: justify;
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+
+.letter-back {
+    transform: rotateY(180deg);
+    font-size : 2.5rem;
+    display: flex;
+    z-index: 1;
+}
+
+.letter-content.open.turn .letter-front {
+    z-index: 1;
+}
+
+.letter-content.open.turn .letter-back {
+    z-index: 2;
+}
+
+.solution-letter-content{
+    color: var(--text-primary);
+    font-size : 1.3rem;
+    padding: 2rem ;
+    text-align: center;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 1s ease, max-height 1s ease;
+}
+
+.solution-letter-content.open{
+    max-height: 900px; /* adapte selon la taille de ta lettre */
+    opacity: 1;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .intro-letter-content {
     color: var(--text-primary);
     font-size : 1.3rem;
     margin-top: 2rem ;
+}
+
+.solution-letter-content form {
+    width: 100%;
+    max-width: 1000px;   /* largeur “lettre” confortable */
+    margin: 0 auto;      /* ← centrage réel */
+    text-align: left;    /* évite l’effet carte étroite */
+}
+
+.solution-letter-content label {
+    display: block;
+    width: 100%;
+}
+
+.solution-letter-content textarea {
+    width: 100%;
+    min-height: 280px; /* Hauteur minimale pour la zone de texte */
+    padding: 1rem;
+    font-size: 1.2rem;
+    resize: vertical; /* Permet uniquement le redimensionnement vertical */
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: 0 0 10px var(--border-light);
 }
 
 .intro-letter-content p {
@@ -51,6 +285,77 @@
 #open-letter-btn {
     width: auto !important; /* écrase le width:100% global */
     display: inline-block;
+}
+
+/* ============ Enigme - Photo retournable ============ */
+.enigma-container {
+    max-width: 800px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.enigma-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+.photo-card {
+    width: 320px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease;
+    cursor: pointer;
+    background: white;
+    box-shadow: 0 4px 15px var(--border-light);
+}
+
+.photo-card.turn {
+    transform: rotateY(180deg);
+}
+
+.photo-face {
+    backface-visibility: hidden;
+    border-radius: 4px;
+}
+
+.photo-front {
+    position: relative;
+    display: block;
+}
+
+.photo-front img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    filter: blur(20px);
+}
+
+.photo-back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f8f8f8;
+    text-align: center;
+}
+
+.back-image{
+    transform: scaleX(-1);
+    color: black;
+    font-family: "Dancing Script", "Segoe UI", Arial, sans-serif;
+    opacity: 0.85;
+    font-size: 1.6rem;
 }
 
 

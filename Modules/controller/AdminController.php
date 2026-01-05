@@ -8,16 +8,19 @@ namespace SAE_CyberCigales_G5\Modules\controller ;
 
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\PendingRegistrationModel;
 use SAE_CyberCigales_G5\Modules\model\UserModel;
 
 class AdminController
 {
     private userModel $userModel;
-    private emailVerificationModel $emailVerificationModel;
+    private EmailVerificationModel $emailVerificationModel;
+    private PendingRegistrationModel $pendingRegistrationModel;
     public function __construct()
     {
         $this->userModel = new userModel();
-        $this->emailVerificationModel = new emailVerificationModel();
+        $this->emailVerificationModel = new EmailVerificationModel();
+        $this->pendingRegistrationModel = new PendingRegistrationModel();
         if (function_exists('log_console')) {
             log_console('AdminController initialisé', 'ok');
         }
@@ -33,7 +36,7 @@ class AdminController
     public function listUsers()
     {
         $users = $this->userModel->getAllUsers();
-        $pendingUsers = $this->emailVerificationModel->getAllPendingRegistrations();
+        $pendingUsers = $this->pendingRegistrationModel->getAllPendingRegistrations();
         viewHandler::show("admin/userListView", ["users" => $users, "pendingUsers" => $pendingUsers]);
     }
 
@@ -101,7 +104,7 @@ class AdminController
     {
         $pendingId = $_GET['id'] ?? null;
         if ($pendingId) {
-            $pendingUser = $this->emailVerificationModel->getPendingRegistrationById((int)$pendingId);
+            $pendingUser = $this->pendingRegistrationModel->getPendingRegistrationById((int)$pendingId);
             if ($pendingUser) {
                 $this->userModel->createUserAfterVerification($pendingUser['email']);
             }
@@ -115,7 +118,7 @@ class AdminController
     {
         $pendingId = $_GET['id'] ?? null;
         if ($pendingId) {
-            $this->emailVerificationModel->deletePendingRegistrationById((int)$pendingId);
+            $this->pendingRegistrationModel->deletePendingRegistrationById((int)$pendingId);
         }
 
         header("Location: index.php?controller=Admin&action=listUsers");
