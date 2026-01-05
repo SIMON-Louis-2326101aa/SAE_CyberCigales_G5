@@ -22,13 +22,22 @@
                 <td>
                     <button type="button" class="edit-user-btn" data-user-id="<?php echo $user['id']; ?>">
                         Modifier</button>
+                    <br>
+                    <?php if ($user['is_banned'] == 0) : ?>
+                    <a href="index.php?controller=Admin&action=banUser&id=<?= $user['id']; ?>" class="active btn-nav">
+                            Bannir</a>
+                    <?php else : ?>
+                    <a href="index.php?controller=Admin&action=unbanUser&id=<?= $user['id']; ?>"
+                            class="active btn-nav"> Débannir </a>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 
-<h2>Utilisateurs en attente de vérification</h2>
+<br>
+<h1>Utilisateurs en attente de vérification</h1>
 
 <?php if (empty($pendingUsers)) : ?>
     <p>Aucun utilisateur en attente de vérification.</p>
@@ -64,3 +73,29 @@
     </table>
 <?php endif; ?>
 
+<br>
+<br>
+<h1>Avancée des joueurs </h1>
+<table class="db-table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Id de l'utilisateur</th>
+        <th>Equipe</th>
+        <th>Niveau</th>
+        <th>Date/heure de debut</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($progressGames as $gameProgress) : ?>
+        <tr>
+            <td><?php echo htmlspecialchars($gameProgress['id']); ?></td>
+            <td><?php echo htmlspecialchars($gameProgress['user_id']); ?></td>
+            <td><?php echo htmlspecialchars($gameProgress['team']); ?></td>
+            <td><?php echo htmlspecialchars($gameProgress['level']); ?></td>
+            <td><?php echo htmlspecialchars($gameProgress['game_start_time']); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<br>

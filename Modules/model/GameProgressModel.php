@@ -36,4 +36,9 @@ class GameProgressModel extends Database
             ['user_id' => $userId]
         ) > 0;
     }
+
+    public function getAllGameProgress(): array
+    {
+        return $this->db->getAll('game_progress');
+    }
 }

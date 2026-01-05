@@ -8,19 +8,20 @@ namespace SAE_CyberCigales_G5\Modules\controller ;
 
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
 use SAE_CyberCigales_G5\Modules\model\PendingRegistrationModel;
 use SAE_CyberCigales_G5\Modules\model\UserModel;
 
 class AdminController
 {
     private userModel $userModel;
-    private EmailVerificationModel $emailVerificationModel;
     private PendingRegistrationModel $pendingRegistrationModel;
+    private GameProgressModel $gameProgressModel;
     public function __construct()
     {
         $this->userModel = new userModel();
-        $this->emailVerificationModel = new EmailVerificationModel();
         $this->pendingRegistrationModel = new PendingRegistrationModel();
+        $this->gameProgressModel = new GameProgressModel();
         if (function_exists('log_console')) {
             log_console('AdminController initialisé', 'ok');
         }
@@ -37,7 +38,9 @@ class AdminController
     {
         $users = $this->userModel->getAllUsers();
         $pendingUsers = $this->pendingRegistrationModel->getAllPendingRegistrations();
-        viewHandler::show("admin/userListView", ["users" => $users, "pendingUsers" => $pendingUsers]);
+        $progressGames = $this->gameProgressModel->getAllGameProgress();
+        viewHandler::show("admin/userListView", ["users" => $users, "pendingUsers" => $pendingUsers,
+            "progressGames" => $progressGames]);
     }
 
     //Permet de modifier les informations lié aux utilisateur (nom, prénom, email) via userEditView
@@ -124,4 +127,38 @@ class AdminController
         header("Location: index.php?controller=Admin&action=listUsers");
         exit;
     }
+
+    public function banUser()
+    {
+        $userId = $_GET['id'] ?? null;
+
+        // Protection compte admin
+        if ($userId == 5) {
+            $_SESSION['flash_error'] = "Le compte administrateur ne peut pas être banni.";
+            header("Location: index.php?controller=Admin&action=listUsers");
+            exit;
+        }
+
+        if ($userId) {
+            $this->userModel->banUser((int)$userId);
+            $_SESSION['flash_success'] = "Utilisateur banni avec succès.";
+        }
+
+        header("Location: index.php?controller=Admin&action=listUsers");
+        exit;
+    }
+
+    public function unbanUser()
+    {
+        $userId = $_GET['id'] ?? null;
+
+        if ($userId) {
+            $this->userModel->unbanUser((int)$userId);
+            $_SESSION['flash_success'] = "Utilisateur débanni avec succès.";
+        }
+
+        header("Location: index.php?controller=Admin&action=listUsers");
+        exit;
+    }
+
 }

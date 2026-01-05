@@ -205,33 +205,31 @@ class UserController
 
         $email    = trim($_POST['email'] ?? '');
         $password = $_POST['pwd'] ?? '';
-
         $utilisateur = $this->userModel->authenticate($email, $password);
 
-        if ($utilisateur) {
-            // La session est supposée démarrée dans index.php
-            $_SESSION['utilisateur'] = $utilisateur;
-            $_SESSION['user_id']     = $utilisateur['id']     ?? null;
-            $_SESSION['nom']         = $utilisateur['nom']    ?? null;
-            $_SESSION['prenom']      = $utilisateur['prenom'] ?? null;
-            $_SESSION['email']       = $utilisateur['email']  ?? null;
-
-            $_SESSION['flash_success'] = "Connexion réussie.";
-            self::log("Login: succès ($email)", 'ok');
-
-            // Succès → on peut nettoyer le old
-            unset($_SESSION['old']);
-
-            header("Location: index.php?controller=Redirection&action=openHomepage");
+        if (!$utilisateur) {
+            $_SESSION['flash_error'] = "Email ou mot de passe incorrect.";
+            header("Location: index.php?controller=Redirection&action=openFormConnection");
+            self::log("Login: échec authentification ($email)", 'info');
             exit;
         }
 
-        // Échec : garder l'email saisi
-        $_SESSION['old'] = ['email' => $email];
+        if ((int)$utilisateur['is_banned'] === 1) {
+            $_SESSION['flash_error'] = "Votre compte est banni. Contactez un administrateur.";
+            header("Location: index.php?controller=Redirection&action=openFormConnection");
+            self::log("Login: compte banni ($email) imposible de ce connecter", 'info');
+            exit;
+        }
 
-        $_SESSION['flash_error'] = "Email ou mot de passe incorrect.";
-        self::log("Login: échec ($email)", 'error');
-        header("Location: index.php?controller=Redirection&action=openFormConnection");
+        $_SESSION['utilisateur'] = $utilisateur;
+        $_SESSION['user_id']     = $utilisateur['id'];
+        $_SESSION['nom']         = $utilisateur['nom'];
+        $_SESSION['prenom']      = $utilisateur['prenom'];
+        $_SESSION['email']       = $utilisateur['email'];
+
+        $_SESSION['flash_success'] = "Connexion réussie.";
+        header("Location: index.php?controller=Redirection&action=openHomepage");
+        self::log("Login: succès authentification ($email)", 'ok');
         exit;
     }
 

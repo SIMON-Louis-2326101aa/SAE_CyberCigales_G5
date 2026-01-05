@@ -110,4 +110,22 @@ class UserModel extends Database
         $users = $this->db->getAll('users', ['id' => $id], 1);
         return $users[0] ?? null;
     }
+
+    public function banUser(int $userId): bool
+    {
+        return $this->db->update(
+            'users',
+            ['is_banned' => 1],
+            ['id' => $userId]
+        ) > 0;
+    }
+
+    public function unbanUser(int $userId): bool
+    {
+        return $this->db->update(
+            'users',
+            ['is_banned' => 0],
+            ['id' => $userId]
+        ) > 0;
+    }
 }
