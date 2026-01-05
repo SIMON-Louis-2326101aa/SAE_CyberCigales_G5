@@ -14,7 +14,7 @@ $fb       = $data['feedback'] ?? null;
             <h1 class="heading">La petite épreuve du papillon</h1>
 
             <?php if (!$started) : ?>
-                <p class="lead">Tu arrives devant la boutique endormie. Le papillon attend ton premier pas.</p>
+                <p class="lead">Tu arrives devant la foret endormie. Le papillon attend ton premier pas.</p>
                 <form method="post" action="?m=papillon&a=start">
                     <button class="btn">Commencer</button>
                 </form>
