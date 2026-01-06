@@ -9,6 +9,7 @@ namespace SAE_CyberCigales_G5\Modules\controller;
 //require_once __DIR__ . '/../../includes/Mailer.php';
 
 //use SAE_CyberCigales_G5\includes\Constant;
+use loginAttemptModel;
 use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
@@ -19,6 +20,7 @@ use SAE_CyberCigales_G5\Modules\model\UserModel;
 class UserController
 {
     private UserModel $userModel;
+    private loginAttemptModel $loginAttemptModel;
 
     private static function log(string $message, string $type): void
     {
@@ -30,6 +32,7 @@ class UserController
     public function __construct()
     {
         $this->userModel = new UserModel();
+        $this->loginAttemptModel = new loginAttemptModel();
         if (function_exists('log_console')) {
             log_console('userController initialisé', 'ok');
         }
@@ -205,10 +208,55 @@ class UserController
 
         $email    = trim($_POST['email'] ?? '');
         $password = $_POST['pwd'] ?? '';
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+        // Vérifier si le compte est bloqué
+        $accountBlocked = $this->loginAttemptModel->isAccountBlocked($email);
+        if ($accountBlocked['blocked']) {
+            $remainingMinutes = ceil($accountBlocked['remaining_time'] / 60);
+            $_SESSION['flash_error'] = "Trop de tentatives de connexion échouées. Veuillez réessayer dans 
+            {$remainingMinutes} minute(s).";
+            header("Location: index.php?controller=Redirection&action=openFormConnection");
+            return;
+        }
+
+        // Vérifier si l'IP est bloquée
+        $ipBlocked = $this->loginAttemptModel->isIPBlocked($ip);
+        if ($ipBlocked['blocked']) {
+            $remainingMinutes = ceil($ipBlocked['remaining_time'] / 60);
+            $_SESSION['flash_error'] = "Trop de tentatives de connexion depuis cette adresse IP. Veuillez réessayer 
+            dans {$remainingMinutes} minute(s).";
+            header("Location: index.php?controller=Redirection&action=openFormConnection");
+            return;
+        }
+
         $utilisateur = $this->userModel->authenticate($email, $password);
 
         if (!$utilisateur) {
-            $_SESSION['flash_error'] = "Email ou mot de passe incorrect.";
+            // Connexion échouée - enregistrer la tentative
+            $this->loginAttemptModel->recordFailedAttempt($email, $ip);
+
+            // Vérifier à nouveau si le compte est maintenant bloqué
+            $accountBlocked = $this->loginAttemptModel->isAccountBlocked($email);
+            if ($accountBlocked['blocked']) {
+                $remainingMinutes = ceil($accountBlocked['remaining_time'] / 60);
+                $blockDuration = $accountBlocked['block_duration'];
+                $attempts = $accountBlocked['attempts'];
+                $_SESSION['flash_error'] = "Compte temporairement bloqué pour {$remainingMinutes} minute(s). 
+                (Tentative {$attempts} - Temps de blocage: {$blockDuration} min)";
+            } else {
+                $attempts = $accountBlocked['attempts'];
+                $remainingAttempts = 4 - $attempts; // Blocage à partir de 4 tentatives
+
+                if ($attempts < 3) {
+                    // Premières tentatives : message simple
+                    $_SESSION['flash_error'] = "Email ou mot de passe incorrect. Il vous reste {$remainingAttempts} 
+                    tentative(s) avant le premier blocage.";
+                } else {
+                    // Dernière tentative avant blocage
+                    $_SESSION['flash_error'] = "⚠️ Email ou mot de passe incorrect. Attention : prochaine tentative
+                     échouée = blocage de 1 minute !";
+                }
+            }
             header("Location: index.php?controller=Redirection&action=openFormConnection");
             self::log("Login: échec authentification ($email)", 'info');
             exit;
@@ -221,11 +269,22 @@ class UserController
             exit;
         }
 
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start([
+                'use_strict_mode' => true,
+                'cookie_httponly' => true,
+                //'cookie_secure' => true,
+                'cookie_samesite' => 'None'
+            ]);
+        }
+
         $_SESSION['utilisateur'] = $utilisateur;
         $_SESSION['user_id']     = $utilisateur['id'];
         $_SESSION['nom']         = $utilisateur['nom'];
         $_SESSION['prenom']      = $utilisateur['prenom'];
         $_SESSION['email']       = $utilisateur['email'];
+
+        $this->loginAttemptModel->clearFailedAttempts($email);
 
         $_SESSION['flash_success'] = "Connexion réussie.";
         header("Location: index.php?controller=Redirection&action=openHomepage");
