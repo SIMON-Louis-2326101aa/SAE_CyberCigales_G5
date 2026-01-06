@@ -2,17 +2,10 @@
 
 namespace SAE_CyberCigales_G5\Modules\controller;
 
-//require_once __DIR__ . '/../model/UserModel.php';
-//require_once __DIR__ . '/../model/EmailVerificationModel.php';
-//require_once __DIR__ . '/../model/PasswordResetModel.php'; // nécessaire pour forgot/changePwd
-//require_once __DIR__ . '/../../includes/ViewHandler.php';
-//require_once __DIR__ . '/../../includes/Mailer.php';
-
-//use SAE_CyberCigales_G5\includes\Constant;
-use loginAttemptModel;
 use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\LoginAttemptModel;
 use SAE_CyberCigales_G5\Modules\model\PasswordResetModel;
 use SAE_CyberCigales_G5\Modules\model\PendingRegistrationModel;
 use SAE_CyberCigales_G5\Modules\model\UserModel;
@@ -20,7 +13,7 @@ use SAE_CyberCigales_G5\Modules\model\UserModel;
 class UserController
 {
     private UserModel $userModel;
-    private loginAttemptModel $loginAttemptModel;
+    private LoginAttemptModel $loginAttemptModel;
 
     private static function log(string $message, string $type): void
     {
