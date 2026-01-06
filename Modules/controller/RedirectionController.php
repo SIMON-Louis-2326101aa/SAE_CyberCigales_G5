@@ -198,4 +198,6 @@ class RedirectionController
         $this->logRedirection('openendTextView');
         ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
+
+
 }
