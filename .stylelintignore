@@ -1,0 +1,3 @@
+# .stylelintignore
+vendor/
+node_modules/

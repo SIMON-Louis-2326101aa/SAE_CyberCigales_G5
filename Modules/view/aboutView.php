@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * Vue "À propos" - Page de présentation du projet et de l'équipe
+ *
+ * Cette vue présente :
+ * - L'équipe CyberCigales G5
+ * - Le projet SAE
+ * - Les technologies utilisées
+ * - Les objectifs pédagogiques
+ *
+ * @author SAE CyberCigales G5
+ * @version 1.0
+ */
+
+?>
+
+<!-- Page À propos - Présentation du projet CyberCigales -->
+<div id="about-page">
+    <h1>À Propos de CyberCigales</h1>
+
+    <!-- Section Équipe -->
+    <section class="team-section">
+        <h2>Notre Équipe</h2>
+        <p>Nous sommes un groupe d'étudiants en 2ème année de BUT Informatique à Aix-en-Provence,
+            passionnés par la cybersécurité et le développement web.</p>
+
+        <div class="team-grid">
+            <div class="team-member">
+                <h3>BADJOUDJ Hana</h3>
+                <p>Développeuse</p>
+            </div>
+
+            <div class="team-member">
+                <h3>CONTRUCCI Lou</h3>
+                <p>Développeuse</p>
+            </div>
+
+            <div class="team-member">
+                <h3>DIAZ Gwenn</h3>
+                <p>Product Owner et Développeuse</p>
+            </div>
+
+            <div class="team-member">
+                <h3>GUZELBABA Imran</h3>
+                <p>Développeur</p>
+            </div>
+
+            <div class="team-member">
+                <h3>SIMON Louis</h3>
+                <p>Scrum Master et Développeur</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Projet -->
+    <section class="project-section">
+        <h2>Le Projet</h2>
+        <p><strong>CyberCigales</strong> est un projet universitaire réalisé dans le cadre de la SAE
+            (Situation d'Apprentissage et d'Évaluation) en 2ème année de BUT Informatique à Aix-en-Provence.</p>
+
+        <h3>Description du Projet</h3>
+        <p>Le projet consiste à créer un <strong>escape game numérique interactif</strong>
+            sur le thème de la cybersécurité et de la cryptographie.
+            Ce jeu a pour objectif de faire découvrir aux lycéennes les bases de la sécurité informatique*
+            à travers des énigmes et des mini-jeux ludiques et pédagogiques.</p>
+
+        <h3>Présentation Publique</h3>
+        <p>Le projet sera présenté le <strong>18 mars 2026</strong> lors de l'atelier <strong>CYBER Cigales</strong>,
+            organisé en partenariat avec l'association <a href="https://lescigales.org" target="_blank">Les Cigales</a>.
+            Cette association œuvre pour initier les jeunes, et plus particulièrement les filles,
+            aux sciences et aux technologies.</p>
+
+        <h3>Objectifs Pédagogiques</h3>
+        <ul>
+            <li>Rendre la cybersécurité et la cryptographie accessibles et amusantes</li>
+            <li>Susciter la curiosité et l'intérêt pour les métiers du numérique</li>
+            <li>Initier les lycéennes aux bases de la sécurité informatique</li>
+            <li>Développer des compétences en développement web et cybersécurité</li>
+            <li>Pratique du travail en équipe avec des rôles définis (Scrum, Product Owner)</li>
+        </ul>
+
+        <h3>Fonctionnalités Techniques</h3>
+        <ul>
+            <li> <strong>Authentification sécurisée</strong> - Connexion/Déconnexion/Inscription</li>
+            <li> <strong>Gestion des sessions</strong> - Protection des données utilisateur</li>
+            <li> <strong>Interface modulaire</strong> - Architecture MVC propre</li>
+            <li> <strong>Récupération de mot de passe</strong> - Système d'email sécurisé</li>
+            <li> <strong>Pages informatives</strong> - Accueil, Mentions légales, À propos</li>
+            <li> <strong>Documentation complète</strong> - Code commenté et structuré</li>
+        </ul>
+    </section>
+
+    <!-- Section Technologies -->
+    <section class="tech-section">
+        <h2>Technologies Utilisées</h2>
+
+        <div class="tech-grid">
+            <div class="tech-category">
+                <h3>Backend</h3>
+                <ul>
+                    <li>PHP 8.0+ (Native)</li>
+                    <li>MySQL (Base de données)</li>
+                    <li>PDO (Sécurité SQL)</li>
+                    <li>Sessions PHP</li>
+                </ul>
+            </div>
+
+            <div class="tech-category">
+                <h3>Frontend</h3>
+                <ul>
+                    <li>HTML5 (Sémantique)</li>
+                    <li>CSS3 (Responsive)</li>
+                    <li>JavaScript (Interactions)</li>
+                    <li>Design Responsive</li>
+                </ul>
+            </div>
+
+            <div class="tech-category">
+                <h3>Architecture</h3>
+                <ul>
+                    <li>MVC (Model-View-Controller)</li>
+                    <li>Autoloading PHP</li>
+                    <li>Routing personnalisé</li>
+                    <li>Séparation des responsabilités</li>
+                </ul>
+            </div>
+
+            <div class="tech-category">
+                <h3>Sécurité</h3>
+                <ul>
+                    <li>Hashage des mots de passe</li>
+                    <li>Protection XSS</li>
+                    <li>Validation des données</li>
+                    <li>Sessions sécurisées</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Contexte -->
+    <section class="context-section">
+        <h2>Contexte Universitaire</h2>
+        <p>Ce projet s'inscrit dans le cadre de notre formation en <strong>2ème année de BUT Informatique</strong>
+            à <strong>Aix-en-Provence</strong>. Il nous permet de mettre en pratique
+            les concepts théoriques appris en cours :</p>
+
+        <ul>
+            <li><strong>Développement Web</strong> - Maîtrise des technologies web modernes</li>
+            <li><strong>Cybersécurité</strong> - Application des bonnes pratiques de sécurité</li>
+            <li><strong>Architecture Logicielle</strong> - Implémentation du pattern MVC</li>
+            <li><strong>Travail d'Équipe</strong> - Collaboration et gestion de projet</li>
+            <li><strong>Documentation</strong> - Rédaction de code propre et commenté</li>
+        </ul>
+    </section>
+
+    <!-- Section Contact -->
+    <section class="contact-section">
+        <h2>Contact</h2>
+        <p>Pour toute question concernant ce projet, vous pouvez nous contacter :</p>
+        <p><strong>Équipe CyberCigales G5</strong><br>
+            BUT Informatique - 2ème année<br>
+            Aix-en-Provence<br>
+            Projet SAE - Cybersécurité</p>
+    </section>
+
+    <!-- Section Remerciements -->
+    <section class="thanks-section">
+        <h2>Remerciements</h2>
+        <p>Nous remercions nos enseignants pour leur accompagnement et
+            leurs conseils précieux dans la réalisation de ce projet.</p>
+    </section>
+</div>

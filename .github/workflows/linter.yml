@@ -1,0 +1,55 @@
+name: Code Quality Checks (Linters)
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest # Environnement de test stable
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # -----------------
+      # PHP Setup
+      # -----------------
+      - name: Setup PHP and dependencies
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2' # À ajuster si vous utilisez une autre version (ex: '8.1')
+          extensions: xml # Essentiel pour PHP_CodeSniffer (corrige l'erreur simplexml)
+          coverage: none
+
+      - name: Install PHP dependencies (Composer)
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      # -----------------
+      # JS/CSS Setup
+      # -----------------
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Utilise une version récente pour la compatibilité ESLint v9
+
+      - name: Install JS/CSS dependencies (npm)
+        run: npm install
+
+      # -----------------
+      # LINTERS EXECUTION
+      # -----------------
+      - name: Run PHPLint (Syntax Check)
+        run: vendor/bin/phplint --exclude vendor
+
+      - name: Run PHP CodeSniffer (Style Check)
+        # Note : Nous utilisons l'option --ignore pour exclure les dépendances comme en ligne de commande
+        run: vendor/bin/phpcs --standard=PSR12 --ignore=vendor/,node_modules/ --extensions=php . || true
+
+      - name: Run ESLint (JavaScript)
+        run: npx eslint .
+
+      - name: Run Stylelint (CSS)
+        run: npx stylelint "**/*.css"

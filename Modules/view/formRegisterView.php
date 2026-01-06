@@ -1,25 +1,30 @@
-<h1>Inscription</h1>
-<?php if (isset($error)): ?>
-    <p style="color: red;"><?= htmlspecialchars($error) ?></p>
-<?php endif; ?>
-<form action="index.php?controller=user&action=register" method="post">
+    <h1>Inscription</h1>
 
-    <label for="nom">Nom :</label>
-    <input type="text" id="nom" name="nom" required value="<?= htmlspecialchars($nom ?? '') ?>"><br>
+    <form action="index.php?controller=User&action=register" method="post">
+        <ul>
+            <li>
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" required value="<?= old('nom') ?>">
+            </li>
+            <li>
+                <label for="prenom">Prenom :</label>
+                <input type="text" id="prenom" name="prenom" required value="<?= old('prenom') ?>">
+            </li>
+            <li>
+                <label for="mail">E-mail :</label>
+                <input type="email" id="mail" name="email" required value="<?= old('email') ?>">
+            </li>
+            <li>
+                <label for="password">Mot de passe :</label>
+                <input type="password" id="pwd" name="pwd" required>
+            </li>
+            <li>
+                <label for="confirm_mdp">Confirmer le mot de passe :</label>
+                <input type="password" id="confirm_pwd" name="confirm_pwd" required>
+            </li>
+        </ul>
 
-    <label for="prenom">Prenom :</label>
-    <input type="text" id="prenom" name="prenom" required value="<?= htmlspecialchars($prenom ?? '') ?>"><br>
+        <button type="submit" name="register">S'inscrire</button><br>
 
-    <label for="mail">E-mail :</label>
-    <input type="email" id="mail" name="email" required value="<?= htmlspecialchars($email ?? '') ?>"><br>
-
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="pwd" name="pwd" required><br>
-
-    <label for="confirm_mdp">Confirmer le mot de passe :</label>
-    <input type="password" id="confirm_pwd" name="confirm_pwd" required><br>
-
-
-    <button type="submit" name="register">S'inscrire</button>
-</form>
-<a href="index.php?controller=user&action=login" class="active">Dejà un compte ? Connection</a>
+        <a href="index.php?controller=Redirection&action=openFormConnection" class="active">Dejà un compte ? Connexion</a>
+    </form>
