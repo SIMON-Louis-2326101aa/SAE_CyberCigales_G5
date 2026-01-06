@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 use SAE_CyberCigales_G5\includes\ControllerHandler;
 use SAE_CyberCigales_G5\includes\ViewHandler;
+use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
 
 // ============================================================
 //  CONFIGURATION DU LOG SERVEUR (AVANT TOUT)
@@ -195,6 +196,17 @@ try {
         log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');
     }
 
+    if (isset($_SESSION['utilisateur'])) {
+        $progressModel = new GameProgressModel();
+        $progress = $progressModel->getByUserId($_SESSION['utilisateur']['id']);
+
+        if ($progress) {
+            $_SESSION['team']  = $progress['team'];
+            $_SESSION['level'] = (int) $progress['level'];
+        } else {
+            $_SESSION['level'] = 0;
+        }
+    }
 
     // Démarre le buffer de rendu
     if (class_exists(ViewHandler::class)) {
