@@ -1,4 +1,4 @@
-<?php if ($_SESSION['team'] === "alice") : ?>
+<?php if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="enigma-container">
 
         <div class="enigma-text">
@@ -34,7 +34,7 @@
     </div>
     </div>
 
-<?php elseif ($_SESSION['team'] === "bob") : ?>
+<?php elseif (isset($_SESSION['team']) && ($_SESSION['team'] === "bob")) : ?>
 <div class="enigma-container">
 
     <div class="enigma-text">
@@ -73,4 +73,5 @@
 
 <?php else : ?>
     <p>Erreur : Veuillez choisir une equipe ou vous reconnecter</p>
+<br>
 <?php endif; ?>
