@@ -5,11 +5,18 @@
 ```
 tests/
 ├── Unit/              # Tests unitaires (logique métier isolée)
-│   ├── EmailVerificationModelTest.php
-│   ├── PasswordValidationTest.php
-│   └── MailerTest.php
+│   ├── EmailVerificationModelTest.php (3 tests)
+│   └── UserModelTest.php (7 tests avec mocks)
 └── Integration/       # Tests d'intégration (avec base de données)
+    ├── DatabaseTestCase.php (classe de base)
+    ├── EmailVerificationModelIntegrationTest.php (7 tests)
+    ├── GameProgressModelIntegrationTest.php (5 tests)
+    ├── PasswordResetModelIntegrationTest.php (8 tests)
+    ├── PendingRegistrationModelIntegrationTest.php (5 tests)
+    └── UserModelIntegrationTest.php (18 tests)
 ```
+
+**Total : 49 tests (10 unitaires + 39 intégration) avec 137 assertions**
 
 ## 🚀 Exécuter les tests
 
@@ -32,12 +39,12 @@ php vendor/phpunit/phpunit/phpunit --testsuite="Integration Tests"
 
 ### Un fichier de test spécifique
 ```bash
-php vendor/phpunit/phpunit/phpunit tests/Unit/PasswordValidationTest.php
+php vendor/phpunit/phpunit/phpunit tests/Unit/UserModelTest.php
 ```
 
 ### Un test spécifique dans un fichier
 ```bash
-php vendor/phpunit/phpunit/phpunit --filter testPasswordMinimumLength
+php vendor/phpunit/phpunit/phpunit --filter testFindByEmailReturnsTrueWhenUserExists
 ```
 
 ### Avec couverture de code (nécessite Xdebug)
@@ -48,8 +55,8 @@ php vendor/phpunit/phpunit/phpunit --coverage-html coverage/
 ### Filtrer par groupe
 ```bash
 php vendor/phpunit/phpunit/phpunit --group unit
-php vendor/phpunit/phpunit/phpunit --group password
-php vendor/phpunit/phpunit/phpunit --group mailer
+php vendor/phpunit/phpunit/phpunit --group integration
+php vendor/phpunit/phpunit/phpunit --group mock
 ```
 
 ### Mode verbose (détails)
@@ -67,7 +74,8 @@ php vendor/phpunit/phpunit/phpunit --stop-on-failure
 ### Nommage des tests
 - Les fichiers de test doivent se terminer par `Test.php`
 - Les méthodes de test doivent commencer par `test`
-- Utiliser des noms descriptifs : `testPasswordMinimumLength`
+- Utiliser des noms descriptifs : `testFindByEmailReturnsTrueWhenUserExists`
+- Ajouter `@testdox` pour des descriptions en français dans le terminal
 
 ### Structure d'un test
 ```php
@@ -114,22 +122,30 @@ Les tests d'intégration utilisent la **vraie base de données** mais avec un sy
 Cela permet de tester avec des données réelles sans risque de pollution de la base.
 
 ### Tests d'intégration disponibles
-- ✅ EmailVerificationModelIntegrationTest (6 tests)
-- ✅ UserModelIntegrationTest (6 tests)
-- ✅ PasswordResetModelIntegrationTest (6 tests)
+- ✅ UserModelIntegrationTest (18 tests)
+- ✅ EmailVerificationModelIntegrationTest (7 tests)
+- ✅ PasswordResetModelIntegrationTest (8 tests)
+- ✅ GameProgressModelIntegrationTest (5 tests)
+- ✅ PendingRegistrationModelIntegrationTest (5 tests)
 
-## 🎯 À développer
+**Total : 39 tests d'intégration avec transactions SQL et ROLLBACK automatique**
 
-### Tests à ajouter
-- [ ] Tests pour les contrôleurs
-- [ ] Tests pour les sessions et flash messages
-- [ ] Tests de rate limiting
-- [ ] Tests end-to-end
+## 🎯 Couverture actuelle
 
-### Configuration à améliorer
-- [ ] Mock des dépendances externes (mail, etc.)
+### ✅ Tests implémentés
+- ✅ Tests unitaires avec mocks (UserModel)
+- ✅ Tests unitaires pour génération de codes (EmailVerificationModel)
+- ✅ Tests d'intégration pour UserModel (authentification, CRUD)
+- ✅ Tests d'intégration pour EmailVerificationModel
+- ✅ Tests d'intégration pour PasswordResetModel
+- ✅ Tests d'intégration pour GameProgressModel
+- ✅ Tests d'intégration pour PendingRegistrationModel
+
+### 📋 Améliorations futures
+- [ ] Tests pour les contrôleurs (AdminController, PuzzleController)
+- [ ] Tests end-to-end avec parcours utilisateur complet
 - [ ] CI/CD avec GitHub Actions
-- [ ] Tests de performance
+- [ ] Augmenter la couverture de code (objectif : 80%+)
 
 ## 📚 Ressources
 
