@@ -177,3 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const burgerButton = document.getElementById('burger-button');
+    const navRightSide = document.getElementById('nav-right-side');
+
+    if (!burgerButton || !navRightSide) return;
+
+    burgerButton.addEventListener('click', () => {
+        const isOpen = navRightSide.classList.toggle('active');
+        burgerButton.classList.toggle('active');
+
+        burgerButton.setAttribute('aria-expanded', isOpen.toString());
+    });
+});

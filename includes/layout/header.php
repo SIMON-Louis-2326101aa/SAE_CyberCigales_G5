@@ -40,7 +40,17 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     <?php endif; ?>
 
-    <div class="nav-right-side">
+    <button class="burger-button"
+            id="burger-button"
+            aria-label="Ouvrir le menu"
+            aria-expanded="false"
+            aria-controls="nav-right-side">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <div class="nav-right-side" id="nav-right-side">
         <div id="nav-auth-buttons">
             <?php
             if (isset($_SESSION['utilisateur'])) {
@@ -50,54 +60,40 @@ if (session_status() === PHP_SESSION_NONE) {
                 <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
                 <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com') : ?>
                     <!-- Si Admin, alors le bouton Admin est accessible -->
-                    <a href="index.php?controller=Admin&action=listUsers" class="active btn-nav" id="admin-button">Admin</a>
+                    <a href="index.php?controller=Admin&action=listUsers" class="active btn-nav" id="admin-button">Admin
+                    </a>
                 <?php endif; ?>
                 <?php
             } else {
                 ?>
                 <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
-                <a href="index.php?controller=Redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
-                <a href="index.php?controller=Redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
+                <a href="index.php?controller=Redirection&action=openFormRegister" class="active btn-nav">Inscription
+                </a>
+                <a href="index.php?controller=Redirection&action=openFormConnection" class="active btn-nav">Connexion
+                </a>
                 <?php
             }
             ?>
         </div>
 
         <div class="settings-menu-container">
-            <button id="settings-button" class="settings-button" aria-label="Ouvrir les paramètres" aria-haspopup="true" aria-expanded="false">
+            <button id="settings-button" class="settings-button" aria-label="Ouvrir les paramètres" aria-haspopup="true"
+                    aria-expanded="false">
                 ⚙️
             </button>
             <div id="settings-menu" class="settings-menu" role="menu">
                 <div class="settings-menu-header">Thèmes d'accessibilité</div>
                 <div id="theme-selector-buttons">
                     <button class="theme-button" data-theme="default" role="menuitem">Thème par défaut</button>
-                    <button class="theme-button" data-theme="deuteranopia-protanopia" role="menuitem">Deutéranopie (Rouge-Vert)</button>
-                    <button class="theme-button" data-theme="tritanopia" role="menuitem">Tritanopie (Bleu-Jaune)</button>
+                    <button class="theme-button" data-theme="deuteranopia-protanopia" role="menuitem">Deutéranopie
+                        (Rouge-Vert)</button>
+                    <button class="theme-button" data-theme="tritanopia" role="menuitem">Tritanopie (Bleu-Jaune)
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </nav>
-
-<?php
-if (!function_exists('old')) {
-    function old(string $key, string $default = ''): string
-    {
-        $val = $_SESSION['old'][$key] ?? $default;
-
-        // Normalisation & nettoyage agressif
-        $val = (string)$val;
-        $val = strip_tags($val);                 // vire <script>...</script> & toutes balises
-        $val = preg_replace('/[\x00-\x1F\x7F]/', '', $val); // caractères de contrôle
-        $val = preg_replace('/\s+/', ' ', $val); // espaces multiples
-        $val = trim($val);
-        $val = mb_substr($val, 0, 120);         // limite défensive
-
-        // Sortie sûre pour un attribut HTML
-        return htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
-    }
-}
-?>
 
 <!-- Permet d'ajouter les pop up flash dans le header sans trop gêner la page-->
 <?php if (!empty($_SESSION['flash_success'])) : ?>
