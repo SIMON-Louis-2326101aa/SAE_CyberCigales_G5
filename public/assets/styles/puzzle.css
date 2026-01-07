@@ -357,3 +357,13 @@
     opacity: 0.85;
     font-size: 1.6rem;
 }
+
+/* ============ Password Game ============ */
+/* Pour le bouton "valider" ait une couleur différent et qu'on ne puisse pas appuyer quand on ne peut pas encore valider */
+#passwordGameForm button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed; /* désactive la possibilité de cliquer sur le bouton */
+    background-color: var(--text-secondary);
+    box-shadow: none;
+    transform: none;
+}

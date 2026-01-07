@@ -166,3 +166,74 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.toggle('turn');
     });
 });
+
+// ===============================================
+//                  PasswordGame
+// ===============================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Sélection des éléments clés du DOM pour PasswordGame
+    const passwordInput = document.getElementById('passwordInput'); // Champ de saisie du mot de passe
+    const rulesList = document.getElementById('passwordRules');   // Liste des règles
+    const submitButton = document.querySelector('#passwordGameForm button[type="submit"]'); // Bouton de validation
+
+    // Si l'un des éléments nécessaires n'est pas trouvé, la fonction s'arrête
+    if (!passwordInput || !rulesList || !submitButton) {
+        return;
+    }
+
+    // Définition des règles PasswordGame
+    // A chaque règle respectée, une nouvelle règle apparaît, en respectant la nouvelle et les précédentes
+    const rules = [
+        // Règle 1: Longueur minimale de 8 caractères
+        { text: "Règle 1: Votre mot de passe doit contenir au moins 8 caractères.", validate: (pwd) => pwd.length >= 8 },
+        // Règle 2: Au moins une majuscule
+        { text: "Règle 2: Votre mot de passe doit contenir au moins une majuscule.", validate: (pwd) => /[A-Z]/.test(pwd) },
+        // Règle 3: Au moins un chiffre
+        { text: "Règle 3: Votre mot de passe doit contenir au moins un chiffre.", validate: (pwd) => /[0-9]/.test(pwd) },
+        // Règle 4: Au moins un caractère spécial
+        { text: "Règle 4: Votre mot de passe doit contenir au moins un caractère spécial (ex: !, @, #, $).", validate: (pwd) => /[^A-Za-z0-9]/.test(pwd) },
+        // Règle 5: La somme des chiffres doit être égale à 25
+        { text: "Règle 5: La somme des chiffres de votre mot de passe doit être égale à 25.", validate: (pwd) => {
+            const digits = pwd.match(/\d/g); // Extrait tous les chiffres de la chaîne
+            if (!digits) return false; // S'il n'y a pas de chiffres, la règle n'est pas respectée
+            // Calcule la somme des chiffres
+            const sum = digits.reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+            return sum === 25; // Retourne vrai si la somme est égale à 25
+        }}
+    ];
+
+    // Pour valider le mot de passe et afficher les règles
+    const validatePassword = () => {
+        const password = passwordInput.value; // Récupère la valeur actuelle du mot de passe
+        rulesList.innerHTML = ''; // Efface toutes les règles précédemment affichées
+        let allRulesMet = true;   // Pour savoir si toutes les règles sont respectées
+
+        // Parcourt chaque règle pour la valider et l'afficher
+        for (let i = 0; i < rules.length; i++) {
+            const rule = rules[i]; // Règle actuelle
+            const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
+            listItem.textContent = rule.text; // Définit le texte de l'élément de liste
+
+            // Vérifie si la règle actuelle est validée
+            if (rule.validate(password)) {
+                listItem.style.color = 'lightgreen'; // Si validée, couleur verte
+                rulesList.appendChild(listItem); // Ajoute à la liste des règles
+            } else {
+                listItem.style.color = 'red'; // Si non validée, couleur rouge
+                rulesList.appendChild(listItem); // Ajoute à la liste des règles
+                allRulesMet = false; // Une règle n'est pas respectée
+                // Arrête l'affichage des règles suivantes car la condition précédente n'est pas remplie
+                break;
+            }
+        }
+        
+        // Active ou désactive le bouton de validation en fonction de la validation de toutes les règles
+        submitButton.disabled = !allRulesMet;
+    };
+
+    // Permet d'"écouter" en direct le mot de passe écrit et appeler validatePassword
+    passwordInput.addEventListener('input', validatePassword);
+
+    // Affichage première règle
+    validatePassword();
+});
