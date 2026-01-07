@@ -169,4 +169,52 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openButterflyWay");
         exit;
     }
+    public function valideIndice()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $team = $_SESSION['team'];
+        $epreuve = $_POST['epreuve'] ?? '';
+        $ans1 = $this->normalize($_POST['answer1'] ?? '');
+        $ans2 = $this->normalize($_POST['answer2'] ?? '');
+
+        if ($ans1 === '' || $ans2 === '') {
+            $_SESSION['flash_error'] = "Tous les indices doivent être remplis.";
+            header("Location: index.php?controller=Redirection&action=openSummaryClue");
+            exit;
+        }
+        $solutions = [
+            'alice' => [
+                '1' => ['indice1' => 'solution1', 'indice2' => 'solution2'],
+                '2' => ['indice1' => 'solution3', 'indice2' => 'solution4'],
+                '3' => ['indice1' => 'solution5', 'indice2' => 'solution6'],
+            ],
+            'bob' => [
+                '1' => ['indice1' => 'valeur1', 'indice2' => 'valeur2'],
+                '2' => ['indice1' => 'valeur3', 'indice2' => 'valeur4'],
+                '3' => ['indice1' => 'valeur5', 'indice2' => 'valeur6'],
+            ]
+        ];
+
+        $expected = $solutions[$team][$epreuve] ?? null;
+        if (
+            $expected &&
+            $ans1 === $this->normalize($expected['indice1']) &&
+            $ans2 === $this->normalize($expected['indice2'])
+        ) {
+            $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
+        } else {
+            $_SESSION['flash_error'] = "Les indices pour l'épreuve $epreuve sont incorrects.";
+        }
+
+        header("Location: index.php?controller=Redirection&action=openSummaryClue");
+        exit;
+    }
 }
