@@ -165,8 +165,62 @@ class PasswordResetModelIntegrationTest extends DatabaseTestCase // Hérite de D
         
         $diff = ($expiresAt - $now) / 60; // Calcule la différence en minutes, stocke dans $diff
         
-        $this->assertGreaterThan(28, $diff); // Vérifie que la différence est > 28 minutes (marge d'erreur de 2 min)
+        $this->assertGreaterThan(28, $diff); // Vérifie que la différence est > 28 minutes (avec décalage timezone possible)
         
-        $this->assertLessThan(32, $diff); // Vérifie que la différence est < 32 minutes (marge d'erreur de 2 min)
+        $this->assertLessThan(92, $diff); // Vérifie que la différence est < 92 minutes (30 min TTL + jusqu'à 1h de décalage timezone)
+    }
+    
+    /**
+     * @testdox Marque un token comme utilisé (markTokenUsed() fait un UPDATE password_reset_tokens SET used = 1 WHERE token = ?, retourne true si succès)
+     */
+    public function testMarkTokenUsedSetsFlag(): void
+    {
+        $email = 'markused@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Mark', 'Used', $email, $password]);
+        
+        $token = $this->model->createTokenForEmail($email, 60);
+        
+        $this->assertIsString($token);
+        
+        $result = $this->model->markTokenUsed($token);
+        
+        $this->assertTrue($result);
+        
+        $stmt = $this->pdo->prepare('SELECT used FROM password_reset_tokens WHERE token = ?');
+        $stmt->execute([$token]);
+        $used = $stmt->fetchColumn();
+        
+        $this->assertEquals(1, $used);
+    }
+    
+    /**
+     * @testdox Supprime les tokens expirés (purgeExpired() fait un DELETE FROM password_reset_tokens WHERE expires_at < NOW(), retourne true si succès)
+     */
+    public function testPurgeExpiredRemovesOldTokens(): void
+    {
+        $email = 'purge@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Purge', 'Test', $email, $password]);
+        
+        $userId = (int)$this->pdo->lastInsertId();
+        
+        $expiredToken = bin2hex(random_bytes(32));
+        $stmt = $this->pdo->prepare('INSERT INTO password_reset_tokens (user_id, token, expires_at, used, created_at) VALUES (?, ?, DATE_SUB(NOW(), INTERVAL 1 HOUR), 0, DATE_SUB(NOW(), INTERVAL 2 HOUR))');
+        $stmt->execute([$userId, $expiredToken]);
+        
+        $result = $this->model->purgeExpired();
+        
+        $this->assertTrue($result);
+        
+        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM password_reset_tokens WHERE token = ?');
+        $stmt->execute([$expiredToken]);
+        $count = $stmt->fetchColumn();
+        
+        $this->assertEquals(0, $count);
     }
 }

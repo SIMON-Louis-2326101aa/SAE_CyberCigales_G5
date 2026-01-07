@@ -27,7 +27,14 @@ final class Mailer
 
         // Log pour débogage (visible dans les logs AlwaysData)
         if (!$result) {
-            error_log("Échec d'envoi d'email vers $to");
+            if (function_exists('log_console')) {
+                log_console("Échec d'envoi d'email vers {$to}", 'error', [
+                    'to' => $to,
+                    'subject' => $subject ?? null,
+                ]);
+            } else {
+                error_log("[MAIL] [ERROR] Échec d'envoi d'email vers {$to}");
+            }
         }
 
         return $result;

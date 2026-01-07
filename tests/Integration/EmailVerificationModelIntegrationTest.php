@@ -158,4 +158,27 @@ class EmailVerificationModelIntegrationTest extends DatabaseTestCase // Hérite 
         
         $this->assertTrue(true); // Si aucune exception n'est levée, le test passe (les TTL sont bien limités)
     }
+    
+    /**
+     * @testdox Récupère une inscription en attente (getPendingRegistration() fait un SELECT * FROM pending_registrations WHERE email = ?, retourne un tableau ou null)
+     */
+    public function testGetPendingRegistrationReturnsRecord(): void
+    {
+        $nom = 'Pending';
+        $prenom = 'User';
+        $email = 'getpending@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $this->model->storePendingRegistration($nom, $prenom, $email, $password);
+        
+        $pending = $this->model->getPendingRegistration($email);
+        
+        $this->assertIsArray($pending);
+        $this->assertEquals($nom, $pending['nom']);
+        $this->assertEquals($prenom, $pending['prenom']);
+        $this->assertEquals($email, $pending['email']);
+        
+        $nonExistent = $this->model->getPendingRegistration('nonexistent@example.com');
+        $this->assertNull($nonExistent);
+    }
 }

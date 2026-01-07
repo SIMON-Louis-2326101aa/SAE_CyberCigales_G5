@@ -21,6 +21,12 @@ use RuntimeException;
 
 final class ViewHandler
 {
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
     /**
      * Démarre le buffer global si aucun buffer n'est actif.
      */
@@ -28,13 +34,9 @@ final class ViewHandler
     {
         if (ob_get_level() === 0) {
             ob_start();
-            if (function_exists('log_console')) {
-                log_console('Buffer global démarré', 'ok'); // ✅
-            }
+            self::log('Buffer global démarré', 'ok');
         } else {
-            if (function_exists('log_console')) {
-                log_console('Buffer déjà actif (aucune action)', 'info'); // ℹ️
-            }
+            self::log('Buffer déjà actif (aucune action)', 'info');
         }
     }
 
@@ -46,14 +48,10 @@ final class ViewHandler
     {
         if (ob_get_level() > 0) {
             $content = ob_get_clean();
-            if (function_exists('log_console')) {
-                log_console('Buffer collecté', 'ok'); // ✅
-            }
+            self::log('Buffer collecté', 'ok');
             return (string)$content;
         }
-        if (function_exists('log_console')) {
-            log_console('Aucun buffer à collecter', 'info'); // ℹ️
-        }
+        self::log('Aucun buffer à collecter', 'info');
         return '';
     }
 
@@ -66,9 +64,7 @@ final class ViewHandler
     {
         // Sécurisation du nom de vue (autorise lettres/chiffres/_/- et sous-dossiers avec '/')
         if (!preg_match('/^[A-Za-z0-9_\/-]+$/', $loc)) {
-            if (function_exists('log_console')) {
-                log_console("Nom de vue invalide : {$loc}", 'error'); // ❌
-            }
+            self::log("Nom de vue invalide : {$loc}", 'error');
             throw new InvalidArgumentException("Nom de vue invalide.");
         }
 
@@ -80,18 +76,19 @@ final class ViewHandler
 
         // Vérifications de lisibilité
         if (!is_readable($viewFile)) {
-            if (function_exists('log_console')) {
-                log_console("Fichier de vue non trouvé : {$viewFile}", 'error'); // ❌
-            }
+            self::log("Fichier de vue non trouvé : {$viewFile}", 'error');
             throw new RuntimeException("Fichier de vue non trouvé : {$viewFile}");
         }
 
         // Log des fichiers ciblés
-        if (function_exists('log_console')) {
-            log_console("Rendu vue: {$viewFile}", 'file'); // 📄
-            //if (is_readable($headerFile)) log_console("Header inclus: {$headerFile}", 'file'); // 📄
-            //if (is_readable($footerFile)) log_console("Footer inclus: {$footerFile}", 'file'); // 📄
+        self::log("Rendu vue: {$viewFile}", 'file');
+        if (is_readable($headerFile)) {
+            self::log("Header inclus: {$headerFile}", 'file');
         }
+        if (is_readable($footerFile)) {
+            self::log("Footer inclus: {$footerFile}", 'file');
+        }
+
 
         // Mise à disposition des paramètres dans la portée de la vue
         // EXTR_SKIP pour ne pas écraser d'éventuelles variables existantes
@@ -113,8 +110,6 @@ final class ViewHandler
         }
 
         // Pas d'ob_end_flush() ici : on laisse index.php récupérer via bufferCollect()
-        if (function_exists('log_console')) {
-            log_console("Vue affichée: {$loc}", 'ok'); // ✅
-        }
+        self::log("Vue affichée: {$loc}", 'ok');
     }
 }

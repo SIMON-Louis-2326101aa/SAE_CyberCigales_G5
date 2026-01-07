@@ -1,94 +1,65 @@
 <?php
 
-//require_once __DIR__ . '/Database.php';
-//require_once __DIR__ . '/../../includes/ConnectionDB.php';
-//require_once __DIR__ . '/../model/EmailVerificationModel.php';
-
 namespace SAE_CyberCigales_G5\Modules\model;
 
-use PDO;
 use SAE_CyberCigales_G5\includes\ConnectionDB;
 
 class UserModel extends Database
 {
     private ConnectionDB $db;
-    private $eModel;
+    private PendingRegistrationModel $pendingModel;
 
-    public function __construct()
+    /**
+     * Constructeur du UserModel
+     * 
+     * Permet l'injection de dépendances pour les tests avec mocks.
+     * Si aucune dépendance n'est fournie, utilise les instances par défaut.
+     * 
+     * @param ConnectionDB|null $db Connexion à la base de données (ou mock pour les tests)
+     * @param PendingRegistrationModel|null $pendingModel Modèle des inscriptions en attente (ou mock pour les tests)
+     */
+    public function __construct(?ConnectionDB $db = null, ?PendingRegistrationModel $pendingModel = null)
     {
-        // On initialise simplement la connexion de la classe parente
-        $this->getBdd();
-
-        if (function_exists('log_console')) {
-            log_console('userModel initialisé', 'ok'); // ✅
-        }
-        $this->db = ConnectionDB::getInstance();
-        $this->eModel = new EmailVerificationModel();
+        $this->db = $db ?? ConnectionDB::getInstance();
+        $this->pendingModel = $pendingModel ?? new PendingRegistrationModel();
     }
-
-    // ANCIEN REGISTER HASH :
-//$hash = password_hash($password, PASSWORD_DEFAULT);
-//
-//$success = $stmt->execute([
-//'nom' => $nom,
-//'prenom' => $prenom,
-//'email' => $email,
-//'password' => $hash
-//]);
 
     // Créer le compte utilisateur après vérification
     public function createUserAfterVerification(string $email): bool
     {
-        $pending = $this->eModel->getPendingRegistration($email);
+        $pending = $this->pendingModel->getPendingRegistration($email);
         if (!$pending) {
             return false;
         }
 
-        // Créer l'utilisateur avec email vérifié
-        $stmt = $this->getBdd()->prepare(
-            'INSERT INTO users (nom, prenom, email, password, email_verified, created_at) 
-             VALUES (:nom, :prenom, :email, :password, TRUE, NOW())'
-        );
-
-        $success = $stmt->execute([
-            'nom' => $pending['nom'],
-            'prenom' => $pending['prenom'],
-            'email' => $pending['email'],
-            'password' => $pending['password']
-        ]);
+        $success = $this->db->insert('users', [
+                'nom' => $pending['nom'],
+                'prenom' => $pending['prenom'],
+                'email' => $pending['email'],
+                'password' => $pending['password'],
+                'email_verified' => 1,
+                'created_at' => date('Y-m-d H:i:s')
+            ]) > 0;
 
         if ($success) {
-            // Supprimer l'inscription en attente
-            $stmt = $this->getBdd()->prepare('DELETE FROM pending_registrations WHERE email = :email');
-            $stmt->execute(['email' => $email]);
+            $this->db->delete('pending_registrations', ['email' => $email]);
         }
 
         return $success;
     }
+
     public function findByEmail($email): bool
     {
-        $stmt = $this->getBdd()->prepare("SELECT COUNT(*) as count FROM users WHERE email = :email");
-        $stmt->execute(['email' => $email]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return ((int)$result['count']) > 0;
+        return $this->db->getElement('users', 'id', ['email' => $email]) !== null;
     }
 
     public function authenticate($email, $password)
     {
-        $sql = "SELECT * FROM users WHERE email = :email";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $users = $this->db->getAll('users', ['email' => $email], 1);
+        $user = $users[0] ?? null;
 
         if ($user && password_verify($password, $user['password'])) {
-            if (function_exists('log_console')) {
-                log_console("Authentification réussie : $email", 'ok'); // ✅
-            }
             return $user;
-        }
-
-        if (function_exists('log_console')) {
-            log_console("Échec d’authentification : $email", 'warn'); // ⚠️
         }
 
         return null;
@@ -96,56 +67,74 @@ class UserModel extends Database
 
     public function emailExists(string $email): bool
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE email = :email";
-        $stmt = $this->getBdd()->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        return $stmt->fetchColumn() > 0;
+        return $this->findByEmail($email);
     }
 
     public function changePwd(string $newPassword, string $email): bool
     {
-        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
-        $sql = "UPDATE users SET password = :newPassword WHERE email = :email";
-        $stmt = $this->getBdd()->prepare($sql);
-        return $stmt->execute([
-            'newPassword' => $hashedPassword,
-            'email' => $email
-        ]);
+        return $this->db->update(
+            'users',
+            ['password' => password_hash($newPassword, PASSWORD_DEFAULT)],
+            ['email' => $email]
+        ) > 0;
     }
 
     public function delete(string $email): bool
     {
-        $sql = "DELETE FROM users WHERE email = :email";
-        $stmt = $this->getBdd()->prepare($sql);
-        $success = $stmt->execute(['email' => $email]);
-
-        if ($success && function_exists('log_console')) {
-            log_console("Utilisateur supprimé : $email", 'file'); // 📄
-        }
-
-        return $success;
+        return $this->db->delete('users', ['email' => $email]) > 0;
     }
-    // Nouvelle méthode pour obtenir le statut de l'email
+
     public function getEmailStatus($email): array
     {
-        $bdd = $this->getBdd();
-
-        // Vérifier dans users
-        $sql = "SELECT COUNT(*) as count FROM users WHERE email = :email";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        $inUsers = $stmt->fetch(PDO::FETCH_ASSOC)['count'] > 0;
-
-        // Vérifier dans pending_registrations
-        $sql = "SELECT COUNT(*) as count FROM pending_registrations WHERE email = :email";
-        $stmt = $bdd->prepare($sql);
-        $stmt->execute(['email' => $email]);
-        $inPending = $stmt->fetch(PDO::FETCH_ASSOC)['count'] > 0;
+        $inUsers = $this->db->getElement('users', 'id', ['email' => $email]) !== null;
+        $inPending = $this->db->getElement('pending_registrations', 'id', ['email' => $email]) !== null;
 
         return [
             'exists' => $inUsers || $inPending,
             'verified' => $inUsers,
             'pending' => $inPending
         ];
+    }
+
+    public function getAllUsers(): array
+    {
+        return $this->db->getAll('users');
+    }
+
+    public function updateUser(int $id, string $nom, string $prenom, string $email): bool
+    {
+        return $this->db->update(
+            'users',
+            [
+                    'nom' => $nom,
+                    'prenom' => $prenom,
+                    'email' => $email
+                ],
+            ['id' => $id]
+        ) > 0;
+    }
+
+    public function getUserById(int $id): ?array
+    {
+        $users = $this->db->getAll('users', ['id' => $id], 1);
+        return $users[0] ?? null;
+    }
+
+    public function banUser(int $userId): bool
+    {
+        return $this->db->update(
+            'users',
+            ['is_banned' => 1],
+            ['id' => $userId]
+        ) > 0;
+    }
+
+    public function unbanUser(int $userId): bool
+    {
+        return $this->db->update(
+            'users',
+            ['is_banned' => 0],
+            ['id' => $userId]
+        ) > 0;
     }
 }

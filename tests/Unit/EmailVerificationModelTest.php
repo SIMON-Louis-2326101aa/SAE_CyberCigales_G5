@@ -20,7 +20,7 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
      */
     public function testGenerateCodeReturns6DigitString(): void // Test : le code généré doit être une chaîne de 6 chiffres
     {
-        $code = str_pad((string)random_int(0, 999999), 6, '0', STR_PAD_LEFT); // Génère un nombre aléatoire (0-999999), le convertit en string, puis complète à gauche avec des zéros pour avoir 6 caractères
+        $code = EmailVerificationModel::generateCode(); // Utilise la méthode generateCode() de EmailVerificationModel du projet
         
         $message = sprintf(
             "\n┌─ ERREUR DE GÉNÉRATION DE CODE ──────────────────────────────────\n" .
@@ -49,28 +49,31 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
     /**
      * @testdox Formate les codes courts avec des zéros à gauche (utilise str_pad avec STR_PAD_LEFT, "42" devient "000042" pour garantir toujours 6 chiffres)
      */
-    public function testCodeHasLeadingZeros(): void // Test : les codes courts doivent être complétés avec des zéros à gauche
+    public function testCodeHasLeadingZeros(): void // Test : les codes générés doivent avoir des zéros à gauche si nécessaire
     {
-        $code = str_pad('42', 6, '0', STR_PAD_LEFT); // Complète '42' à gauche avec des zéros pour avoir 6 caractères → '000042'
+        // Génère plusieurs codes pour augmenter les chances d'avoir un code court (< 100000)
+        $allCodesHave6Digits = true;
+        for ($i = 0; $i < 50; $i++) {
+            $code = EmailVerificationModel::generateCode(); // Utilise la méthode generateCode() de EmailVerificationModel
+            if (strlen($code) !== 6) {
+                $allCodesHave6Digits = false;
+                break;
+            }
+        }
         
         $message = sprintf(
             "\n┌─ ERREUR DE FORMATAGE DE CODE ───────────────────────────────────\n" .
             "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
-            "│ Test               : testCodeHasLeadingZeros() ligne 35\n" .
+            "│ Test               : testCodeHasLeadingZeros() ligne 52\n" .
             "│ \n" .
-            "│ Code original      : '42'\n" .
-            "│ Code formaté       : '%s'\n" .
-            "│ Code attendu       : '000042'\n" .
+            "│ Tous les codes générés doivent avoir exactement 6 caractères\n" .
+            "│ (avec zéros à gauche si le nombre est < 100000)\n" .
             "│ \n" .
-            "│ Le formatage devrait ajouter des zéros à gauche avec str_pad()\n" .
-            "│ pour garantir toujours 6 caractères.\n" .
-            "│ \n" .
-            "│ CORRECTION : Vérifiez la ligne 37 du test\n" .
-            "└─────────────────────────────────────────────────────────────────\n",
-            $code
+            "│ CORRECTION : Vérifiez EmailVerificationModel::generateCode()\n" .
+            "└─────────────────────────────────────────────────────────────────\n"
         );
         
-        $this->assertEquals('000042', $code, $message); // Vérifie que le code complété correspond à '000042'
+        $this->assertTrue($allCodesHave6Digits, $message); // Vérifie que tous les codes ont bien 6 caractères
     }
     
     /**
@@ -78,11 +81,11 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
      */
     public function testTtlIsWithinValidRange(): void // Test : le TTL doit être limité entre 1 et 60 minutes
     {
-        $ttlTooSmall = max(1, min(60, 0)); // Limite 0 entre 1 et 60 → résultat = 1 (valeur trop petite remontée à 1)
+        $ttlTooSmall = EmailVerificationModel::validateTTL(0); // Utilise validateTTL() pour limiter 0 → doit retourner 1
         
-        $ttlTooLarge = max(1, min(60, 100)); // Limite 100 entre 1 et 60 → résultat = 60 (valeur trop grande limitée à 60)
+        $ttlTooLarge = EmailVerificationModel::validateTTL(100); // Utilise validateTTL() pour limiter 100 → doit retourner 60
         
-        $ttlValid = max(1, min(60, 10)); // Limite 10 entre 1 et 60 → résultat = 10 (valeur valide reste inchangée)
+        $ttlValid = EmailVerificationModel::validateTTL(10); // Utilise validateTTL() pour limiter 10 → doit rester 10
         
         $messageTooSmall = sprintf(
             "\n┌─ ERREUR DE LIMITE TTL (TROP PETIT) ─────────────────────────────\n" .

@@ -114,3 +114,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// --- Accessibilité pour les daltoniens & Menu Paramètres ---
+document.addEventListener('DOMContentLoaded', () => {
+    const settingsButton = document.getElementById('settings-button');
+    const settingsMenu = document.getElementById('settings-menu');
+    const themeButtonsContainer = document.getElementById('theme-selector-buttons');
+    const body = document.body;
+
+    if (!settingsButton || !settingsMenu || !themeButtonsContainer) {
+        return; // Ne rien faire si les éléments ne sont pas trouvés
+    }
+
+    // --- Logique du menu déroulant ---
+    settingsButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Empêche le 'click' de se propager au document
+        const isVisible = settingsMenu.classList.toggle('is-visible');
+        settingsButton.setAttribute('aria-expanded', isVisible);
+    });
+
+    // Fermer le menu si on clique en dehors
+    document.addEventListener('click', (event) => {
+        if (!settingsMenu.contains(event.target) && !settingsButton.contains(event.target) && settingsMenu.classList.contains('is-visible')) {
+            settingsMenu.classList.remove('is-visible');
+            settingsButton.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // Fermer avec la touche Echap
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && settingsMenu.classList.contains('is-visible')) {
+            settingsMenu.classList.remove('is-visible');
+            settingsButton.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    // --- Logique de changement de thème ---
+    const applyTheme = (theme) => {
+        body.setAttribute('data-theme', theme);
+        localStorage.setItem('colorblind-theme', theme);
+
+        // Mettre à jour le bouton actif
+        const themeButtons = themeButtonsContainer.querySelectorAll('.theme-button');
+        themeButtons.forEach(btn => {
+            if (btn.dataset.theme === theme) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    };
+
+    // Appliquer le thème sauvegardé au chargement de la page
+    const savedTheme = localStorage.getItem('colorblind-theme') || 'default';
+    applyTheme(savedTheme);
+
+    // Gérer le clic sur les boutons de thème
+    themeButtonsContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('theme-button')) {
+            const selectedTheme = event.target.dataset.theme;
+            applyTheme(selectedTheme);
+        }
+    });
+});

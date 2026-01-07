@@ -15,6 +15,7 @@
     --bg-dark: #061320;
     --bg-card: #0f1b2e99;
     --bg-light: #1a2942;
+    --bg-letter: #DDBA7F ;
 
     /* Textes */
     --text-primary: #e5e9f0;
@@ -162,15 +163,14 @@ h1 {
     letter-spacing: 3px;
 }
 
-.hero-container h1,
-.hero-container p {
+.hero-container-main h1,
+.hero-container-main p {
     color: white !important;
     z-index: 2;
-    text-shadow: 0 0 20px var(--primary-dark), 2px 2px 5px #0000007F;
     margin-bottom: 10px;
 }
 
-.hero-container h1 {
+.hero-container-main h1 {
     font-size: 3em;
     text-transform: uppercase;
     letter-spacing: 3px;
@@ -214,6 +214,19 @@ form h2 {
     display: block;
 }
 
+.team-select a {
+    padding: 22px 50px;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--text-primary);
+    background: var(--bg-card);
+    border: 2px solid var(--border-light);
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 0 15px var(--border-light);
+}
+
 body.dark-theme h1,
 body.dark-theme h2,
 body.dark-theme a,
@@ -245,6 +258,12 @@ body.dark-theme .db-table {
 
 .footer-legal a:hover {
     color: var(--primary);
+}
+
+.team-select a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px var(--primary);
+    border-color: var(--primary);
 }
 
 #nav-auth-buttons a {
@@ -285,47 +304,6 @@ main {
     text-align: center;
 }
 
-.hero-container {
-    height: 60vh;
-    min-height: 400px;
-    max-width: none;
-    margin: 0;
-    width: 100%;
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    overflow: hidden;
-    border-bottom: 3px solid transparent;
-    border-image: linear-gradient(90deg, var(--secondary), var(--primary)) 1;
-}
-
-.hero-container img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: -1;
-    opacity: 0.4;
-    filter: brightness(0.6) contrast(1.2);
-}
-
-.hero-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg,var(--bg-card) 100%);
-    z-index: 0;
-}
-
 h3 {
     font-size: 1.5rem;
     font-weight: 600;
@@ -344,6 +322,13 @@ h4 {
     text-align: left;
 }
 
+h5 {
+    font-size: 3em;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-align: left;
+}
+
 .hero-container-main {
     margin-top: 6rem;
     margin-bottom: 6rem;
@@ -352,6 +337,23 @@ h4 {
     align-items: center;
     gap: 3rem;
     padding: 0 var(--space-6);
+}
+
+.hero-container-welcome{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 var(--space-6);
+}
+
+.hero-container-welcome p{
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 0;
 }
 
 .hero-question {
@@ -607,7 +609,7 @@ button:hover {
 }
 
 .footer-column ul li {
-    margin-bottom: 1rem;
+    margin-bottom: 0;
 }
 
 .project-section ul:nth-of-type(2) li {
@@ -839,7 +841,6 @@ button:hover {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     gap: 4rem;
-    margin-bottom: 3rem;
     text-align: left;
 }
 
@@ -847,7 +848,7 @@ button:hover {
     width: 100%;
     height: 1px;
     background: var(--border);
-    margin: 2rem 0;
+    margin: 1rem 0;
 }
 
 .footer-bottom {
@@ -919,19 +920,159 @@ button:hover {
     transform: translate(-50%, -50%);
 }
 
-/* Theme Sombre */
-body.dark-theme {
-    background: #020817;
-    color: var(--text-primary);
+/* ============ Settings Menu ============ */
+.settings-menu-container {
+    position: relative;
 }
 
-body.dark-theme .btn-nav {
+.settings-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: var(--text-secondary);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.settings-button:hover,
+.settings-button:focus {
+    background-color: var(--border);
     color: var(--primary);
+    outline: none;
 }
 
-body.dark-theme .btn-nav:hover {
+.settings-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+.settings-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    box-shadow: 0 8px 30px var(--bg-dark);
+    width: 280px;
+    z-index: 1100;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0.3s;
+}
+
+.settings-menu.is-visible {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0s 0s;
+}
+
+.settings-menu-header {
+    font-weight: bold;
+    color: var(--primary);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 1px;
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border);
+}
+
+/* Thème pour les daltoniens */
+#theme-selector-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.theme-button {
+    width: 100%;
+    padding: var(--space-3);
+    background-color: var(--bg-light);
+    color: var(--text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    font-size: 0.9rem;
+}
+
+.theme-button:hover {
+    background-color: var(--border);
+    color: var(--primary);
+    transform: none;
+}
+
+.theme-button.active {
     background-color: var(--primary);
     color: var(--bg-dark);
+    font-weight: bold;
+    border-color: var(--primary-dark);
+}
+
+/* ========================= THÈMES DALTONIENS ============================== */
+
+/* ================= Thème Deuteranopie/Protanopie (rouge/vert) ========================== */
+body[data-theme="deuteranopia-protanopia"] {
+    --primary: #0072B2;
+    --primary-dark: #005A8E;
+    --primary-light: #3398D0;
+    --secondary: #E69F00;
+    --secondary-dark: #B87F00;
+    --accent: #E69F00;
+    --success: #56B4E9;
+    --warning: #F0E442;
+    --error: #D55E00;
+
+    /* border colors */
+    --border: #0072B233;        /* rgba(0, 114, 178, 0.2) */
+    --border-light: #0072B24D;  /* rgba(0, 114, 178, 0.3) */
+}
+
+.nav-right-side {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+/* ========================== Thème Tritanopie (bleu-jaune) ============================== */
+body[data-theme="tritanopia"] {
+    --primary: #CC79A7;
+    --primary-dark: #A36185;
+    --primary-light: #E096C1;
+    --secondary: #009E73;
+    --secondary-dark: #007E5C;
+    --accent: #009E73;
+    --success: #009E73;
+    --warning: #F0E442;
+    --error: #D55E00;
+
+    /* border colors */
+    --border: #CC79A733;        /* rgba(204, 121, 167, 0.2) */
+    --border-light: #CC79A74D;  /* rgba(204, 121, 167, 0.3) */
+}
+
+/* Assure que le bouton admin reste visible dans tous les thèmes */
+#admin-button {
+    background: #ffc800;
+    color: #000 !important;
+}
+
+body[data-theme="deuteranopia-protanopia"] #admin-button,
+body[data-theme="tritanopia"] #admin-button {
+    background-color: #F0E442;
+    color: #000 !important;
 }
 
 /* ============ Responsive ============ */
@@ -1422,4 +1563,39 @@ body.dark-theme .btn-nav:hover {
 ::selection {
     background-color: var(--primary);
     color: var(--bg-dark);
+}
+
+/* ============ Admin ============ */
+.delete-pending-btn, .delete-user-account-btn {
+    background: var(--error);
+}
+
+#admin-button {
+    background: #ffc800;
+}
+
+/* ============ Choix de teem ============ */
+.team-select {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 80px;
+}
+
+/* Style neutre pour A et B */
+.team-select a.team-a {
+    border-bottom: 3px solid var(--primary);
+}
+
+.team-select a.team-b {
+    border-bottom: 3px solid var(--secondary);
+}
+
+/* Hover spécifique */
+.team-select a.team-a:hover {
+    box-shadow: 0 0 25px var(--primary-light);
+}
+
+.team-select a.team-b:hover {
+    box-shadow: 0 0 25px var(--secondary-dark);
 }

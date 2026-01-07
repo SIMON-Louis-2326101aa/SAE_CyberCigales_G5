@@ -144,4 +144,187 @@ class UserModelIntegrationTest extends DatabaseTestCase // Hérite de DatabaseTe
         
         $this->assertFalse($notExists); // Vérifie que $notExists est false (l'email n'existe pas)
     }
+    
+    /**
+     * @testdox Change le mot de passe d'un utilisateur (changePwd() hash le nouveau mot de passe avec password_hash() puis fait un UPDATE pour le modifier en base)
+     */
+    public function testChangePwdUpdatesPassword(): void
+    {
+        $email = 'changepwd@example.com';
+        $oldPassword = password_hash('OldPass123!', PASSWORD_DEFAULT);
+        $newPassword = 'NewPass456!';
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Change', 'Pwd', $email, $oldPassword]);
+        
+        $result = $this->model->changePwd($newPassword, $email);
+        
+        $this->assertTrue($result);
+        
+        $stmt = $this->pdo->prepare('SELECT password FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $hashedPassword = $stmt->fetchColumn();
+        
+        $this->assertTrue(password_verify($newPassword, $hashedPassword));
+    }
+    
+    /**
+     * @testdox Supprime un utilisateur de la base de données (delete() fait un DELETE FROM users WHERE email = ?, retourne true si succès)
+     */
+    public function testDeleteRemovesUser(): void
+    {
+        $email = 'delete@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Delete', 'Test', $email, $password]);
+        
+        $result = $this->model->delete($email);
+        
+        $this->assertTrue($result);
+        
+        $exists = $this->model->findByEmail($email);
+        $this->assertFalse($exists);
+    }
+    
+    /**
+     * @testdox Récupère tous les utilisateurs de la base de données (getAllUsers() fait un SELECT * FROM users, retourne un tableau d'utilisateurs)
+     */
+    public function testGetAllUsersReturnsArray(): void
+    {
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['User1', 'Test1', 'user1@example.com', password_hash('Pass123!', PASSWORD_DEFAULT)]);
+        $stmt->execute(['User2', 'Test2', 'user2@example.com', password_hash('Pass123!', PASSWORD_DEFAULT)]);
+        
+        $users = $this->model->getAllUsers();
+        
+        $this->assertIsArray($users);
+        $this->assertGreaterThanOrEqual(2, count($users));
+    }
+    
+    /**
+     * @testdox Met à jour les informations d'un utilisateur (updateUser() fait un UPDATE users SET nom, prenom, email WHERE id = ?, retourne true si succès)
+     */
+    public function testUpdateUserModifiesRecord(): void
+    {
+        $email = 'update@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Old', 'Name', $email, $password]);
+        
+        $userId = (int)$this->pdo->lastInsertId();
+        
+        $result = $this->model->updateUser($userId, 'New', 'Name', 'newemail@example.com');
+        
+        $this->assertTrue($result);
+        
+        $user = $this->model->getUserById($userId);
+        $this->assertEquals('New', $user['nom']);
+        $this->assertEquals('Name', $user['prenom']);
+        $this->assertEquals('newemail@example.com', $user['email']);
+    }
+    
+    /**
+     * @testdox Récupère un utilisateur par son ID (getUserById() fait un SELECT * FROM users WHERE id = ?, retourne un tableau ou null)
+     */
+    public function testGetUserByIdReturnsUser(): void
+    {
+        $email = 'getbyid@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['GetById', 'Test', $email, $password]);
+        
+        $userId = (int)$this->pdo->lastInsertId();
+        
+        $user = $this->model->getUserById($userId);
+        
+        $this->assertIsArray($user);
+        $this->assertEquals($email, $user['email']);
+        
+        $nonExistent = $this->model->getUserById(999999);
+        $this->assertNull($nonExistent);
+    }
+    
+    /**
+     * @testdox Bannit un utilisateur (banUser() fait un UPDATE users SET is_banned = 1 WHERE id = ?, retourne true si succès)
+     */
+    public function testBanUserSetsFlag(): void
+    {
+        $email = 'ban@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Ban', 'Test', $email, $password]);
+        
+        $userId = (int)$this->pdo->lastInsertId();
+        
+        $result = $this->model->banUser($userId);
+        
+        $this->assertTrue($result);
+        
+        $stmt = $this->pdo->prepare('SELECT is_banned FROM users WHERE id = ?');
+        $stmt->execute([$userId]);
+        $isBanned = $stmt->fetchColumn();
+        
+        $this->assertEquals(1, $isBanned);
+    }
+    
+    /**
+     * @testdox Débannit un utilisateur (unbanUser() fait un UPDATE users SET is_banned = 0 WHERE id = ?, retourne true si succès)
+     */
+    public function testUnbanUserClearsFlag(): void
+    {
+        $email = 'unban@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password, is_banned) VALUES (?, ?, ?, ?, ?)');
+        $stmt->execute(['Unban', 'Test', $email, $password, 1]);
+        
+        $userId = (int)$this->pdo->lastInsertId();
+        
+        $result = $this->model->unbanUser($userId);
+        
+        $this->assertTrue($result);
+        
+        $stmt = $this->pdo->prepare('SELECT is_banned FROM users WHERE id = ?');
+        $stmt->execute([$userId]);
+        $isBanned = $stmt->fetchColumn();
+        
+        $this->assertEquals(0, $isBanned);
+    }
+    
+    /**
+     * @testdox Vérifie le statut d'un email (getEmailStatus() vérifie si l'email existe dans users ou pending_registrations, retourne un tableau avec exists, verified, pending)
+     */
+    public function testGetEmailStatusReturnsCorrectStatus(): void
+    {
+        $verifiedEmail = 'verified@example.com';
+        $pendingEmail = 'pending@example.com';
+        $nonExistentEmail = 'nonexistent@example.com';
+        
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Verified', 'User', $verifiedEmail, $password]);
+        
+        $stmt = $this->pdo->prepare('INSERT INTO pending_registrations (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+        $stmt->execute(['Pending', 'User', $pendingEmail, $password]);
+        
+        $verifiedStatus = $this->model->getEmailStatus($verifiedEmail);
+        $this->assertTrue($verifiedStatus['exists']);
+        $this->assertTrue($verifiedStatus['verified']);
+        $this->assertFalse($verifiedStatus['pending']);
+        
+        $pendingStatus = $this->model->getEmailStatus($pendingEmail);
+        $this->assertTrue($pendingStatus['exists']);
+        $this->assertFalse($pendingStatus['verified']);
+        $this->assertTrue($pendingStatus['pending']);
+        
+        $nonExistentStatus = $this->model->getEmailStatus($nonExistentEmail);
+        $this->assertFalse($nonExistentStatus['exists']);
+        $this->assertFalse($nonExistentStatus['verified']);
+        $this->assertFalse($nonExistentStatus['pending']);
+    }
 }

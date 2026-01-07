@@ -12,6 +12,14 @@
 
 declare(strict_types=1);
 
+if (!function_exists('log_console')) {
+    $rootDir = dirname(__DIR__);
+    $functionsPath = $rootDir . '/includes/functions.php';
+    if (is_file($functionsPath)) {
+        require_once $functionsPath;
+    }
+}
+
 if (!function_exists('logSecurityEvent')) {
     /**
      * Journalise un événement de sécurité.
@@ -72,9 +80,19 @@ if (!function_exists('logSecurityEvent')) {
 
         // Log dev discret
         if (function_exists('log_console')) {
-            // On reste neutre côté prod si tu as codé log_dev() pour minimiser le HTML
-            $severity = in_array($type, ['sql_injection', 'xss_attempt', 'csrf_fail'], true) ? 'error' : 'info';
-            log_console("Security event '{$type}' enregistré", $severity);
+            // Niveau de gravité selon le type d'événement
+            $severity = match ($type) {
+                'sql_injection', 'xss_attempt', 'csrf_fail' => 'error',
+                'login_fail' => 'warn',
+                default => 'info',
+            };
+
+            // Log structuré, concis et propre
+            log_console("SECURITY: {$type}", $severity, [
+                'message' => $message,
+                'ip' => $_SERVER['REMOTE_ADDR'] ?? null,
+                'url' => $_SERVER['REQUEST_URI'] ?? null,
+            ]);
         }
     }
 }

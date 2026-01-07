@@ -9,7 +9,25 @@ class RedirectionController
     private function logRedirection(string $view): void
     {
         if (function_exists('log_console')) {
-            log_console("Redirection vers $view", 'info'); // ℹ️
+            log_console("Redirection vers $view", 'info');
+        }
+    }
+    // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
+    private function requireAuth(): void
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        if (empty($_SESSION['user_id'])) {
+            if (function_exists('log_console')) {
+                log_console('Accès refusé: non authentifié', 'warn', [
+                    'uri' => $_SERVER['REQUEST_URI'] ?? null
+                ]);
+            }
+            $_SESSION['flash_error'] = "Vous devez être connecté pour accéder à cette page.";
+            $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+            header('Location: ' . $base . '/index.php?controller=Redirection&action=openFormConnection');
+            exit;
         }
     }
 
@@ -28,16 +46,8 @@ class RedirectionController
     public function openAccount()
     {
         $this->logRedirection('accountView');
-
-//        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
-//        if (empty($_SESSION['user'])) {
-//            if (function_exists('log_console')) {
-//                log_console('Tentative d’accès à openAccount sans session', 'error'); // ❌
-//            }
-//            header('Location: /public/?controller=redirection&action=openFormConnection');
-//            exit;
-//        }
-
+        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
+        $this->requireAuth();
         ViewHandler::show('accountView', ['pageTitle' => 'Compte']);
     }
 
@@ -78,12 +88,114 @@ class RedirectionController
      */
     public function openAbout()
     {
+        $this->logRedirection('openAbout');
         ViewHandler::show('aboutView', ['pageTitle' => 'À Propos']);
     }
 
     /* Affiche le plan du Site */
     public function openSiteMap()
     {
+        $this->logRedirection('openSiteMap');
         ViewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
+    }
+
+    /**
+     * Affiche la page d'introduction de la lettre
+     */
+    public function openLetterIntro()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        $this->logRedirection('letterIntroView');
+        ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
+    }
+
+    public function openContact()
+    {
+        $this->logRedirection('contactView');
+        ViewHandler::show('contactView', ['pageTitle' => 'Contact']);
+    }
+
+    /**
+     * Affiche la page de choix du personnage
+     */
+    public function openChoice()
+    {
+        $this->logRedirection('choiceView');
+        ViewHandler::show('choiceView', ['pageTitle' => 'Choix du personnage']);
+    }
+
+    /**
+     * Affiche la page du puzzle de l'image
+     */
+    public function openPicturePuzzle()
+    {
+        $this->logRedirection('openpicturePuzzleView');
+        ViewHandler::show('picturePuzzleView', ['pageTitle' => 'Enigme de l\'image']);
+    }
+
+    /**
+     * Affiche la page de l'enigme du papillon
+     */
+    public function openButterflyWay()
+    {
+        $this->logRedirection('openbutterflyWayView');
+        ViewHandler::show('butterflyWayView', ['pageTitle' => 'Enigme du papillon']);
+    }
+
+    /**
+     * Affiche la page de l'enigme du mail
+     */
+    public function openPhishingPuzzle()
+    {
+        $this->logRedirection('openPhishingPuzzleView');
+        ViewHandler::show('phishingPuzzleView', ['pageTitle' => 'Enigme du mail']);
+    }
+
+    /**
+     * Affiche la page du jeu du mot de passe
+     */
+    public function openPasswordGame()
+    {
+        $this->logRedirection('openPasswordGameView');
+        ViewHandler::show('passwordGameView', ['pageTitle' => 'Enigme du jeu du mot de passe']);
+    }
+
+    /**
+     * Affiche la page de resumé d'indices
+     */
+    public function openSummaryClue()
+    {
+        $this->logRedirection('openSummaryClueView');
+        ViewHandler::show('summaryClueView', ['pageTitle' => 'Enigme du resumé d\'indices']);
+    }
+
+    /**
+     * Affiche la page de recherche du cousin sur les réseaux
+     */
+    public function openSearchSM()
+    {
+        $this->logRedirection('openSearchSMView');
+        ViewHandler::show('searchSMView', ['pageTitle' => 'Enigme de recherche']);
+    }
+
+    /**
+     * Affiche la page de rencontre des deux equipes et mot de passe
+     */
+    public function openMeetingPwd()
+    {
+        $this->logRedirection('openMeetingPwdView');
+        ViewHandler::show('meetingPasswordView', ['pageTitle' => 'rassemblement des équipes']);
+    }
+
+    /**
+     * Affiche la page de rencontre des deux equipes et mot de passe
+     */
+    public function openEndText()
+    {
+        $this->logRedirection('openendTextView');
+        ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
 }
