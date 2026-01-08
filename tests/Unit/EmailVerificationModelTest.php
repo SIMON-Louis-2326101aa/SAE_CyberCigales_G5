@@ -1,27 +1,36 @@
-<?php // Balise d'ouverture PHP
+<?php
 
-namespace Tests\Unit; // Déclare le namespace Tests\Unit
+// Balise d'ouverture PHP
 
-use PHPUnit\Framework\TestCase; // Importe TestCase de PHPUnit
+namespace Tests\Unit;
 
-use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel; // Importe EmailVerificationModel du projet
+// Déclare le namespace Tests\Unit
+
+use PHPUnit\Framework\TestCase;
+// Importe TestCase de PHPUnit
+use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+
+// Importe EmailVerificationModel du projet
 
 /**
  * Tests unitaires pour EmailVerificationModel
- * 
+ *
  * @testdox Tests unitaires - Génération de codes de vérification email
  * @group unit
  * @covers \SAE_CyberCigales_G5\Modules\model\EmailVerificationModel
  */
-class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour avoir les méthodes de test PHPUnit
+class EmailVerificationModelTest extends TestCase
 {
     /**
-     * @testdox Génère un code de vérification de 6 chiffres (utilise random_int(0-999999) puis str_pad avec zéros à gauche pour garantir 6 caractères, valide avec regex /^\d{6}$/)
+     * @testdox Génère un code de vérification de 6 chiffres
+     * (utilise random_int(0-999999) puis str_pad avec zéros à gauche
+     * pour garantir 6 caractères, valide avec regex /^\d{6}$/)
      */
-    public function testGenerateCodeReturns6DigitString(): void // Test : le code généré doit être une chaîne de 6 chiffres
+    public function testGenerateCodeReturns6DigitString(): void
     {
-        $code = EmailVerificationModel::generateCode(); // Utilise la méthode generateCode() de EmailVerificationModel du projet
-        
+        // Utilise la méthode generateCode() de EmailVerificationModel
+        $code = EmailVerificationModel::generateCode();
+
         $message = sprintf(
             "\n┌─ ERREUR DE GÉNÉRATION DE CODE ──────────────────────────────────\n" .
             "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
@@ -38,29 +47,37 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
             $code,
             strlen($code)
         );
-        
-        $this->assertIsString($code, $message); // Vérifie que $code est une chaîne de caractères
-        
-        $this->assertEquals(6, strlen($code), $message); // Vérifie que la longueur de $code est exactement 6 caractères
-        
-        $this->assertMatchesRegularExpression('/^\d{6}$/', $code, $message); // Vérifie que $code contient exactement 6 chiffres (0-9) avec une expression régulière
+
+        // Vérifie que $code est une chaîne de caractères
+        $this->assertIsString($code, $message);
+
+        // Vérifie que la longueur de $code est exactement 6 caractères
+        $this->assertEquals(6, strlen($code), $message);
+
+        // Vérifie que $code contient exactement 6 chiffres (0-9)
+        $this->assertMatchesRegularExpression('/^\d{6}$/', $code, $message);
     }
-    
+
     /**
-     * @testdox Formate les codes courts avec des zéros à gauche (utilise str_pad avec STR_PAD_LEFT, "42" devient "000042" pour garantir toujours 6 chiffres)
+     * @testdox Formate les codes courts avec des zéros à gauche
+     * (utilise str_pad avec STR_PAD_LEFT, "42" devient "000042")
      */
-    public function testCodeHasLeadingZeros(): void // Test : les codes générés doivent avoir des zéros à gauche si nécessaire
+    public function testCodeHasLeadingZeros(): void
     {
-        // Génère plusieurs codes pour augmenter les chances d'avoir un code court (< 100000)
+        // Génère plusieurs codes pour augmenter les chances
+        // d'avoir un code court (< 100000)
         $allCodesHave6Digits = true;
+
         for ($i = 0; $i < 50; $i++) {
-            $code = EmailVerificationModel::generateCode(); // Utilise la méthode generateCode() de EmailVerificationModel
+            // Utilise la méthode generateCode() de EmailVerificationModel
+            $code = EmailVerificationModel::generateCode();
+
             if (strlen($code) !== 6) {
                 $allCodesHave6Digits = false;
                 break;
             }
         }
-        
+
         $message = sprintf(
             "\n┌─ ERREUR DE FORMATAGE DE CODE ───────────────────────────────────\n" .
             "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
@@ -72,21 +89,26 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
             "│ CORRECTION : Vérifiez EmailVerificationModel::generateCode()\n" .
             "└─────────────────────────────────────────────────────────────────\n"
         );
-        
-        $this->assertTrue($allCodesHave6Digits, $message); // Vérifie que tous les codes ont bien 6 caractères
+
+        // Vérifie que tous les codes ont bien 6 caractères
+        $this->assertTrue($allCodesHave6Digits, $message);
     }
-    
+
     /**
-     * @testdox Limite le TTL entre 1 et 60 minutes (utilise max(1, min(60, valeur)), TTL 0 devient 1, TTL 100 devient 60, TTL 10 reste 10)
+     * @testdox Limite le TTL entre 1 et 60 minutes
+     * (utilise max(1, min(60, valeur)))
      */
-    public function testTtlIsWithinValidRange(): void // Test : le TTL doit être limité entre 1 et 60 minutes
+    public function testTtlIsWithinValidRange(): void
     {
-        $ttlTooSmall = EmailVerificationModel::validateTTL(0); // Utilise validateTTL() pour limiter 0 → doit retourner 1
-        
-        $ttlTooLarge = EmailVerificationModel::validateTTL(100); // Utilise validateTTL() pour limiter 100 → doit retourner 60
-        
-        $ttlValid = EmailVerificationModel::validateTTL(10); // Utilise validateTTL() pour limiter 10 → doit rester 10
-        
+        // TTL trop petit → doit être remonté à 1
+        $ttlTooSmall = EmailVerificationModel::validateTTL(0);
+
+        // TTL trop grand → doit être limité à 60
+        $ttlTooLarge = EmailVerificationModel::validateTTL(100);
+
+        // TTL valide → doit rester inchangé
+        $ttlValid = EmailVerificationModel::validateTTL(10);
+
         $messageTooSmall = sprintf(
             "\n┌─ ERREUR DE LIMITE TTL (TROP PETIT) ─────────────────────────────\n" .
             "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
@@ -100,7 +122,7 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
             "└─────────────────────────────────────────────────────────────────\n",
             $ttlTooSmall
         );
-        
+
         $messageTooLarge = sprintf(
             "\n┌─ ERREUR DE LIMITE TTL (TROP GRAND) ─────────────────────────────\n" .
             "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
@@ -114,7 +136,7 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
             "└─────────────────────────────────────────────────────────────────\n",
             $ttlTooLarge
         );
-        
+
         $messageValid = sprintf(
             "\n┌─ ERREUR DE LIMITE TTL (VALEUR VALIDE) ──────────────────────────\n" .
             "│ Fichier concerné   : tests/Unit/EmailVerificationModelTest.php\n" .
@@ -128,11 +150,14 @@ class EmailVerificationModelTest extends TestCase // Hérite de TestCase pour av
             "└─────────────────────────────────────────────────────────────────\n",
             $ttlValid
         );
-        
-        $this->assertEquals(1, $ttlTooSmall, $messageTooSmall); // Vérifie que la valeur trop petite a été remontée à 1
-        
-        $this->assertEquals(60, $ttlTooLarge, $messageTooLarge); // Vérifie que la valeur trop grande a été limitée à 60
-        
-        $this->assertEquals(10, $ttlValid, $messageValid); // Vérifie que la valeur valide est restée à 10
+
+        // Vérifie que la valeur trop petite a été remontée à 1
+        $this->assertEquals(1, $ttlTooSmall, $messageTooSmall);
+
+        // Vérifie que la valeur trop grande a été limitée à 60
+        $this->assertEquals(60, $ttlTooLarge, $messageTooLarge);
+
+        // Vérifie que la valeur valide est restée à 10
+        $this->assertEquals(10, $ttlValid, $messageValid);
     }
 }

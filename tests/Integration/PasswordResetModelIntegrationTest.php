@@ -1,226 +1,295 @@
-<?php // Balise d'ouverture PHP
+<?php
 
-namespace Tests\Integration; // Déclare le namespace Tests\Integration
+// Balise d'ouverture PHP
 
-use SAE_CyberCigales_G5\Modules\model\PasswordResetModel; // Importe PasswordResetModel du projet
+namespace Tests\Integration;
+
+// Déclare le namespace Tests\Integration
+
+use SAE_CyberCigales_G5\Modules\model\PasswordResetModel;
+
+// Importe PasswordResetModel du projet
 
 /**
  * Tests d'intégration pour PasswordResetModel
- * 
+ *
  * @testdox Tests d'intégration - Réinitialisation de mot de passe
  * @group integration
  * @group database
  */
-class PasswordResetModelIntegrationTest extends DatabaseTestCase // Hérite de DatabaseTestCase (fournit connexion DB et transactions)
+class PasswordResetModelIntegrationTest extends DatabaseTestCase
 {
-    private PasswordResetModel $model; // Instance de PasswordResetModel utilisée dans les tests
-    
-    protected function setUp(): void // Méthode appelée AVANT chaque test
+    // Instance de PasswordResetModel utilisée dans les tests
+    private PasswordResetModel $model;
+
+    protected function setUp(): void
     {
-        parent::setUp(); // Appelle setUp() de DatabaseTestCase (charge .env, crée connexion PDO, démarre transaction)
-        
-        $this->model = new PasswordResetModel(); // Crée une nouvelle instance de PasswordResetModel pour chaque test
+        // Appelle setUp() de DatabaseTestCase
+        // (charge .env, crée connexion PDO, démarre transaction)
+        parent::setUp();
+
+        // Crée une nouvelle instance de PasswordResetModel pour chaque test
+        $this->model = new PasswordResetModel();
     }
-    
+
     /**
-     * @testdox Crée un token valide de 64 caractères hexadécimaux pour un email existant (utilise random_bytes(32) puis bin2hex() pour générer 64 chars hex, stocke dans password_reset_tokens avec expires_at, valide avec regex /^[a-f0-9]{64}$/)
+     * @testdox Crée un token valide de 64 caractères hexadécimaux pour un email existant
+     * (random_bytes(32) + bin2hex(), stocké avec expires_at)
      */
-    public function testCreateTokenForExistingEmail(): void // Test : createTokenForEmail() crée un token valide de 64 caractères hexadécimaux pour un email existant
+    public function testCreateTokenForExistingEmail(): void
     {
-        $email = 'reset@example.com'; // Email de test pour lequel créer le token
-        
-        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe
-        
-        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion de l'utilisateur
-        
-        $stmt->execute(['Reset', 'Test', $email, $password]); // Insère l'utilisateur (doit exister pour créer un token)
-        
-        $token = $this->model->createTokenForEmail($email, 60); // Génère un token sécurisé (32 bytes → 64 chars hex), le stocke en base avec expiration (60 min), retourne le token
-        
-        $this->assertIsString($token); // Vérifie que $token est une chaîne de caractères
-        
-        $this->assertEquals(64, strlen($token)); // Vérifie que la longueur de $token est exactement 64 caractères (32 bytes × 2 = 64 chars hex)
-        
-        $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $token); // Vérifie que $token contient exactement 64 caractères hexadécimaux (a-f0-9) avec une regex
-        
-        $stmt = $this->pdo->prepare('SELECT * FROM password_reset_tokens WHERE token = ?'); // Prépare la requête pour chercher le token en base
-        
-        $stmt->execute([$token]); // Exécute la requête avec le token
-        
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC); // Récupère la ligne sous forme de tableau associatif, stocke dans $result
-        
-        $this->assertIsArray($result); // Vérifie que $result est un tableau (le token a été trouvé en base)
-        
-        $this->assertEquals($token, $result['token']); // Vérifie que le token correspond
-        
-        $this->assertNotNull($result['expires_at']); // Vérifie que la date d'expiration n'est pas null
+        // Email de test
+        $email = 'reset@example.com';
+
+        // Hash le mot de passe
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+
+        // Prépare l'insertion de l'utilisateur
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
+        );
+
+        // Insère l'utilisateur
+        $stmt->execute(['Reset', 'Test', $email, $password]);
+
+        // Génère un token sécurisé avec TTL de 60 minutes
+        $token = $this->model->createTokenForEmail($email, 60);
+
+        // Vérifie que le token est une chaîne
+        $this->assertIsString($token);
+
+        // Vérifie la longueur du token (64 caractères hexadécimaux)
+        $this->assertEquals(64, strlen($token));
+
+        // Vérifie le format hexadécimal
+        $this->assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $token);
+
+        // Prépare la requête pour chercher le token en base
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM password_reset_tokens WHERE token = ?'
+        );
+
+        // Exécute la requête
+        $stmt->execute([$token]);
+
+        // Récupère le token en base
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        // Vérifie que le token existe
+        $this->assertIsArray($result);
+
+        // Vérifie que le token correspond
+        $this->assertEquals($token, $result['token']);
+
+        // Vérifie que la date d'expiration existe
+        $this->assertNotNull($result['expires_at']);
     }
-    
+
     /**
-     * @testdox Retourne false lors de la création d'un token pour un email inexistant (createTokenForEmail() fait un SELECT pour vérifier l'utilisateur, si aucun résultat retourne false sans créer de token)
+     * @testdox Retourne false lors de la création d'un token pour un email inexistant
      */
-    public function testCreateTokenReturnsFalseForNonExistentEmail(): void // Test : createTokenForEmail() retourne false pour un email inexistant
+    public function testCreateTokenReturnsFalseForNonExistentEmail(): void
     {
-        $token = $this->model->createTokenForEmail('nonexistent@example.com', 60); // Essaie de créer un token pour un email qui n'existe pas, stocke le résultat dans $token
-        
-        $this->assertFalse($token); // Vérifie que $token est false (on ne peut pas créer de token pour un utilisateur inexistant)
+        // Tente de créer un token pour un email inexistant
+        $token = $this->model->createTokenForEmail(
+            'nonexistent@example.com',
+            60
+        );
+
+        // Vérifie que la création échoue
+        $this->assertFalse($token);
     }
-    
+
     /**
-     * @testdox Récupère le token valide depuis la base de données (crée un token, puis getValidTokenRow() fait un SELECT avec JOIN users pour récupérer le token si valide, non utilisé et non expiré)
+     * @testdox Récupère un token valide depuis la base
      */
-    public function testGetValidTokenRowReturnsRecordWhenValid(): void // Test : le token créé existe bien dans la base de données
+    public function testGetValidTokenRowReturnsRecordWhenValid(): void
     {
-        $email = 'validtoken@example.com'; // Email de test
-        
-        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe
-        
-        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion
-        
-        $stmt->execute(['Valid', 'Token', $email, $password]); // Insère l'utilisateur
-        
-        $token = $this->model->createTokenForEmail($email, 60); // Crée un token pour cet utilisateur, stocke dans $token
-        
-        $this->assertIsString($token); // Vérifie que $token est une chaîne
-        
-        $stmt = $this->pdo->prepare('SELECT * FROM password_reset_tokens WHERE token = ?'); // Prépare la requête pour vérifier en base
-        
-        $stmt->execute([$token]); // Exécute la requête avec le token
-        
-        $dbToken = $stmt->fetch(\PDO::FETCH_ASSOC); // Récupère la ligne sous forme de tableau associatif, stocke dans $dbToken
-        
-        $this->assertIsArray($dbToken); // Vérifie que $dbToken est un tableau (le token existe en base)
-        
-        $this->assertEquals($token, $dbToken['token']); // Vérifie que le token correspond
+        $email = 'validtoken@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+
+        // Insère l'utilisateur
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
+        );
+        $stmt->execute(['Valid', 'Token', $email, $password]);
+
+        // Crée le token
+        $token = $this->model->createTokenForEmail($email, 60);
+
+        // Vérifie que le token est valide
+        $this->assertIsString($token);
+
+        // Vérifie que le token existe en base
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM password_reset_tokens WHERE token = ?'
+        );
+        $stmt->execute([$token]);
+
+        $dbToken = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $this->assertIsArray($dbToken);
+        $this->assertEquals($token, $dbToken['token']);
     }
-    
+
     /**
-     * @testdox Retourne false pour un token invalide (getValidTokenRow() cherche un token inexistant en base, le SELECT ne trouve rien et retourne false)
+     * @testdox Retourne false pour un token invalide
      */
-    public function testGetValidTokenRowReturnsFalseForInvalidToken(): void // Test : getValidTokenRow() retourne false pour un token invalide
+    public function testGetValidTokenRowReturnsFalseForInvalidToken(): void
     {
-        $result = $this->model->getValidTokenRow('invalidtoken1234567890abcdef1234567890abcdef1234567890abcdef12'); // Cherche un token invalide, stocke le résultat dans $result
-        
-        $this->assertFalse($result); // Vérifie que $result est false (le token invalide n'a pas été trouvé)
+        $result = $this->model->getValidTokenRow(
+            'invalidtoken1234567890abcdef1234567890abcdef1234567890abcdef12'
+        );
+
+        $this->assertFalse($result);
     }
-    
+
     /**
-     * @testdox Un nouveau token remplace l'ancien token pour le même email (génère deux tokens pour le même email, ils sont différents car random_bytes() génère des valeurs aléatoires, les deux peuvent coexister en base)
+     * @testdox Génère un nouveau token différent pour le même email
      */
-    public function testNewTokenReplacesOldToken(): void // Test : générer un nouveau token pour le même email crée un token différent
+    public function testNewTokenReplacesOldToken(): void
     {
-        $email = 'multitoken@example.com'; // Email de test
-        
-        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe
-        
-        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion
-        
-        $stmt->execute(['Multi', 'Token', $email, $password]); // Insère l'utilisateur
-        
-        $token1 = $this->model->createTokenForEmail($email, 60); // Crée un premier token, stocke dans $token1
-        
-        $token2 = $this->model->createTokenForEmail($email, 60); // Crée un second token, stocke dans $token2
-        
-        $this->assertNotEquals($token1, $token2); // Vérifie que les deux tokens sont différents
-        
-        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM password_reset_tokens WHERE token IN (?, ?)'); // Prépare la requête pour compter les tokens
-        
-        $stmt->execute([$token1, $token2]); // Exécute la requête avec les deux tokens
-        
-        $count = $stmt->fetchColumn(); // Récupère le nombre de tokens trouvés, stocke dans $count
-        
-        $this->assertGreaterThan(0, $count); // Vérifie que au moins un token existe (le nouveau token doit exister)
+        $email = 'multitoken@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+
+        // Insère l'utilisateur
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
+        );
+        $stmt->execute(['Multi', 'Token', $email, $password]);
+
+        // Crée deux tokens successifs
+        $token1 = $this->model->createTokenForEmail($email, 60);
+        $token2 = $this->model->createTokenForEmail($email, 60);
+
+        // Vérifie que les tokens sont différents
+        $this->assertNotEquals($token1, $token2);
+
+        // Vérifie que les tokens existent en base
+        $stmt = $this->pdo->prepare(
+            'SELECT COUNT(*) FROM password_reset_tokens WHERE token IN (?, ?)'
+        );
+        $stmt->execute([$token1, $token2]);
+
+        $count = $stmt->fetchColumn();
+
+        $this->assertGreaterThan(0, $count);
     }
-    
+
     /**
-     * @testdox Le token a une date d'expiration valide dans le futur (crée un token avec TTL 30 min, expires_at = date('Y-m-d H:i:s', time() + 30*60), vérifie que la différence est entre 28 et 32 minutes avec marge d'erreur)
+     * @testdox Vérifie que le token a une date d'expiration valide
      */
-    public function testTokenHasExpirationDate(): void // Test : le token a une date d'expiration valide (dans le futur, correspond au TTL)
+    public function testTokenHasExpirationDate(): void
     {
-        $email = 'expiry@example.com'; // Email de test
-        
-        $password = password_hash('Password123!', PASSWORD_DEFAULT); // Hash le mot de passe
-        
-        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'); // Prépare l'insertion
-        
-        $stmt->execute(['Expiry', 'Test', $email, $password]); // Insère l'utilisateur
-        
-        $token = $this->model->createTokenForEmail($email, 30); // Crée un token avec TTL de 30 minutes, stocke dans $token
-        
-        $stmt = $this->pdo->prepare('SELECT * FROM password_reset_tokens WHERE token = ?'); // Prépare la requête pour récupérer le token
-        
-        $stmt->execute([$token]); // Exécute la requête avec le token
-        
-        $result = $stmt->fetch(\PDO::FETCH_ASSOC); // Récupère la ligne sous forme de tableau associatif, stocke dans $result
-        
-        $this->assertIsArray($result); // Vérifie que $result est un tableau
-        
-        $this->assertNotNull($result['expires_at']); // Vérifie que la date d'expiration n'est pas null
-        
-        $expiresAt = strtotime($result['expires_at']); // Convertit la date d'expiration en timestamp Unix, stocke dans $expiresAt
-        
-        $now = time(); // Récupère le timestamp actuel, stocke dans $now
-        
-        $this->assertGreaterThan($now, $expiresAt); // Vérifie que la date d'expiration est dans le futur
-        
-        $diff = ($expiresAt - $now) / 60; // Calcule la différence en minutes, stocke dans $diff
-        
-        $this->assertGreaterThan(28, $diff); // Vérifie que la différence est > 28 minutes (avec décalage timezone possible)
-        
-        $this->assertLessThan(92, $diff); // Vérifie que la différence est < 92 minutes (30 min TTL + jusqu'à 1h de décalage timezone)
+        $email = 'expiry@example.com';
+        $password = password_hash('Password123!', PASSWORD_DEFAULT);
+
+        // Insère l'utilisateur
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
+        );
+        $stmt->execute(['Expiry', 'Test', $email, $password]);
+
+        // Crée un token avec TTL de 30 minutes
+        $token = $this->model->createTokenForEmail($email, 30);
+
+        // Récupère le token
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM password_reset_tokens WHERE token = ?'
+        );
+        $stmt->execute([$token]);
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $this->assertIsArray($result);
+        $this->assertNotNull($result['expires_at']);
+
+        $expiresAt = strtotime($result['expires_at']);
+        $now = time();
+
+        // Vérifie que l'expiration est dans le futur
+        $this->assertGreaterThan($now, $expiresAt);
+
+        $diff = ($expiresAt - $now) / 60;
+
+        // Marge large pour éviter les faux positifs liés aux timezones
+        $this->assertGreaterThan(28, $diff);
+        $this->assertLessThan(92, $diff);
     }
-    
+
     /**
-     * @testdox Marque un token comme utilisé (markTokenUsed() fait un UPDATE password_reset_tokens SET used = 1 WHERE token = ?, retourne true si succès)
+     * @testdox Marque un token comme utilisé
      */
     public function testMarkTokenUsedSetsFlag(): void
     {
         $email = 'markused@example.com';
         $password = password_hash('Password123!', PASSWORD_DEFAULT);
-        
-        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+
+        // Insère l'utilisateur
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
+        );
         $stmt->execute(['Mark', 'Used', $email, $password]);
-        
+
+        // Crée le token
         $token = $this->model->createTokenForEmail($email, 60);
-        
+
         $this->assertIsString($token);
-        
+
+        // Marque le token comme utilisé
         $result = $this->model->markTokenUsed($token);
-        
+
         $this->assertTrue($result);
-        
-        $stmt = $this->pdo->prepare('SELECT used FROM password_reset_tokens WHERE token = ?');
+
+        // Vérifie le flag used
+        $stmt = $this->pdo->prepare(
+            'SELECT used FROM password_reset_tokens WHERE token = ?'
+        );
         $stmt->execute([$token]);
+
         $used = $stmt->fetchColumn();
-        
+
         $this->assertEquals(1, $used);
     }
-    
+
     /**
-     * @testdox Supprime les tokens expirés (purgeExpired() fait un DELETE FROM password_reset_tokens WHERE expires_at < NOW(), retourne true si succès)
+     * @testdox Supprime les tokens expirés
      */
     public function testPurgeExpiredRemovesOldTokens(): void
     {
         $email = 'purge@example.com';
         $password = password_hash('Password123!', PASSWORD_DEFAULT);
-        
-        $stmt = $this->pdo->prepare('INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)');
+
+        // Insère l'utilisateur
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)'
+        );
         $stmt->execute(['Purge', 'Test', $email, $password]);
-        
-        $userId = (int)$this->pdo->lastInsertId();
-        
+
+        $userId = (int) $this->pdo->lastInsertId();
+
+        // Insère un token expiré manuellement
         $expiredToken = bin2hex(random_bytes(32));
-        $stmt = $this->pdo->prepare('INSERT INTO password_reset_tokens (user_id, token, expires_at, used, created_at) VALUES (?, ?, DATE_SUB(NOW(), INTERVAL 1 HOUR), 0, DATE_SUB(NOW(), INTERVAL 2 HOUR))');
+
+        $stmt = $this->pdo->prepare(
+            'INSERT INTO password_reset_tokens (user_id, token, expires_at, used, created_at)
+             VALUES (?, ?, DATE_SUB(NOW(), INTERVAL 1 HOUR), 0, DATE_SUB(NOW(), INTERVAL 2 HOUR))'
+        );
         $stmt->execute([$userId, $expiredToken]);
-        
+
+        // Lance la purge
         $result = $this->model->purgeExpired();
-        
+
         $this->assertTrue($result);
-        
-        $stmt = $this->pdo->prepare('SELECT COUNT(*) FROM password_reset_tokens WHERE token = ?');
+
+        // Vérifie que le token a été supprimé
+        $stmt = $this->pdo->prepare(
+            'SELECT COUNT(*) FROM password_reset_tokens WHERE token = ?'
+        );
         $stmt->execute([$expiredToken]);
+
         $count = $stmt->fetchColumn();
-        
+
         $this->assertEquals(0, $count);
     }
 }
