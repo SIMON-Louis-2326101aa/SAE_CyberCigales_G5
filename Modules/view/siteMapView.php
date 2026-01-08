@@ -6,7 +6,7 @@
             ?>
             <li>
                 <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
-                <a href="index.php?controller=Admin&action=listUser">Tableau de bord Admin</a>
+                <a href="index.php?controller=Admin&action=listUsers">Tableau de bord Admin</a>
                 <a href="index.php?controller=User&action=logout">Déconnexion</a>
                 <a href="index.php?controller=User&action=account">Compte</a>
                 <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
