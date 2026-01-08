@@ -45,7 +45,7 @@
             <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
         </div>
         <div class="footer-copyright">
-            © 2025 ESCAPETHECODE. Tous droits réservés.
+            © 2025-2026 ESCAPETHECODE. Tous droits réservés.
         </div>
     </div>
 </footer>
