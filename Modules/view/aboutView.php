@@ -17,7 +17,7 @@
 
 <!-- Page À propos - Présentation du projet CyberCigales -->
 <div id="about-page">
-    <h1>À Propos de CyberCigales</h1>
+    <h1>À Propos de Escape The Code</h1>
 
     <!-- Section Équipe -->
     <section class="team-section">
