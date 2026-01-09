@@ -3,12 +3,13 @@
 
 $started = !empty($data['started']);
 $step    = (int)($data['step'] ?? 0);
-$max     = (int)($data['maxSteps'] ?? 10);
+$max     = (int)($data['maxSteps'] ?? 11);
 $score   = (int)($data['score'] ?? 0);
 $hint    = (string)($data['hint'] ?? '');
 $fb      = $data['feedback'] ?? null;
 
 $done = ($max > 0 && $step >= $max);
+$showCode = !empty($data['show_code']);
 ?>
 <main class="app">
     <section class="page">
@@ -36,7 +37,7 @@ $done = ($max > 0 && $step >= $max);
                     </p>
                 <?php endif; ?>
 
-                <?php if (!$done) : ?>
+                <?php if (!$done && !$showCode) :?>
                     <div class="bw-actions">
                         <div class="bw-left">
                             <a class="btn active btn-but"
@@ -51,11 +52,10 @@ $done = ($max > 0 && $step >= $max);
                                href="index.php?controller=ButterflyWay&action=right">Aller à droite →</a>
                         </div>
                     </div>
-
                 <?php else : ?>
                     <p class="lead">
                         <em>
-                            Le papillon s’est posé devant une étiquette.
+                            Une étiquette est positionné devant toi.
                             Il ne reste qu’un mot à murmurer…
                         </em>
                     </p>
@@ -65,26 +65,27 @@ $done = ($max > 0 && $step >= $max);
                           class="card bw-code-form">
                         <label for="code">Code</label>
                         <input
-                                class="input"
+                                class="input fly-label"
                                 id="code"
                                 name="code"
                                 autocomplete="off"
                                 placeholder="Écris le mot…"
                         />
-                        <button class="btn bw-code-form" type="submit">Valider</button>
+                        <button class="btn active btn-but" type="submit">Valider</button>
                     </form>
 
                     <?php if (!empty($data['code_ok'])) : ?>
-                        <p <p class="lead bw-success">>
-                            Bravo, tu peux passer à la suite.
+                        <p class="lead lead-success">
+                            Un chemin se forme devant toi 🦋
                         </p>
+                        <a class="btn active btn-but"
+                           href="index.php?controller=Redirection&action=openPhishingPuzzle">Avancer</a>
                     <?php endif; ?>
                 <?php endif; ?>
 
                 <p class="lead bw-status">
                     Étape <?= $step ?> / <?= $max ?> — Score :
-                    <strong class="bw-score<?= $score < 0 ? ' is-negative' : ''; ?>"><?= $score ?>>
-                        <?= $score ?>
+                    <strong class="bw-score<?= $score < 0 ? ' is-negative' : ''; ?>"><?= $score ?>
                     </strong>
                 </p>
             <?php endif; ?>

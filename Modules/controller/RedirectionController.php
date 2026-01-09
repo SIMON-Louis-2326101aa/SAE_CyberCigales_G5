@@ -122,12 +122,6 @@ class RedirectionController
         $this->requireAuth();
         ViewHandler::show('butterflyWayView', ['pageTitle' => 'Un Papillon ?']);
     }
-    public function openButterFlyOneView()
-    {
-        $this->logRedirection('butterflyOneView');
-        $this->requireAuth();
-        ViewHandler::show('butterflyOneView', ['pageTitle' => 'Épreuve du Papillon']);
-    }
 
     public function openContact()
     {

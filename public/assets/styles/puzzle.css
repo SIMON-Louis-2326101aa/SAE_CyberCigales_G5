@@ -547,4 +547,11 @@
     animation: float 4s ease-in-out infinite
 }
 
+.fly-label{
+    animation: float 4s ease-in-out infinite;
+    align-items: center;
+    display: flex;
+    margin : 0 auto;
+}
+
 @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }

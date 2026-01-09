@@ -68,15 +68,18 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
 
         <div class="settings-menu-container">
-            <button id="settings-button" class="settings-button" aria-label="Ouvrir les paramètres" aria-haspopup="true" aria-expanded="false">
+            <button id="settings-button" class="settings-button" aria-label="Ouvrir les paramètres"
+                    aria-haspopup="true" aria-expanded="false">
                 ⚙️
             </button>
             <div id="settings-menu" class="settings-menu" role="menu">
                 <div class="settings-menu-header">Thèmes d'accessibilité</div>
                 <div id="theme-selector-buttons">
                     <button class="theme-button" data-theme="default" role="menuitem">Thème par défaut</button>
-                    <button class="theme-button" data-theme="deuteranopia-protanopia" role="menuitem">Deutéranopie (Rouge-Vert)</button>
-                    <button class="theme-button" data-theme="tritanopia" role="menuitem">Tritanopie (Bleu-Jaune)</button>
+                    <button class="theme-button" data-theme="deuteranopia-protanopia"
+                            role="menuitem">Deutéranopie (Rouge-Vert)</button>
+                    <button class="theme-button" data-theme="tritanopia"
+                            role="menuitem">Tritanopie (Bleu-Jaune)</button>
                 </div>
             </div>
         </div>
