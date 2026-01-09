@@ -49,6 +49,7 @@
         </div>
     </div>
 </footer>
+</html>
 <?php
 // Rejoue le buffer de logs si tu l'utilises
 if (!empty($GLOBALS['dev_log_buffer'])) {
