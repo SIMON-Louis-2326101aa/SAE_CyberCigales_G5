@@ -6,10 +6,12 @@
             <input type="hidden" name="epreuve" value="1">
             <p>Epreuve 1</p>
             <label>Indice 1 : <br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['alice']['1']['ans1'] ?? ''); ?></textarea>
             </label>
             <label>Indice 2 : <br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['alice']['1']['ans2'] ?? ''); ?></textarea>
             </label>
             <button type="submit" class="active btn-nav">Valider</button>
         </form>
@@ -20,10 +22,12 @@
             <input type="hidden" name="epreuve" value="2">
             <p>Epreuve 2</p>
             <label>Indice 1 : <br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['alice']['2']['ans1'] ?? ''); ?></textarea>
             </label>
             <label>Indice 2 : <br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['alice']['2']['ans2'] ?? ''); ?></textarea>
             </label>
             <button type="submit" class="active btn-nav">Valider</button>
         </form>
@@ -34,10 +38,12 @@
             <input type="hidden" name="epreuve" value="3">
             <p>Epreuve 3</p>
             <label>Indice 1 : <br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['alice']['3']['ans1'] ?? ''); ?></textarea>
             </label>
             <label>Indice 2 : <br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['alice']['3']['ans2'] ?? ''); ?></textarea>
             </label>
             <button type="submit" class="active btn-nav">Valider</button>
         </form>
@@ -51,10 +57,12 @@
             <input type="hidden" name="epreuve" value="1">
             <p>Epreuve 1</p>
             <label>Indice 1 : <br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['bob']['1']['ans1'] ?? ''); ?></textarea>
             </label>
             <label>Indice 2 : <br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['bob']['1']['ans2'] ?? ''); ?></textarea>
             </label>
             <button type="submit" class="active btn-nav">Valider</button>
         </form>
@@ -65,10 +73,12 @@
             <input type="hidden" name="epreuve" value="2">
             <p>Epreuve 2</p>
             <label>Indice 1 : <br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['bob']['2']['ans1'] ?? ''); ?></textarea>
             </label>
             <label>Indice 2 : <br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['bob']['2']['ans2'] ?? ''); ?></textarea>
             </label>
             <button type="submit" class="active btn-nav">Valider</button>
         </form>
@@ -79,10 +89,12 @@
             <input type="hidden" name="epreuve" value="3">
             <p>Epreuve 3</p>
             <label>Indice 1 : <br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['bob']['3']['ans1'] ?? ''); ?></textarea>
             </label>
             <label>Indice 2 : <br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?php echo
+                    htmlspecialchars($_SESSION['saved_indices']['bob']['3']['ans2'] ?? ''); ?></textarea>
             </label>
             <button type="submit" class="active btn-nav">Valider</button>
         </form>

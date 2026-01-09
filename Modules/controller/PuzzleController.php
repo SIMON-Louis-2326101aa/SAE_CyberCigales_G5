@@ -169,6 +169,8 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openButterflyWay");
         exit;
     }
+    // Dans PuzzleController.php, modifiez la fonction valideIndice :
+
     public function valideIndice()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -182,14 +184,21 @@ class PuzzleController
 
         $team = $_SESSION['team'];
         $epreuve = $_POST['epreuve'] ?? '';
-        $ans1 = $this->normalize($_POST['answer1'] ?? '');
-        $ans2 = $this->normalize($_POST['answer2'] ?? '');
+        $ans1Raw = $_POST['answer1'] ?? '';
+        $ans2Raw = $_POST['answer2'] ?? '';
+
+        $ans1 = $this->normalize($ans1Raw);
+        $ans2 = $this->normalize($ans2Raw);
+        if (!isset($_SESSION['saved_indices'])) {
+            $_SESSION['saved_indices'] = [];
+        }
 
         if ($ans1 === '' || $ans2 === '') {
             $_SESSION['flash_error'] = "Tous les indices doivent être remplis.";
             header("Location: index.php?controller=Redirection&action=openSummaryClue");
             exit;
         }
+
         $solutions = [
             'alice' => [
                 '1' => ['indice1' => 'solution1', 'indice2' => 'solution2'],
@@ -204,14 +213,24 @@ class PuzzleController
         ];
 
         $expected = $solutions[$team][$epreuve] ?? null;
-        if (
-            $expected &&
-            $ans1 === $this->normalize($expected['indice1']) &&
-            $ans2 === $this->normalize($expected['indice2'])
-        ) {
-            $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
-        } else {
-            $_SESSION['flash_error'] = "Les indices pour l'épreuve $epreuve sont incorrects.";
+
+        if ($expected) {
+            $isCorrect1 = ($ans1 === $this->normalize($expected['indice1']));
+            $isCorrect2 = ($ans2 === $this->normalize($expected['indice2']));
+
+            // On ne sauvegarde en session QUE si c'est correct
+            if ($isCorrect1) {
+                $_SESSION['saved_indices'][$team][$epreuve]['ans1'] = $ans1Raw;
+            }
+            if ($isCorrect2) {
+                $_SESSION['saved_indices'][$team][$epreuve]['ans2'] = $ans2Raw;
+            }
+
+            if ($isCorrect1 && $isCorrect2) {
+                $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
+            } else {
+                $_SESSION['flash_error'] = "Certains indices pour l'épreuve $epreuve sont incorrects.";
+            }
         }
 
         header("Location: index.php?controller=Redirection&action=openSummaryClue");

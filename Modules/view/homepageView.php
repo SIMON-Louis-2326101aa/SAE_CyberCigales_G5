@@ -15,6 +15,8 @@
         <h1 class="hero-question">Serez-vous capable de résoudre le mystère ?</h1>
         <a  href='index.php?controller=Team&action=play'
             class="active btn-nav">JOUER</a>
+        <a href="index.php?controller=Redirection&action=openSummaryClue"
+           class="active btn-nav">Résumé</a>
     </div>
 
 <?php else : ?>
