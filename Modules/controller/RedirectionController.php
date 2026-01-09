@@ -46,7 +46,6 @@ class RedirectionController
     public function openAccount()
     {
         $this->logRedirection('accountView');
-        // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
         $this->requireAuth();
         ViewHandler::show('accountView', ['pageTitle' => 'Compte']);
     }
@@ -72,6 +71,7 @@ class RedirectionController
     public function openChangePwd()
     {
         $this->logRedirection('changePwdView');
+        $this->requireAuth();
         ViewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token']
             ?? '']);
     }
@@ -109,6 +109,7 @@ class RedirectionController
         }
 
         $this->logRedirection('letterIntroView');
+        $this->requireAuth();
         ViewHandler::show('letterIntroView', ['pageTitle' => 'Introduction']);
     }
 
@@ -118,11 +119,13 @@ class RedirectionController
     public function openButterflyWay()
     {
         $this->logRedirection('ButterflyWayView');
+        $this->requireAuth();
         ViewHandler::show('butterflyWayView', ['pageTitle' => 'Un Papillon ?']);
     }
     public function openButterFlyOneView()
     {
         $this->logRedirection('butterflyOneView');
+        $this->requireAuth();
         ViewHandler::show('butterflyOneView', ['pageTitle' => 'Épreuve du Papillon']);
     }
 
@@ -138,6 +141,7 @@ class RedirectionController
     public function openChoice()
     {
         $this->logRedirection('choiceView');
+        $this->requireAuth();
         ViewHandler::show('choiceView', ['pageTitle' => 'Choix du personnage']);
     }
 
@@ -147,6 +151,7 @@ class RedirectionController
     public function openPicturePuzzle()
     {
         $this->logRedirection('openpicturePuzzleView');
+        $this->requireAuth();
         ViewHandler::show('picturePuzzleView', ['pageTitle' => 'Enigme de l\'image']);
     }
 
@@ -156,6 +161,7 @@ class RedirectionController
     public function openPhishingPuzzle()
     {
         $this->logRedirection('openPhishingPuzzleView');
+        $this->requireAuth();
         ViewHandler::show('phishingPuzzleView', ['pageTitle' => 'Enigme du mail']);
     }
 
@@ -165,6 +171,7 @@ class RedirectionController
     public function openPasswordGame()
     {
         $this->logRedirection('openPasswordGameView');
+        $this->requireAuth();
         ViewHandler::show('passwordGameView', ['pageTitle' => 'Enigme du jeu du mot de passe']);
     }
 
@@ -174,6 +181,7 @@ class RedirectionController
     public function openSummaryClue()
     {
         $this->logRedirection('openSummaryClueView');
+        $this->requireAuth();
         ViewHandler::show('summaryClueView', ['pageTitle' => 'Enigme du resumé d\'indices']);
     }
 
@@ -183,6 +191,7 @@ class RedirectionController
     public function openSearchSM()
     {
         $this->logRedirection('openSearchSMView');
+        $this->requireAuth();
         ViewHandler::show('searchSMView', ['pageTitle' => 'Enigme de recherche']);
     }
 
@@ -192,6 +201,7 @@ class RedirectionController
     public function openMeetingPwd()
     {
         $this->logRedirection('openMeetingPwdView');
+        $this->requireAuth();
         ViewHandler::show('meetingPasswordView', ['pageTitle' => 'rassemblement des équipes']);
     }
 
@@ -201,6 +211,7 @@ class RedirectionController
     public function openEndText()
     {
         $this->logRedirection('openendTextView');
+        $this->requireAuth();
         ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
 }

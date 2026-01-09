@@ -1,50 +1,92 @@
 <?php
 /** @var array $data */
 
-$started  = !empty($data['started']);
-$step     = (int) ($data['step'] ?? 0);
-$max      = (int) ($data['maxSteps'] ?? 10);
-$score    = (int) ($data['score'] ?? 0);
-$hint     = $data['hint'] ?? '';
-$fb       = $data['feedback'] ?? null;
+$started = !empty($data['started']);
+$step    = (int)($data['step'] ?? 0);
+$max     = (int)($data['maxSteps'] ?? 10);
+$score   = (int)($data['score'] ?? 0);
+$hint    = (string)($data['hint'] ?? '');
+$fb      = $data['feedback'] ?? null;
+
+$done = ($max > 0 && $step >= $max);
 ?>
 <main class="app">
-    <section class="page page--active">
+    <section class="page">
         <div class="center">
-            <h1 class="heading">La petite épreuve du papillon</h1>
+            <h1 class="heading">Le chemin du petit papillon</h1>
 
             <?php if (!$started) : ?>
-                <p class="lead">Tu arrives devant la foret endormie. Le papillon attend ton premier pas.</p>
-                <form method="post" action="?m=papillon&a=start">
-                    <button class="btn">Commencer</button>
-                </form>
-            <?php else : ?>
-                <p class="lead" id="hint"><?= htmlspecialchars($hint, ENT_QUOTES, 'UTF-8') ?></p>
-
-                <?php if ($fb) : ?>
-                    <p class="lead" style="opacity:.9"><?= htmlspecialchars($fb, ENT_QUOTES, 'UTF-8') ?></p>
-                <?php endif; ?>
-
-                <div style="display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:wrap">
-                    <form method="post" action="?m=papillon&a=right"><button class="btn">Aller à droite →</button>
-                    </form>
-                    <form method="post" action="?m=papillon&a=left"><button class="btn">← Aller à gauche</button></form>
-
-                    <?php if ($started) : ?>
-                        <form method="post" action="?m=papillon&a=turn">
-                            <button class="btn" style="background:#222">Se retourner</button>
-                        </form>
-                    <?php endif; ?>
-                </div>
-
-                <p class="lead" style="margin-top:8px; opacity:.75">
-                    Étape <?= $step ?> / <?= $max ?> — Score :
-                    <strong<?= $score < 0 ? ' style="color:#b91c1c"' : ''; ?>><?= $score ?></strong>
+                <p class="lead">
+                    Un papillon traverse les couloirs, comme s’il connaissait un secret.
+                    Suis-le. Ne le perds pas.
                 </p>
 
-                <?php if ($step >= $max) : ?>
-                    <p class="lead"><em>Tu sens qu’il n’y a plus rien devant. “Se retourner”…</em></p>
+                <form method="post" action="index.php?controller=ButterflyWay&action=start">
+                    <button class="btn" type="submit">Commencer</button>
+                </form>
+
+            <?php else : ?>
+                <?php if ($hint !== '') : ?>
+                    <p class="lead" id="hint"><?= htmlspecialchars($hint, ENT_QUOTES, 'UTF-8') ?></p>
                 <?php endif; ?>
+
+                <?php if (!empty($fb)) : ?>
+                    <p class="lead lead-feedback">
+                        <?= htmlspecialchars((string)$fb, ENT_QUOTES, 'UTF-8') ?>
+                    </p>
+                <?php endif; ?>
+
+                <?php if (!$done) : ?>
+                    <div class="bw-actions">
+                        <div class="bw-left">
+                            <a class="btn active btn-but"
+                               href="index.php?controller=ButterflyWay&action=left">← Aller à gauche</a>
+                        </div>
+                        <div class="bw-center">
+                            <a class="btn btn-dark active btn-but"
+                               href="index.php?controller=ButterflyWay&action=turn">Se retourner</a>
+                        </div>
+                        <div class="bw-right">
+                            <a class="btn active btn-but"
+                               href="index.php?controller=ButterflyWay&action=right">Aller à droite →</a>
+                        </div>
+                    </div>
+
+                <?php else : ?>
+                    <p class="lead">
+                        <em>
+                            Le papillon s’est posé devant une étiquette.
+                            Il ne reste qu’un mot à murmurer…
+                        </em>
+                    </p>
+
+                    <form method="post"
+                          action="index.php?controller=ButterflyWay&action=submitCode"
+                          class="card bw-code-form">
+                        <label for="code">Code</label>
+                        <input
+                                class="input"
+                                id="code"
+                                name="code"
+                                autocomplete="off"
+                                placeholder="Écris le mot…"
+                        />
+                        <button class="btn bw-code-form" type="submit">Valider</button>
+                    </form>
+
+                    <?php if (!empty($data['code_ok'])) : ?>
+                        <p <p class="lead bw-success">>
+                            Bravo, tu peux passer à la suite.
+                        </p>
+                    <?php endif; ?>
+                <?php endif; ?>
+
+                <p class="lead bw-status">
+                    Étape <?= $step ?> / <?= $max ?> — Score :
+                    <strong class="bw-score<?= $score < 0 ? ' is-negative' : ''; ?>"><?= $score ?>>
+                        <?= $score ?>
+                    </strong>
+                </p>
             <?php endif; ?>
         </div>
     </section>

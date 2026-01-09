@@ -185,7 +185,7 @@
     left: 0;
     padding: 2rem;
     font-family: Handlee, cursive;
-    background-image: url("/assets/images/fond-lettre.webp");
+    background-image: url("../images/fond-lettre.webp");
     background-size: cover;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -389,13 +389,13 @@
 }
 
 .lead{
-    color:var(--muted);
+    color:var(--text-muted);
     max-width:60ch;
     line-height:1.6;
 }
 
 .card{
-    background:var(--surface);
+    background:var(--dark-bg);
     border:1px solid var(--border);
     border-radius:20px;
     padding:24px;
@@ -412,7 +412,7 @@
 }
 
 .input:focus{
-    border-color:var(--focus);
+    border-color:var(--border);
     box-shadow: 0 0 0 4px rgb(59 130 246 / 12%)
 }
 
@@ -444,15 +444,17 @@
 }
 
 .nav__link{
-    color:var(--muted);
+    color:var(--text-muted);
     text-decoration:none;
     margin:0 6px
 }
 
 .nav__link.is-active{
-    color:var(--ink);
+    color:var(--border);
     font-weight:600
 }
+
+/* ===== Butterfly Way ===== */
 
 .butterfly{
     width:180px;
@@ -467,7 +469,78 @@
     right:0;
     bottom:-22px;
     font-size:.9rem;
-    color:var(--muted)
+    color:var(--text-muted)
+}
+
+/* ===== Disposition des choix gauche / centre / droite ===== */
+.bw-actions{
+    width:100%;
+    display:grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items:center;
+    margin-top:20px;
+}
+
+.bw-left{
+    justify-self:start;
+}
+
+.bw-center{
+    justify-self:center;
+    padding-left:20px;
+}
+
+.bw-right{
+    justify-self:end;
+}
+
+@media (width <= 640px){
+    .bw-actions{
+        grid-template-columns: 1fr;
+        gap:12px;
+    }
+
+    .bw-left,
+    .bw-center,
+    .bw-right{
+        justify-self:center;
+    }
+}
+
+.btn-dark{
+    background:#222;
+}
+
+.lead-feedback{
+    opacity:.9;
+}
+
+.bw-status{
+    margin-top:8px;
+    opacity:.75;
+}
+.bw-score.is-negative{ color:#b91c1c; }
+
+.bw-code-form{
+    width:min(560px,92vw);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.bw-success{ font-weight:700; }
+
+.btn-but {
+    border-radius: var(--radius);
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.btn-but:hover {
+    background-color: var(--primary);
+    color: var(--bg-dark);
 }
 
 .float{

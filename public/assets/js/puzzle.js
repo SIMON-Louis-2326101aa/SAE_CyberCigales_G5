@@ -84,7 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const infoTab = document.getElementById("info-handle");
 
     // Fonction pour afficher l'indice
-    function showClue(element) {
+    function showClue(element)
+    {
         if (element) {
             element.classList.add("show");
         }
@@ -92,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Minuteur tab info : Révéler tab d'info
     if (infoTab) {
-        setTimeout(function() {
+        setTimeout(function () {
             infoTab.classList.remove("disabled");
             console.log("L'onglet d'info est activer !"); // Pour le débogage
         }, delayTabInfo);
@@ -100,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Minuteur 1 : Révéler l'indice 1 après 0 minute
     if (clue1) {
-        setTimeout(function() {
+        setTimeout(function () {
             showClue(clue1);
             console.log("Indice 1 révélé !"); // Pour le débogage
         }, delayClue1);
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Minuteur 2 : Révéler l'indice 2 après 15 minute
     if (clue2) {
-        setTimeout(function() {
+        setTimeout(function () {
             showClue(clue2);
             console.log("Indice 2 révélé !"); // Pour le débogage
         }, delayClue2);
@@ -116,7 +117,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Minuteur 3 : Révéler l'indice 3 après 30 minutes
     if (clue3) {
-        setTimeout(function() {
+        setTimeout(function () {
             showClue(clue3);
             console.log("Indice 3 révélé !"); // Pour le débogage
         }, delayClue3);
@@ -127,7 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (timeDisplay && typeof GAME_START_TIME !== "undefined") {
 
-        function updateTimer() {
+        function updateTimer()
+        {
             // Heure actuelle
             const now = Date.now();
 
@@ -160,7 +162,9 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener('DOMContentLoaded', () => {
     const card = document.getElementById('photoCard');
 
-    if (!card) return;
+    if (!card) {
+        return;
+    }
 
     card.addEventListener('click', () => {
         card.classList.toggle('turn');
@@ -208,5 +212,19 @@ if (h1) {
 // reduce motion
 if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     document.querySelectorAll(".wing-l,.wing-r,.float").forEach(el => el.style.animation = "none");
+}
+
+const hint = document.getElementById("hint");
+if (hint) {
+    const full = hint.textContent;
+    hint.textContent = "";
+    let i = 0, speed = 12;
+    (function tick()
+    {
+        if (i <= full.length) {
+            hint.textContent = full.slice(0, i++);
+            requestAnimationFrame(() => setTimeout(tick, speed));
+        }
+    })();
 }
 

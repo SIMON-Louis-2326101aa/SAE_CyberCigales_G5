@@ -50,14 +50,18 @@ if (session_status() === PHP_SESSION_NONE) {
                 <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
                 <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com') : ?>
                     <!-- Si Admin, alors le bouton Admin est accessible -->
-                    <a href="index.php?controller=Admin&action=listUsers" class="active btn-nav" id="admin-button">Admin</a>
+                    <a href="index.php?controller=Admin&action=listUsers"
+                       class="active btn-nav" id="admin-button">Admin</a>
                 <?php endif; ?>
                 <?php
             } else {
                 ?>
-                <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
-                <a href="index.php?controller=Redirection&action=openFormRegister" class="active btn-nav">Inscription</a>
-                <a href="index.php?controller=Redirection&action=openFormConnection" class="active btn-nav">Connexion</a>
+                <a href="index.php?controller=Redirection&action=openHomepage"
+                   class="active btn-nav">Accueil</a>
+                <a href="index.php?controller=Redirection&action=openFormRegister"
+                   class="active btn-nav">Inscription</a>
+                <a href="index.php?controller=Redirection&action=openFormConnection"
+                   class="active btn-nav">Connexion</a>
                 <?php
             }
             ?>
