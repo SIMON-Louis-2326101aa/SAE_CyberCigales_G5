@@ -2,6 +2,13 @@
 
 namespace SAE_CyberCigales_G5\Modules\controller;
 
+//require_once __DIR__ . '/../model/UserModel.php';
+//require_once __DIR__ . '/../model/EmailVerificationModel.php';
+//require_once __DIR__ . '/../model/PasswordResetModel.php'; // nécessaire pour forgot/changePwd
+//require_once __DIR__ . '/../../includes/ViewHandler.php';
+//require_once __DIR__ . '/../../includes/Mailer.php';
+
+use SAE_CyberCigales_G5\includes\Constant;
 use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
@@ -10,18 +17,30 @@ use SAE_CyberCigales_G5\Modules\model\PasswordResetModel;
 use SAE_CyberCigales_G5\Modules\model\PendingRegistrationModel;
 use SAE_CyberCigales_G5\Modules\model\UserModel;
 
+/**
+ * Contrôleur utilisateur
+ *
+ * Gère toutes les actions liées aux utilisateurs : inscription, connexion,
+ * déconnexion, gestion de compte, mot de passe oublié, etc.
+ *
+ * @package SAE_CyberCigales_G5\Modules\controller
+ * @author Équipe CyberCigales
+ */
 class UserController
 {
+    /**
+     * Instance du modèle utilisateur
+     *
+     * @var UserModel
+     */
     private UserModel $userModel;
     private LoginAttemptModel $loginAttemptModel;
 
-    private static function log(string $message, string $type): void
-    {
-        if (function_exists('log_console')) {
-            log_console($message, $type);
-        }
-    }
-
+    /**
+     * Constructeur du contrôleur
+     *
+     * Initialise le modèle utilisateur et log l'initialisation.
+     */
     public function __construct()
     {
         $this->userModel = new UserModel();
@@ -32,13 +51,22 @@ class UserController
     }
 
     /**
-     * Inscription utilisateur avec vérification e-mail (code à 10 min)
+     * Inscription utilisateur avec vérification e-mail
+     * Processus d'inscription en plusieurs étapes :
+     * 1. Validation des données (nom, prénom, email, mot de passe)
+     * 2. Vérification de la complexité du mot de passe
+     * 3. Vérification que l'email n'est pas déjà utilisé
+     * 4. Stockage temporaire en attente de vérification
+     * 5. Envoi du code de vérification par email (expire après 10 minutes)
+     * @return void Redirige vers la page de vérification d'email ou d'inscription selon le résultat
+     * @uses UserModel::findByEmail() Pour vérifier si l'email existe déjà
+     * @uses EmailVerificationModel Pour gérer le code de vérification
      */
     public function register()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['register'])) {
             $_SESSION['flash_error'] = "Accès invalide au formulaire d'inscription.";
-            self::log('Register: accès direct ou mauvaise méthode', 'error');
+            //if (function_exists('log_console')) log_console('Register: accès direct ou mauvaise méthode', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -189,7 +217,15 @@ class UserController
     }
 
     /**
-     * Connexion
+     * Connexion utilisateur
+     *
+     * Authentifie un utilisateur avec son email et son mot de passe.
+     * En cas de succès, crée une session sécurisée.
+     *
+     * @return void Redirige vers la page d'accueil en cas de succès,
+     *              vers la page de connexion en cas d'échec
+     *
+     * @uses UserModel::authenticate() Pour vérifier les identifiants
      */
     public function login()
     {
@@ -286,7 +322,11 @@ class UserController
     }
 
     /**
-     * Déconnexion
+     * Déconnexion utilisateur
+     *
+     * Détruit la session utilisateur et redirige vers la page d'accueil.
+     *
+     * @return void Redirige toujours vers la page d'accueil
      */
     public function logout()
     {
@@ -315,7 +355,15 @@ class UserController
 
 
     /**
-     * Mot de passe oublié : envoi de lien avec token valide 60 min
+     * Mot de passe oublié : envoi du lien de réinitialisation
+     *
+     * Génère un token unique valide 60 minutes et envoie un email
+     * contenant un lien de réinitialisation du mot de passe.
+     *
+     * @return void Redirige vers la page de mot de passe oublié avec un message
+     *
+     * @uses PasswordResetModel::generateToken() Pour créer le token sécurisé
+     * @uses Mailer::send() Pour envoyer l'email de réinitialisation
      */
     public function forgot()
     {
@@ -388,7 +436,16 @@ class UserController
     }
 
     /**
-     * Changement de mot de passe via token
+     * Changement de mot de passe via token de réinitialisation
+     *
+     * Affiche le formulaire de changement de mot de passe (GET)
+     * ou traite le changement de mot de passe (POST).
+     * Vérifie la validité et l'expiration du token avant toute modification.
+     *
+     * @return void Affiche le formulaire ou redirige selon le résultat
+     *
+     * @uses PasswordResetModel::findValidToken() Pour valider le token
+     * @uses UserModel::updatePassword() Pour modifier le mot de passe
      */
     public function changePwd()
     {

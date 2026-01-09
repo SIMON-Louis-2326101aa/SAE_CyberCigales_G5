@@ -1,6 +1,6 @@
 <?php
 
-namespace SAE_CyberCigales_G5\Modules\controller;
+namespace SAE_CyberCigales\Modules\controller;
 
 //require_once __DIR__ . '/../model/EmailVerificationModel.php';
 //require_once __DIR__ . '/../../includes/Mailer.php';
@@ -12,24 +12,53 @@ use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
 use SAE_CyberCigales_G5\Modules\model\UserModel;
 
+/**
+ * Contrôleur de vérification d'email
+ * 
+ * Gère l'envoi et la vérification des codes de vérification d'email
+ * pour confirmer l'adresse email d'un utilisateur lors de l'inscription.
+ * 
+ * @package SAE_CyberCigales\Modules\controller
+ * @author Équipe CyberCigales
+ */
 class EmailVerificationController
 {
+    /**
+     * Instance du modèle de vérification d'email
+     * 
+     * @var EmailVerificationModel
+     */
     private $eModel;
-    private $user ;
+    
+    /**
+     * Instance du modèle utilisateur
+     * 
+     * @var UserModel
+     */
+    private $user;
 
+    /**
+     * Constructeur du contrôleur
+     * 
+     * Initialise les modèles nécessaires pour la vérification d'email.
+     */
     public function __construct()
     {
         $this->eModel = new EmailVerificationModel();
         $this->user = new UserModel();
     }
 
-    private static function log(string $message, string $type): void
-    {
-        if (function_exists('log_console')) {
-            log_console($message, $type);
-        }
-    }
-
+    /**
+     * Génère et envoie un code de vérification par email
+     * 
+     * Cette méthode génère un code de vérification à 6 chiffres,
+     * le stocke en base de données et l'envoie par email à l'utilisateur.
+     * En mode développement, le code est affiché dans un message flash.
+     * 
+     * @return void Redirige vers la page de saisie du code
+     * 
+     * @throws void Affiche un message d'erreur si l'email est manquant
+     */
     public function request()
     {
         $email = $_GET['email'] ?? '';
@@ -60,21 +89,16 @@ class EmailVerificationController
   </td></tr></table>
 </div>';
         $sent = Mailer::send($email, $subject, $message);
-        self::log("Envoi du code de vérification à {$email} : " . ($sent ? 'Succès' : 'Échec'), $sent ? 'ok' : 'error');
 
         // L'email doit être passé dans l'URL pour être récupéré par l'afficheur
         $url = 'Location: index.php?controller=Redirection&action=openEmailVerification&email=' . urlencode($email);
-        self::log("Redirection vers : {$url}", 'file');
 
         if ($sent) {
             $_SESSION['flash_success'] = "Un code vous a été envoyé.";
-            self::log("Code de vérification envoyé à {$email}", 'ok');
         } else {
             if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
                 $_SESSION['flash_info'] = "Le mail n'a pas été envoyé. Code pour dev: {$code}";
-                self::log("Mode DEV: affichage du code de vérification pour {$email}", 'info');
             } else {
-                self::log("Échec d'envoi du code de vérification à {$email}", 'error');
                 $_SESSION['flash_error'] = "Erreur lors de l'envoi du code.";
             }
         }
@@ -83,6 +107,23 @@ class EmailVerificationController
         exit;
     }
 
+    /**
+     * Vérifie le code de vérification saisi par l'utilisateur
+     * 
+     * Cette méthode vérifie que le code saisi correspond à celui envoyé par email,
+     * qu'il n'est pas expiré (10 minutes) et crée le compte utilisateur si tout est valide.
+     * 
+     * Contrôles effectués :
+     * - Présence de l'email et du code
+     * - Format du code (6 chiffres)
+     * - Validité et expiration du code
+     * 
+     * @return void Redirige vers la page de connexion en cas de succès,
+     *              vers la page de saisie du code en cas d'échec
+     * 
+     * @uses EmailVerificationModel::checkCodeStatus() Pour vérifier le statut du code
+     * @uses UserModel::createUserAfterVerification() Pour créer le compte après vérification
+     */
     public function verify()
     {
         $email = $_POST['email'] ?? '';
@@ -114,13 +155,11 @@ class EmailVerificationController
             if ($this->user->createUserAfterVerification($email)) {
                 // Succès : Redirection vers la page de connexion
                 $_SESSION['flash_success'] = "Compte créé. Vous pouvez vous connecter.";
-                self::log("Compte créé pour {$email} après vérification.", 'ok');
                 header('Location: index.php?controller=Redirection&action=openFormConnection');
                 exit;
             } else {
                 // Erreur lors de la création du compte
                 $_SESSION['flash_error'] = "Erreur lors de la création du compte. Réessayez.";
-                self::log("Échec de création du compte pour {$email} après vérification.", 'error');
                 header($errorRedirectUrl); // Redirection après échec
                 exit;
             }
@@ -128,10 +167,9 @@ class EmailVerificationController
 
         // Afficher un message d'erreur spécifique selon la raison
         $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired')
-            ? "Code expiré (10 minutes). <a href=\"index.php?controller=EmailVerification&action=request&email="
+            ? "Code expiré (10 minutes). <a href=\"index.php?controller=emailVerification&action=request&email="
             . urlencode($email) . "\">Renvoyer un code</a>."
             : "Code incorrect. Vérifiez et réessayez.";
-        self::log("Échec de vérification du code pour {$email} : " . $codeStatus['reason'], 'error');
 
         header($errorRedirectUrl); // Redirection après échec
         exit;

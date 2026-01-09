@@ -9,10 +9,19 @@ class UserModel extends Database
     private ConnectionDB $db;
     private PendingRegistrationModel $pendingModel;
 
-    public function __construct()
+    /**
+     * Constructeur du UserModel
+     * 
+     * Permet l'injection de dépendances pour les tests avec mocks.
+     * Si aucune dépendance n'est fournie, utilise les instances par défaut.
+     * 
+     * @param ConnectionDB|null $db Connexion à la base de données (ou mock pour les tests)
+     * @param PendingRegistrationModel|null $pendingModel Modèle des inscriptions en attente (ou mock pour les tests)
+     */
+    public function __construct(?ConnectionDB $db = null, ?PendingRegistrationModel $pendingModel = null)
     {
-        $this->db = ConnectionDB::getInstance();
-        $this->pendingModel = new PendingRegistrationModel();
+        $this->db = $db ?? ConnectionDB::getInstance();
+        $this->pendingModel = $pendingModel ?? new PendingRegistrationModel();
     }
 
     // Créer le compte utilisateur après vérification

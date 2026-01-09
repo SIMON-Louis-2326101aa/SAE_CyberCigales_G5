@@ -9,7 +9,7 @@ use PDO;
 use PDOException;
 use RuntimeException;
 
-final class ConnectionDB
+class ConnectionDB
 {
     private static function log(string $message, string $type): void
     {
