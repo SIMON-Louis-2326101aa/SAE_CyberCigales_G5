@@ -159,7 +159,7 @@ class PuzzleController
             exit;
         }
 
-        // ✅ Niveau suivant
+        // Niveau suivant
         $userId = $_SESSION['utilisateur']['id'];
         $progressModel = new GameProgressModel();
         $progressModel->updateLevel($userId, 3);

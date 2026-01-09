@@ -57,7 +57,7 @@ if (!function_exists('logSecurityEvent')) {
                 . ($_SERVER['REQUEST_URI'] ?? '/'),
             'referer'      => $_SERVER['HTTP_REFERER']       ?? null,
             'user_agent'   => $_SERVER['HTTP_USER_AGENT']    ?? null,
-            'session_user' => $_SESSION['user_id']           ?? null, // adapte la clé selon ton app
+            'session_user' => $_SESSION['user_id']           ?? null,
             'app_env'      => $_ENV['APP_ENV']              ?? null,
             'is_dev'       => (($_ENV['APP_ENV'] ?? 'dev') === 'dev'),
         ];
