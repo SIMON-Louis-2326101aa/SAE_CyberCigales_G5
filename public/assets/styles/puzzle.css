@@ -357,3 +357,83 @@
     opacity: 0.85;
     font-size: 1.6rem;
 }
+
+/* ============ Résumé des indices (Summary View - Large & Simple) ============ */
+
+h2 {
+    text-align: center;
+    color: var(--primary);
+    font-family: 'Cormorant Garamond', serif;
+    margin: 30px 0;
+    font-size: 2.5rem; /* Titre un peu plus grand */
+}
+
+.s-section {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 30px;
+    margin: 0 auto 30px;
+    width: 95%;           /* Prend 95% de la largeur de l'écran */
+    max-width: 1100px;    /* Limite la largeur sur les très grands écrans */
+}
+
+.s-section p {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-family: cursive;
+    text-align: center; /* Centré comme sur votre image */
+}
+
+.s-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto; /* Centre le formulaire dans le grand bloc */
+}
+
+.s-section label {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    display: block;
+    text-align: center; /* Labels centrés */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.s-section textarea {
+    width: 100%;
+    min-height: 70px;
+    margin-top: 10px;
+    padding: 15px;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-family: sans-serif;
+    resize: vertical;
+    font-size: 1.1rem;
+}
+
+.s-section button {
+    align-self: center;
+    background-color: var(--primary-dark);
+    color: var(--bg-dark);
+    border: none;
+    padding: 12px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.s-section button:hover {
+    opacity: 0.9;
+}
