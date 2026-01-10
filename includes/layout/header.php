@@ -1,3 +1,12 @@
+<?php if (!empty($gameProgress)) : ?>
+    <script>
+        const GAME_STATUS = "<?= $gameProgress['status'] ?>";
+        const BASE_TIME = <?= (int)$gameProgress['total_time_sec'] ?>;
+        const LAST_START_TIME = <?= $gameProgress['last_start_time']
+                ? 'new Date("' . $gameProgress['last_start_time'] . '").getTime()'
+                : 'null' ?>;
+    </script>
+<?php endif; ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -34,7 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <h5><strong>Escape The Code</strong></h5>
     </div>
 
-    <?php if (isset($_SESSION['game_start_time'])) : ?>
+    <?php if (!empty($gameProgress)) : ?>
         <div id="game-timer">
             Chrono : <span id="time-display">00:00:00</span>
         </div>

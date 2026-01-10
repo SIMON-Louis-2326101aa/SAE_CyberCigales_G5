@@ -12,6 +12,7 @@ use SAE_CyberCigales_G5\includes\Constant;
 use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
+use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
 use SAE_CyberCigales_G5\Modules\model\LoginAttemptModel;
 use SAE_CyberCigales_G5\Modules\model\PasswordResetModel;
 use SAE_CyberCigales_G5\Modules\model\PendingRegistrationModel;
@@ -36,6 +37,8 @@ class UserController
     private UserModel $userModel;
     private LoginAttemptModel $loginAttemptModel;
 
+    private GameProgressModel $gameProgressModel;
+
     /**
      * Constructeur du contrôleur
      *
@@ -45,6 +48,7 @@ class UserController
     {
         $this->userModel = new UserModel();
         $this->loginAttemptModel = new loginAttemptModel();
+        $this->gameProgressModel = new GameProgressModel();
         if (function_exists('log_console')) {
             log_console('userController initialisé', 'ok');
         }
@@ -316,6 +320,7 @@ class UserController
         $this->loginAttemptModel->clearFailedAttempts($email);
 
         $_SESSION['flash_success'] = "Connexion réussie.";
+        $this->gameProgressModel->startOrResumeGame($_SESSION['user_id']);
         header("Location: index.php?controller=Redirection&action=openHomepage");
         log_console("Login: succès authentification ($email)", 'ok');
         exit;
@@ -334,6 +339,7 @@ class UserController
             session_start();
         }
 
+        $this->gameProgressModel->pauseGame($_SESSION['user_id']);
         // Nettoyer uniquement les infos utilisateur
         unset(
             $_SESSION['utilisateur'],
