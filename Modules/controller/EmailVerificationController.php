@@ -1,6 +1,6 @@
 <?php
 
-namespace SAE_CyberCigales\Modules\controller;
+namespace SAE_CyberCigales_G5\Modules\controller;
 
 //require_once __DIR__ . '/../model/EmailVerificationModel.php';
 //require_once __DIR__ . '/../../includes/Mailer.php';
