@@ -443,13 +443,13 @@
     z-index:10;
 }
 
-.nav__link{
+.nav-link{
     color:var(--text-muted);
     text-decoration:none;
     margin:0 6px
 }
 
-.nav__link.is-active{
+.nav-link.is-active{
     color:var(--border);
     font-weight:600
 }
@@ -463,7 +463,7 @@
     position:relative
 }
 
-.butterfly__hint{
+.butterfly-hint{
     position:absolute;
     left:0;
     right:0;
