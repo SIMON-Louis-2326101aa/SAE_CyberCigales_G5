@@ -185,45 +185,63 @@ document.addEventListener('DOMContentLoaded', () => {
     const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
+    
+    // Variable pour stocker la valeur du produit romain pour l'affichage
+    let romanProductValue = 1;
 
     // Chaque règle est un objet avec un texte et une fonction de validation
     // La fonction de validation prend le mot de passe (pwd) et retourne `true` si la règle est respectée, sinon `false`
     const rules = [
         // Règle 1: Longueur minimale
         { text: "Règle 1: Votre mot de passe doit contenir au moins 8 caractères.", validate: (pwd) => pwd.length >= 8 },
-        
+
         // Règle 2: Présence d'une majuscule
         { text: "Règle 2: Votre mot de passe doit contenir au moins une majuscule.", validate: (pwd) => /[A-Z]/.test(pwd) },
-        
+
         // Règle 3: Présence d'un chiffre
         { text: "Règle 3: Votre mot de passe doit contenir au moins un chiffre.", validate: (pwd) => /[0-9]/.test(pwd) },
-        
+
         // Règle 4: Présence d'un caractère spécial
         // /[^A-Za-z0-9]/ cherche un caractère qui n'est pas une lettre majuscule, minuscule ou un chiffre (à cause du ^)
         { text: "Règle 4: Votre mot de passe doit contenir au moins un caractère spécial (ex: !, @, #, $).", validate: (pwd) => /[^A-Za-z0-9]/.test(pwd) },
-        
+
         // Règle 5: La somme des chiffres doit faire 25
         { text: "Règle 5: La somme des chiffres de votre mot de passe doit être égale à 25.", validate: (pwd) => {
-            const digits = pwd.match(/\d/g); // .match(/\d/g) trouve tous les chiffres et les retourne dans un tableau
-            if (!digits) return false; // Si pas de chiffres, la règle échoue
-            const sum = digits.reduce((acc, digit) => acc + parseInt(digit, 10), 0); // On additionne les chiffres
-            return sum === 25; // On vérifie si la somme est 25
-        }},
+                const digits = pwd.match(/\d/g);
+                if (!digits) return false;
+                const sum = digits.reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                return sum === 25;
+            }},
 
         // Règle 6: Doit contenir "biloute"
         { text: "Règle 6: Votre mot de passe doit contenir 'biloute'.", validate: (pwd) => /biloute/i.test(pwd) },
 
         // Règle 7: Doit contenir le nom d'un sponsor
-        // innerHTML car il y a des images
-        { 
-          text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_bjorg.png" alt="Logo Bjorg" title="Bjorg"><img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti"><img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
-          validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd)) // Parcours la liste de nom de sponsors puis regarde si le mot de passe contient un des noms
+        {
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_bjorg.png" alt="Logo Bjorg" title="Bjorg"><img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti"><img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
+            validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
         },
 
         // Règle 8: Doit contenir le jour actuel
-        { 
-          text: "Règle 8: Votre mot de passe doit contenir le jour actuel.",
-          validate: (pwd) => new RegExp(currentDay, 'i').test(pwd)  // Equivalent de /$(jouractuel)/i.test(pwd)
+        {
+            text: `Règle 8: Votre mot de passe doit contenir le jour actuel (${currentDay}).`,
+            validate: (pwd) => new RegExp(currentDay, 'i').test(pwd)
+        },
+
+        // Règle 9: Le produit des chiffres romains doit être 100
+        {
+            text: "Règle 9: La somme des valeurs de tous les chiffres romains (I, V, X, L, C, D, M,) doit être égal à 1729." +
+                " Attention: Pas de combinaison, VI != 7, mais VI = 5 + 1",
+            validate: (pwd) => {
+                const romanValues = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000};
+                let sumRoman = 0;
+                for (const char of pwd.toUpperCase()) {
+                    if (char in romanValues) {
+                        sumRoman += romanValues[char];
+                    }
+                }
+                return sumRoman === 1729;
+            }
         }
     ];
 
@@ -251,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break; // On arrête de vérifier les autres règles, car il faut les valider dans l'ordre
             }
         }
-        
+
         // Le bouton est désactivé (`disabled = true`)
         submitButton.disabled = !allRulesMet;
     };
