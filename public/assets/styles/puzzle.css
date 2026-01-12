@@ -556,6 +556,41 @@
 
 @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
 
+
+/* ============ Password Game ============ */
+/* Pour le bouton "valider" ait une couleur différent et qu'on ne puisse pas appuyer quand on ne peut pas encore valider */
+#passwordGameForm button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed; /* désactive la possibilité de cliquer sur le bouton */
+    background-color: var(--text-secondary);
+    box-shadow: none;
+    transform: none;
+}
+#pwdhead {
+    font-weight:800;
+    letter-spacing:-.02em;
+    font-size:clamp(1.6rem,1.2rem + 2.2vw,3rem);
+    margin:0;
+}
+
+.sponsor-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    justify-content: center;
+}
+
+.sponsor-logos img {
+    height: 20vh;
+    width: auto;
+    background-color: white;
+    padding: 2px;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
 /* ============ Résumé des indices (Summary View - Large & Simple) ============ */
 
 h2 {
@@ -634,32 +669,4 @@ h2 {
 
 .s-section button:hover {
     opacity: 0.9;
-}
-
-/* ============ Password Game ============ */
-/* Pour le bouton "valider" ait une couleur différent et qu'on ne puisse pas appuyer quand on ne peut pas encore valider */
-#passwordGameForm button[type="submit"]:disabled {
-    opacity: 0.5;
-    cursor: not-allowed; /* désactive la possibilité de cliquer sur le bouton */
-    background-color: var(--text-secondary);
-    box-shadow: none;
-    transform: none;
-}
-
-.sponsor-logos {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
-    justify-content: center;
-}
-
-.sponsor-logos img {
-    height: 20vh;
-    width: auto;
-    background-color: white;
-    padding: 2px;
-    border-radius: 4px;
-    object-fit: contain;
 }

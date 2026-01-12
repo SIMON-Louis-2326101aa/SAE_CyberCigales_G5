@@ -15,8 +15,6 @@
         <h1 class="hero-question">Serez-vous capable de résoudre le mystère ?</h1>
         <a  href='index.php?controller=Team&action=play'
             class="active btn-nav">JOUER</a>
-        <!-- Bouton temporaire pour le mini-jeu du mot de passe -->
-        <a href="index.php?controller=Redirection&action=openPasswordGame" class="active btn-nav">Mini-jeu Mot de Passe (TEMP)</a>
     </div>
 
 <?php else : ?>

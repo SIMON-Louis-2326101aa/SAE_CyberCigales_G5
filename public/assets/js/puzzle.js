@@ -247,6 +247,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
+    
+    // --- Fonction utilitaire pour la Règle 9 (Correction de l'affichage) ---
+    // Calcule la somme des valeurs des chiffres romains dans une chaîne de caractères.
+    const getRomanSum = (pwd) => {
+        const romanValues = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000};
+        let sum = 0;
+        for (const char of pwd.toUpperCase()) {
+            if (char in romanValues) {
+                sum += romanValues[char];
+            }
+        }
+        return sum;
+    };
 
     // Chaque règle est un objet avec un texte et une fonction de validation
     // La fonction de validation prend le mot de passe (pwd) et retourne `true` si la règle est respectée, sinon `false`
@@ -287,20 +300,12 @@ document.addEventListener('DOMContentLoaded', () => {
             validate: (pwd) => new RegExp(currentDay, 'i').test(pwd)
         },
 
-        // Règle 9: Le produit des chiffres romains doit être 100
+        // Règle 9: La somme des chiffres romains doit être 1729
         {
-            text: "Règle 9: La somme des valeurs de tous les chiffres romains (I, V, X, L, C, D, M,) doit être égal à 1729." +
-                " Attention: Pas de combinaison, VI != 7, mais VI = 5 + 1",
-            validate: (pwd) => {
-                const romanValues = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000};
-                let sumRoman = 0;
-                for (const char of pwd.toUpperCase()) {
-                    if (char in romanValues) {
-                        sumRoman += romanValues[char];
-                    }
-                }
-                return sumRoman === 1729;
-            }
+            // Le texte appelle la fonction getRomanSum pour un affichage toujours à jour.
+            text: () => `Règle 9: La somme des valeurs de tous les chiffres romains (I,V,X,L,C,D,M) doit être égale à 1729. <br><small>Attention: Pas de combinaison, VI = 5 + 1</small> Somme actuelle: ${getRomanSum(passwordInput.value)}`,
+            // La validation appelle aussi la même fonction pour une vérification toujours à jour.
+            validate: (pwd) => getRomanSum(pwd) === 1729
         }
     ];
 
@@ -314,8 +319,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i];
             const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
-            // innerHTML à la place de textContent pour avoir des images
-            listItem.innerHTML = rule.text;
+            
+            // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
+            listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
 
             // Si la règle est respectée
             if (rule.validate(password)) {
@@ -335,6 +341,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Permet d'"écouter" en direct le mot de passe écrit et appeler validatePassword
     passwordInput.addEventListener('input', validatePassword);
+
+    // Ajout de l'écouteur sur le bouton valider pour aller dans une autre page
+    const passwordGameForm = document.getElementById('passwordGameForm');
+    if (passwordGameForm) {
+        passwordGameForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+            // Vérifie si toutes les règles sont validées avant de rediriger
+            if (!submitButton.disabled) {
+                window.location.href = 'index.php?controller=Redirection&action=openSummaryClue';
+            }
+        });
+    }
 
     // Affichage de la première règle
     validatePassword();

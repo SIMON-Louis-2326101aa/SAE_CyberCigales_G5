@@ -467,6 +467,10 @@ h5 {
     box-shadow: 0 12px 40px #2BD9FE66;
 }
 
+.delete-account-button {
+    background: var(--error);
+}
+
 .flash {
     margin: 10px auto;
     padding: 12px 18px;

@@ -1,5 +1,5 @@
 <div>
-    <h2>jeu "Password Game"</h2>
+    <h2 id="pwdhead">Password Game</h2>
     <p>Bienvenue dans "Password Game".</p>
     <p>Votre mission est de créer un mot de passe sécurisé en suivant une série de règles qui apparaîtront au fur et à mesure.</p>
     <p>Atteignez toutes les règles pour valider votre mot de passe.</p>

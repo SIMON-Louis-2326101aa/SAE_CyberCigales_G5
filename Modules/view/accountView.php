@@ -12,7 +12,7 @@
             <li>
                 <button type="submit" name="delete"
                         onclick="return confirm('Confirmer la suppression ?')"
-                        class="danger-button">
+                        class="delete-account-button">
                     Supprimer ce compte
                 </button>
             </li>
