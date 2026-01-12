@@ -36,6 +36,13 @@ class UserController
     private UserModel $userModel;
     private LoginAttemptModel $loginAttemptModel;
 
+    private static function log(string $message, string $type): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type);
+        }
+    }
+
     /**
      * Constructeur du contrôleur
      *
