@@ -192,6 +192,17 @@ try {
     // Paramètres de route par query string
     $S_controller = $_GET['controller'] ?? 'Redirection';
     $S_action     = $_GET['action'] ?? 'openHomepage';
+
+    // Cache OFF uniquement sur la page d'accueil
+    $isHome = ($S_controller === 'Redirection' && $S_action === 'openHomepage');
+
+    if ($isHome) {
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+        log_console("Cache rafraichis depuis la page d'accueil", 'info');
+    }
+
     if (function_exists('log_console')) {
         log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');
     }
