@@ -14,26 +14,41 @@ class ButterflyWayController
     private array $path = ['L','R','L','L','R','R','L','R','L','L','B']; // 11 étapes
 
     /** Indices narratifs — PISTE DU PAPILLON */
-    private array $storyHints = [
-        0 => "Le sol semble plus sûr sur la gauche.",
-        1 => "Un courant d’air vient de la droite.",
-        2 => "Des traces anciennes bifurquent à gauche.",
-        3 => "Un murmure persiste côté gauche.",
-        4 => "La lumière vacille à droite.",
-        5 => "Le silence est plus lourd à droite.",
-        6 => "Une odeur de pierre humide à gauche.",
-        7 => "Un pas résonne à droite.",
-        8 => "Un symbole gravé pointe à gauche.",
-        9 => "La sortie est proche. Ne doute plus.",
-        10 => "Apres avoir passé un grand arbre, le papillon décide de te contourner.",
+    private array $storyHintsAlice = [
+        0  => "Un log ancien subsiste. Peu visible, mais intact.",
+        1  => "Une activité bruyante attire l’attention en surface.",
+        2  => "Des métadonnées oubliées tracent un chemin flou.",
+        3  => "Un signal faible persiste hors du flux principal.",
+        4  => "Un accès trop exposé clignote inutilement.",
+        5  => "Le silence apparent laisse transparaitre une trace plus discrète.",
+        6  => "Une archive n’a jamais été correctement effacée.",
+        7  => "Un trafic évident semble trop parfait.",
+        8  => "Une signature ancienne a été laissée volontairement.",
+        9  => "Les données se raréfient. Mais le sens est encore là.",
+        10 => "Le papillon ralentit. Il attend que tu realises ce que d’autres ont ignoré.",
+    ];
+
+    private array $storyHintsBob = [
+        0  => "Un point d’entrée discret semble moins exposé.",
+        1  => "Un accès public attire trop facilement.",
+        2  => "Une route secondaire contourne les contrôles visibles.",
+        3  => "Un bruit parasite cache un chemin plus sûr.",
+        4  => "Une interface trop lumineuse signale un risque.",
+        5  => "Un silence artificiel est rarement rassurant.",
+        6  => "Un accès interne n’a jamais été audité.",
+        7  => "Un flux évident ressemble à un leurre.",
+        8  => "Une validation ancienne n’a jamais été révoquée.",
+        9  => "À ce stade, la solution simple est la plus dangereuse.",
+        10 => "Le papillon change de logique. La sécurité exige parfois de reculer.",
     ];
 
     private array $lostMessages = [
-        "Le papillon disparaît d’un coup. Tu l’as perdu…",
-        "Rien. Plus aucune aile, plus aucun signe.",
-        "Tu tournes la tête une seconde… et il n’est plus là.",
-        "Un frisson. Le silence. Tu n’es plus sûr du chemin.",
-        "Un faux reflet t’a piégé. Il s’est volatilisé.",
+        "Une alerte s’est déclenchée. Le signal a disparu.",
+        "Trop direct. Le papillon s’est volatilisé.",
+        "Une action brusque a effacé la trace.",
+        "Avast a détécté une menace et t'a mis en quarantaine.",
+        "Tu as attiré l’attention. Le système t'a redirigé.",
+        "Erreur humaine détectée, tu a été déconnécté du système",
     ];
 
     private function randomLostMessage(): string
@@ -100,7 +115,7 @@ class ButterflyWayController
         // Si on est arrivé au bout (step == max) -> on révèle le code
         if ($step >= $max) {
             $_SESSION['pap_show_code'] = true;
-            $_SESSION['pap_feedback']  = "Bravo tu a finis ta poursuite. Un mot est gravé : ";
+            $_SESSION['pap_feedback']  = "Il ne reste plus qu’à valider l’accès.";
             header('Location: index.php?controller=ButterflyWay&action=code');
             exit;
         }
@@ -143,6 +158,13 @@ class ButterflyWayController
         $step = (int)$_SESSION['pap_step'];
         $max  = count($this->path);
 
+        $team = $_SESSION['team'] ?? 'alice';
+
+        $hints = match ($team) {
+            'bob'   => $this->storyHintsBob,
+            default => $this->storyHintsAlice,
+        };
+
         return [
             'started'  => (bool)$_SESSION['pap_started'],
             'step'     => $step,
@@ -150,9 +172,9 @@ class ButterflyWayController
             'score'    => (int)$_SESSION['pap_score'],
             'feedback' => $_SESSION['pap_feedback'],
             'code_ok'  => (bool)$_SESSION['pap_code_ok'],
-            'hint'       => $step < $max
-                ? ($this->storyHints[$step] ?? '')
-                : "Le papillon se pose sur un panneau renversé.",
+            'hint'     => $step < $max
+                ? ($hints[$step] ?? '')
+                : "Il semble que tu aie trouvé ce que tu cherchais.",
         ];
     }
 
@@ -204,11 +226,11 @@ class ButterflyWayController
         if ($dir === $expected) {
             $_SESSION['pap_score'] = (int)$_SESSION['pap_score'] + 1;
             $_SESSION['pap_step']  = $step + 1;
-            $_SESSION['pap_feedback'] = "Tu suis sa trajectoire. (+1)";
+            $_SESSION['pap_feedback'] = "Le signal s'amplifie.";
         } else {
             // Mauvais => BLOQUE, et on n'avance pas d'étape
             $_SESSION['pap_score'] = -1;
-            $_SESSION['pap_feedback'] = $this->randomLostMessage() . " (Score bloqué.)";
+            $_SESSION['pap_feedback'] = $this->randomLostMessage() . " (Signal bloqué.)";
         }
     }
 
@@ -232,8 +254,8 @@ class ButterflyWayController
         $team = $_SESSION['team'];
 
         $waySolutions = [
-            'alice' => ['papillon'],
-            'bob'   => ['papipillon'],
+            'alice' => ['admin'],
+            'bob'   => ['root'],
         ];
 
         if (!isset($waySolutions[$team])) {
@@ -248,11 +270,11 @@ class ButterflyWayController
 
         $_SESSION['pap_code_ok']  = $ok;
         if ($ok) {
-            $_SESSION['pap_feedback'] = "…le papillon approuve. L’épreuve est terminée.";
-            $_SESSION['flash_success'] = "Le papillon s'envole lentement dans le ciel. Tu as réussi.";
+            $_SESSION['pap_feedback'] = "Le terminal bip doucement. Accès accordé.";
+            $_SESSION['flash_success'] = "AUTH OK — Le papillon reprend sa course. La suite s’ouvre.";
         } else {
-            $_SESSION['pap_feedback'] = "Rien ne se passe. Ce n’est pas le bon mot.";
-            $_SESSION['flash_error'] = "Ce n’est pas le bon mot.";
+            $_SESSION['pap_feedback'] = "Le terminal affiche : AUTH FAILED.";
+            $_SESSION['flash_error'] = "Mot invalide — réessaie en suivant la logique de la piste.";
         }
     }
 }
