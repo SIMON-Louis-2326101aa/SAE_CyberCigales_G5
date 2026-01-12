@@ -208,4 +208,6 @@ class RedirectionController
         $this->requireAuth();
         ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
+
+
 }
