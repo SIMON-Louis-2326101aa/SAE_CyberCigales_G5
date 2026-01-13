@@ -1,4 +1,5 @@
 <?php
+
 namespace SAE_CyberCigales_G5\Modules\model;
 
 use SAE_CyberCigales_G5\includes\ConnectionDB;

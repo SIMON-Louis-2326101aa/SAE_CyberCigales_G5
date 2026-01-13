@@ -135,7 +135,7 @@ class EmailVerificationController
 
         // Si l'un des deux manque (email ou code)
         if (!$email || !$code) {
-            $_SESSION['flash_error'] = "Veuillez saisir l'email et le code.";
+            $_SESSION['flash_error'] = "Veuillez saisir l'e-mail et le code.";
             header($errorRedirectUrl); // Redirection après échec
             exit;
         }

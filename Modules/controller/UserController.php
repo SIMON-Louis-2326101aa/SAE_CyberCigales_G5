@@ -165,7 +165,7 @@ class UserController
                 $_SESSION['flash_success'] = "Un nouveau code vous a été envoyé.";
                 log_console("Register: renvoi code OK ($email)", 'ok');
             } else {
-                    $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+                    $_SESSION['flash_error'] = "L'envoi de l'e-mail a échoué. Veuillez réessayer plus tard.";
                 log_console("Register: échec envoi mail ($email)", 'error');
             }
 
@@ -212,7 +212,7 @@ class UserController
             $_SESSION['flash_success'] = "Un code vous a été envoyé. Vérifiez votre boîte mail.";
             log_console("Register: code envoyé ($email)", 'ok');
         } else {
-                $_SESSION['flash_error'] = "L'envoi de l'email a échoué. Veuillez réessayer plus tard.";
+                $_SESSION['flash_error'] = "L'envoi de l'e-mail a échoué. Veuillez réessayer plus tard.";
                 log_console("Register: échec envoi mail ($email)", 'error');
         }
 
@@ -285,11 +285,11 @@ class UserController
 
                 if ($attempts < 3) {
                     // Premières tentatives : message simple
-                    $_SESSION['flash_error'] = "Email ou mot de passe incorrect. Il vous reste {$remainingAttempts} 
+                    $_SESSION['flash_error'] = "E-mail ou mot de passe incorrect. Il vous reste {$remainingAttempts} 
                     tentative(s) avant le premier blocage.";
                 } else {
                     // Dernière tentative avant blocage
-                    $_SESSION['flash_error'] = "⚠️ Email ou mot de passe incorrect. Attention : prochaine tentative
+                    $_SESSION['flash_error'] = "⚠️ E-mail ou mot de passe incorrect. Attention : prochaine tentative
                      échouée = blocage de 1 minute !";
                 }
             }
@@ -384,7 +384,7 @@ class UserController
 
         // Réponse générique (ne pas révéler si un mail existe ou pas)
         if (!$this->userModel->emailExists($email)) {
-            $_SESSION['flash_success'] = "Si l'email existe, un lien de réinitialisation vous a été envoyé.";
+            $_SESSION['flash_success'] = "Si l'e-mail existe, un lien de réinitialisation vous a été envoyé.";
             log_console("Forgot: email inconnu ($email)", 'info');
             header("Location: index.php?controller=Redirection&action=openForgotPwd");
             exit;
@@ -431,7 +431,7 @@ class UserController
 </div>';
 
         if (Mailer::send($to, $subject, $message)) {
-            $_SESSION['flash_success'] = "Si l'email existe, un lien de réinitialisation vous a été envoyé.";
+            $_SESSION['flash_success'] = "Si l'e-mail existe, un lien de réinitialisation vous a été envoyé.";
             log_console("Forgot: mail envoyé ($email)", 'ok');
         } else {
             $_SESSION['flash_error'] = "Erreur lors de l'envoi du mail. Veuillez réessayer.";

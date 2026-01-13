@@ -2,9 +2,9 @@
     <div class="enigma-container">
 
         <div class="enigma-text">
-            <p>Cette lettre etait donc adressais a ma mere... Mais pourquoi etait elle crypter comme ca
-                et de quel trésor mes arriere-grand parent parle</p>
-            <p> Oh, on dirais une photo au fond de l'enveloppe </p>
+            <p>Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme ça ?
+                Et de quel trésor mes arrière-grandparents parlent.</p>
+            <p> Oh on dirait une photo au fond de l'enveloppe. </p>
         </div>
 
         <div class="photo-enigma">
@@ -19,7 +19,7 @@
         </div>
 
         <div class="enigma-text">
-            <p>tien la photo est vraiment très flou</p>
+            <p>Tiens, la photo est vraiment très floue.</p>
         </div>
 
         <div class="enigma-form">
@@ -38,9 +38,9 @@
 <div class="enigma-container">
 
     <div class="enigma-text">
-        <p>Cette lettre etait donc adressais a ma mere... Mais pourquoi etait elle crypter comme ca
-            et de quel trésor mes arriere-grand parent parle</p>
-        <p> oh on dirais une photo au fond de l'enveloppe </p>
+        <p>Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme ça ?
+            Et de quel trésor mes arrière-grandparents parlent.</p>
+        <p> Oh on dirait une photo au fond de l'enveloppe. </p>
     </div>
 
 <div class="photo-enigma">
