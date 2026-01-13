@@ -52,8 +52,8 @@
             ses parents. Une après-midi de fin d’hiver, vous rangez discrètement les chaussures de votre mère que vous
             lui avez emprunté sans sa permission, lorsque vous renversez une boîte, qui s’ouvre et éparpille tous les
             documents sur le sol. Vous récupérez les documents et la boîte et vous vous dirigez vers votre chambre pour
-            tout ranger correctement. Vous remarquez que les papiers sont très anciens et qu’il y a quelques photos qui
-            Vous n'avez jamais vu une lettre avec un logo de papillon avec une clé.
+            tout ranger correctement. Vous remarquez que les papiers sont très anciens et qu’il y a quelques photos que
+            vous n'avez jamais vu ainsi qu'une lettre avec un logo de papillon tenant une clé.
             En la retournant, une étrange inscription attire votre attention :</p>
         <p class="clue-letter">“Sache que la clé du savoir sommeille dans un empereur antique. Certains l’appelaient
             Caesar, d’autres l’appellent encore le décalage du destin.” </p>
