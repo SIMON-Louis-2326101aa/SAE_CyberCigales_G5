@@ -102,7 +102,7 @@ class PuzzleController
 
         if ($answerMorseNorm !== $expectedMorse) {
             $_SESSION['flash_error'] =
-                "Le message en morse est incorrect.";
+                "Le message codé est incorrect.";
             header("Location: index.php?controller=Redirection&action=openLetterIntro");
             exit;
         }

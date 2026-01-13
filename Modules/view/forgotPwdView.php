@@ -2,8 +2,8 @@
 
 ?>
 <form action="index.php?controller=User&action=forgot" method="post">
-    <h2>Vous avez oublié votre mot de passe</h2>
-    <h3>Veuillez mettre votre E-mail pour réinitialiser votre mot de passe</h3>
+    <h2>Vous avez oublié votre mot de passe.</h2>
+    <h3>Veuillez mettre votre e-mail pour réinitialiser votre mot de passe.</h3>
 
         <ul>
             <li>

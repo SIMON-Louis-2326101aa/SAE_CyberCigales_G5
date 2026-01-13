@@ -1,5 +1,5 @@
 <?php
 
 ?>
-<h2> texte de fin qui indique ou regarder pour le coffre</h2>
+<h2> texte de fin qui indique où regarder pour le coffre</h2>
 <p></p>
