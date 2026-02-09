@@ -1,12 +1,21 @@
-<?php if (!empty($gameProgress)) : ?>
+<?php
+use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
+
+$gameProgress = null;
+
+if (isset($_SESSION['user_id'])) {
+    $gpModel = new GameProgressModel();
+    $gameProgress = $gpModel->getByUserId($_SESSION['user_id']);
+}
+?>
+
     <script>
-        const GAME_STATUS = "<?= $gameProgress['status'] ?>";
-        const BASE_TIME = <?= (int)$gameProgress['total_time_sec'] ?>;
-        const LAST_START_TIME = <?= $gameProgress['last_start_time']
+        window.GAME_STATUS = <?= json_encode($gameProgress['status'] ?? null) ?>;
+        window.BASE_TIME = <?= (int)($gameProgress['total_time_sec'] ?? 0) ?>;
+        window.LAST_START_TIME = <?= !empty($gameProgress['last_start_time'])
                 ? 'new Date("' . $gameProgress['last_start_time'] . '").getTime()'
                 : 'null' ?>;
     </script>
-<?php endif; ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -43,12 +52,15 @@ if (session_status() === PHP_SESSION_NONE) {
         <h5><strong>Escape The Code</strong></h5>
     </div>
 
-    <?php if (!empty($gameProgress)) : ?>
-        <div id="game-timer">
-            Chrono : <span id="time-display">00:00:00</span>
-        </div>
-    <?php endif; ?>
-
+    <?php
+    if (isset($_SESSION['utilisateur'])) {
+        ?>
+    <div id="game-timer">
+        Chrono : <span id="time-display">00:00:00</span>
+    </div>
+        <?php
+    }
+    ?>
     <button class="burger-button"
             id="burger-button"
             aria-label="Ouvrir le menu"

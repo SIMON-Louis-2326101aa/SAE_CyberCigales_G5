@@ -125,14 +125,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Chronomètre de jeu (Game Timer)
     const timeDisplay = document.getElementById("time-display");
+    console.log(window.BASE_TIME, window.GAME_STATUS, window.LAST_START_TIME);
 
-    if (timeDisplay && typeof BASE_TIME !== "undefined") {
+
+    if (timeDisplay && window.BASE_TIME !== undefined) {
 
         function updateTimer() {
-            let elapsed = BASE_TIME;
+            let elapsed = window.BASE_TIME;
 
-            if (GAME_STATUS === "in_progress" && LAST_START_TIME) {
-                elapsed += Math.floor((Date.now() - LAST_START_TIME) / 1000);
+            if (window.GAME_STATUS === "in_progress" && window.LAST_START_TIME) {
+                elapsed += Math.floor((Date.now() - window.LAST_START_TIME) / 1000);
             }
 
             const h = Math.floor(elapsed / 3600);
