@@ -50,10 +50,10 @@
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage d'Alice, une jeune lycéenne de 16 ans, vivant aux alentours de Marseille avec
             ses parents. Une après-midi de fin d’hiver, vous rangez discrètement les chaussures de votre mère que vous
-            lui avez empruntées sans sa permission, lorsque vous renversez une boîte, qui s’ouvre et éparpille tous les
+            lui avez emprunté sans sa permission, lorsque vous renversez une boîte, qui s’ouvre et éparpille tous les
             documents sur le sol. Vous récupérez les documents et la boîte et vous vous dirigez vers votre chambre pour
             tout ranger correctement. Vous remarquez que les papiers sont très anciens et qu’il y a quelques photos que
-            vous n'avez jamais vues et une lettre avec un logo de papillon avec une clé.
+            vous n'avez jamais vu ainsi qu'une lettre avec un logo de papillon tenant une clé.
             En la retournant, une étrange inscription attire votre attention :</p>
         <p class="clue-letter">“Sache que la clé du savoir sommeille dans un empereur antique. Certains l’appelaient
             Caesar, d’autres l’appellent encore le décalage du destin.” </p>
@@ -103,7 +103,7 @@
             </label>
 
         <label>
-            Qu'est-ce que ça veut dire c'est signe ?<br>
+            Que signifient ces symboles ?<br>
             <textarea name="answer2" required></textarea>
         </label>
 
@@ -166,7 +166,7 @@
             </label>
 
             <label>
-                Qu'est-ce que ça veut dire c'est signe ?<br>
+                Que signifient ces symboles ?<br>
                 <textarea name="answer2" required></textarea>
             </label>
 
@@ -176,5 +176,5 @@
         </form>
     </div>
 <?php else : ?>
-    <p>Erreur : Veuillez choisir une equipe ou vous reconnecter</p>
+    <p>Erreur : veuillez choisir une équipe ou vous reconnecter.</p>
 <?php endif; ?><?php

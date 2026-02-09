@@ -1,3 +1,6 @@
+<?php
+
+?>
 <h1>Contact</h1>
 <form id="form-contact" action="index.php?controller=EmailContact&action=sendContactEmail" method="post">
 

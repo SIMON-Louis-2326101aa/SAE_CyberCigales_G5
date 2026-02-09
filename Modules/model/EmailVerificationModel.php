@@ -8,10 +8,10 @@ use PDO;
 
 /**
  * Modèle de vérification d'email
- * 
+ *
  * Gère la génération, le stockage et la vérification des codes de vérification d'email,
  * ainsi que les inscriptions en attente de vérification.
- * 
+ *
  * @package SAE_CyberCigales_G5\Modules\model
  * @author Équipe CyberCigales
  */
@@ -19,10 +19,10 @@ class EmailVerificationModel extends Database
 {
     /**
      * Génère un code de vérification à 6 chiffres
-     * 
+     *
      * Méthode statique pour générer un code aléatoire de 6 chiffres.
      * Utilise random_int() pour la sécurité cryptographique.
-     * 
+     *
      * @return string Code à 6 chiffres (avec zéros à gauche si nécessaire)
      */
     public static function generateCode(): string
@@ -32,7 +32,7 @@ class EmailVerificationModel extends Database
 
     /**
      * Valide et limite le TTL entre 1 et 60 minutes
-     * 
+     *
      * @param int $ttlMinutes TTL en minutes
      * @return int TTL limité entre 1 et 60
      */
@@ -43,10 +43,10 @@ class EmailVerificationModel extends Database
 
     /**
      * Génère et stocke un code de vérification à 6 chiffres
-     * 
+     *
      * Le code expire après le délai spécifié (par défaut 10 minutes).
      * Utilise l'horloge de la base de données pour éviter les décalages.
-     * 
+     *
      * @param string $email Email pour lequel générer le code
      * @param int $ttlMinutes Durée de validité du code en minutes (min: 1, max: 60)
      * @return string Le code généré (6 chiffres)
@@ -70,9 +70,9 @@ class EmailVerificationModel extends Database
 
     /**
      * Vérifie le statut d'un code de vérification
-     * 
+     *
      * Détermine si le code est valide, expiré ou incorrect.
-     * 
+     *
      * @param string $email Email associé au code
      * @param string $code Code à vérifier
      * @return array Tableau associatif avec 'valid' (bool) et 'reason' (string: 'valid', 'expired', 'incorrect')
@@ -126,11 +126,11 @@ class EmailVerificationModel extends Database
 
     /**
      * Stocke une inscription en attente de vérification
-     * 
+     *
      * Sauvegarde les données d'inscription dans la table pending_registrations
      * en attendant la vérification de l'email. Supprime toute inscription
      * en attente existante pour cet email avant d'en créer une nouvelle.
-     * 
+     *
      * @param string $nom Nom de l'utilisateur
      * @param string $prenom Prénom de l'utilisateur
      * @param string $email Email de l'utilisateur

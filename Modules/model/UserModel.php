@@ -11,10 +11,10 @@ class UserModel extends Database
 
     /**
      * Constructeur du UserModel
-     * 
+     *
      * Permet l'injection de dépendances pour les tests avec mocks.
      * Si aucune dépendance n'est fournie, utilise les instances par défaut.
-     * 
+     *
      * @param ConnectionDB|null $db Connexion à la base de données (ou mock pour les tests)
      * @param PendingRegistrationModel|null $pendingModel Modèle des inscriptions en attente (ou mock pour les tests)
      */

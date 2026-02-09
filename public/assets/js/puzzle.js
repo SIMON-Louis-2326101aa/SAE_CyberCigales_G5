@@ -223,3 +223,132 @@ if (hint) {
     })();
 }
 
+
+// ===============================================
+//                 PasswordGame
+// ===============================================
+document.addEventListener('DOMContentLoaded', () => {
+    // On récupère les éléments HTML avec lesquels on va interagir
+    const passwordInput = document.getElementById('passwordInput'); // Le champ où l'utilisateur tape son mot de passe
+    const rulesList = document.getElementById('passwordRules'); // La liste (<ul>) où les règles s'affichent
+    const submitButton = document.querySelector('#passwordGameForm button[type="submit"]'); // Le bouton pour valider
+
+    // Si un des éléments n'existe pas, on arrête le script pour éviter des erreurs
+    if (!passwordInput || !rulesList || !submitButton) {
+        return;
+    }
+
+    // --- Données pour les règles dynamiques ---
+    const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
+    const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
+    const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
+    
+    // --- Fonction utilitaire pour la Règle 9 (Correction de l'affichage) ---
+    // Calcule la somme des valeurs des chiffres romains dans une chaîne de caractères.
+    const getRomanSum = (pwd) => {
+        const romanValues = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000};
+        let sum = 0;
+        for (const char of pwd.toUpperCase()) {
+            if (char in romanValues) {
+                sum += romanValues[char];
+            }
+        }
+        return sum;
+    };
+
+    // Chaque règle est un objet avec un texte et une fonction de validation
+    // La fonction de validation prend le mot de passe (pwd) et retourne `true` si la règle est respectée, sinon `false`
+    const rules = [
+        // Règle 1: Longueur minimale
+        { text: "Règle 1: Votre mot de passe doit contenir au moins 8 caractères.", validate: (pwd) => pwd.length >= 8 },
+
+        // Règle 2: Présence d'une majuscule
+        { text: "Règle 2: Votre mot de passe doit contenir au moins une majuscule.", validate: (pwd) => /[A-Z]/.test(pwd) },
+
+        // Règle 3: Présence d'un chiffre
+        { text: "Règle 3: Votre mot de passe doit contenir au moins un chiffre.", validate: (pwd) => /[0-9]/.test(pwd) },
+
+        // Règle 4: Présence d'un caractère spécial
+        // /[^A-Za-z0-9]/ cherche un caractère qui n'est pas une lettre majuscule, minuscule ou un chiffre (à cause du ^)
+        { text: "Règle 4: Votre mot de passe doit contenir au moins un caractère spécial (ex: !, @, #, $).", validate: (pwd) => /[^A-Za-z0-9]/.test(pwd) },
+
+        // Règle 5: La somme des chiffres doit faire 25
+        { text: "Règle 5: La somme des chiffres de votre mot de passe doit être égale à 25.", validate: (pwd) => {
+                const digits = pwd.match(/\d/g);
+                if (!digits) return false;
+                const sum = digits.reduce((acc, digit) => acc + parseInt(digit, 10), 0);
+                return sum === 25;
+            }},
+
+        // Règle 6: Doit contenir "biloute"
+        { text: "Règle 6: Votre mot de passe doit contenir 'biloute'.", validate: (pwd) => /biloute/i.test(pwd) },
+
+        // Règle 7: Doit contenir le nom d'un sponsor
+        {
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg"><img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti"><img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
+            validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
+        },
+
+        // Règle 8: Doit contenir le jour actuel
+        {
+            text: `Règle 8: Votre mot de passe doit contenir le jour actuel (${currentDay}).`,
+            validate: (pwd) => new RegExp(currentDay, 'i').test(pwd)
+        },
+
+        // Règle 9: La somme des chiffres romains doit être 1729
+        {
+            // Le texte appelle la fonction getRomanSum pour un affichage toujours à jour.
+            text: () => `Règle 9: La somme des valeurs de tous les chiffres romains (I,V,X,L,C,D,M) doit être égale à 1729. <br><small>Attention: Pas de combinaison, VI = 5 + 1</small> Somme actuelle: ${getRomanSum(passwordInput.value)}`,
+            // La validation appelle aussi la même fonction pour une vérification toujours à jour.
+            validate: (pwd) => getRomanSum(pwd) === 1729
+        }
+    ];
+
+    // Cette fonction est appelée à chaque fois que l'utilisateur modifie le mot de passe
+    const validatePassword = () => {
+        const password = passwordInput.value;
+        rulesList.innerHTML = ''; // On vide la liste des règles pour la reconstruire
+        let allRulesMet = true; // On suppose que tout est bon au début
+
+        // On parcourt les règles une par une
+        for (let i = 0; i < rules.length; i++) {
+            const rule = rules[i];
+            const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
+            
+            // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
+            listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
+
+            // Si la règle est respectée
+            if (rule.validate(password)) {
+                listItem.style.color = 'green'; // Affichage en vert
+                rulesList.appendChild(listItem); // Ajout à la liste
+            } else { // Si la règle n'est pas respectée
+                listItem.style.color = 'red'; // Affichage en rouge
+                rulesList.appendChild(listItem); // Ajout à la liste
+                allRulesMet = false; // Toutes les règles ne sont pas respectées
+                break; // On arrête de vérifier les autres règles, car il faut les valider dans l'ordre
+            }
+        }
+
+        // Le bouton est désactivé (`disabled = true`)
+        submitButton.disabled = !allRulesMet;
+    };
+
+    // Permet d'"écouter" en direct le mot de passe écrit et appeler validatePassword
+    passwordInput.addEventListener('input', validatePassword);
+
+    // Ajout de l'écouteur sur le bouton valider pour aller dans une autre page
+    const passwordGameForm = document.getElementById('passwordGameForm');
+    if (passwordGameForm) {
+        passwordGameForm.addEventListener('submit', (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+            // Vérifie si toutes les règles sont validées avant de rediriger
+            if (!submitButton.disabled) {
+                window.location.href = 'index.php?controller=Redirection&action=openSummaryClue';
+            }
+        });
+    }
+
+    // Affichage de la première règle
+    validatePassword();
+});

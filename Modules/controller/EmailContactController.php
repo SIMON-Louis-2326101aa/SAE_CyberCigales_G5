@@ -68,7 +68,7 @@ class EmailContactController
                 throw new \Exception("Mailer::send a retourné false");
             }
         } catch (\Exception $e) {
-            $_SESSION['flash_error'] = "Erreur lors de l'envoi de l'email. Réessayez plus tard.";
+            $_SESSION['flash_error'] = "Erreur lors de l'envoi de l'e-mail. Réessayez plus tard.";
             self::log("Contact: Erreur Mailer - " . $e->getMessage(), "error");
         }
 
@@ -81,7 +81,7 @@ class EmailContactController
             return ['valid' => false, 'error' => 'Tous les champs sont obligatoires.'];
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return ['valid' => false, 'error' => 'L\'adresse email est invalide.'];
+            return ['valid' => false, 'error' => 'L\'adresse e-mail est invalide.'];
         }
         if (strlen($sujet) < 3 || strlen($sujet) > 200) {
             return ['valid' => false, 'error' => 'Le sujet doit faire entre 3 et 200 caractères.'];

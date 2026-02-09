@@ -18,8 +18,15 @@ $showCode = !empty($data['show_code']);
 
             <?php if (!$started) : ?>
                 <p class="lead">
-                    Un papillon traverse les couloirs, comme s’il connaissait un secret.
-                    Suis-le. Ne le perds pas.
+                    Un papillon traverse les couloirs du système.<br>
+                    On dirait qu'il possède des données importantes.<br>
+                    Il ne laisse presque aucune trace.<br>
+                    Chaque mouvement est une information.<br>
+                    Chaque erreur, une alerte.<br>
+                    <br>
+                    En cybersécurité, ce qui disparaît trop vite est souvent ce qu’il fallait protéger.<br>
+                    <br>
+                    Observe. Interprète. Ne force jamais.
                 </p>
 
                 <form method="post" action="index.php?controller=ButterflyWay&action=start">
@@ -41,22 +48,28 @@ $showCode = !empty($data['show_code']);
                     <div class="bw-actions">
                         <div class="bw-left">
                             <a class="btn active btn-but"
-                               href="index.php?controller=ButterflyWay&action=left">← Aller à gauche</a>
+                               href="index.php?controller=ButterflyWay&action=left">← Analyser en profondeur</a>
                         </div>
                         <div class="bw-center">
                             <a class="btn btn-dark active btn-but"
-                               href="index.php?controller=ButterflyWay&action=turn">Se retourner</a>
+                               href="index.php?controller=ButterflyWay&action=turn">Revenir à la racine</a>
                         </div>
                         <div class="bw-right">
                             <a class="btn active btn-but"
-                               href="index.php?controller=ButterflyWay&action=right">Aller à droite →</a>
+                               href="index.php?controller=ButterflyWay&action=right">Suivre la voie évidente →</a>
                         </div>
                     </div>
                 <?php else : ?>
                     <p class="lead">
                         <em>
-                            Une étiquette est positionné devant toi.
-                            Il ne reste qu’un mot à murmurer…
+                            Le papillon se pose sur un terminal verrouillé.<br>
+                            L’écran affiche : <strong>INPUT REQUIRED</strong>.<br>
+                            Il attend que tu identifies une chose : <br>
+                            Un terme simple, souvent utilisé pour désigner l’accès total<br>
+                            ou plutot le rôle qui supervise tout.<br>
+                            Ou alors, Un mot court, connu de ceux qui touchent au cœur des systèmes,<br>
+                            l’identifiant de l’accès le plus absolu.<br>
+                            Une chose est sûre : il n’y a de place que pour <strong>4 à 5 caractères</strong>.<br>
                         </em>
                     </p>
 
@@ -79,12 +92,13 @@ $showCode = !empty($data['show_code']);
                             Un chemin se forme devant toi 🦋
                         </p>
                         <a class="btn active btn-but"
-                           href="index.php?controller=Redirection&action=openPhishingPuzzle">Avancer</a>
+                           href="index.php?controller=Redirection&action=openPhishingPuzzle">
+                            Quitter le système et Continuer</a>
                     <?php endif; ?>
                 <?php endif; ?>
 
                 <p class="lead bw-status">
-                    Étape <?= $step ?> / <?= $max ?> — Score :
+                    Lieux explorés : <?= $step ?> / <?= $max ?> — Stabilité du signal :
                     <strong class="bw-score<?= $score < 0 ? ' is-negative' : ''; ?>"><?= $score ?>
                     </strong>
                 </p>

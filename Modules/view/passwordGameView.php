@@ -1,5 +1,24 @@
 <?php
 
 ?>
-<h2>jeu "Password Game" </h2>
-<p></p>
+<div>
+    <h2 id="pwdhead">Password Game</h2>
+    <p>Vous avez été victime de phishing, veuillez changer votre mot de passe.</p>
+    <p>Votre mission est de créer un mot de passe sécurisé en suivant une série de règles qui apparaîtront au fur et
+        à mesure.</p>
+    <p>Atteignez toutes les règles pour valider votre mot de passe.</p>
+
+    <div>
+        <form id="passwordGameForm">
+            <div>
+                <label for="passwordInput">Votre mot de passe :</label>
+                <input type="text" id="passwordInput" placeholder="Commencez à taper votre mot de passe ici...">
+            </div>
+            <div>
+                <ul id="passwordRules">
+                </ul>
+            </div>
+            <button type="submit" disabled>Valider le mot de passe</button>
+        </form>
+    </div>
+</div>
