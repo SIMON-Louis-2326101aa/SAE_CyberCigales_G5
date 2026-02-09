@@ -236,4 +236,34 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openSummaryClue");
         exit;
     }
+
+    public function validatePhishing()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $answer = $this->normalize($_POST['answer'] ?? '');
+        
+        // On accepte "tante" ou "ma tante"
+        if (str_contains($answer, 'tante')) {
+            $userId = $_SESSION['utilisateur']['id'];
+            $progressModel = new GameProgressModel();
+            
+            // L'énigme Phishing est le niveau 7 (normalement)
+            $progressModel->updateLevel($userId, 7);
+
+            $_SESSION['flash_success'] = "Bravo ! Vous avez compris le lien de parenté.";
+            header("Location: index.php?controller=Redirection&action=openPasswordGame");
+        } else {
+            $_SESSION['flash_error'] = "Ce n'est pas la bonne réponse. Relisez bien l'acte de naissance.";
+            header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+        }
+        exit;
+    }
 }

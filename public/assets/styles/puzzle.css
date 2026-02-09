@@ -670,3 +670,69 @@ h2 {
 .s-section button:hover {
     opacity: 0.9;
 }
+
+/* ============ Phishing Puzzle ============ */
+.phishing-area {
+    background: #fff;
+    color: #333;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: left;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.email-list-simple {
+    list-style: none;
+    padding: 0;
+}
+
+.email-list-simple li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.email-list-simple li:hover {
+    background: #f0f0f0;
+}
+
+.email-list-simple li.active {
+    font-weight: bold;
+    border-left: 4px solid var(--primary);
+}
+
+.email-body-display {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    min-height: 200px;
+}
+
+.pdf-simu {
+    background: #fafafa;
+    border: 2px solid #333;
+    padding: 30px;
+    margin-top: 20px;
+    font-family: 'Times New Roman', serif;
+    display: none;
+}
+
+.pdf-simu.show {
+    display: block;
+}
+
+.pdf-handwritten {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.5rem;
+    color: blue;
+    margin-top: 20px;
+    border: 1px dashed #ccc;
+    padding: 10px;
+}
+
+.phishing-question {
+    margin-top: 30px;
+    padding: 20px;
+    border-top: 2px solid var(--primary);
+}
