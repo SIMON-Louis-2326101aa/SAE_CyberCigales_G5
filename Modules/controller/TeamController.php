@@ -42,6 +42,7 @@ class TeamController
         $progressModel->create($userId, $team);
         $_SESSION['team'] = $team;
         $_SESSION['game_start_time'] = time();
+        $progressModel->startOrResumeGame($userId);
 
         header("Location: index.php?controller=Redirection&action=openLetterIntro");
         exit;
@@ -62,7 +63,6 @@ class TeamController
         $userId = $_SESSION['utilisateur']['id'];
 
         $progressModel = new GameProgressModel();
-        $progressModel->startOrResumeGame($_SESSION['user_id']);
         $progress = $progressModel->getByUserId($userId);
 
         // 2. Pas encore commencé → choix équipe

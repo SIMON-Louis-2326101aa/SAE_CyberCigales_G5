@@ -17,6 +17,8 @@ use SAE_CyberCigales_G5\includes\ControllerHandler;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
 
+date_default_timezone_set('Europe/Paris');
+
 // ============================================================
 //  CONFIGURATION DU LOG SERVEUR (AVANT TOUT)
 // ============================================================
