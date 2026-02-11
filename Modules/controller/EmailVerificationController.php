@@ -72,22 +72,10 @@ class EmailVerificationController
         $code = $this->eModel->generateAndStoreCode($email);
 
         $subject = 'Vérification de votre adresse email';
-        $message = '
-<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td align="center">
-    <table width="600" style="background:#ffffff; padding:20px; border-radius:8px; box-shadow:0 4px 8px 
-    rgba(0,0,0,0.1);">
-      <tr><td style="text-align:center;">
-        <h2 style="color:#333333;">Vérification de votre adresse email</h2>
-        <p style="font-size:16px; color:#555555;">Merci de vous être inscrit !</p>
-        <p style="font-size:16px; color:#555555;">Votre code de vérification est :</p>
-        <p style="font-size:24px; font-weight:bold; color:#007bff; background:#e9f7ff; 
-        padding:10px; border-radius:4px; display:inline-block;">' . htmlspecialchars($code) . '</p>
-        <p style="font-size:14px; color:#888888;">Ce code expire dans 10 minutes.</p>
-      </td></tr>
-    </table>
-  </td></tr></table>
-</div>';
+        $message = $this->renderEmailTemplate([
+            'code' => $code
+        ]);
+
         $sent = Mailer::send($email, $subject, $message);
 
         // L'email doit être passé dans l'URL pour être récupéré par l'afficheur
@@ -166,12 +154,20 @@ class EmailVerificationController
         }
 
         // Afficher un message d'erreur spécifique selon la raison
-        $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired')
-            ? "Code expiré (10 minutes). <a href=\"index.php?controller=emailVerification&action=request&email="
-            . urlencode($email) . "\">Renvoyer un code</a>."
-            : "Code incorrect. Vérifiez et réessayez.";
+        $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired');
 
         header($errorRedirectUrl); // Redirection après échec
         exit;
     }
+
+    private function renderEmailTemplate(array $data): string
+    {
+        extract($data);
+
+        ob_start();
+        require __DIR__ . '/../../views/emails/verificationEmail.php';
+        return ob_get_clean();
+    }
+
+
 }

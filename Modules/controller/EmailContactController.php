@@ -56,7 +56,11 @@ class EmailContactController
         // Envoi email
         try {
             $sujetFinal = "Contact Escape The Code : " . $sujet;
-            $corpsEmail = $this->formatEmailBody($email, $sujet, $message);
+            $corpsEmail = $this->renderEmailTemplate([
+                'email' => $email,
+                'sujet' => $sujet,
+                'message' => $message
+            ]);
 
             $success = Mailer::send(self::ADMIN_EMAIL, $sujetFinal, $corpsEmail);
 
@@ -92,31 +96,13 @@ class EmailContactController
         return ['valid' => true];
     }
 
-    private function formatEmailBody(string $email, string $sujet, string $message): string
+    private function renderEmailTemplate(array $data): string
     {
-        $date = date('d/m/Y à H:i:s');
-        $safeEmail = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
-        $safeSujet = htmlspecialchars($sujet, ENT_QUOTES, 'UTF-8');
-        $safeMsg = nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
+        extract($data);
 
-        return "
-        <div style='font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;'>
-          <table width='100%' border='0' cellspacing='0' cellpadding='0'><tr><td align='center'>
-            <table width='600' style='background:#ffffff; padding:20px; border-radius:8px; box-shadow:0 4px 8px 
-            rgba(0,0,0,0.1);'>
-              <tr><td>
-                <h2 style='color:#333; border-bottom: 2px solid #007bff; padding-bottom: 10px;'>
-                Nouveau Message Contact</h2>
-                <p><strong>De :</strong> {$safeEmail}</p>
-                <p><strong>Sujet :</strong> {$safeSujet}</p>
-                <div style='background:#f9f9f9; padding:15px; border-left:4px solid #007bff; margin:20px 0;'>
-                    <p style='margin:0;'>{$safeMsg}</p>
-                </div>
-                <p style='font-size:12px; color:#888;'>Envoyé le {$date}</p>
-              </td></tr>
-            </table>
-          </td></tr></table>
-        </div>";
+        ob_start();
+        require __DIR__ . '../../views/email/contactEmail.php';
+        return ob_get_clean();
     }
 
     private function redirect(): void
