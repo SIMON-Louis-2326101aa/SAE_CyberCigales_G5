@@ -2,10 +2,12 @@
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+
+$team = $_SESSION['team'] ?? 'alice';
 ?>
 
 <div class="hero-container-welcome">
-    <h1>Énigme 7 — Le faux mail (Phishing)</h1>
+    <h1>Le faux mail</h1>
 </div>
 
 <div class="phishing-base-container">
@@ -22,7 +24,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 
     <section class="document-content">
         <h2>Document : Acte de naissance (Extrait)</h2>
-        <p><strong>Nom :</strong> VALMONT Hélène</p>
+        <p><strong>Nom :</strong> <?php echo ($team === 'alice') ? 'VALMONT Diane' : 'VALMONT Clara'; ?></p>
         <p><strong>Date de naissance :</strong> 18 mars 1972</p>
         <p><strong>Lieu :</strong> Boulogne-Billancourt</p>
         <p><strong>Parents :</strong> Pierre VALMONT et Suzanne LECLERC</p>
@@ -39,7 +41,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     <hr>
 
     <section class="puzzle-question">
-        <p>Ce document concerne la sœur jumelle de votre mère. Une fois le bon mail trouvé et le PDF ouvert :</p>
         <h3>Qui est cette personne pour vous ?</h3>
         
         <form action="index.php?controller=Puzzle&action=validatePhishing" method="POST">
