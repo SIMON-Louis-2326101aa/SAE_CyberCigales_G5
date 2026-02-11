@@ -49,11 +49,11 @@
 <?php if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage d'Alice, une jeune lycéenne de 16 ans, vivant aux alentours de Marseille avec
-            ses parents. Une après-midi de fin d’hiver, vous rangez discrètement les chaussures de votre mère que vous
+            ses parents. Un après-midi de fin d’hiver, vous rangez discrètement les chaussures de votre mère que vous
             lui avez emprunté sans sa permission, lorsque vous renversez une boîte, qui s’ouvre et éparpille tous les
             documents sur le sol. Vous récupérez les documents et la boîte et vous vous dirigez vers votre chambre pour
             tout ranger correctement. Vous remarquez que les papiers sont très anciens et qu’il y a quelques photos que
-            vous n'avez jamais vu ainsi qu'une lettre avec un logo de papillon tenant une clé.
+            vous n'avez jamais vues ainsi qu'une lettre avec un logo de papillon tenant une clé.
             En la retournant, une étrange inscription attire votre attention :</p>
         <p class="clue-letter">“Sache que la clé du savoir sommeille dans un empereur antique. Certains l’appelaient
             Caesar, d’autres l’appellent encore le décalage du destin.” </p>
@@ -116,9 +116,9 @@
 <?php elseif (isset($_SESSION['team']) && ($_SESSION['team'] === "bob")) : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage de Bob, un jeune lycéen de 17 ans, vivant aux alentours de Marseille avec ses
-            parents. Une après-midi de fin d’hiver, vous êtes de corvée pour ranger les décorations de Noël au grenier.
+            parents. Un après-midi de fin d’hiver, vous êtes de corvée pour ranger les décorations de Noël au grenier.
             Lors de votre rangement, vous trébuchez sur une boîte qui se renverse et éparpille des papiers anciens et
-            des photos jaunies. Vous la ramassez, intriguée : les visages sur les photos vous semblent familiers… mais
+            des photos jaunies. Vous la ramassez, intrigué : les visages sur les photos vous semblent familiers… mais
             sans savoir d'où. Au fond, une lettre scellée porte un logo élégant, un papillon et une clé.
             En la retournant, vous découvrez une étrange phrase :
         </p>
