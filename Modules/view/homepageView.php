@@ -1,7 +1,7 @@
-<?php if (isset($_SESSION['user_id'])) : ?>
+<?php // var_dump($_SESSION);
+if (isset($_SESSION['user_id'])) : ?>
     <div class="hero-container-welcome">
         <h1>Bonjour <?php echo htmlspecialchars($_SESSION['prenom'] . " " . $_SESSION['nom']); ?> !</h1>
-        <p>Vous êtes connecté(e) avec l'email : <?php echo htmlspecialchars($_SESSION['email']); ?></p>
         <br>
         <p><strong>Certains secrets ne se lisent pas, ils se déchiffrent.
                 Derrière chaque symbole, chaque message ou ligne de code, se cache une vérité à découvrir.

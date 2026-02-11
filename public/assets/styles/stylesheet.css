@@ -778,6 +778,17 @@ button:hover {
     padding-bottom: 10px;
 }
 
+#info-account {
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 .footer-column h3 {
     color: var(--text-primary);
     font-size: 1.5rem;

@@ -7,11 +7,11 @@
             <li>
                 <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
                 <a href="index.php?controller=Admin&action=listUsers">Tableau de bord Admin</a>
-                <a href="index.php?controller=User&action=logout">Déconnexion</a>
-                <a href="index.php?controller=User&action=account">Compte</a>
+                <a href="index.php?controller=Redirection&action=openAccount">Compte</a>
                 <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
                 <br>
+                <a href="index.php?controller=Redirection&action=openChoice">Changer d'équipe</a>
                 <a href="index.php?controller=Redirection&action=openLetterIntro">Enigme 1</a>
                 <a href="index.php?controller=Redirection&action=openPicturePuzzle">Enigme 2</a>
                 <a href="index.php?controller=Redirection&action=openButterflyWay">Enigme 3</a>
@@ -27,8 +27,7 @@
             ?>
             <li>
                 <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
-                <a href="index.php?controller=User&action=logout">Déconnexion</a>
-                <a href="index.php?controller=User&action=account">Compte</a>
+                <a href="index.php?controller=Redirection&action=openAccount">Compte</a>
                 <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
                 <br>
@@ -65,8 +64,8 @@
             ?>
             <li>
                 <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
-                <a href="index.php?controller=User&action=register">Inscription</a>
-                <a href="index.php?controller=User&action=login">Connexion</a>
+                <a href="index.php?controller=Redirection&action=openFormRegister">Inscription</a>
+                <a href="index.php?controller=Redirection&action=openLogin">Connexion</a>
                 <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
             </li>

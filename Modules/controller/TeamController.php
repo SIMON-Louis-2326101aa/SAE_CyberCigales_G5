@@ -3,6 +3,7 @@
 namespace SAE_CyberCigales_G5\Modules\controller;
 
 use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
+use SAE_CyberCigales_G5\Modules\model\UserModel;
 
 class TeamController
 {
@@ -29,11 +30,31 @@ class TeamController
         $userId = $_SESSION['utilisateur']['id'];
 
         $progressModel = new GameProgressModel();
+        $userModel = new UserModel();
         $existing = $progressModel->getByUserId($userId);
 
-        // ÉQUIPE DÉJÀ CHOISIE
+        $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com';
+
+        // ÉQUIPE DÉJÀ CHOISIE : bloqué pour user, autorisé pour admin
         if ($existing) {
-            $_SESSION['flash_error'] = "Équipe déjà sélectionnée.";
+            // utilisateur normal : bloqué pour changer d'équipe
+            if (!$isAdmin) {
+                $_SESSION['flash_error'] = "Équipe déjà sélectionnée.";
+                header("Location: index.php?controller=Redirection&action=openLetterIntro");
+                exit;
+            }
+
+            // admin : peut re-choisir la team + reset uniquement le timer (pas le level)
+            $progressModel->updateTeam($userId, $team);
+            $progressModel->resetTimer($userId);
+
+            $_SESSION['team'] = $team;
+            $_SESSION['game_start_time'] = time();
+
+            // remet le status in_progress + last_start_time, et game_start_time sera re-initialisé
+            // car resetTimer l'a vidé
+            $progressModel->startOrResumeGame($userId);
+
             header("Location: index.php?controller=Redirection&action=openLetterIntro");
             exit;
         }
@@ -43,6 +64,9 @@ class TeamController
         $_SESSION['team'] = $team;
         $_SESSION['game_start_time'] = time();
         $progressModel->startOrResumeGame($userId);
+
+        $newNbTry = $userModel->incrementNbTry($userId);
+        $_SESSION['utilisateur']['nbTry'] = $newNbTry;
 
         header("Location: index.php?controller=Redirection&action=openLetterIntro");
         exit;

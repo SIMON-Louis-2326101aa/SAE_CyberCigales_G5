@@ -573,6 +573,33 @@ class UserController
      */
     public function account()
     {
+        // RESET PROGRESSION (uniquement non-admin)
+        if (isset($_POST['reset_progression'])) {
+            $email = $_SESSION['email'] ?? '';
+            if ($email === 'escapethecode2025@gmail.com') {
+                $_SESSION['flash_error'] = "Action interdite pour l'administrateur.";
+                header("Location: index.php?controller=Redirection&action=openAccount");
+                exit;
+            }
+
+            $userId = $_SESSION['user_id'] ?? null;
+            if (!$userId) {
+                $_SESSION['flash_error'] = "Utilisateur non connecté.";
+                header("Location: index.php?controller=Redirection&action=openFormConnection");
+                exit;
+            }
+
+            // reset en DB (sans toucher aux essais mais en suprimmant dans game progress)
+            $this->gameProgressModel->deleteByUserId((int)$userId);
+
+            // reset session liée au jeu
+            unset($_SESSION['team'], $_SESSION['game_start_time']);
+
+            $_SESSION['flash_success'] = "Votre progression a été réinitialisée.";
+            header("Location: index.php?controller=Redirection&action=openAccount");
+            exit;
+        }
+
         if (isset($_POST['delete'])) {
             $email = $_SESSION['email'] ?? null;
 

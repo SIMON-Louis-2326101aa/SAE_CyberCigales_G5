@@ -137,4 +137,23 @@ class UserModel extends Database
             ['id' => $userId]
         ) > 0;
     }
+
+    public function incrementNbTry(int $userId): int
+    {
+        // On lit la vraie valeur en base (source de vérité)
+        $user = $this->getUserById($userId);
+        $current = (int)($user['nbTry'] ?? 0);
+
+        // On incrémente
+        $newValue = $current + 1;
+
+        $this->db->update(
+            'users',
+            ['nbTry' => $newValue],
+            ['id' => $userId]
+        );
+
+        // On renvoie la nouvelle valeur pour mettre à jour la session
+        return $newValue;
+    }
 }
