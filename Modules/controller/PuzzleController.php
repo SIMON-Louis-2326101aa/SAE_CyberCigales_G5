@@ -261,7 +261,7 @@ class PuzzleController
         ];
 
         $team = $_SESSION['team'];
-        if ($answer !== $solutions[$team]) {
+        if (!in_array($answer, $solutions[$team])) {
             $_SESSION['flash_error'] = "Ce n’est pas la bonne réponse.";
             header("Location: index.php?controller=Redirection&action=openEndText");
             exit;
