@@ -736,3 +736,153 @@ h2 {
     padding: 20px;
     border-top: 2px solid var(--primary);
 }
+
+/* ============ Mail Interface Layout ============ */
+.mail-header {
+    background: #eee;
+    padding: 10px;
+    border-radius: 5px 5px 0 0;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
+    color: #333;
+}
+
+.mail-main-container {
+    display: flex;
+    min-height: 400px;
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #333;
+}
+
+.mail-sidebar {
+    width: 30%;
+    border-right: 1px solid #eee;
+}
+
+.mail-sender-name {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.mail-subject-preview {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.mail-content-display {
+    width: 70%;
+    padding: 20px;
+}
+
+.mail-detail-meta {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.mail-message-body p {
+    margin-bottom: 15px;
+}
+
+/* Attachment Simulation */
+.attachment-logic {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px dashed #0056b3;
+    background: #f0f7ff;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.attachment-icon-simu {
+    width: 30px;
+    height: 40px;
+    background: #dc3545;
+    position: relative;
+    border-radius: 2px;
+}
+
+.attachment-icon-simu::after {
+    content: "PDF";
+    color: white;
+    font-size: 8px;
+    position: absolute;
+    bottom: 5px;
+    left: 4px;
+    font-weight: bold;
+}
+
+.attachment-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.attachment-action-text {
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* PDF Simulation Styling */
+.pdf-header-border {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.pdf-title {
+    margin: 0;
+    color: #000;
+}
+
+.pdf-subtitle {
+    margin: 0;
+    font-size: 0.9em;
+    color: #444;
+}
+
+.pdf-person-name {
+    text-align: center;
+    font-size: 1.8em;
+    margin: 20px 0;
+    color: #000;
+}
+
+.pdf-body-content {
+    line-height: 1.6;
+}
+
+.handwritten-label {
+    text-decoration: underline;
+}
+
+/* Validation Form */
+.phishing-form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.phishing-input {
+    flex-grow: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.phishing-submit {
+    background: var(--secondary);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: bold;
+}
