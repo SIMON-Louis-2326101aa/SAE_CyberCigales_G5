@@ -45,6 +45,15 @@ class UserController
         }
     }
 
+    private function renderEmailTemplate(string $template, array $data = []): string
+    {
+        extract($data);
+
+        ob_start();
+        require __DIR__ . "/../view/emails/{$template}.php";
+        return ob_get_clean();
+    }
+
     /**
      * Constructeur du contrôleur
      *
@@ -146,22 +155,9 @@ class UserController
             // Renvoi d’un nouveau code
             $code = $emailModel->generateAndStoreCode($email);
             $subject = 'Vérification de votre adresse email';
-            $message = '
-<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td align="center">
-    <table width="600" style="background:#ffffff; padding:20px; border-radius:8px;
-     box-shadow:0 4px 8px rgba(0,0,0,0.1);">
-      <tr><td style="text-align:center;">
-        <h2 style="color:#333333;">Vérification de votre adresse email</h2>
-        <p style="font-size:16px; color:#555555;">Merci de vous être inscrit !</p>
-        <p style="font-size:16px; color:#555555;">Votre code de vérification est :</p>
-        <p style="font-size:24px; font-weight:bold; color:#007bff; background:#e9f7ff; padding:10px; 
-        border-radius:4px; display:inline-block;">' . htmlspecialchars($code) . '</p>
-        <p style="font-size:14px; color:#888888;">Ce code expire dans 10 minutes.</p>
-      </td></tr>
-    </table>
-  </td></tr></table>
-</div>';
+            $message = $this->renderEmailTemplate('verificationEmail', [
+                'code' => $code
+            ]);
             $sent = Mailer::send($email, $subject, $message);
 
             if ($sent) {
@@ -193,22 +189,9 @@ class UserController
         // Générer et envoyer le code
         $code = $emailModel->generateAndStoreCode($email);
         $subject = 'Vérification de votre adresse email';
-        $message = '
-<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td align="center">
-    <table width="600" style="background:#ffffff; padding:20px; border-radius:8px; 
-    box-shadow:0 4px 8px rgba(0,0,0,0.1);">
-      <tr><td style="text-align:center;">
-        <h2 style="color:#333333;">Vérification de votre adresse email</h2>
-        <p style="font-size:16px; color:#555555;">Merci de vous être inscrit !</p>
-        <p style="font-size:16px; color:#555555;">Votre code de vérification est :</p>
-        <p style="font-size:24px; font-weight:bold; color:#007bff; background:#e9f7ff; 
-        padding:10px; border-radius:4px; display:inline-block;">' . htmlspecialchars($code) . '</p>
-        <p style="font-size:14px; color:#888888;">Ce code expire dans 10 minutes.</p>
-      </td></tr>
-    </table>
-  </td></tr></table>
-</div>';
+        $message = $this->renderEmailTemplate('verificationEmail', [
+            'code' => $code
+        ]);
         $sent = Mailer::send($email, $subject, $message);
 
         if ($sent) {
@@ -413,30 +396,9 @@ class UserController
 
         $to      = $email;
         $subject = 'Réinitialisation du mot de passe';
-        $message = '
-<div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f4;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0"><tr><td align="center">
-    <table width="600" style="background:#ffffff; padding:20px; border-radius:8px; 
-    box-shadow:0 4px 8px rgba(0,0,0,0.1);">
-      <tr><td style="text-align:center;">
-        <h2 style="color:#333333;">Réinitialisation du mot de passe</h2>
-        <p style="font-size:16px; color:#555555;">Bonjour,</p>
-        <p style="font-size:16px; color:#555555;">
-        Pour réinitialiser votre mot de passe, veuillez cliquer sur le bouton ci-dessous :</p>
-        <p style="margin: 20px 0;">
-          <a href="' . htmlspecialchars($resetLink) . '" 
-          style="display:inline-block; padding:10px 20px; background:#007bff; color:#fff; text-decoration:none; 
-          border-radius:5px; font-weight:bold;">
-            Réinitialiser mon mot de passe
-          </a>
-        </p>
-        <p style="font-size:14px; color:#888888;">Ce lien expire dans 60 minutes.</p>
-        <p style="font-size:14px; color:#888888;">
-        Si vous n\'avez pas demandé cette réinitialisation, veuillez ignorer cet email.</p>
-      </td></tr>
-    </table>
-  </td></tr></table>
-</div>';
+        $message = $this->renderEmailTemplate('resetPassword', [
+            'resetLink' => $resetLink
+        ]);
 
         if (Mailer::send($to, $subject, $message)) {
             $_SESSION['flash_success'] = "Si l'e-mail existe, un lien de réinitialisation vous a été envoyé.";

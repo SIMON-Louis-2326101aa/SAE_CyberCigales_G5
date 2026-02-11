@@ -101,7 +101,7 @@ class EmailContactController
         extract($data);
 
         ob_start();
-        require __DIR__ . '../../views/email/contactEmail.php';
+        require __DIR__ . '/../view/email/contactEmail.php';
         return ob_get_clean();
     }
 

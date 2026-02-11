@@ -165,9 +165,7 @@ class EmailVerificationController
         extract($data);
 
         ob_start();
-        require __DIR__ . '/../../views/emails/verificationEmail.php';
+        require __DIR__ . '/../view/email/verificationEmail.php';
         return ob_get_clean();
     }
-
-
 }
