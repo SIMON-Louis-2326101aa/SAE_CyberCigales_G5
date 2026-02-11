@@ -50,7 +50,7 @@ class UserController
         extract($data);
 
         ob_start();
-        require __DIR__ . "/../../view/emails/{$template}.php";
+        require __DIR__ . "/../view/emails/{$template}.php";
         return ob_get_clean();
     }
 
