@@ -7,7 +7,10 @@
     <p>Date de creation du compte : <?php echo htmlspecialchars($_SESSION['utilisateur']['created_at'] ??
                 'Inconnue'); ?></p>
     <p><br></p>
-    <p>Niveau du compte : <?php echo htmlspecialchars($_SESSION['level']); ?></p>
+    <p>Équipe sélectionnée : <?php echo htmlspecialchars(ucfirst($_SESSION['team'] ?? 'Aucune')); ?></p>
+    <p>Niveau du compte de l'essai actuel : <?php echo htmlspecialchars($_SESSION['level']); ?></p>
+    <p>Nombre d'essai total : <?php echo htmlspecialchars($_SESSION['utilisateur']['nbTry']); ?></p>
+
     </div>
     <form method="POST" action="index.php?controller=User&action=account">
         <ul>
@@ -20,7 +23,7 @@
                 <li>
                     <button type="submit" name="reset_progression"
                             onclick="return confirm('Confirmer le reset de votre progression ?')"
-                            class="reset-progress-button">
+                            id="reset-progress-button">
                         Réinitialiser la progression
                     </button>
                 </li>

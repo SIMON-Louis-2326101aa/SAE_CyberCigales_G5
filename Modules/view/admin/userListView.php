@@ -24,11 +24,11 @@
                         Modifier</button>
                     <br>
                     <?php if ($user['is_banned'] == 0) : ?>
-                    <a href="index.php?controller=Admin&action=banUser&id=<?= $user['id']; ?>" class="active btn-nav">
-                            Bannir</a>
+                    <a href="index.php?controller=Admin&action=banUser&id=<?= $user['id']; ?>" class="active btn-nav"
+                       id="ban-user-btn">Bannir</a>
                     <?php else : ?>
                     <a href="index.php?controller=Admin&action=unbanUser&id=<?= $user['id']; ?>"
-                            class="active btn-nav"> Débannir </a>
+                       id="unban-user-btn" class="active btn-nav"> Débannir </a>
                     <?php endif; ?>
                 </td>
             </tr>
