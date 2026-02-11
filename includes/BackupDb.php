@@ -90,12 +90,21 @@ file_put_contents($defaultsFile, $defaultsContent);
 
 // Construis la commande mysqldump
 $command = sprintf(
-    'mysqldump --defaults-extra-file=%s --single-transaction --routines --triggers
-     --events --set-gtid-purged=OFF --default-character-set=utf8mb4 %s > %s 2>&1',
-    escapeshellarg($defaultsFile),
-    escapeshellarg($dbName),
-    escapeshellarg($fullPath)
+    implode(' ', [
+        'mysqldump',
+        '--defaults-extra-file=' . escapeshellarg($defaultsFile),
+        '--single-transaction',
+        '--routines',
+        '--triggers',
+        '--events',
+        '--set-gtid-purged=OFF',
+        '--default-character-set=utf8mb4',
+        escapeshellarg($dbName),
+        '> ' . escapeshellarg($fullPath),
+        '2>&1'
+    ])
 );
+
 
 // Exécute la commande et capture la sortie
 if (function_exists('log_console')) {
