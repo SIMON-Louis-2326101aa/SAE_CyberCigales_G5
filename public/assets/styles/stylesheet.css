@@ -306,12 +306,17 @@ li {
     height: 0;
 }
 
-/*body.dark-theme h1,*/
-/*body.dark-theme h2,*/
-/*body.dark-theme a,*/
-/*body.dark-theme .db-table {*/
-/*    color: var(--text-primary);*/
-/*}*/
+/* body.dark-theme h1, */
+
+/* body.dark-theme h2, */
+
+/* body.dark-theme a, */
+
+/* body.dark-theme .db-table { */
+
+/*    color: var(--text-primary); */
+
+/* } */
 
 .nav-menu a:hover {
     color: var(--primary);
@@ -1154,6 +1159,21 @@ body[data-theme="tritanopia"] {
 /* Assure que le bouton admin reste visible dans tous les thèmes */
 #admin-button {
     background: #ffc800;
+    color: #000 !important;
+}
+
+#reset-progress-button {
+    background: #ff6f00;
+    color: #000 !important;
+}
+
+#ban-user-btn{
+    background: #f00;
+    color: #000 !important;
+}
+
+#unban-user-btn{
+    background: #5f0;
     color: #000 !important;
 }
 
