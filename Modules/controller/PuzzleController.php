@@ -169,8 +169,6 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openButterflyWay");
         exit;
     }
-    // Dans PuzzleController.php, modifiez la fonction valideIndice :
-
     public function valideIndice()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
