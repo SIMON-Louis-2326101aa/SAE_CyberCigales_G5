@@ -236,4 +236,45 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openSummaryClue");
         exit;
     }
+
+    public function validateEnd()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $answer = strtolower(trim($_POST['answer'] ?? ''));
+        if ($answer === '') {
+            $_SESSION['flash_error'] = "Réponse vide.";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        }
+
+        $solutions = [
+            'alice' => ['d9', '9d'],
+            'bob'   => ['d9', '9d']
+        ];
+
+        $team = $_SESSION['team'];
+        if ($answer !== $solutions[$team]) {
+            $_SESSION['flash_error'] = "Ce n’est pas la bonne réponse.";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        }
+
+        // Fin du jeu
+        $userId = $_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+        $progressModel->finishGame($userId);
+
+        $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre et terminé l’enquête.";
+
+        header("Location: index.php?controller=Redirection&action=openEndText");
+        exit;
+    }
 }
