@@ -325,6 +325,9 @@ class UserController
 
         $this->loginAttemptModel->clearFailedAttempts($email);
 
+        $progressModel = new GameProgressModel();
+        $progressModel->startOrResumeGame($_SESSION['user_id']);
+
         $_SESSION['flash_success'] = "Connexion réussie.";
         header("Location: index.php?controller=Redirection&action=openHomepage");
         log_console("Login: succès authentification ($email)", 'ok');
@@ -343,6 +346,8 @@ class UserController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+        $progressModel = new GameProgressModel();
+        $progressModel->pauseGame($_SESSION['user_id']);
 
         // Nettoyer uniquement les infos utilisateur
         unset(
