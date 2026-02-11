@@ -79,7 +79,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <a href="index.php?controller=Redirection&action=openHomepage" class="active btn-nav">Accueil</a>
                 <a href="index.php?controller=User&action=logout" class="active btn-nav">Déconnexion</a>
                 <a href="index.php?controller=Redirection&action=openAccount" class="active btn-nav">Compte</a>
-                <?php if (isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com') : ?>
+                <?php if (isset($_SESSION['email']) && $_SESSION['email'] === $_ENV['ADMIN_EMAIL']) : ?>
                     <!-- Si Admin, alors le bouton Admin est accessible -->
                     <a href="index.php?controller=Admin&action=listUsers"
                        class="active btn-nav" id="admin-button">Admin</a>

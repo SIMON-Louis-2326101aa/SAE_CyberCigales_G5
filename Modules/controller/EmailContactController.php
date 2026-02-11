@@ -8,8 +8,6 @@ use SAE_CyberCigales_G5\includes\Mailer;
 
 class EmailContactController
 {
-    private const ADMIN_EMAIL = 'escapethecode2025@gmail.com';
-
     private static function log(string $message, string $type): void
     {
         if (function_exists('log_console')) {
@@ -62,7 +60,7 @@ class EmailContactController
                 'message' => $message
             ]);
 
-            $success = Mailer::send(self::ADMIN_EMAIL, $sujetFinal, $corpsEmail);
+            $success = Mailer::send(self::$_ENV['ADMIN_EMAIL'], $sujetFinal, $corpsEmail);
 
             if ($success) {
                 unset($_SESSION['old']);

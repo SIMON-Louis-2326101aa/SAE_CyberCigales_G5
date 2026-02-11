@@ -27,7 +27,7 @@ class AdminController
         }
 
         // Si non Admin, pas accès aux pages admin
-        if (!isset($_SESSION['email']) || $_SESSION['email'] !== 'escapethecode2025@gmail.com') {
+        if (!isset($_SESSION['email']) || $_SESSION['email'] !== $_ENV['ADMIN_EMAIL']) {
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }

@@ -538,7 +538,7 @@ class UserController
         // RESET PROGRESSION (uniquement non-admin)
         if (isset($_POST['reset_progression'])) {
             $email = $_SESSION['email'] ?? '';
-            if ($email === 'escapethecode2025@gmail.com') {
+            if ($email === $_ENV['ADMIN_EMAIL']) {
                 $_SESSION['flash_error'] = "Action interdite pour l'administrateur.";
                 header("Location: index.php?controller=Redirection&action=openAccount");
                 exit;

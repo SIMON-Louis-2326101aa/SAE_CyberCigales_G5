@@ -17,7 +17,7 @@
 
     <p><strong>Institution :</strong> Université d'Aix-Marseille<br>
         <strong>Formation :</strong> SAE (Situation d'Apprentissage et d'Évaluation) CyberCigales<br>
-        <strong>Email de contact :</strong> escapethecode2025@gmail.com<br>
+        <strong>Email de contact :</strong> <?php echo htmlspecialchars($_ENV['ADMIN_EMAIL']) ?><br>
         <strong>Site web :</strong> <a href="https://escapethecode.alwaysdata.net/">Escape The Code</a></p><br>
 
     <!-- Section Hébergeur -->

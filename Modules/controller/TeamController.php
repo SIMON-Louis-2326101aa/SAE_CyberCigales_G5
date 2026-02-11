@@ -33,7 +33,7 @@ class TeamController
         $userModel = new UserModel();
         $existing = $progressModel->getByUserId($userId);
 
-        $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === 'escapethecode2025@gmail.com';
+        $isAdmin = isset($_SESSION['email']) && $_SESSION['email'] === $_ENV['ADMIN_EMAIL'];
 
         // ÉQUIPE DÉJÀ CHOISIE : bloqué pour user, autorisé pour admin
         if ($existing) {
