@@ -99,6 +99,35 @@ class GameProgressModel extends Database
         );
     }
 
+    public function updateTeam(int $userId, string $team): bool
+    {
+        return $this->db->update(
+            'game_progress',
+            ['team' => $team],
+            ['user_id' => $userId]
+        ) > 0;
+    }
+
+    public function resetTimer(int $userId): void
+    {
+        $this->db->update(
+            'game_progress',
+            [
+                'total_time_sec' => 0,
+                'last_start_time' => null,
+                'game_start_time' => null,
+                'game_end_time' => null,
+                'status' => 'paused'
+            ],
+            ['user_id' => $userId]
+        );
+    }
+
+    public function deleteByUserId(int $userId): bool
+    {
+        return $this->db->delete('game_progress', ['user_id' => $userId]) > 0;
+    }
+
     public function finishGame(int $userId): void
     {
         $progress = $this->getByUserId($userId);
