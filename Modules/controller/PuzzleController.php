@@ -236,4 +236,32 @@ class PuzzleController
         header("Location: index.php?controller=Redirection&action=openSummaryClue");
         exit;
     }
+    public function valideMotCle()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'])) {
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+        $input = $this->normalize($_POST['answer1'] ?? '');
+        $Word1 = 'papillon';
+        $Word2 = 'clé';
+        if (str_contains($input, $Word1) && str_contains($input, $Word2)) {
+            $userId = $_SESSION['utilisateur']['id'];
+            $progressModel = new GameProgressModel();
+            $progressModel->updateLevel($userId, 4);
+
+            $_SESSION['flash_success'] = "Bravo ! L'union fait la force";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        } else {
+            $_SESSION['flash_error'] = "Le mot de passe est incomplet ou incorrect. 
+            N'oubliez pas qu'il faut combiner les indices des deux équipes.";
+            header("Location: index.php?controller=Redirection&action=openMeetingPwd");
+            exit;
+        }
+    }
 }
