@@ -249,8 +249,7 @@ class PuzzleController
         }
 
         $answer = $this->normalize($_POST['answer'] ?? '');
-        
-        // On accepte "tante" ou "ma tante"
+
         if (str_contains($answer, 'tante')) {
             $userId = $_SESSION['utilisateur']['id'];
             $progressModel = new GameProgressModel();

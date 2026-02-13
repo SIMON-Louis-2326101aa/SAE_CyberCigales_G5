@@ -878,11 +878,77 @@ h2 {
 }
 
 .phishing-submit {
+
     background: var(--secondary);
+
     color: white;
+
     border: none;
+
     padding: 10px 25px;
+
     cursor: pointer;
+
     border-radius: 4px;
+
     font-weight: bold;
+
+}
+
+
+
+.hidden {
+
+    display: none !important;
+
+}
+
+
+
+.mail-placeholder {
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    height: 100%;
+
+    color: #999;
+
+    font-style: italic;
+
+}
+
+
+
+.email-item-logic {
+
+    padding: 15px;
+
+    border-bottom: 1px solid #eee;
+
+    cursor: pointer;
+
+    transition: background 0.2s;
+
+}
+
+
+
+.email-item-logic:hover {
+
+    background: #f9f9f9;
+
+}
+
+
+
+.email-item-logic.active {
+
+    background: #e7f1ff;
+
+    border-left: 4px solid var(--primary);
+
 }

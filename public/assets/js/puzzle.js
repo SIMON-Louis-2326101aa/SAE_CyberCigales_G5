@@ -352,3 +352,95 @@ document.addEventListener('DOMContentLoaded', () => {
     // Affichage de la première règle
     validatePassword();
 });
+
+// ===============================================
+//                 Phishing Mail
+// ===============================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const emailItems = document.querySelectorAll('.email-item-logic');
+    const displayArea = document.getElementById('email-display-area');
+    const pdfSimu = document.getElementById('pdf-simulation');
+    const validationSection = document.getElementById('validation-section');
+
+    if (!emailItems.length || !displayArea) return;
+
+    const mailData = {
+        1: {
+            from: "service-client@inf0-impots.gouv.fr",
+            subject: "Remboursement de trop-perçu",
+            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='#'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
+        },
+        2: {
+            from: "secure-check@faceb00k.security.com",
+            subject: "Alerte de sécurité importante",
+            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div><button class='btn' disabled>SÉCURISER MON COMPTE</button></div><p>L'équipe de sécurité.</p>"
+        },
+        3: {
+            from: "archives.departementales@hauts-de-seine.fr",
+            subject: "Votre demande d'acte n°7845",
+            body: `<p>Bonjour,</p><p>Faisant suite à votre demande, veuillez trouver ci-joint l'acte de naissance demandé.</p>
+                   <div class="attachment-logic" id="trigger-pdf">
+                       <div class="attachment-icon-simu"></div>
+                       <div class="attachment-info">
+                           <strong>acte_de_naissance_7845.pdf</strong>
+                           <span class="attachment-action-text">Cliquer pour visualiser</span>
+                       </div>
+                   </div>
+                   <p>Cordialement,<br>Le service des archives.</p>`
+        }
+    };
+
+    const container = document.getElementById('phishing-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+    const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
+    const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
+    const gpsLabel = (team === 'alice') ? 'Nord' : 'Est';
+
+    emailItems.forEach(item => {
+        item.addEventListener('click', () => {
+            emailItems.forEach(el => el.classList.remove('active'));
+            item.classList.add('active');
+
+            const id = item.getAttribute('data-id');
+            const data = mailData[id];
+
+            displayArea.innerHTML = `
+                <div class="mail-detail-meta">
+                    <strong>De :</strong> ${data.from}<br>
+                    <strong>Objet :</strong> ${data.subject}
+                </div>
+                <div class="mail-message-body">
+                    ${data.body}
+                </div>
+            `;
+
+            if (id === "3") {
+                const trigger = document.getElementById('trigger-pdf');
+                if (trigger) {
+                    trigger.onclick = () => {
+                        if (pdfSimu) {
+                            pdfSimu.innerHTML = `
+                                <div class="pdf-header-border">
+                                    <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                                    <p class="pdf-subtitle">Commune de Boulogne-Billancourt</p>
+                                </div>
+                                <div class="pdf-body-content">
+                                    <p>Le <strong>18 mars 1972</strong>, est née :</p>
+                                    <h3 class="pdf-person-name">${targetName}</h3>
+                                    <p>Fille de Pierre VALMONT et de Suzanne LECLERC.</p>
+                                    <div class="pdf-handwritten">
+                                        <span class="handwritten-label">Note manuscrite :</span><br>
+                                        Coordonnées GPS (${gpsLabel}) : <strong>${gpsCoord}</strong>
+                                    </div>
+                                </div>
+                            `;
+                            pdfSimu.classList.add('show');
+                            if (validationSection) validationSection.classList.remove('hidden');
+                        }
+                    };
+                }
+            }
+        });
+    });
+});
