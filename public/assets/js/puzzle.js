@@ -395,7 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const team = container ? container.getAttribute('data-team') : 'alice';
     const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
     const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
-    const gpsLabel = (team === 'alice') ? 'Nord' : 'Est';
 
     emailItems.forEach(item => {
         item.addEventListener('click', () => {
@@ -426,12 +425,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <p class="pdf-subtitle">Commune de Boulogne-Billancourt</p>
                                 </div>
                                 <div class="pdf-body-content">
-                                    <p>Le <strong>18 mars 1972</strong>, est née :</p>
+                                    <p>Le <strong>18 mars 1978</strong>, est née :</p>
                                     <h3 class="pdf-person-name">${targetName}</h3>
                                     <p>Fille de Pierre VALMONT et de Suzanne LECLERC.</p>
                                     <div class="pdf-handwritten">
                                         <span class="handwritten-label">Note manuscrite :</span><br>
-                                        Coordonnées GPS (${gpsLabel}) : <strong>${gpsCoord}</strong>
+                                        <strong>${gpsCoord}</strong>
                                     </div>
                                 </div>
                             `;

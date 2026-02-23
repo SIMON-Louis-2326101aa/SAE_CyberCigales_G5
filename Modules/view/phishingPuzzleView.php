@@ -44,7 +44,8 @@ $team = $_SESSION['team'] ?? 'alice';
 
     <div id="validation-section" class="phishing-question hidden">
         <h3>Analyse du document</h3>
-        
+        <p>Qui est cette personne ?</p>
+
         <form action="index.php?controller=Puzzle&action=validatePhishing" method="POST" class="phishing-form">
             <input type="text" name="answer" placeholder="Votre réponse" required class="phishing-input">
             <button type="submit" class="btn-nav phishing-submit">VALIDER</button>
