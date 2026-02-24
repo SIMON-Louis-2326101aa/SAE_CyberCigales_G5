@@ -97,7 +97,6 @@ $command = sprintf(
         '--routines',
         '--triggers',
         '--events',
-        '--set-gtid-purged=OFF',
         '--default-character-set=utf8mb4',
         escapeshellarg($dbName),
         '> ' . escapeshellarg($fullPath),
