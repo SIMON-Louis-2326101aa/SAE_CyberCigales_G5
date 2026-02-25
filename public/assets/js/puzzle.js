@@ -389,6 +389,11 @@ document.addEventListener('DOMContentLoaded', () => {
                        </div>
                    </div>
                    <p>Cordialement,<br>Le service des archives.</p>`
+        },
+        4: {
+            from: "contact@genealogie-direct-infos.com",
+            subject: "Nouvelle découverte dans votre arbre !",
+            body: "<p>Bonjour,</p><p>Notre algorithme a détecté un nouvel acte concernant la famille <strong>VALMONT</strong> qui pourrait vous intéresser.</p><p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant ici : <br><a href='#'>https://paiement-genealogie-securise.biz/abos</a></p><p>L'équipe Généalogie Direct.</p>"
         }
     };
 

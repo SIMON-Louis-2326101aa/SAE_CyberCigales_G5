@@ -36,6 +36,10 @@ $state = $_SESSION['phishing_state'] ?? null;
                     <div class="mail-sender-name">Archives 92</div>
                     <div class="mail-subject-preview">Votre demande n°7845</div>
                 </li>
+                <li class="email-item-logic" data-id="4">
+                    <div class="mail-sender-name">Généalogie Direct</div>
+                    <div class="mail-subject-preview">Découvrez votre arbre!</div>
+                </li>
             </ul>
         </div>
 
