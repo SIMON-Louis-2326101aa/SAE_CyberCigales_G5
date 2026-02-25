@@ -444,13 +444,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function showFakePdf() {
         if (!pdfSimu) return;
         pdfSimu.innerHTML = `
-            <div class="pdf-header-border" style="opacity: 0.7;">
+            <div class="pdf-header-border" id="pdf-phishing-header-border">
                 <h2 class="pdf-title">DOCUMENT ARCHIVÉ - APERÇU</h2>
                 <p class="pdf-subtitle">Service de généalogie privée</p>
             </div>
             <div class="pdf-body-content">
                 <p>Extrait partiel concernant :</p>
-                <h3 class="pdf-person-name" style="color: #666;">${motherName}</h3>
+                <h3 class="pdf-person-name">${motherName}</h3>
                 <p>Née le 15 août 1975 à Paris.</p>
                 <p><em>Le reste du document est masqué. Pour lever le filigrane et accéder aux mentions marginales, veuillez valider votre paiement.</em></p>
                 <div class="pdf-subscription">
@@ -483,6 +483,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 ${data.body}
             </div>
         `;
+
+        // On enlève l'affichage de pdf quand on clique sur un autre mail
+        if (pdfSimu) {
+            pdfSimu.innerHTML = '';
+            pdfSimu.classList.remove('show');
+        }
+        if (validationSection) {
+            validationSection.classList.add('hidden');
+        }
 
         // Gestion du clic sur la pièce jointe (uniquement pour le mail n°3)
         if (id === "3") {
