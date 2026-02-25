@@ -393,7 +393,16 @@ document.addEventListener('DOMContentLoaded', () => {
         4: {
             from: "contact@genealogie-direct-infos.com",
             subject: "Nouvelle découverte dans votre arbre !",
-            body: "<p>Bonjour,</p><p>Notre algorithme a détecté un nouvel acte concernant la famille <strong>VALMONT</strong> qui pourrait vous intéresser.</p><p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant ici : <br><a href='#'>https://paiement-genealogie-securise.biz/abos</a></p><p>L'équipe Généalogie Direct.</p>"
+            body: `<p>Bonjour,</p><p>Notre algorithme a détecté un nouvel acte concernant la famille <strong>VALMONT</strong> qui pourrait vous intéresser.</p>
+                   <div class="attachment-logic" id="trigger-fake-pdf">
+                       <div class="attachment-icon-simu"></div>
+                       <div class="attachment-info">
+                           <strong>acte_valmont_inedit.pdf</strong>
+                           <span class="attachment-action-text">Cliquer pour visualiser</span>
+                       </div>
+                   </div>
+                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le lien sécurisé.</p>
+                   <p>L'équipe Généalogie Direct.</p>`
         }
     };
 
@@ -405,7 +414,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Détermination du contenu selon l'équipe
     const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
+    const motherName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
     const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
+
 
     // Affiche le contenu de l'acte de naissance (simule l'ouverture d'un PDF)
     function showPdf() {
@@ -427,6 +438,28 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         pdfSimu.classList.add('show');
         if (validationSection) validationSection.classList.remove('hidden');
+    }
+
+    // Affiche un faux document (Phishing)
+    function showFakePdf() {
+        if (!pdfSimu) return;
+        pdfSimu.innerHTML = `
+            <div class="pdf-header-border" style="opacity: 0.7;">
+                <h2 class="pdf-title">DOCUMENT ARCHIVÉ - APERÇU</h2>
+                <p class="pdf-subtitle">Service de généalogie privée</p>
+            </div>
+            <div class="pdf-body-content">
+                <p>Extrait partiel concernant :</p>
+                <h3 class="pdf-person-name" style="color: #666;">${motherName}</h3>
+                <p>Née le 15 août 1975 à Paris.</p>
+                <p><em>Le reste du document est masqué. Pour lever le filigrane et accéder aux mentions marginales, veuillez valider votre paiement.</em></p>
+                <div class="pdf-subscription">
+                    ABONNEMENT REQUIS
+                </div>
+            </div>
+        `;
+        pdfSimu.classList.add('show');
+        if (validationSection) validationSection.classList.add('hidden');
     }
 
      // Gère l'affichage d'un email spécifique
@@ -457,6 +490,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (trigger) {
                 trigger.onclick = () => {
                     showPdf();
+                };
+            }
+        }
+
+        // Gestion du clic sur la pièce jointe factice (mail n°4)
+        if (id === "4") {
+            const triggerFake = document.getElementById('trigger-fake-pdf');
+            if (triggerFake) {
+                triggerFake.onclick = () => {
+                    showFakePdf();
                 };
             }
         }

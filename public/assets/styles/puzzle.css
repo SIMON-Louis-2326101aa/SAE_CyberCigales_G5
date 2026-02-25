@@ -671,7 +671,7 @@ h2 {
     opacity: 0.9;
 }
 
-/* ============ Phishing Puzzle ============ */
+/* ============ Mail Phishing ============ */
 .phishing-area {
     background: #fff;
     color: #333;
@@ -679,6 +679,7 @@ h2 {
     border-radius: 8px;
     text-align: left;
     max-width: 800px;
+    width: 100%;
     margin: 20px auto;
 }
 
@@ -737,7 +738,7 @@ h2 {
     border-top: 2px solid var(--primary);
 }
 
-/* ============ Mail Interface Layout ============ */
+/* Interface du phishing */
 .mail-header {
     background: #eee;
     padding: 10px;
@@ -787,7 +788,7 @@ h2 {
     margin-bottom: 15px;
 }
 
-/* Attachment Simulation */
+/* Simulation de PDF dans les mails */
 .attachment-logic {
     margin: 20px 0;
     padding: 15px;
@@ -828,7 +829,7 @@ h2 {
     color: #666;
 }
 
-/* PDF Simulation Styling */
+/* Style PDF */
 .pdf-header-border {
     text-align: center;
     border-bottom: 2px solid #333;
@@ -862,7 +863,17 @@ h2 {
     text-decoration: underline;
 }
 
-/* Validation Form */
+.pdf-subscription {
+    margin-top:20px;
+    text-align:center;
+    font-weight:bold;
+    color:red;
+    border: 2px solid red;
+    padding: 10px;
+    transform: rotate(-5deg)
+}
+
+/* Formulaire du phishing */
 .phishing-form {
     display: flex;
     gap: 10px;
@@ -878,77 +889,40 @@ h2 {
 }
 
 .phishing-submit {
-
     background: var(--secondary);
-
     color: white;
-
     border: none;
-
     padding: 10px 25px;
-
     cursor: pointer;
-
     border-radius: 4px;
-
     font-weight: bold;
-
 }
-
-
 
 .hidden {
-
     display: none !important;
-
 }
-
-
 
 .mail-placeholder {
-
     display: flex;
-
     justify-content: center;
-
     align-items: center;
-
     height: 100%;
-
     color: #999;
-
     font-style: italic;
-
 }
-
-
 
 .email-item-logic {
-
     padding: 15px;
-
     border-bottom: 1px solid #eee;
-
     cursor: pointer;
-
     transition: background 0.2s;
-
 }
-
-
 
 .email-item-logic:hover {
-
     background: #f9f9f9;
-
 }
 
-
-
 .email-item-logic.active {
-
     background: #e7f1ff;
-
     border-left: 4px solid var(--primary);
-
 }
