@@ -2,14 +2,21 @@
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+
 $team = $_SESSION['team'] ?? 'alice';
+/* Récupération de l'équipe et de l'état mémorisé en session pour la restauration après fausse réponse */
+$state = $_SESSION['phishing_state'] ?? null;
 ?>
 
 <div class="hero-container-welcome">
     <h1>La boîte mail</h1>
 </div>
 
-<div class="phishing-area" id="phishing-container" data-team="<?php echo $team; ?>">
+<div class="phishing-area" id="phishing-container" 
+     data-team="<?php echo $team; ?>"
+     data-open-mail="<?php echo htmlspecialchars((string)($state['open_mail'] ?? '')); ?>"
+     data-open-pdf="<?php echo htmlspecialchars((string)($state['open_pdf'] ?? '')); ?>">
+    
     <div class="mail-header">
         <span class="mail-app-name">Boîte Mail</span>
     </div>
@@ -45,10 +52,16 @@ $team = $_SESSION['team'] ?? 'alice';
     <div id="validation-section" class="phishing-question hidden">
         <h3>Analyse du document</h3>
         <p>Qui est cette personne ?</p>
-
+        
         <form action="index.php?controller=Puzzle&action=validatePhishing" method="POST" class="phishing-form">
-            <input type="text" name="answer" placeholder="Votre réponse" required class="phishing-input">
+            <input type="text" name="answer" placeholder="Votre réponse" required class="phishing-input"
+                   value="<?php echo htmlspecialchars($state['answer'] ?? ''); ?>">
             <button type="submit" class="btn-nav phishing-submit">VALIDER</button>
         </form>
     </div>
 </div>
+
+<?php 
+/* Suppression de l'état après affichage pour ne pas interférer avec les futures tentatives */
+unset($_SESSION['phishing_state']); 
+?>

@@ -242,7 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
-    
+
     // --- Fonction utilitaire pour la Règle 9 (Correction de l'affichage) ---
     // Calcule la somme des valeurs des chiffres romains dans une chaîne de caractères.
     const getRomanSum = (pwd) => {
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i];
             const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
-            
+
             // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
             listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
 
@@ -365,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!emailItems.length || !displayArea) return;
 
+    // Contenus des emails
     const mailData = {
         1: {
             from: "service-client@inf0-impots.gouv.fr",
@@ -391,55 +392,83 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Récupération des paramètres d'initialisation (utile après un rechargement de page)
     const container = document.getElementById('phishing-container');
     const team = container ? container.getAttribute('data-team') : 'alice';
+    const initialMailId = container ? container.getAttribute('data-open-mail') : null;
+    const initialOpenPdf = container ? container.getAttribute('data-open-pdf') === '1' : false;
+
+    // Détermination du contenu selon l'équipe
     const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
     const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
 
+    // Affiche le contenu de l'acte de naissance (simule l'ouverture d'un PDF)
+    function showPdf() {
+        if (!pdfSimu) return;
+        pdfSimu.innerHTML = `
+            <div class="pdf-header-border">
+                <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                <p class="pdf-subtitle">Commune de Boulogne-Billancourt</p>
+            </div>
+            <div class="pdf-body-content">
+                <p>Le <strong>18 mars 1978</strong>, est née :</p>
+                <h3 class="pdf-person-name">${targetName}</h3>
+                <p>Fille de Pierre VALMONT et de Suzanne LECLERC.</p>
+                <div class="pdf-handwritten">
+                    <span class="handwritten-label">Note manuscrite :</span><br>
+                    <strong>${gpsCoord}</strong>
+                </div>
+            </div>
+        `;
+        pdfSimu.classList.add('show');
+        if (validationSection) validationSection.classList.remove('hidden');
+    }
+
+     // Gère l'affichage d'un email spécifique
+    function selectMail(id) {
+        const item = Array.from(emailItems).find(el => el.getAttribute('data-id') === id);
+        if (!item) return;
+
+        // Mise à jour visuelle de la sélection dans la liste
+        emailItems.forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+
+        const data = mailData[id];
+
+        // Rendu du contenu du mail
+        displayArea.innerHTML = `
+            <div class="mail-detail-meta">
+                <strong>De :</strong> ${data.from}<br>
+                <strong>Objet :</strong> ${data.subject}
+            </div>
+            <div class="mail-message-body">
+                ${data.body}
+            </div>
+        `;
+
+        // Gestion du clic sur la pièce jointe (uniquement pour le mail n°3)
+        if (id === "3") {
+            const trigger = document.getElementById('trigger-pdf');
+            if (trigger) {
+                trigger.onclick = () => {
+                    showPdf();
+                };
+            }
+        }
+    }
+
+    // Assignation des événements de clic sur les mails de la sidebar
     emailItems.forEach(item => {
         item.addEventListener('click', () => {
-            emailItems.forEach(el => el.classList.remove('active'));
-            item.classList.add('active');
-
-            const id = item.getAttribute('data-id');
-            const data = mailData[id];
-
-            displayArea.innerHTML = `
-                <div class="mail-detail-meta">
-                    <strong>De :</strong> ${data.from}<br>
-                    <strong>Objet :</strong> ${data.subject}
-                </div>
-                <div class="mail-message-body">
-                    ${data.body}
-                </div>
-            `;
-
-            if (id === "3") {
-                const trigger = document.getElementById('trigger-pdf');
-                if (trigger) {
-                    trigger.onclick = () => {
-                        if (pdfSimu) {
-                            pdfSimu.innerHTML = `
-                                <div class="pdf-header-border">
-                                    <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
-                                    <p class="pdf-subtitle">Commune de Boulogne-Billancourt</p>
-                                </div>
-                                <div class="pdf-body-content">
-                                    <p>Le <strong>18 mars 1978</strong>, est née :</p>
-                                    <h3 class="pdf-person-name">${targetName}</h3>
-                                    <p>Fille de Pierre VALMONT et de Suzanne LECLERC.</p>
-                                    <div class="pdf-handwritten">
-                                        <span class="handwritten-label">Note manuscrite :</span><br>
-                                        <strong>${gpsCoord}</strong>
-                                    </div>
-                                </div>
-                            `;
-                            pdfSimu.classList.add('show');
-                            if (validationSection) validationSection.classList.remove('hidden');
-                        }
-                    };
-                }
-            }
+            selectMail(item.getAttribute('data-id'));
         });
     });
+
+    // Restauration automatique de l'état (si session PHP active après erreur)
+    if (initialMailId) {
+        selectMail(initialMailId);
+        if (initialOpenPdf) {
+            showPdf();
+        }
+    }
 });

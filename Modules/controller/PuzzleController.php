@@ -237,30 +237,46 @@ class PuzzleController
         exit;
     }
 
+    /**
+     * Énigme 4 - Phishing Par Mail
+     */
     public function validatePhishing()
     {
+        // Démarre la session si elle n'est pas déjà active
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
 
+        // Vérifie que l'utilisateur est bien connecté
         if (!isset($_SESSION['utilisateur'])) {
             header("Location: index.php");
             exit;
         }
 
-        $answer = $this->normalize($_POST['answer'] ?? '');
+        // Récupère et normalise la réponse du formulaire
+        $answerRaw = $_POST['answer'] ?? '';
+        $answer = $this->normalize($answerRaw);
 
+        // Réponse de l'énigme, on accepte tous les réponses contenant le mot 'tante'
         if (str_contains($answer, 'tante')) {
             $userId = $_SESSION['utilisateur']['id'];
             $progressModel = new GameProgressModel();
-            
-            // L'énigme Phishing est le niveau 7 (normalement)
-            $progressModel->updateLevel($userId, 7);
 
+            // L'énigme Phishing est le niveau 4 (normalement)
+            $progressModel->updateLevel($userId, 4);
+
+            // Nettoie l'état mémorisé en cas de succès
+            unset($_SESSION['phishing_state']);
             $_SESSION['flash_success'] = "Bravo ! Vous avez compris le lien de parenté.";
             header("Location: index.php?controller=Redirection&action=openPasswordGame");
         } else {
-            $_SESSION['flash_error'] = "Ce n'est pas la bonne réponse. Relisez bien l'acte de naissance.";
+            // En cas d'erreur, mémorise l'état pour restaurer l'interface après rechargement
+            $_SESSION['phishing_state'] = [
+                'answer' => $answerRaw,
+                'open_mail' => 3,
+                'open_pdf' => true
+            ];
+            $_SESSION['flash_error'] = "Ce n'est pas la bonne réponse. Relisez bien le document";
             header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
         }
         exit;
