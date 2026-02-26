@@ -22,6 +22,7 @@
             <input type="hidden" name="epreuve" value="2">
             <p>Epreuve 2</p>
             <label>Indice 1 : <br>
+                <img src="./assets/images/photoFamille.png" alt="photodefamille">
                 <textarea name="answer1" required><?php echo
                     htmlspecialchars($_SESSION['saved_indices']['alice']['2']['ans1'] ?? ''); ?></textarea>
             </label>
