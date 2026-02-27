@@ -310,6 +310,9 @@ class UserController
 
         $progressModel = new GameProgressModel();
         $progressModel->startOrResumeGame($_SESSION['user_id']);
+        $progress = $progressModel->getByUserId($_SESSION['user_id']);
+
+        $_SESSION['gameprogress'] = $progress;
 
         $_SESSION['flash_success'] = "Connexion réussie.";
         header("Location: index.php?controller=Redirection&action=openHomepage");
