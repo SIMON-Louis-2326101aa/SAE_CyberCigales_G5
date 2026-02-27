@@ -7,6 +7,11 @@
     <p>Pour percer les mystères de ce jeu, il vous faudra être deux<br>
         Mais pas le droit de regarder ce que votre associé fait (ça ne vous aidera pas)<br>
         Vous choisirez chacun une équipe différente qui vous mènera ensemble au mystère de cette histoire</p>
+
+    <p>Des petits onglets d'information (ℹ️) et d'indice (💡) seront là tout au long de votre jeu,<br>
+        pour vous aider à avancer dans votre aventure, et vous informer sur les éléments plus complexes du jeu.<br>
+        Les informations et indices vous arriveront au fur et à mesure du temps, il sera de votre devoir de penser à
+        les regarder.</p>
 </div>
 
 <div class="team-select">
