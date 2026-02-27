@@ -178,4 +178,10 @@ class EmailVerificationModel extends Database
         $this->db->delete('email_verification_codes', ['code' => $code]);
         return true ;
     }
+
+    public function deleteExpiredCodes(): void
+    {
+        $stmt = $this->getBdd()->prepare("DELETE FROM email_verification_codes WHERE expires_at <= NOW()");
+        $stmt->execute();
+    }
 }

@@ -114,6 +114,9 @@ class EmailVerificationController
      */
     public function verify()
     {
+        //  Nettoyage des codes expirés AVANT toute vérification
+        $this->eModel->deleteExpiredCodes();
+
         $email = $_POST['email'] ?? '';
         $code  = $_POST['code']  ?? '';
 
@@ -156,8 +159,6 @@ class EmailVerificationController
 
         // Afficher un message d'erreur spécifique selon la raison
         $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired');
-        $this->eModel->deleteCode($code);
-
         header('Location : index.php?controller=Redirection&action=openFormRegister'); // Redirection après échec
         exit;
     }
