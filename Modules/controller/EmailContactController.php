@@ -76,6 +76,7 @@ class EmailContactController
             if ($success) {
                 unset($_SESSION['old']);
                 $_SESSION['flash_success'] = "Votre message a été envoyé avec succès !";
+                $_SESSION['last_email_sent_time'] = time();
                 self::log("Contact: Mail envoyé par {$email}", "ok");
             } else {
                 throw new \Exception("Mailer::send a retourné false");

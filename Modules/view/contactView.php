@@ -1,21 +1,18 @@
-<?php
-
-?>
 <h1>Contact</h1>
-<form id="form-contact" action="index.php?controller=EmailContact&action=sendContactEmail" method="post">
 
+<form id="form-contact" action="index.php?controller=EmailContact&action=sendContactEmail" method="post">
     <ul>
         <li>
             <label for="mail">E-mail :</label>
-            <input type="email" id="mail" name="email" required>
+            <input type="email" id="mail" name="email" value="<?= $old['email'] ?? '' ?>" required>
         </li>
         <li>
             <label for="sujet">Sujet : </label>
-            <input type="text" id="sujet" name="sujet" required>
+            <input type="text" id="sujet" name="sujet" value="<?= $old['sujet'] ?? '' ?>" required>
         </li>
         <li>
             <label for="message">Message :</label>
-            <textarea id="message" name="message" rows="5" required></textarea>
+            <textarea id="message" name="message" rows="5" required><?= $old['message'] ?? '' ?></textarea>
         </li>
     </ul>
     <br>
