@@ -130,7 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (timeDisplay && window.BASE_TIME !== undefined) {
 
-        function updateTimer() {
+        function updateTimer()
+        {
             let elapsed = window.BASE_TIME;
 
             if (window.GAME_STATUS === "in_progress" && window.LAST_START_TIME) {
@@ -242,7 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
-    
     // --- Fonction utilitaire pour la Règle 9 (Correction de l'affichage) ---
     // Calcule la somme des valeurs des chiffres romains dans une chaîne de caractères.
     const getRomanSum = (pwd) => {
@@ -285,7 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg"><img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti"><img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos">' +
+                '<img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg">' +
+                '<img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti">' +
+                '<img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
             validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
         },
 
@@ -314,7 +317,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i];
             const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
-            
             // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
             listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
 
