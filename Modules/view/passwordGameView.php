@@ -9,7 +9,7 @@
     <p>Atteignez toutes les règles pour valider votre mot de passe.</p>
 
     <div>
-        <form id="passwordGameForm">
+        <form id="password-game-form">
             <div>
                 <label for="passwordInput">Votre mot de passe :</label>
                 <input type="text" id="passwordInput" placeholder="Commencez à taper votre mot de passe ici...">

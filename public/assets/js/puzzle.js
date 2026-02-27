@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // On récupère les éléments HTML avec lesquels on va interagir
     const passwordInput = document.getElementById('passwordInput'); // Le champ où l'utilisateur tape son mot de passe
     const rulesList = document.getElementById('passwordRules'); // La liste (<ul>) où les règles s'affichent
-    const submitButton = document.querySelector('#passwordGameForm button[type="submit"]'); // Le bouton pour valider
+    const submitButton = document.querySelector('#password-game-form button[type="submit"]'); // Le bouton pour valider
 
     // Si un des éléments n'existe pas, on arrête le script pour éviter des erreurs
     if (!passwordInput || !rulesList || !submitButton) {
