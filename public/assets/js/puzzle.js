@@ -370,12 +370,12 @@ document.addEventListener('DOMContentLoaded', () => {
         1: {
             from: "service-client@inf0-impots.gouv.fr",
             subject: "Remboursement de trop-perçu",
-            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='#'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
+            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=1'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
         },
         2: {
             from: "secure-check@faceb00k.security.com",
             subject: "Alerte de sécurité importante",
-            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div><button class='btn' disabled>SÉCURISER MON COMPTE</button></div><p>L'équipe de sécurité.</p>"
+            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div class='button class' id='block-button-facebook-phishing'><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=2' class='btn-nav' id='button-facebook-phishing'>SÉCURISER MON COMPTE</a></div><p>L'équipe de sécurité.</p>"
         },
         3: {
             from: "archives.departementales@hauts-de-seine.fr",
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
                            <span class="attachment-action-text">Cliquer pour visualiser</span>
                        </div>
                    </div>
-                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le lien sécurisé.</p>
+                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le <a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=4'>lien sécurisé</a>.</p>
                    <p>L'équipe Généalogie Direct.</p>`
         }
     };

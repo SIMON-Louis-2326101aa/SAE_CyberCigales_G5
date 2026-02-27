@@ -240,6 +240,27 @@ class PuzzleController
     /**
      * Énigme 4 - Phishing Par Mail
      */
+    // Affichage de message lors du clique sur les liens de phishing
+    public function phishingLinkClick()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        // Message d'avertissement
+        $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens suspects dans un courriel non vérifié.";
+
+        // Mémorise l'état
+        $_SESSION['phishing_state'] = [
+            'answer' => $_SESSION['phishing_state']['answer'] ?? '',
+            'open_mail' => $_GET['from_id'] ?? 1, // On récupère l'ID du mail pour le réouvrir
+            'open_pdf' => false
+        ];
+
+        header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+        exit;
+    }
+
     public function validatePhishing()
     {
         // Démarre la session si elle n'est pas déjà active
@@ -262,8 +283,8 @@ class PuzzleController
             $userId = $_SESSION['utilisateur']['id'];
             $progressModel = new GameProgressModel();
 
-            // L'énigme Phishing est le niveau 4 (normalement)
-            $progressModel->updateLevel($userId, 4);
+            // L'énigme Phishing est le niveau 4 (normalement) donc on va au niveau 5
+            $progressModel->updateLevel($userId, 5);
 
             // Nettoie l'état mémorisé en cas de succès
             unset($_SESSION['phishing_state']);

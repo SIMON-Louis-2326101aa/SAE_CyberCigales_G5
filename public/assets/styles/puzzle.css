@@ -738,6 +738,17 @@ h2 {
     border-top: 2px solid var(--primary);
 }
 
+#block-button-facebook-phishing {
+    text-align:center;
+    margin:20px;
+}
+
+#button-facebook-phishing {
+    display:inline-block;
+    text-decoration:none;
+    background:#ff4444;
+}
+
 /* Interface du phishing */
 .mail-header {
     background: #eee;
