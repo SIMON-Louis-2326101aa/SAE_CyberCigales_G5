@@ -6,10 +6,12 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 $team = $_SESSION['team'] ?? 'alice';
 /* Récupération de l'équipe et de l'état mémorisé en session pour la restauration après fausse réponse */
 $state = $_SESSION['phishing_state'] ?? null;
+$motherName = ($team === 'alice') ? 'Clara' : 'Diane';
 ?>
 
 <div class="hero-container-welcome">
     <h1>La boîte mail</h1>
+    <p>Vous ouvrez la boîte mail de votre mère (<?php echo $motherName; ?>).</p>
 </div>
 
 <div class="phishing-area" id="phishing-container" 

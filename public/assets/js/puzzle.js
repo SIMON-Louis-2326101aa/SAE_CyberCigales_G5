@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="pdf-body-content">
                 <p>Le <strong>18 mars 1978</strong>, est née :</p>
                 <h3 class="pdf-person-name">${targetName}</h3>
-                <p>Fille de Pierre VALMONT et de Suzanne LECLERC.</p>
+                <p>Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de ${motherName}.</p>
                 <div class="pdf-handwritten">
                     <span class="handwritten-label">Note manuscrite :</span><br>
                     <strong>${gpsCoord}</strong>
