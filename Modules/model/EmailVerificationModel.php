@@ -5,6 +5,7 @@
 namespace SAE_CyberCigales_G5\Modules\model;
 
 use PDO;
+use SAE_CyberCigales_G5\includes\ConnectionDB;
 
 /**
  * Modèle de vérification d'email
@@ -17,6 +18,11 @@ use PDO;
  */
 class EmailVerificationModel extends Database
 {
+    public function __construct()
+    {
+        $this->db = ConnectionDB::getInstance();
+    }
+
     /**
      * Génère un code de vérification à 6 chiffres
      *
@@ -165,5 +171,11 @@ class EmailVerificationModel extends Database
         $stmt->execute(['email' => $email]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result ?: null;
+    }
+
+    public function deleteCode(string $code): bool
+    {
+        $this->db->delete('email_verification_codes', ['code' => $code]);
+        return true ;
     }
 }
