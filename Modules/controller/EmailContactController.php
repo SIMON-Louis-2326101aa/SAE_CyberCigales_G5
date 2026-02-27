@@ -23,6 +23,17 @@ class EmailContactController
             session_start();
         }
 
+        // ANTI-SPAM DE 5MIN
+        if (isset($_SESSION['last_email_sent_time'])) {
+            $timeSinceLastEmail = time() - $_SESSION['last_email_sent_time'];
+            if ($timeSinceLastEmail < 300) {
+                $minutesRestantes = ceil((300 - $timeSinceLastEmail) / 60);
+                $_SESSION['flash_error'] = "Veuillez patienter encore {$minutesRestantes} 
+                minute(s) avant d'envoyer un nouveau message.";
+                $this->redirect();
+                return;
+            }
+        }
         //Vérification méthode POST
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             $_SESSION['flash_error'] = "Méthode non autorisée.";
