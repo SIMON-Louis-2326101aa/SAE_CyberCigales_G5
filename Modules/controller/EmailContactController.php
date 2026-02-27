@@ -60,7 +60,7 @@ class EmailContactController
                 'message' => $message
             ]);
 
-            $success = Mailer::send(self::$_ENV['ADMIN_EMAIL'], $sujetFinal, $corpsEmail);
+            $success = Mailer::send($_ENV['ADMIN_EMAIL'], $sujetFinal, $corpsEmail);
 
             if ($success) {
                 unset($_SESSION['old']);
