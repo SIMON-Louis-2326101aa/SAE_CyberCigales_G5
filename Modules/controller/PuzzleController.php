@@ -224,6 +224,9 @@ class PuzzleController
             }
 
             if ($isCorrect1 && $isCorrect2) {
+                $userId = $_SESSION['utilisateur']['id'];
+                $progressModel = new GameProgressModel();
+                $progressModel->updateLevel($userId, 7);
                 $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
             } else {
                 $_SESSION['flash_error'] = "Certains indices pour l'épreuve $epreuve sont incorrects.";
@@ -249,7 +252,7 @@ class PuzzleController
         if (str_contains($input, $Word1) && str_contains($input, $Word2)) {
             $userId = $_SESSION['utilisateur']['id'];
             $progressModel = new GameProgressModel();
-            $progressModel->updateLevel($userId, 4);
+            $progressModel->updateLevel($userId, 9);
 
             $_SESSION['flash_success'] = "Bravo ! L'union fait la force";
             header("Location: index.php?controller=Redirection&action=openEndText");
@@ -295,7 +298,6 @@ class PuzzleController
         $userId = $_SESSION['utilisateur']['id'];
         $progressModel = new GameProgressModel();
         $progressModel->finishGame($userId);
-
         $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre et terminé l’enquête.";
 
         header("Location: index.php?controller=Redirection&action=openEndText");

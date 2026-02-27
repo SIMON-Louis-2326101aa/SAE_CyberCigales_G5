@@ -271,6 +271,9 @@ class ButterflyWayController
         $_SESSION['pap_code_ok']  = $ok;
         if ($ok) {
             $_SESSION['pap_feedback'] = "Le terminal bip doucement. Accès accordé.";
+            $userId = $_SESSION['utilisateur']['id'];
+            $progressModel = new GameProgressModel();
+            $progressModel->updateLevel($userId, 4);
             $_SESSION['flash_success'] = "AUTH OK — Le papillon reprend sa course. La suite s’ouvre.";
         } else {
             $_SESSION['pap_feedback'] = "Le terminal affiche : AUTH FAILED.";
