@@ -141,6 +141,7 @@ class EmailVerificationController
         if ($codeStatus['valid']) {
             // Créer le compte utilisateur maintenant que l'email est vérifié
             if ($this->user->createUserAfterVerification($email)) {
+                $this->eModel->deleteCode($code);
                 // Succès : Redirection vers la page de connexion
                 $_SESSION['flash_success'] = "Compte créé. Vous pouvez vous connecter.";
                 header('Location: index.php?controller=Redirection&action=openFormConnection');
