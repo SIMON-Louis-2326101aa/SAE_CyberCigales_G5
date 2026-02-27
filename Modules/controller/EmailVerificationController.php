@@ -156,8 +156,9 @@ class EmailVerificationController
 
         // Afficher un message d'erreur spécifique selon la raison
         $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired');
+        $this->eModel->deleteCode($code);
 
-        header($errorRedirectUrl); // Redirection après échec
+        header('Location : index.php?controller=Redirection&action=openFormRegister'); // Redirection après échec
         exit;
     }
 
