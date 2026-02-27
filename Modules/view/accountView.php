@@ -8,6 +8,8 @@
                 'Inconnue'); ?></p>
     <p><br></p>
     <p>Équipe sélectionnée : <?php echo htmlspecialchars(ucfirst($_SESSION['team'] ?? 'Aucune')); ?></p>
+    <p>Temps de jeu : <?php $seconds = $_SESSION['gameprogress']['total_time_sec'] ?? 0;
+        echo htmlspecialchars(gmdate("H:i:s", $seconds)); ?></p>
     <p>Niveau du compte de l'essai actuel : <?php echo htmlspecialchars($_SESSION['level']); ?></p>
     <p>Nombre d'essai total : <?php echo htmlspecialchars($_SESSION['utilisateur']['nbTry']); ?></p>
 
