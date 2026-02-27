@@ -335,7 +335,7 @@
     height: auto;
     display: block;
     border-radius: 4px;
-    filter: blur(20px);
+    filter: blur(12px);
 }
 
 .photo-back {
