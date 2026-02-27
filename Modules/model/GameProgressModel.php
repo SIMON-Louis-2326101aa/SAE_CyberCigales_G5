@@ -34,11 +34,16 @@ class GameProgressModel extends Database
 
     public function updateLevel(int $userId, int $level): bool
     {
-        return $this->db->update(
-            'game_progress',
-            ['level' => $level],
-            ['user_id' => $userId]
-        ) > 0;
+        $stmt = $this->getBdd()->prepare("
+        UPDATE game_progress
+        SET level = GREATEST(level, :level)
+        WHERE user_id = :user_id
+    ");
+
+        return $stmt->execute([
+            'level' => $level,
+            'user_id' => $userId
+        ]);
     }
 
     public function getAllGameProgress(): array
