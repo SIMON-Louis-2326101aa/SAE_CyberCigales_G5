@@ -13,6 +13,9 @@ if (isset($_SESSION['user_id'])) : ?>
 
     <div class="hero-container-main">
         <h1 class="hero-question">Serez-vous capable de résoudre le mystère ?</h1>
+        <p class="rules">Pour percer les mystères de ce jeu, il vous faudra être deux<br>
+            Mais pas le droit de regarder ce que votre associé fait (ça ne vous aidera pas)<br>
+            Vous choisirez chacun une équipe différente qui vous mènera ensemble au mystère de cette histoire</p>
         <a  href='index.php?controller=Team&action=play'
             class="active btn-nav">JOUER</a>
     </div>
@@ -32,6 +35,9 @@ if (isset($_SESSION['user_id'])) : ?>
 
     <div class="hero-container-main">
         <h1 class="hero-question">Serez-vous capable de résoudre le mystère ?</h1>
+        <p class="rules">Pour percer les mystères de ce jeu, il vous faudra être deux<br>
+            Mais pas le droit de regarder ce que votre associé fait (ça ne vous aidera pas)<br>
+            Vous choisirez chacun une équipe différente qui vous mènera ensemble au mystère de cette histoire</p>
         <a  href="index.php?controller=Redirection&action=openFormConnection"
             class="active btn-nav">SE CONNECTER POUR JOUER</a>
     </div>

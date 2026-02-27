@@ -423,6 +423,11 @@ h5 {
     padding: 0 var(--space-6);
 }
 
+.rules{
+    font-family: Handlee, cursive;
+    font-size: 18px;
+}
+
 .hero-container-welcome{
     margin-top: 2rem;
     margin-bottom: 2rem;
