@@ -96,21 +96,23 @@
     </div>
 
     <div id="solutionLetter" class="solution-letter-content">
-    <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
+        <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
             <label>
                 Qu'est-ce veut dire cette lettre ?<br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
+                            ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
             </label>
 
-        <label>
-            Que signifient ces symboles ?<br>
-            <textarea name="answer2" required></textarea>
-        </label>
+            <label>
+                Que signifient ces symboles ?<br>
+                <textarea name="answer2" required><?= isset($_SESSION['old_answer2'])
+                            ? htmlspecialchars($_SESSION['old_answer2']) : '' ?></textarea>
+            </label>
 
-        <button type="submit" class="active btn-nav">
-            Valider
-        </button>
-    </form>
+            <button type="submit" class="active btn-nav">
+                Valider
+            </button>
+        </form>
     </div>
 
 <?php elseif (isset($_SESSION['team']) && ($_SESSION['team'] === "bob")) : ?>
@@ -162,12 +164,14 @@
         <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
             <label>
                 Qu'est-ce veut dire cette lettre ?<br>
-                <textarea name="answer1" required></textarea>
+                <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
+                            ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
             </label>
 
             <label>
                 Que signifient ces symboles ?<br>
-                <textarea name="answer2" required></textarea>
+                <textarea name="answer2" required><?= isset($_SESSION['old_answer2'])
+                            ? htmlspecialchars($_SESSION['old_answer2']) : '' ?></textarea>
             </label>
 
             <button type="submit" class="active btn-nav">

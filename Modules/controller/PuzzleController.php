@@ -26,10 +26,10 @@ class PuzzleController
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }
-
-        //RÉCUPÉRATION RÉPONSES
         $answerLetter = $_POST['answer1'] ?? '';
         $answerMorse  = $_POST['answer2'] ?? '';
+        $_SESSION['old_answer1'] = $answerLetter;
+        $_SESSION['old_answer2'] = $answerMorse;
 
         if (trim($answerLetter) === '' || trim($answerMorse) === '') {
             $_SESSION['flash_error'] = "Les deux réponses doivent être remplies.";
@@ -85,13 +85,12 @@ class PuzzleController
             exit;
         }
 
-        //VALIDATION CÉSAR
+        // VALIDATION CÉSAR
         $answerLetterNorm = $this->normalize($answerLetter);
         $expectedLetter   = $this->normalize($letterSolutions[$team]);
 
         if ($answerLetterNorm !== $expectedLetter) {
-            $_SESSION['flash_error'] =
-                "La lettre n’a pas été correctement déchiffrée.";
+            $_SESSION['flash_error'] = "La lettre n’a pas été correctement déchiffrée.";
             header("Location: index.php?controller=Redirection&action=openLetterIntro");
             exit;
         }
@@ -101,20 +100,20 @@ class PuzzleController
         $expectedMorse   = $this->normalize($morseSolutions[$team]);
 
         if ($answerMorseNorm !== $expectedMorse) {
-            $_SESSION['flash_error'] =
-                "Le message codé est incorrect.";
+            $_SESSION['flash_error'] = "Le message codé est incorrect.";
             header("Location: index.php?controller=Redirection&action=openLetterIntro");
             exit;
         }
 
-        //SUCCÈS → SUITE
+        // SUCCÈS ON NETTOIE LES VARIABLES DE SAUVEGARDE ET ON CONTINUE
+        unset($_SESSION['old_answer1'], $_SESSION['old_answer2']);
+
         $userId = $_SESSION['utilisateur']['id'];
 
         $progressModel = new GameProgressModel();
         $progressModel->updateLevel($userId, 2);
 
-        $_SESSION['flash_success'] =
-            "Bravo ! Les deux messages ont été correctement déchiffrés.";
+        $_SESSION['flash_success'] = "Bravo ! Les deux messages ont été correctement déchiffrés.";
 
         header("Location: index.php?controller=Redirection&action=openPicturePuzzle");
         exit;
