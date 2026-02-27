@@ -137,19 +137,19 @@
         <div id="letterContent" class="letter-content" role="button" tabindex="0" aria-pressed="false">
 
             <div class="letter-face letter-front">
-                <p>wk mrobo mvkbk </p>
-                <p> vo dowzc xyec k qvscco oxdbo voc nysqdc mywwo ne cklvo wksc kfkxd ae'sv xo nsczkbkscco mywzvodowoxd
-                    xyec fyevsyxc do myxpsob moc wydc</p>
-                <p>sv x'i k zkc no pkedo dbyz kxmsoxxo zyeb odbo zkbnyxxoo xs no nscdkxmo dbyz qbkxno zyeb odbo pbkxmrso
-                    zkbpysc vk fso xyec cozkbo xyx zyeb xyec zexsb wksc zyeb xyec kzzboxnbo k bofoxsb
+                <p>wk mrobo mvkbk, </p>
+                <p> vo dowzc xyec k qvscco oxdbo voc nysqdc mywwo, ne cklvo wksc kfkxd ae'sv xo nsczkbkscco,
+                    mywzvodowoxd xyec fyevsyxc do myxpsob moc wydc.</p>
+                <p>sv x'i k zkc no pkedo dbyz kxmsoxxo zyeb odbo zkbnyxxoo, xs no nscdkxmo dbyz qbkxno zyeb odbo
+                    pbkxmrso. zkbpysc, vk fso xyec cozkbo xyx zyeb xyec zexsb, wksc zyeb xyec kzzboxnbo k bofoxsb.
                 </p>
-                <p>dyx psvc lyl zyccono notk moddo pvkwwo aeo xyec kfyxc bomyxxeo  vk cysp no mywzboxnbo n'kvvob kenovk
-                    noc ofsnoxmoc ksnovo k omyedob mo ae'yx xo nsd zkc k vsbo mo ae'yx xo wyxdbo zvec
+                <p>dyx psvc lyl zyccono notk moddo pvkwwo aeo xyec kfyxc bomyxxeo : vk cysp no mywzboxnbo,
+                    n’kvvob kenovk noc ofsnoxmoc. ksnovo k omyedob mo ae’yx xo nsd zkc, k vsbo mo ae’yx xo wyxdbo zvec.
                 </p>
-                <p>mo aeo xyec kfyxc vkscco nobbsobo xyec x'ocd zkc ex dbocyb n'yb ye no zsobbo wksc ex wocckqo exo zkbd
-                    no xydbo rscdysbo mkmroo nkxc voc zvsc ne dowzc
+                <p>mo aeo xyec kfyxc vkscco nobbsobo xyec x’ocd zkc ex dbocyb n’yb ye no zsobbo, wksc ex wocckqo exo
+                    zkbd no xydbo rscdysbo, mkmroo nkxc voc zvsc ne dowzc.
                 </p>
-                <p>kfom v'oczysb aeo voc mrowsxc zobnec co mbyscoxd k xyefoke doc qbkxnczkboxdc aes dkswoxd
+                <p>kfom v’oczysb aeo voc mrowsxc zobnec co mbyscoxd k xyefoke. doc qbkxnczkboxdc aes d’kswoxd.
                 </p><br>
                 <p class="clue-letter2">10/10/2010</p>
             </div>
