@@ -307,7 +307,8 @@
 }
 
 .photo-card {
-    width: 320px;
+    width: 400px;
+    height: 400px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.8s ease;
@@ -322,20 +323,11 @@
 
 .photo-face {
     backface-visibility: hidden;
-    border-radius: 4px;
 }
 
 .photo-front {
-    position: relative;
-    display: block;
-}
-
-.photo-front img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 4px;
-    filter: blur(12px);
+    position: absolute;
+    inset: 0;
 }
 
 .photo-back {
@@ -346,7 +338,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    background: #f8f8f8;
+    background: var(--bg-picture);
     text-align: center;
 }
 
@@ -358,6 +350,17 @@
     font-size: 1.6rem;
 }
 
+
+#photo-puzzle {
+    margin: auto;
+}
+
+.piece {
+    width: 100px;
+    height: 100px;
+    border: 1px solid #000;
+    cursor: grab;
+}
 
 .app{
     min-height:100dvh;

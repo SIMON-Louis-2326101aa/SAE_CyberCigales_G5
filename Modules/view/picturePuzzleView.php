@@ -10,7 +10,7 @@
         <div class="photo-enigma">
             <div class="photo-card" id="photoCard">
                 <div class="photo-face photo-front">
-                    <img src="./assets/images/photoFamilleFlou.png" alt="photodefamille">
+                    <div id="photoPuzzle" class="photo-puzzle"></div>
                 </div>
                 <div class="photo-face photo-back">
                     <p class="back-image">Le papillon garde la mémoire.</p>

@@ -154,17 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ===== Carte photo retournable =====
-document.addEventListener('DOMContentLoaded', () => {
-    const card = document.getElementById('photoCard');
-
-    if (!card) {
-        return;
-    }
-
-    card.addEventListener('click', () => {
-        card.classList.toggle('turn');
-    });
-});
+// La rotation est gérée uniquement dans checkWin() après résolution du puzzle
 
 // Vanilla, no framework — juste UX
 const $ = s => document.querySelector(s);
@@ -242,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
-    
+
     // --- Fonction utilitaire pour la Règle 9 (Correction de l'affichage) ---
     // Calcule la somme des valeurs des chiffres romains dans une chaîne de caractères.
     const getRomanSum = (pwd) => {
@@ -314,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i];
             const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
-            
+
             // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
             listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
 
@@ -351,4 +341,106 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Affichage de la première règle
     validatePassword();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const photoPuzzle = document.getElementById("photoPuzzle");
+    const photoCard = document.getElementById("photoCard");
+
+    if (!photoPuzzle || !photoCard) return;
+
+    //photoCard.style.display = "none"; // cacher carte au début
+
+    const size = 4;
+    const total = size * size;
+    const imageUrl = "./assets/images/photoFamilleFlou.png";
+
+    let pieces = [];
+    let order = [...Array(total).keys()];
+    let shuffled = [...order].sort(() => Math.random() - 0.5);
+
+    photoPuzzle.style.display = "grid";
+    photoPuzzle.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+    photoPuzzle.style.width = "400px";
+    photoPuzzle.style.height = "400px";
+    photoPuzzle.style.gap = "0";
+
+    shuffled.forEach((value, index) => {
+
+        let piece = document.createElement("div");
+        piece.classList.add("piece");
+        piece.draggable = true;
+        piece.dataset.correct = value;
+        piece.style.border = "none"; // supprime les bordures qui créent les espaces blancs
+
+        piece.style.backgroundImage = `url(${imageUrl})`;
+        piece.style.backgroundSize = "400px 400px";
+
+        let x = (value % size) * -100;
+        let y = Math.floor(value / size) * -100;
+        piece.style.backgroundPosition = `${x}px ${y}px`;
+
+        piece.addEventListener("dragstart", dragStart);
+        piece.addEventListener("dragover", dragOver);
+        piece.addEventListener("drop", drop);
+
+        photoPuzzle.appendChild(piece);
+        pieces.push(piece);
+    });
+
+    let dragged = null;
+
+    function dragStart() {
+        dragged = this;
+    }
+
+    function dragOver(e) {
+        e.preventDefault();
+    }
+
+    function drop(e) {
+        e.preventDefault();
+
+        if (dragged === this) return;
+
+        let tempBg = this.style.backgroundPosition;
+        this.style.backgroundPosition = dragged.style.backgroundPosition;
+        dragged.style.backgroundPosition = tempBg;
+
+        let tempCorrect = this.dataset.correct;
+        this.dataset.correct = dragged.dataset.correct;
+        dragged.dataset.correct = tempCorrect;
+
+        checkWin();
+    }
+
+    function checkWin() {
+
+        let win = true;
+
+        pieces.forEach((piece, index) => {
+            if (parseInt(piece.dataset.correct) !== index) {
+                win = false;
+            }
+        });
+
+        if (win) {
+
+            // Bloque les pièces
+            pieces.forEach(piece => {
+                piece.draggable = false;
+                piece.style.cursor = "default";
+            });
+
+            // Active la rotation sur la carte complète
+            const card = document.getElementById("photoCard");
+
+            card.addEventListener("click", () => {
+                card.classList.toggle("turn");
+            });
+
+        }
+    }
+
 });
