@@ -280,8 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return sum === 25;
             }},
 
-        // Règle 6: Doit contenir "biloute"
-        { text: "Règle 6: Votre mot de passe doit contenir 'biloute'.", validate: (pwd) => /biloute/i.test(pwd) },
+        // Règle 6: Doit contenir "biloute" et "cigales"
+        { text: "Règle 6: Votre mot de passe doit contenir les mots 'biloute' et 'cigales'.", validate: (pwd) => /(?=.*biloute)(?=.*cigales)/i.test(pwd) },
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {

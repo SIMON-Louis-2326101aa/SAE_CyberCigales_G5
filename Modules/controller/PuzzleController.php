@@ -25,6 +25,7 @@ class PuzzleController
         if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
+        }
 
         //RÉCUPÉRATION RÉPONSES
         $answerLetter = $_POST['answer1'] ?? '';
