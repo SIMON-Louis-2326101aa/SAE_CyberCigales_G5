@@ -307,6 +307,60 @@ class PuzzleController
     }
 
     /**
+     * Énigme 3 - Labyrinthe
+     */
+    public function validateButterflyCode()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            $_SESSION['flash_error'] = "Erreur : veuillez choisir une équipe ou vous reconnecter.";
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+
+        $code = $this->normalize($_POST['code'] ?? '');
+        if ($code === '') {
+            $_SESSION['flash_error'] = "Code vide.";
+            header("Location: index.php?controller=Redirection&action=openButterflyWay");
+            exit;
+        }
+
+        $team = $_SESSION['team'];
+
+        $solutions = [
+            'alice' => ['admin'],
+            'bob'   => ['root'],
+        ];
+
+        if (!isset($solutions[$team])) {
+            $_SESSION['flash_error'] = "Équipe inconnue.";
+            header("Location: index.php?controller=Redirection&action=openButterflyWay");
+            exit;
+        }
+
+        // Easter-egg optionnel
+        $allowed = array_merge($solutions[$team], ['nollipap']);
+
+        if (!in_array($code, $allowed, true)) {
+            $_SESSION['flash_error'] = "Mot invalide — réessaie en suivant la logique de la piste.";
+            header("Location: index.php?controller=Redirection&action=openButterflyWay");
+            exit;
+        }
+
+        // Succès -> update level
+        $userId = (int)$_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+        $progressModel->updateLevel($userId, 4);
+
+        $_SESSION['flash_success'] = "AUTH OK — Le papillon reprend sa course. La suite s’ouvre.";
+        header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+        exit;
+    }
+
+    /**
      * Énigme 4 - Phishing Par Mail
      */
     // Affichage de message lors du clique sur les liens de phishing

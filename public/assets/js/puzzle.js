@@ -130,7 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (timeDisplay && window.BASE_TIME !== undefined) {
 
-        function updateTimer() {
+        function updateTimer()
+        {
             let elapsed = window.BASE_TIME;
 
             if (window.GAME_STATUS === "in_progress" && window.LAST_START_TIME) {
@@ -231,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // On récupère les éléments HTML avec lesquels on va interagir
     const passwordInput = document.getElementById('passwordInput'); // Le champ où l'utilisateur tape son mot de passe
     const rulesList = document.getElementById('passwordRules'); // La liste (<ul>) où les règles s'affichent
-    const submitButton = document.querySelector('#passwordGameForm button[type="submit"]'); // Le bouton pour valider
+    const submitButton = document.querySelector('#password-game-form button[type="submit"]'); // Le bouton pour valider
 
     // Si un des éléments n'existe pas, on arrête le script pour éviter des erreurs
     if (!passwordInput || !rulesList || !submitButton) {
@@ -285,7 +286,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg"><img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti"><img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos">' +
+                '<img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg">' +
+                '<img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti">' +
+                '<img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
             validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
         },
 
@@ -351,6 +355,167 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Affichage de la première règle
     validatePassword();
+});
+
+// ==========================================
+//               ButterflyWay
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const root = document.querySelector("[data-bw-root]");
+    if (!root) return;
+
+    const maxSteps = 11;
+    const path = ["L","R","L","L","R","R","L","R","L","L","B"];
+
+    const team = (root.getAttribute("data-team") || "alice").toLowerCase();
+
+    const storyHintsAlice = [
+        "Un log ancien subsiste. Peu visible, mais intact.",
+        "Une activité bruyante attire l’attention en surface.",
+        "Des métadonnées oubliées tracent un chemin flou.",
+        "Un signal faible persiste hors du flux principal.",
+        "Un accès trop exposé clignote inutilement.",
+        "Le silence apparent laisse transparaitre une trace plus discrète.",
+        "Une archive n’a jamais été correctement effacée.",
+        "Un trafic évident semble trop parfait.",
+        "Une signature ancienne a été laissée volontairement.",
+        "Les données se raréfient. Mais le sens est encore là.",
+        "Le papillon ralentit. Il attend que tu realises ce que d’autres ont ignoré.",
+    ];
+
+    const storyHintsBob = [
+        "Un point d’entrée discret semble moins exposé.",
+        "Un accès public attire trop facilement.",
+        "Une route secondaire contourne les contrôles visibles.",
+        "Un bruit parasite cache un chemin plus sûr.",
+        "Une interface trop lumineuse signale un risque.",
+        "Un silence artificiel est rarement rassurant.",
+        "Un accès interne n’a jamais été audité.",
+        "Un flux évident ressemble à un leurre.",
+        "Une validation ancienne n’a jamais été révoquée.",
+        "À ce stade, la solution simple est la plus dangereuse.",
+        "Le papillon change de logique. La sécurité exige parfois de reculer.",
+    ];
+
+    const lostMessages = [
+        "Une alerte s’est déclenchée. Le signal a disparu.",
+        "Trop direct. Le papillon s’est volatilisé.",
+        "Une action brusque a effacé la trace.",
+        "Avast a détécté une menace et t'a mis en quarantaine.",
+        "Tu as attiré l’attention. Le système t'a redirigé.",
+        "Erreur humaine détectée, tu a été déconnécté du système",
+    ];
+
+    const hints = (team === "bob") ? storyHintsBob : storyHintsAlice;
+
+    const elHint = document.getElementById("bw-hint");
+    const elFeedback = document.getElementById("bw-feedback");
+    const elStep = document.getElementById("bw-step");
+    const elMax = document.getElementById("bw-max");
+    const elScore = document.getElementById("bw-score");
+    const codeZone = document.getElementById("bw-code-zone");
+
+    const key = `bw_state_${team}`; // state séparé par team (optionnel)
+    const defaultState = { step: 0, score: 0, blocked: false, showCode: false };
+
+    function loadState() {
+        try {
+            return JSON.parse(sessionStorage.getItem(key)) || { ...defaultState };
+        } catch {
+            return { ...defaultState };
+        }
+    }
+
+    function saveState(st) {
+        sessionStorage.setItem(key, JSON.stringify(st));
+    }
+
+    function randomLost() {
+        return lostMessages[Math.floor(Math.random() * lostMessages.length)];
+    }
+
+    function render(st) {
+        if (elMax) elMax.textContent = String(maxSteps);
+        if (elStep) elStep.textContent = String(st.step);
+        if (elScore) elScore.textContent = String(st.score);
+
+        if (elHint) {
+            elHint.textContent = (st.step < maxSteps)
+                ? (hints[st.step] || "")
+                : "Il semble que tu aie trouvé ce que tu cherchais.";
+        }
+
+        if (codeZone) {
+            codeZone.style.display = st.showCode ? "" : "none";
+        }
+    }
+
+    function move(dir) {
+        const st = loadState();
+
+        if (st.step >= maxSteps) return;
+
+        if (st.blocked) {
+            if (elFeedback) elFeedback.textContent = randomLost() + " (Reprends la trace.)";
+            return;
+        }
+
+        dir = String(dir || "").toUpperCase();
+        if (!["L","R","B"].includes(dir)) dir = "R";
+
+        const expected = path[st.step] || "R";
+
+        if (dir === expected) {
+            st.score += 1;
+            st.step += 1;
+
+            if (elFeedback) elFeedback.textContent = "Le signal s'amplifie.";
+
+            if (st.step >= maxSteps) {
+                st.showCode = true;
+                if (elFeedback) elFeedback.textContent = "Il ne reste plus qu’à valider l’accès.";
+            }
+        } else {
+            st.score = -1;
+            st.blocked = true;
+            if (elFeedback) elFeedback.textContent = randomLost() + " (Signal bloqué.)";
+        }
+
+        saveState(st);
+        render(st);
+    }
+
+    function turn() {
+        // Si l’action attendue à l’étape actuelle est B, alors c’est un “bon move”
+        const st = loadState();
+        const expected = path[st.step] || "R";
+
+        if (expected === "B") {
+            move("B");
+            return;
+        }
+
+        // Sinon retour au début
+        st.step = 0;
+        st.score = 0;
+        st.blocked = false;
+        st.showCode = false;
+
+        if (elFeedback) elFeedback.textContent = "Tu te retournes… et tu reprends la piste depuis le début.";
+        saveState(st);
+        render(st);
+    }
+
+    document.querySelectorAll("[data-bw]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const d = btn.getAttribute("data-bw");
+            if (d === "B") turn();
+            else move(d);
+        });
+    });
+
+    // init
+    render(loadState());
 });
 
 // ===============================================
