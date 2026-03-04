@@ -223,7 +223,6 @@ if (hint) {
     })();
 }
 
-
 // ===============================================
 //                 PasswordGame
 // ===============================================
@@ -315,15 +314,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const rule = rules[i];
             const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
 
-            // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
-            listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
+            // On récupère le texte de la règle (fonction ou chaîne)
+            let ruleText = typeof rule.text === 'function' ? rule.text() : rule.text;
 
             // Si la règle est respectée
             if (rule.validate(password)) {
-                listItem.style.color = 'green'; // Affichage en vert
+                listItem.style.color = '#00FF00'; // Affichage en vert clair
+                listItem.innerHTML = "✅ " + ruleText; // Ajout de l'emoji succès pour plus de visibilité
                 rulesList.appendChild(listItem); // Ajout à la liste
             } else { // Si la règle n'est pas respectée
                 listItem.style.color = 'red'; // Affichage en rouge
+                listItem.innerHTML = "❌ " + ruleText; // Ajout de l'emoji échec pour voir les règles pas encore validées
                 rulesList.appendChild(listItem); // Ajout à la liste
                 allRulesMet = false; // Toutes les règles ne sont pas respectées
                 break; // On arrête de vérifier les autres règles, car il faut les valider dans l'ordre
