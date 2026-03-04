@@ -558,6 +558,10 @@
 
 
 /* ============ Password Game ============ */
+#passwordGameForm {
+    max-width: 30%;
+}
+
 /* Pour le bouton "valider" ait une couleur différent et qu'on ne puisse pas appuyer quand on ne peut pas encore valider */
 #passwordGameForm button[type="submit"]:disabled {
     opacity: 0.5;
@@ -566,6 +570,7 @@
     box-shadow: none;
     transform: none;
 }
+
 #pwdhead {
     font-weight:800;
     letter-spacing:-.02em;
@@ -584,6 +589,7 @@
 
 .sponsor-logos img {
     height: 20vh;
+    max-width: 100%;
     width: auto;
     background-color: white;
     padding: 2px;

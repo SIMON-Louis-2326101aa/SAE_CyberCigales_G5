@@ -1,5 +1,7 @@
 <?php
-
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 ?>
 <div>
     <h2 id="pwdhead">Password Game</h2>

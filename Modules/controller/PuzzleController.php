@@ -371,4 +371,30 @@ class PuzzleController
         }
         exit;
     }
+
+    /**
+    * Énigme 5 - Password Game
+    */
+    public function validatePasswordGame()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $userId = $_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+
+        // On passe au niveau 6
+        $progressModel->updateLevel($userId, 6);
+
+        $_SESSION['flash_success'] = "Bravo ! Votre mot de passe est excellent car il ne contient pas que des mots du dictionnaire, mais aussi de nombreux caractères variés et aléatoires, ce qui le rend très difficile à craquer par brute force.";
+
+        header("Location: index.php?controller=Redirection&action=openSummaryClue");
+        exit;
+    }
 }

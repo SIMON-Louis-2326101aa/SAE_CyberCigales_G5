@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Données pour les règles dynamiques ---
-    const sponsors = ['Microsoft', 'Mitsubishi', 'Tor'];
+    const sponsors = ['Microsoft', 'Mitsubishi', 'Lamborghini'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
 
@@ -285,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Microsoft.png" alt="Logo Microsoft" title="Microsoft"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Tor.png" alt="Logo Tor" title="Tor"></div>',
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Microsoft.png" alt="Logo Microsoft" title="Microsoft"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Lamborghini.png" alt="Logo Lamborghini" title="Lamborghini"></div>',
             validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
         },
 
@@ -295,12 +295,12 @@ document.addEventListener('DOMContentLoaded', () => {
             validate: (pwd) => new RegExp(currentDay, 'i').test(pwd)
         },
 
-        // Règle 9: La somme des chiffres romains doit être 1729
+        // Règle 9: La somme des chiffres romains doit être 3729
         {
             // Le texte appelle la fonction getRomanSum pour un affichage toujours à jour.
-            text: () => `Règle 9: La somme des valeurs de tous les chiffres romains (I,V,X,L,C,D,M) doit être égale à 1729. <br><small>Attention: Pas de combinaison, VI = 5 + 1</small> Somme actuelle: ${getRomanSum(passwordInput.value)}`,
+            text: () => `Règle 9: La somme des valeurs de tous les chiffres romains (I,V,X,L,C,D,M) doit être égale à 3729. <br><small>Attention: Pas de combinaison, IV = 1 + 5 ≠ 4</small> Somme actuelle: ${getRomanSum(passwordInput.value)}`,
             // La validation appelle aussi la même fonction pour une vérification toujours à jour.
-            validate: (pwd) => getRomanSum(pwd) === 1729
+            validate: (pwd) => getRomanSum(pwd) === 3729
         }
     ];
 
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault(); // Empêche le rechargement de la page
             // Vérifie si toutes les règles sont validées avant de rediriger
             if (!submitButton.disabled) {
-                window.location.href = 'index.php?controller=Redirection&action=openSummaryClue';
+                window.location.href = 'index.php?controller=Puzzle&action=validatePasswordGame';
             }
         });
     }
