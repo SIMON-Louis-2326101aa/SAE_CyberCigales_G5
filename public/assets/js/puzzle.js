@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Données pour les règles dynamiques ---
-    const sponsors = ['Microsoft', 'Mitsubishi', 'Lamborghini'];
+    const sponsors = ['Samsung', 'Mitsubishi', 'Lamborghini'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
 
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Microsoft.png" alt="Logo Microsoft" title="Microsoft"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Lamborghini.png" alt="Logo Lamborghini" title="Lamborghini"></div>',
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Lamborghini.png" alt="Logo Lamborghini" title="Lamborghini"></div>',
             validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
         },
 
