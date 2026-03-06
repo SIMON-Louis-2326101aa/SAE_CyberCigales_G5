@@ -1,4 +1,12 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php?controller=Redirection&action=openFormConnection");
+    exit;
+}
 ?>
 <div class="phishing-page-container-welcome">
     <h1 class="phishing-trap-title">Paiement Généalogie Direct</h1>

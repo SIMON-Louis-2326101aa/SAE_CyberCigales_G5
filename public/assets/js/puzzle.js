@@ -676,9 +676,9 @@ document.addEventListener('DOMContentLoaded', () => {
                    <p>L'équipe Généalogie Direct.</p>`
         },
         5: {
-            from: "info@laposte-suivi.fr",
+            from: "info@lapostee-suivi.fr",
             subject: "Votre colis n°8L9452 est bloqué",
-            body: "<p>Bonjour,</p><p>Votre colis n'a pas pu être livré car il manque un affranchissement de 1,99€.</p><p>Pour programmer une nouvelle livraison, veuillez régulariser les frais de port via le lien ci-dessous :</p><p><a href='index.php?controller=Puzzle&action=openColisPhishing'>https://laposte.fr/suivi/paiement-frais-douane</a></p><p>Attention, sans action de votre part sous 48h, le colis sera renvoyé à l'expéditeur.</p>"
+            body: "<p>Bonjour,</p><p>Votre colis n'a pas pu être livré car il manque un affranchissement de 1,99€.</p><p>Pour programmer une nouvelle livraison, veuillez régulariser les frais de port via le lien ci-dessous :</p><p><a href='index.php?controller=Puzzle&action=openColisPhishing'>https://lapostee.fr/suivi/paiement-frais-douane</a></p><p>Attention, sans action de votre part sous 48h, le colis sera renvoyé à l'expéditeur.</p>"
         }
     };
 

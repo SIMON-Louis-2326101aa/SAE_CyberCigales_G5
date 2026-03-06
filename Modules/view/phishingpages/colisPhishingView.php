@@ -1,4 +1,12 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php?controller=Redirection&action=openFormConnection");
+    exit;
+}
 ?>
 <div class="phishing-page-container-welcome">
     <h1 class="phishing-trap-title">⚠️ Alerte de Sécurité ⚠️</h1>
@@ -13,5 +21,5 @@
         <p class="phishing-trap-warning">Ne donnez jamais vos informations sur un site dont vous n'avez pas vérifié l'origine.</p>
     </div>
     
-    <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=6" class="btn-nav btn-phishing-return">RETOUR SUR LA BOITE MAIL</a>
+    <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=5" class="btn-nav btn-phishing-return">RETOUR SUR LA BOITE MAIL</a>
 </div>
