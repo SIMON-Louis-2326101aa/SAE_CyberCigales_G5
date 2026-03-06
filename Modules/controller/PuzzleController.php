@@ -392,7 +392,7 @@ class PuzzleController
         // On passe au niveau 6
         $progressModel->updateLevel($userId, 6);
 
-        $_SESSION['flash_success'] = "Bravo ! Votre mot de passe est excellent car il ne contient pas que des mots du dictionnaire, mais aussi de nombreux caractères variés et aléatoires, ce qui le rend très difficile à craquer par brute force.";
+        $_SESSION['flash_success'] = "Épreuve du mot de passe réussie !";
 
         header("Location: index.php?controller=Redirection&action=openSummaryClue");
         exit;

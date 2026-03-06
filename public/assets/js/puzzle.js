@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // On récupère les éléments HTML avec lesquels on va interagir
     const passwordInput = document.getElementById('passwordInput'); // Le champ où l'utilisateur tape son mot de passe
     const rulesList = document.getElementById('passwordRules'); // La liste (<ul>) où les règles s'affichent
-    const submitButton = document.querySelector('#passwordGameForm button[type="submit"]'); // Le bouton pour valider
+    const submitButton = document.querySelector('#password-game-form button[type="submit"]'); // Le bouton pour valider
 
     // Si un des éléments n'existe pas, on arrête le script pour éviter des erreurs
     if (!passwordInput || !rulesList || !submitButton) {
@@ -339,13 +339,26 @@ document.addEventListener('DOMContentLoaded', () => {
     passwordInput.addEventListener('input', validatePassword);
 
     // Ajout de l'écouteur sur le bouton valider pour aller dans une autre page
-    const passwordGameForm = document.getElementById('passwordGameForm');
+    const passwordGameForm = document.getElementById('password-game-form');
+    const successBlock = document.getElementById('block-message-good-pwd');
+
     if (passwordGameForm) {
         passwordGameForm.addEventListener('submit', (event) => {
             event.preventDefault(); // Empêche le rechargement de la page
-            // Vérifie si toutes les règles sont validées avant de rediriger
+
+            // Si toutes les règles sont validées, on affiche le bloc de succès au lieu de rediriger
             if (!submitButton.disabled) {
-                window.location.href = 'index.php?controller=Puzzle&action=validatePasswordGame';
+                if (successBlock) {
+                    // On affiche le mot de passe final
+                    const finalDisplay = document.getElementById('final-password-display');
+                    if (finalDisplay) {
+                        finalDisplay.textContent = passwordInput.value;
+                    }
+
+                    successBlock.style.display = 'block'; // Affiche l'explication et le bouton suivant
+                    submitButton.style.display = 'none';  // Cache le bouton de validation original
+                    passwordInput.disabled = true;        // Désactive l'input pour garder l'état
+                }
             }
         });
     }
