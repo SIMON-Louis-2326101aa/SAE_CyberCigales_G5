@@ -130,7 +130,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (timeDisplay && window.BASE_TIME !== undefined) {
 
-        function updateTimer() {
+        function updateTimer()
+        {
             let elapsed = window.BASE_TIME;
 
             if (window.GAME_STATUS === "in_progress" && window.LAST_START_TIME) {
@@ -221,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // On récupère les éléments HTML avec lesquels on va interagir
     const passwordInput = document.getElementById('passwordInput'); // Le champ où l'utilisateur tape son mot de passe
     const rulesList = document.getElementById('passwordRules'); // La liste (<ul>) où les règles s'affichent
-    const submitButton = document.querySelector('#passwordGameForm button[type="submit"]'); // Le bouton pour valider
+    const submitButton = document.querySelector('#password-game-form button[type="submit"]'); // Le bouton pour valider
 
     // Si un des éléments n'existe pas, on arrête le script pour éviter des erreurs
     if (!passwordInput || !rulesList || !submitButton) {
@@ -232,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sponsors = ['Bjorg', 'Bugatti', 'Kiri'];
     const days = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
     const currentDay = days[(new Date().getDay() + 6) % 7]; // Doit faire + 6 puis modulo 7 car javascript a été créer par des américains qui pensent qu'ils sont le centre du monde et que la semaine commence le dimanche
-
+    
     // --- Fonction utilitaire pour la Règle 9 (Correction de l'affichage) ---
     // Calcule la somme des valeurs des chiffres romains dans une chaîne de caractères.
     const getRomanSum = (pwd) => {
@@ -275,7 +276,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg"><img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti"><img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
+            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos">' +
+                '<img src="./assets/images/Logo_Bjorg.png" alt="Logo Bjorg" title="Bjorg">' +
+                '<img src="./assets/images/Logo_Bugatti.png" alt="Logo Bugatti" title="Bugatti">' +
+                '<img src="./assets/images/Logo_KIRI.png" alt="Logo KIRI" title="KIRI"></div>',
             validate: (pwd) => sponsors.some(sponsor => new RegExp(sponsor, 'i').test(pwd))
         },
 
@@ -304,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < rules.length; i++) {
             const rule = rules[i];
             const listItem = document.createElement('li'); // Crée un élément de liste pour la règle
-
+            
             // Si rule.text est une fonction, on l'exécute pour obtenir le texte. Sinon, on utilise la innerHTML (à la place de textContent pour avoir des images).
             listItem.innerHTML = typeof rule.text === 'function' ? rule.text() : rule.text;
 
@@ -443,4 +447,342 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+});
+
+// ==========================================
+//               ButterflyWay
+// ==========================================
+document.addEventListener("DOMContentLoaded", () => {
+    const root = document.querySelector("[data-bw-root]");
+    if (!root) return;
+
+    const maxSteps = 11;
+    const path = ["L","R","L","L","R","R","L","R","L","L","B"];
+
+    const team = (root.getAttribute("data-team") || "alice").toLowerCase();
+
+    const storyHintsAlice = [
+        "Un log ancien subsiste. Peu visible, mais intact.",
+        "Une activité bruyante attire l’attention en surface.",
+        "Des métadonnées oubliées tracent un chemin flou.",
+        "Un signal faible persiste hors du flux principal.",
+        "Un accès trop exposé clignote inutilement.",
+        "Le silence apparent laisse transparaitre une trace plus discrète.",
+        "Une archive n’a jamais été correctement effacée.",
+        "Un trafic évident semble trop parfait.",
+        "Une signature ancienne a été laissée volontairement.",
+        "Les données se raréfient. Mais le sens est encore là.",
+        "Le papillon ralentit. Il attend que tu realises ce que d’autres ont ignoré.",
+    ];
+
+    const storyHintsBob = [
+        "Un point d’entrée discret semble moins exposé.",
+        "Un accès public attire trop facilement.",
+        "Une route secondaire contourne les contrôles visibles.",
+        "Un bruit parasite cache un chemin plus sûr.",
+        "Une interface trop lumineuse signale un risque.",
+        "Un silence artificiel est rarement rassurant.",
+        "Un accès interne n’a jamais été audité.",
+        "Un flux évident ressemble à un leurre.",
+        "Une validation ancienne n’a jamais été révoquée.",
+        "À ce stade, la solution simple est la plus dangereuse.",
+        "Le papillon change de logique. La sécurité exige parfois de reculer.",
+    ];
+
+    const lostMessages = [
+        "Une alerte s’est déclenchée. Le signal a disparu.",
+        "Trop direct. Le papillon s’est volatilisé.",
+        "Une action brusque a effacé la trace.",
+        "Avast a détécté une menace et t'a mis en quarantaine.",
+        "Tu as attiré l’attention. Le système t'a redirigé.",
+        "Erreur humaine détectée, tu a été déconnécté du système",
+    ];
+
+    const hints = (team === "bob") ? storyHintsBob : storyHintsAlice;
+
+    const elHint = document.getElementById("bw-hint");
+    const elFeedback = document.getElementById("bw-feedback");
+    const elStep = document.getElementById("bw-step");
+    const elMax = document.getElementById("bw-max");
+    const elScore = document.getElementById("bw-score");
+    const codeZone = document.getElementById("bw-code-zone");
+
+    const key = `bw_state_${team}`; // state séparé par team (optionnel)
+    const defaultState = { step: 0, score: 0, blocked: false, showCode: false };
+
+    function loadState() {
+        try {
+            return JSON.parse(sessionStorage.getItem(key)) || { ...defaultState };
+        } catch {
+            return { ...defaultState };
+        }
+    }
+
+    function saveState(st) {
+        sessionStorage.setItem(key, JSON.stringify(st));
+    }
+
+    function randomLost() {
+        return lostMessages[Math.floor(Math.random() * lostMessages.length)];
+    }
+
+    function render(st) {
+        if (elMax) elMax.textContent = String(maxSteps);
+        if (elStep) elStep.textContent = String(st.step);
+        if (elScore) elScore.textContent = String(st.score);
+
+        if (elHint) {
+            elHint.textContent = (st.step < maxSteps)
+                ? (hints[st.step] || "")
+                : "Il semble que tu aie trouvé ce que tu cherchais.";
+        }
+
+        if (codeZone) {
+            codeZone.style.display = st.showCode ? "" : "none";
+        }
+    }
+
+    function move(dir) {
+        const st = loadState();
+
+        if (st.step >= maxSteps) return;
+
+        if (st.blocked) {
+            if (elFeedback) elFeedback.textContent = randomLost() + " (Reprends la trace.)";
+            return;
+        }
+
+        dir = String(dir || "").toUpperCase();
+        if (!["L","R","B"].includes(dir)) dir = "R";
+
+        const expected = path[st.step] || "R";
+
+        if (dir === expected) {
+            st.score += 1;
+            st.step += 1;
+
+            if (elFeedback) elFeedback.textContent = "Le signal s'amplifie.";
+
+            if (st.step >= maxSteps) {
+                st.showCode = true;
+                if (elFeedback) elFeedback.textContent = "Il ne reste plus qu’à valider l’accès.";
+            }
+        } else {
+            st.score = -1;
+            st.blocked = true;
+            if (elFeedback) elFeedback.textContent = randomLost() + " (Signal bloqué.)";
+        }
+
+        saveState(st);
+        render(st);
+    }
+
+    function turn() {
+        // Si l’action attendue à l’étape actuelle est B, alors c’est un “bon move”
+        const st = loadState();
+        const expected = path[st.step] || "R";
+
+        if (expected === "B") {
+            move("B");
+            return;
+        }
+
+        // Sinon retour au début
+        st.step = 0;
+        st.score = 0;
+        st.blocked = false;
+        st.showCode = false;
+
+        if (elFeedback) elFeedback.textContent = "Tu te retournes… et tu reprends la piste depuis le début.";
+        saveState(st);
+        render(st);
+    }
+
+    document.querySelectorAll("[data-bw]").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const d = btn.getAttribute("data-bw");
+            if (d === "B") turn();
+            else move(d);
+        });
+    });
+
+    // init
+    render(loadState());
+});
+
+// ===============================================
+//                 Phishing Mail
+// ===============================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    const emailItems = document.querySelectorAll('.email-item-logic');
+    const displayArea = document.getElementById('email-display-area');
+    const pdfSimu = document.getElementById('pdf-simulation');
+    const validationSection = document.getElementById('validation-section');
+
+    if (!emailItems.length || !displayArea) return;
+
+    // Contenus des emails
+    const mailData = {
+        1: {
+            from: "service-client@inf0-impots.gouv.fr",
+            subject: "Remboursement de trop-perçu",
+            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=1'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
+        },
+        2: {
+            from: "secure-check@faceb00k.security.com",
+            subject: "Alerte de sécurité importante",
+            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div class='button class' id='block-button-facebook-phishing'><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=2' class='btn-nav' id='button-facebook-phishing'>SÉCURISER MON COMPTE</a></div><p>L'équipe de sécurité.</p>"
+        },
+        3: {
+            from: "archives.departementales@hauts-de-seine.fr",
+            subject: "Votre demande d'acte n°7845",
+            body: `<p>Bonjour,</p><p>Faisant suite à votre demande, veuillez trouver ci-joint l'acte de naissance demandé.</p>
+                   <div class="attachment-logic" id="trigger-pdf">
+                       <div class="attachment-icon-simu"></div>
+                       <div class="attachment-info">
+                           <strong>acte_de_naissance_7845.pdf</strong>
+                           <span class="attachment-action-text">Cliquer pour visualiser</span>
+                       </div>
+                   </div>
+                   <p>Cordialement,<br>Le service des archives.</p>`
+        },
+        4: {
+            from: "contact@genealogie-direct-infos.com",
+            subject: "Nouvelle découverte dans votre arbre !",
+            body: `<p>Bonjour,</p><p>Notre algorithme a détecté un nouvel acte concernant la famille <strong>VALMONT</strong> qui pourrait vous intéresser.</p>
+                   <div class="attachment-logic" id="trigger-fake-pdf">
+                       <div class="attachment-icon-simu"></div>
+                       <div class="attachment-info">
+                           <strong>acte_valmont_inedit.pdf</strong>
+                           <span class="attachment-action-text">Cliquer pour visualiser</span>
+                       </div>
+                   </div>
+                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le <a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=4'>lien sécurisé</a>.</p>
+                   <p>L'équipe Généalogie Direct.</p>`
+        }
+    };
+
+    // Récupération des paramètres d'initialisation (utile après un rechargement de page)
+    const container = document.getElementById('phishing-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+    const initialMailId = container ? container.getAttribute('data-open-mail') : null;
+    const initialOpenPdf = container ? container.getAttribute('data-open-pdf') === '1' : false;
+
+    // Détermination du contenu selon l'équipe
+    const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
+    const motherName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
+    const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
+
+
+    // Affiche le contenu de l'acte de naissance (simule l'ouverture d'un PDF)
+    function showPdf() {
+        if (!pdfSimu) return;
+        pdfSimu.innerHTML = `
+            <div class="pdf-header-border">
+                <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                <p class="pdf-subtitle">Commune de Boulogne-Billancourt</p>
+            </div>
+            <div class="pdf-body-content">
+                <p>Le <strong>18 mars 1978</strong>, est née :</p>
+                <h3 class="pdf-person-name">${targetName}</h3>
+                <p>Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de ${motherName}.</p>
+                <div class="pdf-handwritten">
+                    <span class="handwritten-label">Note manuscrite :</span><br>
+                    <strong>${gpsCoord}</strong>
+                </div>
+            </div>
+        `;
+        pdfSimu.classList.add('show');
+        if (validationSection) validationSection.classList.remove('hidden');
+    }
+
+    // Affiche un faux document (Phishing)
+    function showFakePdf() {
+        if (!pdfSimu) return;
+        pdfSimu.innerHTML = `
+            <div class="pdf-header-border" id="pdf-phishing-header-border">
+                <h2 class="pdf-title">DOCUMENT ARCHIVÉ - APERÇU</h2>
+                <p class="pdf-subtitle">Service de généalogie privée</p>
+            </div>
+            <div class="pdf-body-content">
+                <p>Extrait partiel concernant :</p>
+                <h3 class="pdf-person-name">${motherName}</h3>
+                <p>Née le 15 août 1975 à Paris.</p>
+                <p><em>Le reste du document est masqué. Pour lever le filigrane et accéder aux mentions marginales, veuillez valider votre paiement.</em></p>
+                <div class="pdf-subscription">
+                    ABONNEMENT REQUIS
+                </div>
+            </div>
+        `;
+        pdfSimu.classList.add('show');
+        if (validationSection) validationSection.classList.add('hidden');
+    }
+
+     // Gère l'affichage d'un email spécifique
+    function selectMail(id) {
+        const item = Array.from(emailItems).find(el => el.getAttribute('data-id') === id);
+        if (!item) return;
+
+        // Mise à jour visuelle de la sélection dans la liste
+        emailItems.forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+
+        const data = mailData[id];
+
+        // Rendu du contenu du mail
+        displayArea.innerHTML = `
+            <div class="mail-detail-meta">
+                <strong>De :</strong> ${data.from}<br>
+                <strong>Objet :</strong> ${data.subject}
+            </div>
+            <div class="mail-message-body">
+                ${data.body}
+            </div>
+        `;
+
+        // On enlève l'affichage de pdf quand on clique sur un autre mail
+        if (pdfSimu) {
+            pdfSimu.innerHTML = '';
+            pdfSimu.classList.remove('show');
+        }
+        if (validationSection) {
+            validationSection.classList.add('hidden');
+        }
+
+        // Gestion du clic sur la pièce jointe (uniquement pour le mail n°3)
+        if (id === "3") {
+            const trigger = document.getElementById('trigger-pdf');
+            if (trigger) {
+                trigger.onclick = () => {
+                    showPdf();
+                };
+            }
+        }
+
+        // Gestion du clic sur la pièce jointe factice (mail n°4)
+        if (id === "4") {
+            const triggerFake = document.getElementById('trigger-fake-pdf');
+            if (triggerFake) {
+                triggerFake.onclick = () => {
+                    showFakePdf();
+                };
+            }
+        }
+    }
+
+    // Assignation des événements de clic sur les mails de la sidebar
+    emailItems.forEach(item => {
+        item.addEventListener('click', () => {
+            selectMail(item.getAttribute('data-id'));
+        });
+    });
+
+    // Restauration automatique de l'état (si session PHP active après erreur)
+    if (initialMailId) {
+        selectMail(initialMailId);
+        if (initialOpenPdf) {
+            showPdf();
+        }
+    }
 });

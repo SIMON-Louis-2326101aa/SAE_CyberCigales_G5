@@ -26,6 +26,8 @@ class PuzzleController
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }
+
+        //RÉCUPÉRATION RÉPONSES
         $answerLetter = $_POST['answer1'] ?? '';
         $answerMorse  = $_POST['answer2'] ?? '';
         $_SESSION['old_answer1'] = $answerLetter;
@@ -301,6 +303,126 @@ class PuzzleController
         $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre et terminé l’enquête.";
 
         header("Location: index.php?controller=Redirection&action=openEndText");
+        exit;
+    }
+
+    /**
+     * Énigme 3 - Labyrinthe
+     */
+    public function validateButterflyCode()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            $_SESSION['flash_error'] = "Erreur : veuillez choisir une équipe ou vous reconnecter.";
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+
+        $code = $this->normalize($_POST['code'] ?? '');
+        if ($code === '') {
+            $_SESSION['flash_error'] = "Code vide.";
+            header("Location: index.php?controller=Redirection&action=openButterflyWay");
+            exit;
+        }
+
+        $team = $_SESSION['team'];
+
+        $solutions = [
+            'alice' => ['admin'],
+            'bob'   => ['root'],
+        ];
+
+        if (!isset($solutions[$team])) {
+            $_SESSION['flash_error'] = "Équipe inconnue.";
+            header("Location: index.php?controller=Redirection&action=openButterflyWay");
+            exit;
+        }
+
+        // Easter-egg optionnel
+        $allowed = array_merge($solutions[$team], ['nollipap']);
+
+        if (!in_array($code, $allowed, true)) {
+            $_SESSION['flash_error'] = "Mot invalide — réessaie en suivant la logique de la piste.";
+            header("Location: index.php?controller=Redirection&action=openButterflyWay");
+            exit;
+        }
+
+        // Succès -> update level
+        $userId = (int)$_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+        $progressModel->updateLevel($userId, 4);
+
+        $_SESSION['flash_success'] = "AUTH OK — Le papillon reprend sa course. La suite s’ouvre.";
+        header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+        exit;
+    }
+
+    /**
+     * Énigme 4 - Phishing Par Mail
+     */
+    // Affichage de message lors du clique sur les liens de phishing
+    public function phishingLinkClick()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        // Message d'avertissement
+        $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens suspects dans un courriel non vérifié.";
+
+        // Mémorise l'état
+        $_SESSION['phishing_state'] = [
+            'answer' => $_SESSION['phishing_state']['answer'] ?? '',
+            'open_mail' => $_GET['from_id'] ?? 1, // On récupère l'ID du mail pour le réouvrir
+            'open_pdf' => false
+        ];
+
+        header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+        exit;
+    }
+
+    public function validatePhishing()
+    {
+        // Démarre la session si elle n'est pas déjà active
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        // Vérifie que l'utilisateur est bien connecté
+        if (!isset($_SESSION['utilisateur'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        // Récupère et normalise la réponse du formulaire
+        $answerRaw = $_POST['answer'] ?? '';
+        $answer = $this->normalize($answerRaw);
+
+        // Réponse de l'énigme, on accepte tous les réponses contenant le mot 'tante'
+        if (str_contains($answer, 'tante')) {
+            $userId = $_SESSION['utilisateur']['id'];
+            $progressModel = new GameProgressModel();
+
+            // L'énigme Phishing est le niveau 4 (normalement) donc on va au niveau 5
+            $progressModel->updateLevel($userId, 5);
+
+            // Nettoie l'état mémorisé en cas de succès
+            unset($_SESSION['phishing_state']);
+            $_SESSION['flash_success'] = "Bravo ! Vous avez compris le lien de parenté.";
+            header("Location: index.php?controller=Redirection&action=openPasswordGame");
+        } else {
+            // En cas d'erreur, mémorise l'état pour restaurer l'interface après rechargement
+            $_SESSION['phishing_state'] = [
+                'answer' => $answerRaw,
+                'open_mail' => 3,
+                'open_pdf' => true
+            ];
+            $_SESSION['flash_error'] = "Ce n'est pas la bonne réponse. Relisez bien le document";
+            header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
+        }
         exit;
     }
 }
