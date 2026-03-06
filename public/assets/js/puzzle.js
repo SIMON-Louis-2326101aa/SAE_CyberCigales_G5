@@ -694,3 +694,164 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+(function () {
+    'use strict';
+
+    function el(id)   { return document.getElementById(id); }
+    function show(id) { el(id).classList.remove('hidden'); }
+    function hide(id) { el(id).classList.add('hidden'); }
+
+    let isFollowing  = false;
+    let modalLiked   = false;
+    let currentPost  = null;
+    let profileFound = false;
+
+    const TARGET = (typeof IG_TARGET !== 'undefined') ? IG_TARGET : {};
+
+    // Si le profil a déjà été trouvé (bot a déjà répondu = session active),
+    // on affiche directement le bouton DM dans le header
+    if (TARGET.botReplied) {
+        const btn = el('igDmHeaderBtn');
+        if (btn) btn.classList.remove('hidden');
+    }
+
+    window.igOnSearch = function (val) {
+        const dropdown = el('igSearchDropdown');
+        val = val.trim().toLowerCase();
+
+        if (!val) { dropdown.classList.add('hidden'); return; }
+
+        const match =
+            TARGET.handle.toLowerCase().includes(val) ||
+            TARGET.name.toLowerCase().includes(val)   ||
+            TARGET.handle.replace('.', ' ').toLowerCase().includes(val);
+
+        dropdown.innerHTML = match
+            ? `<div class="ig-search-item" onclick="igShowProfile()">
+                   <div class="ig-search-avatar">${TARGET.letter}</div>
+                   <div>
+                       <div class="ig-search-name">${TARGET.handle}</div>
+                       <div class="ig-search-sub">${TARGET.name}</div>
+                   </div>
+               </div>`
+            : `<div class="ig-search-empty">Aucun résultat pour « ${val} »</div>`;
+
+        dropdown.classList.remove('hidden');
+    };
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.ig-search-wrap')) {
+            el('igSearchDropdown').classList.add('hidden');
+        }
+    });
+
+    window.igShowProfile = function () {
+        profileFound = true;
+        el('igSearchDropdown').classList.add('hidden');
+        el('igSearchInput').value = '';
+
+        hide('ig-home-state');
+        show('ig-profile-state');
+
+        // Rendre le bouton DM visible dans le header
+        const dmBtn = el('igDmHeaderBtn');
+        if (dmBtn) dmBtn.classList.remove('hidden');
+
+        // Construire la grille
+        el('igProfileGrid').innerHTML = TARGET.posts
+            .map(p => `
+                <div class="ig-grid-item" onclick="igOpenModal('${p.id}')">
+                    <span class="ig-grid-emoji">${p.emoji}</span>
+                </div>`)
+            .join('');
+    };
+
+    window.igToggleFollow = function () {
+        isFollowing = !isFollowing;
+        const btn   = el('igFollowBtn');
+        const count = el('igFollowersCount');
+
+        if (isFollowing) {
+            btn.textContent = 'Suivi';
+            btn.classList.add('following');
+            count.textContent = TARGET.followers + 1;
+        } else {
+            btn.textContent = 'Suivre';
+            btn.classList.remove('following');
+            count.textContent = TARGET.followers;
+        }
+    };
+
+    window.igOpenDm = function () {
+        show('igDmOverlay');
+        // Scroll vers le bas des messages
+        const msgs = el('igDmMessages');
+        if (msgs) msgs.scrollTop = msgs.scrollHeight;
+    };
+
+    window.igCloseDm = function () {
+        hide('igDmOverlay');
+    };
+
+    window.igOpenModal = function (postId) {
+        currentPost = TARGET.posts.find(p => p.id === postId);
+        if (!currentPost) return;
+        modalLiked = false;
+
+        el('igModalImg').textContent      = currentPost.emoji;
+        el('igModalLocation').textContent = currentPost.location;
+        el('igModalLikes').textContent    = currentPost.likes + " J'aime";
+
+        const likeBtn = el('igModalLikeBtn');
+        likeBtn.classList.remove('liked');
+        likeBtn.innerHTML = heartSVG(false);
+
+        el('igModalBody').innerHTML =
+            `<div class="ig-modal-comment">
+                <div class="ig-modal-c-avatar">${TARGET.letter}</div>
+                <div><strong>${TARGET.handle}</strong> ${currentPost.caption}</div>
+            </div>` +
+            currentPost.comments.map(c =>
+                `<div class="ig-modal-comment">
+                    <div class="ig-modal-c-avatar">${c.user[0].toUpperCase()}</div>
+                    <div><strong>${c.user}</strong> ${c.text}</div>
+                </div>`
+            ).join('') +
+            `<div class="ig-modal-time">${currentPost.time}</div>`;
+
+        el('igModal').classList.remove('hidden');
+    };
+
+    window.igCloseModal = function () {
+        el('igModal').classList.add('hidden');
+        currentPost = null;
+    };
+
+    window.igCloseModalOutside = function (e) {
+        if (e.target === el('igModal')) igCloseModal();
+    };
+
+    window.igToggleModalLike = function () {
+        if (!currentPost) return;
+        modalLiked = !modalLiked;
+        const btn  = el('igModalLikeBtn');
+        const likes = el('igModalLikes');
+        btn.classList.toggle('liked', modalLiked);
+        btn.innerHTML     = heartSVG(modalLiked);
+        likes.textContent = (currentPost.likes + (modalLiked ? 1 : 0)) + " J'aime";
+    };
+
+    function heartSVG(filled) {
+        const fill   = filled ? 'red' : 'none';
+        const stroke = filled ? 'red' : 'currentColor';
+        return `<svg width="22" height="22" viewBox="0 0 24 24"
+                    fill="${fill}" stroke="${stroke}" stroke-width="1.5">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
+                             l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78
+                             l1.06 1.06L12 21.23l7.78-7.78
+                             1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>`;
+    }
+
+})();
