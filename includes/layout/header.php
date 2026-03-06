@@ -1,4 +1,5 @@
 <?php
+
 use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
 
 $gameProgress = null;
@@ -30,6 +31,9 @@ if (isset($_SESSION['user_id'])) {
     <?php if (isset($_GET['controller']) && $_GET['controller'] === 'Admin') : ?>
         <!-- Si Admin, alors le script pour admin est chargé -->
         <script src="./assets/js/admin.js" defer></script>
+    <?php endif; ?>
+    <?php if (($_GET['action'] ?? '') === 'openSearchSM') : ?>
+        <link rel="stylesheet" href="./assets/styles/fauxInstagram.css">
     <?php endif; ?>
 </head>
 <?php if (isset($_SESSION['game_start_time'])) : ?>
