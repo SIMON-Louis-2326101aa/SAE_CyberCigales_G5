@@ -565,6 +565,17 @@
 
 
 /* ============ Password Game ============ */
+#passwordGameForm {
+    max-width: 1000px;
+    width: 95%;
+}
+
+#passwordRules li {
+    font-weight: bold;
+    list-style: none; /* Enlève les points devant la liste pour laisser place aux emojis */
+    margin-bottom: 10px;
+    text-align: left;
+}
 
 /* Pour le bouton "valider" ait une couleur différent et qu'on ne puisse pas appuyer quand on ne peut pas encore valider */
 #password-game-form button[type="submit"]:disabled {
@@ -593,11 +604,52 @@
 
 .sponsor-logos img {
     height: 20vh;
+    max-width: 100%;
     width: auto;
     background-color: white;
     padding: 2px;
     border-radius: 4px;
     object-fit: contain;
+}
+
+#block-message-good-pwd {
+    display: none;
+    margin-top: 30px;
+    padding: 20px;
+    border: 2px solid #00FF00;
+    border-radius: 10px;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+#message-congratulation {
+    font-weight: bold;
+    color: #00FF00;
+    font-size: 1.2rem;
+}
+
+#btn-after-pwdgame {
+    display: inline-block;
+    background: #00FF00;
+    color: #000;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+#final-password-container {
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+#final-password-display {
+    color: #00FF00;
+    font-weight: bold;
 }
 
 /* ============ Résumé des indices (Summary View - Large & Simple) ============ */
