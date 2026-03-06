@@ -1,5 +1,10 @@
 <?php
 
+$info = " ";
+$clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\">
+ Quel autre mot avont nous retenu avec CLE et MEMOIRE ? ";
+
+require_once __DIR__ . "./../../includes/layout/headerClue.php";
 ?>
 <br>
 <p>Vous allez pouvoir rencontrez votre cousin (l'autre joueure(use) avec qui vous jouez) </p>

@@ -3,6 +3,89 @@
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+
+$info = "<section >
+
+    <h2>Pourquoi un mot de passe robuste est-il important ?</h2>
+
+    <p>
+        Un mot de passe est la première barrière de protection de vos comptes en ligne.
+        Il permet de protéger vos informations personnelles, vos emails, vos photos,
+        vos comptes bancaires ou encore vos réseaux sociaux.
+    </p>
+
+    <p>
+        Si un mot de passe est trop simple ou trop court, il peut être facilement
+        deviné ou trouvé par des programmes automatiques utilisés par des pirates
+        informatiques. Une fois le mot de passe découvert, un attaquant peut accéder
+        à vos comptes et voler vos données ou se faire passer pour vous.
+    </p>
+
+    <h2>Qu’est-ce qu’un mot de passe robuste ?</h2>
+
+    <p>
+        Un mot de passe robuste est un mot de passe difficile à deviner pour une
+        personne ou un ordinateur. Il doit contenir plusieurs types de caractères
+        et être suffisamment long.
+    </p>
+
+    <ul>
+        <li>Au moins 12 caractères</li>
+        <li>Des lettres minuscules</li>
+        <li>Des lettres majuscules</li>
+        <li>Des chiffres</li>
+        <li>Des caractères spéciaux comme ! ? @ # % *</li>
+    </ul>
+
+    <h2>Les erreurs à éviter</h2>
+
+    <p>Certains mots de passe sont très faciles à deviner et doivent être évités :</p>
+
+    <ul>
+        <li>Utiliser des mots simples comme password ou 123456</li>
+        <li>Utiliser une date de naissance</li>
+        <li>Utiliser son nom ou prénom</li>
+        <li>Réutiliser le même mot de passe sur plusieurs sites</li>
+    </ul>
+
+    <h2>Comment créer un mot de passe sécurisé ?</h2>
+
+    <p>
+        Une méthode efficace consiste à créer une phrase facile à retenir mais
+        difficile à deviner, puis à la transformer en mot de passe.
+    </p>
+
+    <p>
+        Exemple de phrase : Mon chat noir adore dormir sur le canapé
+    </p>
+
+    <p>
+        Exemple transformé : McN@d0slC!
+    </p>
+
+    <h2>Bonnes pratiques de sécurité</h2>
+
+    <ul>
+        <li>Utiliser un mot de passe différent pour chaque compte</li>
+        <li>Activer la double authentification quand c'est possible</li>
+        <li>Utiliser un gestionnaire de mots de passe</li>
+        <li>Ne jamais partager son mot de passe</li>
+        <li>Changer son mot de passe en cas de doute</li>
+    </ul>
+
+    <h2>À retenir</h2>
+
+    <p>
+        Un mot de passe long et complexe protège mieux vos comptes.
+        Quelques minutes pour créer un bon mot de passe peuvent éviter
+        de nombreux problèmes de sécurité.
+    </p>
+
+</section>";
+$clue = "Vous n'aavez pas besoin d'indice pour cette epreuve, il suffit de suivre les règles pour créer 
+un mot de passe sécurisé.";
+
+require_once __DIR__ . "./../../includes/layout/headerClue.php";
 ?>
 <div>
     <br>

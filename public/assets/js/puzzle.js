@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const delayClue2 = 600000; // 10 minute
     const delayClue3 = 900000; // 15 minutes
 
-    const delayTabInfo = 120000; // 2 minutes
+    const delayTabInfo = 12; // 2 minutes
 
     const clue1 = document.getElementById("clue-text-1");
     const clue2 = document.getElementById("clue-text-2");
