@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const delayClue2 = 600000; // 10 minute
     const delayClue3 = 900000; // 15 minutes
 
-    const delayTabInfo = 12; // 2 minutes
+    const delayTabInfo = 120000; // 2 minutes
 
     const clue1 = document.getElementById("clue-text-1");
     const clue2 = document.getElementById("clue-text-2");
@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
     photoPuzzle.style.height = "400px";
     photoPuzzle.style.gap = "0";
 
-    shuffled.forEach((value, index) => {
+    shuffled.forEach((value) => {
 
         let piece = document.createElement("div");
         piece.classList.add("piece");
@@ -544,7 +544,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Lamborghini.png" alt="Logo Lamborghini" title="Lamborghini"></div>',
             text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos">' +
                 '<img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung">' +
                 '<img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi">' +
@@ -694,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Détermination du contenu selon l'équipe
     const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
     const motherName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
-    const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
+    const gpsCoord = (team === 'alice') ? 'D' : '9';
 
 
     // Affiche le contenu de l'acte de naissance (simule l'ouverture d'un PDF)
@@ -710,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3 class="pdf-person-name">${targetName}</h3>
                 <p>Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de ${motherName}.</p>
                 <div class="pdf-handwritten">
-                    <span class="handwritten-label">Note manuscrite :</span><br>
+                    <span class="handwritten-label">Note manuscrite :</span>
                     <strong>${gpsCoord}</strong>
                 </div>
             </div>
