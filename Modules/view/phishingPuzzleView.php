@@ -10,7 +10,7 @@ $motherName = ($team === 'alice') ? 'Clara' : 'Diane';
 ?>
 
 <div class="hero-container-welcome">
-    <h1>La boîte mail</h1>
+    <p>Le papillon vous mene sur votre PC</p>
     <p>Vous ouvrez la boîte mail de votre mère (<?php echo $motherName; ?>).</p>
 </div>
 
@@ -67,7 +67,7 @@ $motherName = ($team === 'alice') ? 'Clara' : 'Diane';
     </div>
 </div>
 
-<?php 
+<?php
 /* Suppression de l'état après affichage pour ne pas interférer avec les futures tentatives */
-unset($_SESSION['phishing_state']); 
+unset($_SESSION['phishing_state']);
 ?>
