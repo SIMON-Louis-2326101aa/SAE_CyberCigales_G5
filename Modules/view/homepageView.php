@@ -17,7 +17,8 @@ if (isset($_SESSION['user_id'])) : ?>
             Mais pas le droit de regarder ce que votre associé fait (ça ne vous aidera pas)<br>
             Vous choisirez chacun une équipe différente qui vous mènera ensemble au mystère de cette histoire</p>
 
-        <p class="rules">Des petits onglets d'information (ℹ️) et d'indice (💡) seront là tout au long de votre jeu,<br>
+        <p class="rules">Des petits onglets d'information (ℹ️), d'indice (💡) et un inventaire(🎒) seront là tout au long
+            de votre jeu,<br>
             pour vous aider à avancer dans votre aventure, et vous informer sur les éléments plus complexes du jeu.<br>
             Les informations et indices vous arriveront au fur et à mesure du temps, il sera de votre devoir de penser à
             les regarder. </p>
