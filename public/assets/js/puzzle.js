@@ -641,12 +641,12 @@ document.addEventListener('DOMContentLoaded', () => {
         1: {
             from: "service-client@inf0-impots.gouv.fr",
             subject: "Remboursement de trop-perçu",
-            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=1'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
+            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='index.php?controller=Puzzle&action=openImpotsPhishing'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
         },
         2: {
             from: "secure-check@faceb00k.security.com",
             subject: "Alerte de sécurité importante",
-            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div class='button class' id='block-button-facebook-phishing'><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=2' class='btn-nav' id='button-facebook-phishing'>SÉCURISER MON COMPTE</a></div><p>L'équipe de sécurité.</p>"
+            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div class='mail-button-container'><a href='index.php?controller=Puzzle&action=openFacebookPhishing' class='btn-nav btn-mail-action'>SÉCURISER MON COMPTE</a></div><p>L'équipe de sécurité.</p>"
         },
         3: {
             from: "archives.departementales@hauts-de-seine.fr",
@@ -672,8 +672,13 @@ document.addEventListener('DOMContentLoaded', () => {
                            <span class="attachment-action-text">Cliquer pour visualiser</span>
                        </div>
                    </div>
-                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le <a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=4'>lien sécurisé</a>.</p>
+                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le <a href='index.php?controller=Puzzle&action=openGenealogiePhishing'>lien sécurisé</a>.</p>
                    <p>L'équipe Généalogie Direct.</p>`
+        },
+        5: {
+            from: "info@laposte-suivi.fr",
+            subject: "Votre colis n°8L9452 est bloqué",
+            body: "<p>Bonjour,</p><p>Votre colis n'a pas pu être livré car il manque un affranchissement de 1,99€.</p><p>Pour programmer une nouvelle livraison, veuillez régulariser les frais de port via le lien ci-dessous :</p><p><a href='index.php?controller=Puzzle&action=openColisPhishing'>https://laposte.fr/suivi/paiement-frais-douane</a></p><p>Attention, sans action de votre part sous 48h, le colis sera renvoyé à l'expéditeur.</p>"
         }
     };
 

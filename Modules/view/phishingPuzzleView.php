@@ -42,6 +42,10 @@ $motherName = ($team === 'alice') ? 'Clara' : 'Diane';
                     <div class="mail-sender-name">Généalogie Direct</div>
                     <div class="mail-subject-preview">Découvrez votre arbre!</div>
                 </li>
+                <li class="email-item-logic" data-id="5">
+                    <div class="mail-sender-name">La Poste</div>
+                    <div class="mail-subject-preview">Colis bloqué</div>
+                </li>
             </ul>
         </div>
 

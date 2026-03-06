@@ -3,6 +3,7 @@
 namespace SAE_CyberCigales_G5\Modules\controller;
 
 use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
+use SAE_CyberCigales_G5\includes\ViewHandler;
 
 class PuzzleController
 {
@@ -363,7 +364,7 @@ class PuzzleController
     /**
      * Énigme 4 - Phishing Par Mail
      */
-    // Affichage de message lors du clique sur les liens de phishing
+    // Affichage de message lors du retour depuis une page de phishing
     public function phishingLinkClick()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -373,7 +374,7 @@ class PuzzleController
         // Message d'avertissement
         $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens suspects dans un courriel non vérifié.";
 
-        // Mémorise l'état
+        // Mémorise l'état pour réouvrir le mail fautif
         $_SESSION['phishing_state'] = [
             'answer' => $_SESSION['phishing_state']['answer'] ?? '',
             'open_mail' => $_GET['from_id'] ?? 1, // On récupère l'ID du mail pour le réouvrir
@@ -382,6 +383,26 @@ class PuzzleController
 
         header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
         exit;
+    }
+
+    public function openFacebookPhishing()
+    {
+        ViewHandler::show('phishingpages/facebookPhishingView', ['pageTitle' => 'Facebook Login']);
+    }
+
+    public function openImpotsPhishing()
+    {
+        ViewHandler::show('phishingpages/impotsPhishingView', ['pageTitle' => 'Impôts Gouv']);
+    }
+
+    public function openGenealogiePhishing()
+    {
+        ViewHandler::show('phishingpages/genealogiePhishingView', ['pageTitle' => 'Généalogie Direct']);
+    }
+
+    public function openColisPhishing()
+    {
+        ViewHandler::show('phishingpages/colisPhishingView', ['pageTitle' => 'Suivi de Colis']);
     }
 
     public function validatePhishing()
