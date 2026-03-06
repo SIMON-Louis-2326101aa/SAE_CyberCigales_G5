@@ -1,105 +1,113 @@
-<?php if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
-    <h2> Résumé des indices trouvés </h2>
+<?php
+
+$info = "";
+$clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\"
+Qui est cette autre enfant sur la photo de famille ?</span>";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
+
+if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
+    <br>
+
+    <p>Voyons voir tout ce qu'on a touvez jusqu'ici pour voir ci on trouve plus </p><br>
 
     <div class="s-section">
-        <form method="POST" action="index.php?controller=Puzzle&action=valideIndice">
-            <input type="hidden" name="epreuve" value="1">
-            <p>Epreuve 1</p>
-            <label>Indice 1 : <br>
-                <textarea name="answer1" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['alice']['1']['ans1'] ?? ''); ?></textarea>
-            </label>
-            <label>Indice 2 : <br>
-                <textarea name="answer2" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['alice']['1']['ans2'] ?? ''); ?></textarea>
-            </label>
-            <button type="submit" class="active btn-nav">Valider</button>
-        </form>
+        <p>Epreuve 1</p>
+        <p>On a eu la lettre decripter :</p>
+        <p>Ma chère Diane,
+        Si tu lis ces lignes, c’est que le temps a poursuivi sa route sans nous attendre.
+        Nous ne savons pas ce que la vie t’a réservé, mais nous espérons qu’elle t’a offert
+        autant de raisons d’aimer que de pardonner.
+        Il est des blessures que l’on tait trop longtemps, croyant qu’elles disparaîtront
+        d’elles-mêmes. Mais le silence ne soigne pas, il endort seulement la douleur.
+        Nous avons vu, dans le regard de ta fille Alice, cette même lueur que tu avais enfant :
+        celle de la curiosité et du courage mêlés.
+        Ne la laisse pas s’éteindre, même si le monde tente de la couvrir d’ombre.
+        Tout ce que nous avons construit, tout ce que nous avons caché, nous l’avons fait
+        pour que quelqu’un comme elle puisse un jour comprendre.
+        Avec toute la tendresse que le vent n’a pas emportée.
+        Tes grands-parents qui t'aiment.</p>
+        <p>et le mot en morse : REFLET </p>
     </div>
 
     <div class="s-section">
-        <form method="POST" action="index.php?controller=Puzzle&action=valideIndice">
-            <input type="hidden" name="epreuve" value="2">
-            <p>Epreuve 2</p>
-            <label>Indice 1 : <br>
-                <img src="./assets/images/photoFamille.png" alt="photodefamille">
-                <textarea name="answer1" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['alice']['2']['ans1'] ?? ''); ?></textarea>
-            </label>
-            <label>Indice 2 : <br>
-                <textarea name="answer2" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['alice']['2']['ans2'] ?? ''); ?></textarea>
-            </label>
-            <button type="submit" class="active btn-nav">Valider</button>
-        </form>
+        <p>Epreuve 2</p>
+        <p>Puis nous avons trovez la photo de famille en morceau et les deux mot clé</p>
+        <img src="./assets/images/photoFamille.png" alt="photodefamille">
+        <p>PAPILLION et MEMOIRE</p>
     </div>
 
     <div class="s-section">
-        <form method="POST" action="index.php?controller=Puzzle&action=valideIndice">
-            <input type="hidden" name="epreuve" value="3">
-            <p>Epreuve 3</p>
-            <label>Indice 1 : <br>
-                <textarea name="answer1" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['alice']['3']['ans1'] ?? ''); ?></textarea>
-            </label>
-            <label>Indice 2 : <br>
-                <textarea name="answer2" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['alice']['3']['ans2'] ?? ''); ?></textarea>
-            </label>
-            <button type="submit" class="active btn-nav">Valider</button>
-        </form>
+        <p>Epreuve 3</p>
+        <p>Ici on a suivie le signale deguissait en papilon qui nous a mene a ADMIN</p>
     </div>
 
+    <div class="s-section">
+        <p>Epreuve 4</p>
+        <p>On a trouvez le certificat de naissance de notre tante, on a decouvert l'existance d'une tante !</p>
+        <p>(acte de naissance ??)</p>
+    </div>
+
+    <div class="s-section">
+        <p>Epreuve 5</p>
+        <p>On a recree un mot de passe plus robuste </p>
+    </div>
+
+    <form action="index.php?module=game&action=finalClue" method="post">
+        <label>Qu'est ce qu'on apprend de plus ?</label>
+        <input type="text" name="anser" placeholder="Entrez votre réponse ">
+        <button type="submit">Soumettre</button>
+    </form>
 <?php elseif (isset($_SESSION['team']) && $_SESSION['team'] === "bob") : ?>
-    <h2> Résumé des indices trouvés </h2>
+    <br>
+    <p>Voyons voir tout ce qu'on a touvez jusqu'ici pour voir ci on trouve plus </p><br>
 
     <div class="s-section">
-        <form method="POST" action="index.php?controller=Puzzle&action=valideIndice">
-            <input type="hidden" name="epreuve" value="1">
-            <p>Epreuve 1</p>
-            <label>Indice 1 : <br>
-                <textarea name="answer1" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['bob']['1']['ans1'] ?? ''); ?></textarea>
-            </label>
-            <label>Indice 2 : <br>
-                <textarea name="answer2" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['bob']['1']['ans2'] ?? ''); ?></textarea>
-            </label>
-            <button type="submit" class="active btn-nav">Valider</button>
-        </form>
+        <p>Epreuve 1</p>
+        <p>On a eu la lettre decripter :</p>
+        <p>Ma chère Clara,
+        Le temps nous a glissé entre les doigts comme du sable, mais avant qu’il ne disparaisse
+        complètement, nous voulions te confier ces mots.
+        Il n’y a pas de faute trop ancienne pour être pardonnée, ni de distance trop grande
+        pour être franchie.
+        Parfois, la vie nous sépare non pour nous punir, mais pour nous apprendre à revenir.
+        Ton fils Bob possède déjà cette flamme que nous avons reconnue : la soif de comprendre,
+        d’aller au-delà des évidences.
+        Aide-le à écouter ce qu’on ne dit pas, à lire ce qu’on ne montre plus.
+        Ce que nous avons laissé derrière nous n’est pas un trésor d’or ou de pierre, mais un
+        message, une part de notre histoire, cachée dans les plis du temps.
+        Avec l’espoir que les chemins perdus se croisent à nouveau.
+        Tes grands-parents qui t'aiment.</p>
+        <p>et le mot en morse : REFLET </p>
     </div>
 
     <div class="s-section">
-        <form method="POST" action="index.php?controller=Puzzle&action=valideIndice">
-            <input type="hidden" name="epreuve" value="2">
-            <p>Epreuve 2</p>
-            <label>Indice 1 : <br>
-                <textarea name="answer1" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['bob']['2']['ans1'] ?? ''); ?></textarea>
-            </label>
-            <label>Indice 2 : <br>
-                <textarea name="answer2" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['bob']['2']['ans2'] ?? ''); ?></textarea>
-            </label>
-            <button type="submit" class="active btn-nav">Valider</button>
-        </form>
+        <p>Epreuve 2</p>
+        <p>Puis nous avons trovez la photo de famille en morceau et les deux mot clé</p>
+        <img src="./assets/images/photoFamille.png" alt="photodefamille">
+        <p>PASSE et CLE</p>
     </div>
 
     <div class="s-section">
-        <form method="POST" action="index.php?controller=Puzzle&action=valideIndice">
-            <input type="hidden" name="epreuve" value="3">
-            <p>Epreuve 3</p>
-            <label>Indice 1 : <br>
-                <textarea name="answer1" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['bob']['3']['ans1'] ?? ''); ?></textarea>
-            </label>
-            <label>Indice 2 : <br>
-                <textarea name="answer2" required><?php echo
-                    htmlspecialchars($_SESSION['saved_indices']['bob']['3']['ans2'] ?? ''); ?></textarea>
-            </label>
-            <button type="submit" class="active btn-nav">Valider</button>
-        </form>
+        <p>Epreuve 3</p>
+        <p>Ici on a suivie le signale deguissait en papilon qui nous a mene a ROOT</p>
     </div>
+
+    <div class="s-section">
+        <p>Epreuve 4</p>
+        <p>On a trouvez le certificat de naissance de notre tante, on a decouvert l'existance d'une tante !</p>
+        <p>(acte de naissance ??)</p>
+    </div>
+
+    <div class="s-section">
+        <p>Epreuve 5</p>
+        <p>On a recree un mot de passe plus robuste </p>
+    </div>
+
+    <form action="index.php?module=game&action=finalClue" method="post">
+        <label>Qu'est ce qu'on apprend de plus ?</label>
+        <input type="text" name="anser" placeholder="Entrez votre réponse ">
+        <button type="submit">Soumettre</button>
+    </form>
 <?php else : ?>
     <p>Erreur : Veuillez choisir une équipe ou vous reconnecter</p>
 <?php endif; ?>
