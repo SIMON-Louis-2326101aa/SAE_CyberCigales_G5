@@ -186,7 +186,7 @@ class RedirectionController
     {
         $this->logRedirection('openSearchSMView');
         $this->requireAuth();
-        ViewHandler::show('searchSMView', ['pageTitle' => 'Enigme de recherche']);
+        ViewHandler::show('searchSMView', ['pageTitle' => 'Faux Instagram']);
     }
 
     /**
@@ -208,6 +208,4 @@ class RedirectionController
         $this->requireAuth();
         ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
-
-
 }
