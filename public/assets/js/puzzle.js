@@ -66,6 +66,14 @@ document.addEventListener("DOMContentLoaded", function () {
             clueTab.classList.toggle("open");
         });
     }
+
+    const inventoryTab = document.getElementById("inventory-tab");
+    const inventoryHandle = document.getElementById("inventory-handle");
+    if (inventoryTab && inventoryHandle) {
+        inventoryHandle.addEventListener("click", function () {
+            inventoryTab.classList.toggle("open");
+        });
+    }
 });
 
 // ===== Révélation des indices avec délai (setTimeout) & Chronomètre (pas de changement) =====

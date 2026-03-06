@@ -59,12 +59,24 @@
     z-index: 2000;
 }
 
+#inventory-tab {
+    position: fixed;
+    top: 40%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 2000;
+}
+
 /* Quand on ouvre le panneau, tout le bloc glisse */
 #info-tab.open {
     right: 580px; /* la largeur du panneau */
 }
 
 #clue-tab.open {
+    right: 580px; /* la largeur du panneau */
+}
+
+#inventory-tab.open {
     right: 580px; /* la largeur du panneau */
 }
 
@@ -104,7 +116,7 @@
     transition: transform 0.6s ease, opacity 0.6s ease;
     backdrop-filter: blur(8px);
     opacity: 0;
-    max-height: 650px;
+    max-height: 520px;
     overflow-y: auto;
 }
 
@@ -115,6 +127,11 @@
 }
 
 #clue-tab.open .tab-content {
+    opacity: 1;
+    right: -580px; /* ajusté pour être visible */
+}
+
+#inventory-tab.open .tab-content {
     opacity: 1;
     right: -580px; /* ajusté pour être visible */
 }
