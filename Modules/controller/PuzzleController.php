@@ -16,6 +16,9 @@ class PuzzleController
         return trim($text);
     }
 
+    /**
+     * Enigme 1 - Lettre et Morse
+     */
     public function validateLetter()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -121,6 +124,9 @@ class PuzzleController
         exit;
     }
 
+    /**
+     * Enigme 2 - Photo de famille et mots clés
+     */
     public function validatePhoto()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -168,141 +174,6 @@ class PuzzleController
         $_SESSION['flash_success'] = "Bien joué, tu avances dans l’enquête.";
 
         header("Location: index.php?controller=Redirection&action=openButterflyWay");
-        exit;
-    }
-    public function valideIndice()
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
-            header("Location: index.php");
-            exit;
-        }
-
-        $team = $_SESSION['team'];
-        $epreuve = $_POST['epreuve'] ?? '';
-        $ans1Raw = $_POST['answer1'] ?? '';
-        $ans2Raw = $_POST['answer2'] ?? '';
-
-        $ans1 = $this->normalize($ans1Raw);
-        $ans2 = $this->normalize($ans2Raw);
-        if (!isset($_SESSION['saved_indices'])) {
-            $_SESSION['saved_indices'] = [];
-        }
-
-        if ($ans1 === '' || $ans2 === '') {
-            $_SESSION['flash_error'] = "Tous les indices doivent être remplis.";
-            header("Location: index.php?controller=Redirection&action=openSummaryClue");
-            exit;
-        }
-
-        $solutions = [
-            'alice' => [
-                '1' => ['indice1' => 'solution1', 'indice2' => 'solution2'],
-                '2' => ['indice1' => 'solution3', 'indice2' => 'solution4'],
-                '3' => ['indice1' => 'solution5', 'indice2' => 'solution6'],
-            ],
-            'bob' => [
-                '1' => ['indice1' => 'valeur1', 'indice2' => 'valeur2'],
-                '2' => ['indice1' => 'valeur3', 'indice2' => 'valeur4'],
-                '3' => ['indice1' => 'valeur5', 'indice2' => 'valeur6'],
-            ]
-        ];
-
-        $expected = $solutions[$team][$epreuve] ?? null;
-
-        if ($expected) {
-            $isCorrect1 = ($ans1 === $this->normalize($expected['indice1']));
-            $isCorrect2 = ($ans2 === $this->normalize($expected['indice2']));
-
-            // On ne sauvegarde en session QUE si c'est correct
-            if ($isCorrect1) {
-                $_SESSION['saved_indices'][$team][$epreuve]['ans1'] = $ans1Raw;
-            }
-            if ($isCorrect2) {
-                $_SESSION['saved_indices'][$team][$epreuve]['ans2'] = $ans2Raw;
-            }
-
-            if ($isCorrect1 && $isCorrect2) {
-                $userId = $_SESSION['utilisateur']['id'];
-                $progressModel = new GameProgressModel();
-                $progressModel->updateLevel($userId, 7);
-                $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
-            } else {
-                $_SESSION['flash_error'] = "Certains indices pour l'épreuve $epreuve sont incorrects.";
-            }
-        }
-
-        header("Location: index.php?controller=Redirection&action=openSummaryClue");
-        exit;
-    }
-    public function valideMotCle()
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['utilisateur'])) {
-            header("Location: index.php?controller=Redirection&action=openHomepage");
-            exit;
-        }
-        $input = $this->normalize($_POST['answer1'] ?? '');
-        $Word1 = 'papillon';
-        $Word2 = 'clé';
-        if (str_contains($input, $Word1) && str_contains($input, $Word2)) {
-            $userId = $_SESSION['utilisateur']['id'];
-            $progressModel = new GameProgressModel();
-            $progressModel->updateLevel($userId, 9);
-
-            $_SESSION['flash_success'] = "Bravo ! L'union fait la force";
-            header("Location: index.php?controller=Redirection&action=openEndText");
-            exit;
-        } else {
-            $_SESSION['flash_error'] = "Le mot de passe est incomplet ou incorrect. 
-            N'oubliez pas qu'il faut combiner les indices des deux équipes.";
-            header("Location: index.php?controller=Redirection&action=openMeetingPwd");
-            exit;
-        }
-    }
-    public function validateEnd()
-    {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
-            header("Location: index.php");
-            exit;
-        }
-
-        $answer = strtolower(trim($_POST['answer'] ?? ''));
-        if ($answer === '') {
-            $_SESSION['flash_error'] = "Réponse vide.";
-            header("Location: index.php?controller=Redirection&action=openEndText");
-            exit;
-        }
-
-        $solutions = [
-            'alice' => ['d9', '9d'],
-            'bob'   => ['d9', '9d']
-        ];
-
-        $team = $_SESSION['team'];
-        if (!in_array($answer, $solutions[$team])) {
-            $_SESSION['flash_error'] = "Ce n’est pas la bonne réponse.";
-            header("Location: index.php?controller=Redirection&action=openEndText");
-            exit;
-        }
-
-        // Fin du jeu
-        $userId = $_SESSION['utilisateur']['id'];
-        $progressModel = new GameProgressModel();
-        $progressModel->finishGame($userId);
-        $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre et terminé l’enquête.";
-
-        header("Location: index.php?controller=Redirection&action=openEndText");
         exit;
     }
 
@@ -427,8 +298,8 @@ class PuzzleController
     }
 
     /**
-    * Énigme 5 - Password Game
-    */
+     * Énigme 5 - Password Game
+     */
     public function validatePasswordGame()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -449,6 +320,153 @@ class PuzzleController
         $_SESSION['flash_success'] = "Épreuve du mot de passe réussie !";
 
         header("Location: index.php?controller=Redirection&action=openSummaryClue");
+        exit;
+    }
+
+    /**
+     * Enigme 6 - Résumé des indices
+     */
+    public function valideIndice()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $team = $_SESSION['team'];
+        $epreuve = $_POST['epreuve'] ?? '';
+        $ans1Raw = $_POST['answer1'] ?? '';
+        $ans2Raw = $_POST['answer2'] ?? '';
+
+        $ans1 = $this->normalize($ans1Raw);
+        $ans2 = $this->normalize($ans2Raw);
+        if (!isset($_SESSION['saved_indices'])) {
+            $_SESSION['saved_indices'] = [];
+        }
+
+        if ($ans1 === '' || $ans2 === '') {
+            $_SESSION['flash_error'] = "Tous les indices doivent être remplis.";
+            header("Location: index.php?controller=Redirection&action=openSummaryClue");
+            exit;
+        }
+
+        $solutions = [
+            'alice' => [
+                '1' => ['indice1' => 'solution1', 'indice2' => 'solution2'],
+                '2' => ['indice1' => 'solution3', 'indice2' => 'solution4'],
+                '3' => ['indice1' => 'solution5', 'indice2' => 'solution6'],
+            ],
+            'bob' => [
+                '1' => ['indice1' => 'valeur1', 'indice2' => 'valeur2'],
+                '2' => ['indice1' => 'valeur3', 'indice2' => 'valeur4'],
+                '3' => ['indice1' => 'valeur5', 'indice2' => 'valeur6'],
+            ]
+        ];
+
+        $expected = $solutions[$team][$epreuve] ?? null;
+
+        if ($expected) {
+            $isCorrect1 = ($ans1 === $this->normalize($expected['indice1']));
+            $isCorrect2 = ($ans2 === $this->normalize($expected['indice2']));
+
+            // On ne sauvegarde en session QUE si c'est correct
+            if ($isCorrect1) {
+                $_SESSION['saved_indices'][$team][$epreuve]['ans1'] = $ans1Raw;
+            }
+            if ($isCorrect2) {
+                $_SESSION['saved_indices'][$team][$epreuve]['ans2'] = $ans2Raw;
+            }
+
+            if ($isCorrect1 && $isCorrect2) {
+                $userId = $_SESSION['utilisateur']['id'];
+                $progressModel = new GameProgressModel();
+                $progressModel->updateLevel($userId, 7);
+                $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
+            } else {
+                $_SESSION['flash_error'] = "Certains indices pour l'épreuve $epreuve sont incorrects.";
+            }
+        }
+
+        header("Location: index.php?controller=Redirection&action=openSummaryClue");
+        exit;
+    }
+
+    /**
+     * Epreuve 8 - Mot de passe commun
+     */
+    public function valideMotCle()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'])) {
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+        $input = $this->normalize($_POST['answer1'] ?? '');
+        $Word1 = 'papillon';
+        $Word2 = 'clé';
+        if (str_contains($input, $Word1) && str_contains($input, $Word2)) {
+            $userId = $_SESSION['utilisateur']['id'];
+            $progressModel = new GameProgressModel();
+            $progressModel->updateLevel($userId, 9);
+
+            $_SESSION['flash_success'] = "Bravo ! L'union fait la force";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        } else {
+            $_SESSION['flash_error'] = "Le mot de passe est incomplet ou incorrect. 
+            N'oubliez pas qu'il faut combiner les indices des deux équipes.";
+            header("Location: index.php?controller=Redirection&action=openMeetingPwd");
+            exit;
+        }
+    }
+
+    /**
+     * Epreuve finale - Trouver où est le coffre
+     */
+    public function validateEnd()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $answer = strtolower(trim($_POST['answer'] ?? ''));
+        if ($answer === '') {
+            $_SESSION['flash_error'] = "Réponse vide.";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        }
+
+        $solutions = [
+            'alice' => ['d9', '9d'],
+            'bob'   => ['d9', '9d']
+        ];
+
+        $team = $_SESSION['team'];
+        if (!in_array($answer, $solutions[$team])) {
+            $_SESSION['flash_error'] = "Ce n’est pas la bonne réponse.";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        }
+
+        // Fin du jeu
+        $userId = $_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+        $progressModel->finishGame($userId);
+        $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre et terminé l’enquête.";
+
+        header("Location: index.php?controller=Redirection&action=openEndText");
         exit;
     }
 }
