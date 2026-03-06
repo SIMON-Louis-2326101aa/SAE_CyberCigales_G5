@@ -12,14 +12,15 @@
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
                 <br>
                 <a href="index.php?controller=Redirection&action=openChoice">Changer d'équipe</a>
-                <a href="index.php?controller=Redirection&action=openLetterIntro">Enigme 1</a>
-                <a href="index.php?controller=Redirection&action=openPicturePuzzle">Enigme 2</a>
-                <a href="index.php?controller=Redirection&action=openButterflyWay">Enigme 3</a>
-                <a href="index.php?controller=Redirection&action=openPhishingPuzzle">Enigme 4</a>
-                <a href="index.php?controller=Redirection&action=openPasswordGame">Enigme 5</a>
-                <a href="index.php?controller=Redirection&action=openSummaryClue">Enigme 6</a>
-                <a href="index.php?controller=Redirection&action=openSearchSM">Enigme 7</a>
-                <a href="index.php?controller=Redirection&action=openMeetingPwd">Enigme 8</a>
+                <br>
+                <a href="index.php?controller=Redirection&action=openLetterIntro">Enigme 1 - Lettre</a>
+                <a href="index.php?controller=Redirection&action=openPicturePuzzle">Enigme 2 - Photo</a>
+                <a href="index.php?controller=Redirection&action=openButterflyWay">Enigme 3 - Signal</a>
+                <a href="index.php?controller=Redirection&action=openPhishingPuzzle">Enigme 4 - Mail</a>
+                <a href="index.php?controller=Redirection&action=openPasswordGame">Enigme 5 - Sécurité</a>
+                <a href="index.php?controller=Redirection&action=openSummaryClue">Enigme 6 - Commun</a>
+                <a href="index.php?controller=Redirection&action=openSearchSM">Enigme 7 - Réseau</a>
+                <a href="index.php?controller=Redirection&action=openMeetingPwd">Enigme 8 - Rencontre</a>
                 <a href="index.php?controller=Redirection&action=openEndText">Enigme Finale</a>
             </li>
             <?php
@@ -32,28 +33,28 @@
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
                 <br>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 1)) { ?>
-                    <a href="index.php?controller=Redirection&action=openLetterIntro">Enigme 1</a>
+                    <a href="index.php?controller=Redirection&action=openLetterIntro">Enigme 1 - Lettre</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 2)) { ?>
-                    <a href="index.php?controller=Redirection&action=openPicturePuzzle">Enigme 2</a>
+                    <a href="index.php?controller=Redirection&action=openPicturePuzzle">Enigme 2 - Photo</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 3)) { ?>
-                    <a href="index.php?controller=Redirection&action=openButterflyWay">Enigme 3</a>
+                    <a href="index.php?controller=Redirection&action=openButterflyWay">Enigme 3 - Signal</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 4)) { ?>
-                    <a href="index.php?controller=Redirection&action=openPhishingPuzzle">Enigme 4</a>
+                    <a href="index.php?controller=Redirection&action=openPhishingPuzzle">Enigme 4 - Mail</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 5)) { ?>
-                    <a href="index.php?controller=Redirection&action=openPasswordGame">Enigme 5</a>
+                    <a href="index.php?controller=Redirection&action=openPasswordGame">Enigme 5 - Sécurité</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 6)) { ?>
-                    <a href="index.php?controller=Redirection&action=openSummaryClue">Enigme 6</a>
+                    <a href="index.php?controller=Redirection&action=openSummaryClue">Enigme 6 - Commun</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 7)) { ?>
-                    <a href="index.php?controller=Redirection&action=openSearchSM">Enigme 7</a>
+                    <a href="index.php?controller=Redirection&action=openSearchSM">Enigme 7 - Réseau</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 8)) { ?>
-                    <a href="index.php?controller=Redirection&action=openMeetingPwd">Enigme 8</a>
+                    <a href="index.php?controller=Redirection&action=openMeetingPwd">Enigme 8 - Rencontre</a>
                 <?php } ?>
                 <?php if (isset($_SESSION['level']) && ($_SESSION['level'] >= 9)) { ?>
                     <a href="index.php?controller=Redirection&action=openEndText">Enigme Finale</a>
