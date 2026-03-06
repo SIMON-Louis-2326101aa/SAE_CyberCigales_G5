@@ -524,6 +524,10 @@
 }
 .bw-score.is-negative{ color:#b91c1c; }
 
+#bw-code-zone{
+    display:none;
+}
+
 .bw-code-form{
     width:min(560px,92vw);
     display:flex;

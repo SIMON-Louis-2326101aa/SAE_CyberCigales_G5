@@ -44,7 +44,7 @@ $team = $_SESSION['team'] ?? 'alice';
             </div>
 
             <!-- FORM CODE (caché tant que pas fini, affiché par JS) -->
-            <div id="bw-code-zone" style="display:none;">
+            <div id="bw-code-zone">
                 <p class="lead">
                     <em>
                         Le papillon se pose sur un terminal verrouillé.<br>

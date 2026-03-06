@@ -95,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (infoTab) {
         setTimeout(function () {
             infoTab.classList.remove("disabled");
-            console.log("L'onglet d'info est activer !"); // Pour le débogage
         }, delayTabInfo);
     }
 
@@ -103,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (clue1) {
         setTimeout(function () {
             showClue(clue1);
-            console.log("Indice 1 révélé !"); // Pour le débogage
         }, delayClue1);
     }
 
@@ -111,7 +109,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (clue2) {
         setTimeout(function () {
             showClue(clue2);
-            console.log("Indice 2 révélé !"); // Pour le débogage
         }, delayClue2);
     }
 
@@ -119,13 +116,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (clue3) {
         setTimeout(function () {
             showClue(clue3);
-            console.log("Indice 3 révélé !"); // Pour le débogage
         }, delayClue3);
     }
 
     // Chronomètre de jeu (Game Timer)
     const timeDisplay = document.getElementById("time-display");
-    console.log(window.BASE_TIME, window.GAME_STATUS, window.LAST_START_TIME);
 
 
     if (timeDisplay && window.BASE_TIME !== undefined) {
