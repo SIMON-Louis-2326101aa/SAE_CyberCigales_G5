@@ -66,16 +66,24 @@ document.addEventListener("DOMContentLoaded", function () {
             clueTab.classList.toggle("open");
         });
     }
+
+    const inventoryTab = document.getElementById("inventory-tab");
+    const inventoryHandle = document.getElementById("inventory-handle");
+    if (inventoryTab && inventoryHandle) {
+        inventoryHandle.addEventListener("click", function () {
+            inventoryTab.classList.toggle("open");
+        });
+    }
 });
 
 // ===== Révélation des indices avec délai (setTimeout) & Chronomètre (pas de changement) =====
 document.addEventListener("DOMContentLoaded", function () {
     // Délai en millisecondes avant l'apparition de chaque indice (exemple : 2 minutes = 120000 ms)
-    const delayClue1 = 600000; // 10 minutes
-    const delayClue2 = 900000; // 15 minute
-    const delayClue3 = 1800000; // 30 minutes
+    const delayClue1 = 300000; // 5 minutes
+    const delayClue2 = 600000; // 10 minute
+    const delayClue3 = 900000; // 15 minutes
 
-    const delayTabInfo = 300000; // 5 minutes
+    const delayTabInfo = 12; // 2 minutes
 
     const clue1 = document.getElementById("clue-text-1");
     const clue2 = document.getElementById("clue-text-2");
