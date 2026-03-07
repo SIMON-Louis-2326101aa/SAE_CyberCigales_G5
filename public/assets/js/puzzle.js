@@ -411,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (codeZone) {
-            codeZone.style.display = st.showCode ? "" : "none";
+            codeZone.style.display = st.showCode ? "block" : "none";
         }
     }
 

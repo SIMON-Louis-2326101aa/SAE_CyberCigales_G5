@@ -545,6 +545,10 @@
     display:none;
 }
 
+#bw-code-zone.is-visible{
+    display:block;
+}
+
 .bw-code-form{
     width:min(560px,92vw);
     display:flex;
