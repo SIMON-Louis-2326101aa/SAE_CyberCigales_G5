@@ -32,7 +32,7 @@ $clue = "<ul>
             <li>Solution (15min):</li>
             <li><span id=\"clue-text-3\" class=\"timed-clue\">La clée est 10.</span></li>
         </ul>";
-require_once __DIR__ . "./../../includes/layout/headerClue.php";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage d'Alice, une jeune lycéenne de 16 ans, vivant aux alentours de Marseille avec

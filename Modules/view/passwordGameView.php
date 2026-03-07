@@ -82,10 +82,10 @@ $info = "<section >
     </p>
 
 </section>";
-$clue = "Vous n'aavez pas besoin d'indice pour cette epreuve, il suffit de suivre les règles pour créer 
+$clue = "Vous n'avez pas besoin d'indice pour cette épreuve, il suffit de suivre les règles pour créer 
 un mot de passe sécurisé.";
 
-require_once __DIR__ . "./../../includes/layout/headerClue.php";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 ?>
 <div>
     <br>

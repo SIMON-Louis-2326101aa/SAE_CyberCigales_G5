@@ -6,7 +6,7 @@ ou nous fetions la vie -> regardes bien la photo
 premier papier de cette vie -> regarde les certificats de naissance
 jour si special -> regarde les dates sur les deux";
 
-require_once __DIR__ . "./../../includes/layout/headerClue.php";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 ?>
 <div class="end">
     <p>Nous y sommes presque ils nous reste plus qu'a comprendre où se trouve le trésor !</p>

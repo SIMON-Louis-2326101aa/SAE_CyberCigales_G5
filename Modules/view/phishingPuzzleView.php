@@ -62,7 +62,7 @@ $info = " <section class=\"phishing-info\">
 $clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\">
 Le mail 3 semble provenir d'une source officielle.</span><br>";
 
-require_once __DIR__ . "./../../includes/layout/headerClue.php";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 $team = $_SESSION['team'] ?? 'alice';
 /* Récupération de l'équipe et de l'état mémorisé en session pour la restauration après fausse réponse */
 $state = $_SESSION['phishing_state'] ?? null;
