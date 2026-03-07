@@ -695,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Détermination du contenu selon l'équipe
     const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
     const motherName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
-    const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
+    const gpsCoord = (team === 'alice') ? 'D' : '9';
 
 
     // Affiche le contenu de l'acte de naissance (simule l'ouverture d'un PDF)
