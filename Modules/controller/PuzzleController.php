@@ -405,6 +405,11 @@ class PuzzleController
         ViewHandler::show('phishingpages/colisPhishingView', ['pageTitle' => 'Suivi de Colis']);
     }
 
+    public function openVideoPhishing()
+    {
+        ViewHandler::show('phishingpages/videoPhishingView', ['pageTitle' => 'Contenu Multimédia']);
+    }
+
     public function validatePhishing()
     {
         // Démarre la session si elle n'est pas déjà active

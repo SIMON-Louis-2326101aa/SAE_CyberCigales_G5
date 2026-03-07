@@ -883,6 +883,16 @@
     background: #ff4444;
 }
 
+.video-hidden {
+    display: none;
+}
+
+.multimedia-action-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+
 /* ============ Password Game ============ */
 #passwordGameForm {
     max-width: 1000px;

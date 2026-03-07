@@ -46,6 +46,10 @@ $motherName = ($team === 'alice') ? 'Clara' : 'Diane';
                     <div class="mail-sender-name">La Poste</div>
                     <div class="mail-subject-preview">Colis bloqué</div>
                 </li>
+                <li class="email-item-logic" data-id="6">
+                    <div class="mail-sender-name">Video Cloud</div>
+                    <div class="mail-subject-preview">Vidéo reçue</div>
+                </li>
             </ul>
         </div>
 

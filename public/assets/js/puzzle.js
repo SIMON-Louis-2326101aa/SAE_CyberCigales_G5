@@ -536,7 +536,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Lamborghini.png" alt="Logo Lamborghini" title="Lamborghini"></div>',
             text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos">' +
                 '<img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung">' +
                 '<img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi">' +
@@ -679,6 +678,11 @@ document.addEventListener('DOMContentLoaded', () => {
             from: "info@lapostee-suivi.fr",
             subject: "Votre colis n°8L9452 est bloqué",
             body: "<p>Bonjour,</p><p>Votre colis n'a pas pu être livré car il manque un affranchissement de 1,99€.</p><p>Pour programmer une nouvelle livraison, veuillez régulariser les frais de port via le lien ci-dessous :</p><p><a href='index.php?controller=Puzzle&action=openColisPhishing'>https://lapostee.fr/suivi/paiement-frais-douane</a></p><p>Attention, sans action de votre part sous 48h, le colis sera renvoyé à l'expéditeur.</p>"
+        },
+        6: {
+            from: "nepasrepondre@videocloud-share.com",
+            subject: "Vous avez reçu une vidéo !",
+            body: "<p>Bonjour,</p><p>Un de vos contacts vous a partagé une vidéo privée via notre plateforme sécurisée.</p><p>Pour la visionner, cliquez sur le bouton ci-dessous :</p><div class='mail-button-container'><a href='index.php?controller=Puzzle&action=openVideoPhishing' class='btn-nav btn-mail-action'>VISIONNER LA VIDÉO</a></div>"
         }
     };
 
@@ -803,5 +807,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (initialOpenPdf) {
             showPdf();
         }
+    }
+});
+
+// Gestion de la vidéo de phishing (Déblocage et lecture)
+document.addEventListener('DOMContentLoaded', () => {
+    const unlockBtn = document.getElementById('unlock-video-btn');
+    const trapVideo = document.getElementById('trap-video');
+    if (unlockBtn && trapVideo) {
+        unlockBtn.addEventListener('click', () => {
+            trapVideo.classList.remove('video-hidden');
+            unlockBtn.parentElement.style.display = 'none'; // Cache le conteneur du bouton
+            trapVideo.play();
+        });
     }
 });
