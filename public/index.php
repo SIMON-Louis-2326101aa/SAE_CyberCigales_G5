@@ -157,13 +157,51 @@ try {
     }
 }
 
+
+/* ============================================================
+    CONFIGURATION AUTOMATIQUE SELON APP_ENV
+   ============================================================ */
+
+$appEnv = $_ENV['APP_ENV'] ?? 'dev';
+
+switch ($appEnv) {
+    case 'prod':
+        $_ENV['APP_DEBUG'] = '0';
+        $_ENV['LOG_MODE'] = 'public';
+        $_ENV['LOG_LEVEL'] = 'warn';
+        $_ENV['LOG_CONTEXT_ENABLED'] = '0';
+        $_ENV['LOG_SECURITY_ENABLED'] = '1';
+        $_ENV['FORCE_SECURE'] = '1';
+
+        break;
+
+    case 'dev':
+    default:
+        $_ENV['APP_DEBUG'] = '1';
+        $_ENV['LOG_MODE'] = 'private';
+        $_ENV['LOG_LEVEL'] = 'debug';
+        $_ENV['LOG_CONTEXT_ENABLED'] = '1';
+        $_ENV['LOG_SECURITY_ENABLED'] = '1';
+        $_ENV['FORCE_SECURE'] = '0';
+
+        break;
+}
+
+if (function_exists('log_console')) {
+    log_console('Configuration environnement appliquée', 'info', [
+        'APP_ENV' => $appEnv,
+        'LOG_MODE' => $_ENV['LOG_MODE'],
+        'LOG_LEVEL' => $_ENV['LOG_LEVEL']
+    ]);
+}
+
 /* ============================================================
     Gestion des erreurs (dev/prod)
     APP_ENV=dev | prod (dev par défaut)
    ============================================================ */
 
 $appEnv = $_ENV['APP_ENV'] ?? 'dev';
-if ($appEnv === 'dev') {
+if ($_ENV['APP_DEBUG'] === '1') {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
     error_reporting(E_ALL);

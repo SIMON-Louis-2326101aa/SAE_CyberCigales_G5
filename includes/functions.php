@@ -70,7 +70,7 @@ if (!function_exists('log_console')) {
 
 }
 
-function trimAndSortLogFile(string $file, int $maxBytes = 15 * 1024 * 1024): void
+function trimAndSortLogFile(string $file, int $maxBytes = 100 * 1024 * 1024): void
 {
     if (!is_file($file)) {
         return;
@@ -118,8 +118,8 @@ if (!function_exists('registerLogRotation')) {
     {
         register_shutdown_function(static function () use ($logDir, $logFile) {
             try {
-                // Trim du fichier principal (limite 15 Mo avec 80% gardés)
-                trimAndSortLogFile($logFile, 15 * 1024 * 1024);
+                // Trim du fichier principal (limite 100 Mo avec 80% gardés)
+                trimAndSortLogFile($logFile, 100 * 1024 * 1024);
 
                 // Rotation des logs : garder seulement les 7 plus récents
                 $logFiles = glob("{$logDir}/app-*.log");
