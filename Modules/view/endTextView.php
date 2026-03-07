@@ -20,7 +20,12 @@ require_once __DIR__ . "./../../includes/layout/headerClue.php";
 <form action="index.php?controller=Puzzle&action=validateEnd" method="post" id="end-form">
     <label>
         Où allez ?<br>
-        <textarea name="answer" required></textarea>
+        <textarea name="answer1" required></textarea><br>
+    </label>
+<br>
+    <label>
+        Quelle est le code du coffre?<br>
+        <textarea name="answer2" required></textarea><br>
     </label>
 
     <button type="submit" class="btn-submit">Valider</button>
