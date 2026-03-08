@@ -21,7 +21,7 @@ if (isset($_SESSION['user_id'])) : ?>
             de votre jeu,<br>
             pour vous aider à avancer dans votre aventure, et vous informer sur les éléments plus complexes du jeu.<br>
             Les informations et indices vous arriveront au fur et à mesure du temps, il sera de votre devoir de penser à
-            les regarder. </p>
+            les regarder. Vous pourrez retrouver les informations que nous vous donnons dans la page du même nom. </p>
         <a  href='index.php?controller=Team&action=play'
             class="active btn-nav">JOUER</a>
     </div>

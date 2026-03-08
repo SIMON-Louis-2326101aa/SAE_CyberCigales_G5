@@ -1048,3 +1048,18 @@ h2 {
     background: #e7f1ff;
     border-left: 4px solid var(--primary);
 }
+
+section {
+    background-color: var(--bg-light);
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 10px;
+    border-left: 6px solid #3a7afe;
+    box-shadow: 0 4px 10px var(--border);
+}
+
+section h4 {
+    margin-top: 0;
+    color: var(--text-secondary);
+    font-size: 2.5rem;
+}

@@ -215,4 +215,10 @@ class RedirectionController
         $this->requireAuth();
         ViewHandler::show('victoryView', ['pageTitle' => 'Victoire']);
     }
+
+    public function openInformation()
+    {
+        $this->logRedirection('openInformationView');
+        ViewHandler::show('informationView', ['pageTitle' => 'Informations']);
+    }
 }

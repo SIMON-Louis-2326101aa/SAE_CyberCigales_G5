@@ -13,6 +13,7 @@
             <ul>
                 <li><a href="index.php">Accueil</a></li>
                 <li><a href="index.php?controller=Redirection&action=openSiteMap">Plan du site</a></li>
+                <li><a href="index.php?controller=Redirection&action=openInformation">Informations</a> </li>
                 <li><a href="index.php?controller=Redirection&action=openContact">Contact</a></li>
             </ul>
         </div>
