@@ -588,14 +588,24 @@
 
 @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
 
+/* ============ Phishing ============ */
+.email-list-simple li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.email-list-simple li:hover {
+    background: #f0f0f0;
+}
 
 /* ============ Password Game ============ */
-#passwordGameForm {
+#password-game-form {
     max-width: 1000px;
     width: 95%;
 }
 
-#passwordRules li {
+#password-rules li {
     font-weight: bold;
     list-style: none; /* Enlève les points devant la liste pour laisser place aux emojis */
     margin-bottom: 10px;
@@ -641,20 +651,20 @@
     display: none;
     margin-top: 30px;
     padding: 20px;
-    border: 2px solid #00FF00;
+    border: 2px solid #0F0;
     border-radius: 10px;
-    background: rgba(0, 255, 0, 0.1);
+    background: rgb(0 255 0 / 10%);
 }
 
 #message-congratulation {
     font-weight: bold;
-    color: #00FF00;
+    color: #0F0;
     font-size: 1.2rem;
 }
 
 #btn-after-pwdgame {
     display: inline-block;
-    background: #00FF00;
+    background: #0F0;
     color: #000;
     font-weight: bold;
     padding: 10px 20px;
@@ -665,7 +675,7 @@
 #final-password-container {
     margin: 15px 0;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(255 255 255 / 10%);
     border-radius: 5px;
     word-break: break-all;
     font-family: monospace;
@@ -673,7 +683,7 @@
 }
 
 #final-password-display {
-    color: #00FF00;
+    color: #0F0;
     font-weight: bold;
 }
 
@@ -792,16 +802,6 @@ h2 {
     padding: 0;
 }
 
-.email-list-simple li {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-}
-
-.email-list-simple li:hover {
-    background: #f0f0f0;
-}
-
 .email-list-simple li.active {
     font-weight: bold;
     border-left: 4px solid var(--primary);
@@ -850,7 +850,7 @@ h2 {
 #button-facebook-phishing {
     display:inline-block;
     text-decoration:none;
-    background:#ff4444;
+    background:#f44;
 }
 
 /* Interface du phishing */
@@ -967,7 +967,7 @@ h2 {
     text-align: center;
     font-size: 1.8em;
     margin: 20px 0;
-    color: #000;
+    color: #666;
 }
 
 .pdf-body-content {
@@ -986,9 +986,6 @@ h2 {
     border: 2px solid red;
     padding: 10px;
     transform: rotate(-5deg);
-}
-.pdf-person-name {
-    color: #666;
 }
 
 #pdf-phishing-header-border {

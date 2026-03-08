@@ -24,7 +24,7 @@ require_once __DIR__ . "/../../includes/layout/headerClue.php";
                 <input type="text" id="passwordInput" placeholder="Commencez à taper votre mot de passe ici...">
             </div>
             <div>
-                <ul id="passwordRules">
+                <ul id="passwordRules" class="password-rules">
                 </ul>
             </div>
             <button type="submit" disabled>Valider le mot de passe</button>
