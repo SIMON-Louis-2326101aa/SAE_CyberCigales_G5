@@ -871,3 +871,38 @@ function showWarningPhishingImpots() {
 
     if (msg) msg.scrollIntoView({ behavior: 'smooth' });
 }
+
+// Fonction pour remplir automatiquement le formulaire Facebook
+function autoFillFacebook() {
+    const container = document.querySelector('.facebook-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const email = document.getElementById('fb-email');
+    const pass = document.getElementById('fb-pass');
+
+    const fillBtn = document.getElementById('fb-fill-btn');
+    const loginBtn = document.getElementById('fb-login-btn');
+
+    // Remplissage avec les identifiants probables des personnages
+    if (team === 'alice') {
+        if (email) email.value = "alice.durand@email.fr";
+        if (pass) pass.value = "SecretPapillon95";
+    } else {
+        if (email) email.value = "bob.lefebvre@email.fr";
+        if (pass) pass.value = "MemoireVive92";
+    }
+
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (loginBtn) loginBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing Facebook
+function showWarningPhishingFacebook() {
+    const loginCard = document.getElementById('fb-login-card');
+    const warningMsg = document.getElementById('fb-warning-msg');
+    const returnBtn = document.getElementById('fb-return-btn');
+
+    if (loginCard) loginCard.style.display = 'none';
+    if (warningMsg) warningMsg.style.display = 'block';
+    if (returnBtn) returnBtn.style.display = 'block';
+}

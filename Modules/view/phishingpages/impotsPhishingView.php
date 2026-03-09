@@ -15,7 +15,7 @@ $team = $_SESSION['team'] ?? 'alice';
 <div class="impots-container" data-team="<?php echo htmlspecialchars($team); ?>">
     <div class="impots-header">
         <div>
-            <h2 class="fr-m-0">République Française</h2>
+            <h2 class="impots-fr-header">République Française</h2>
             <small>Liberté • Égalité • Fraternité</small>
         </div>
         <div class="impots-domain">impots.gouv.fr</div>
@@ -60,11 +60,11 @@ $team = $_SESSION['team'] ?? 'alice';
         </form>
 
         <div id="warning-msg" class="warning-message">
-            <strong>⚠️ ATTENTION !</strong><br><br>
+            <strong class="impots-warning-title">⚠️ ATTENTION !</strong><br><br>
             Vous étiez sur le point de fournir des informations personnelles et bancaires sensibles sur une page frauduleuse.
             <br><br>
             <strong>Conseils de sécurité :</strong>
-            <ul>
+            <ul class="impots-warning-list">
                 <li>Vérifiez toujours l'URL dans la barre d'adresse. Les sites officiels de l'administration se terminent par <strong>.gouv.fr</strong>.</li>
                 <li>L'administration ne vous demandera JAMAIS vos coordonnées bancaires par email ou SMS pour un remboursement.</li>
                 <li>Ne saisissez jamais d'informations importantes si vous avez un doute sur l'origine du message.</li>
