@@ -52,9 +52,9 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
         <p>On a recree un mot de passe plus robuste </p>
     </div>
 
-    <form action="index.php?module=game&action=finalClue" method="post">
+    <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
         <label>Qu'est ce qu'on apprend de plus ?</label>
-        <input type="text" name="anser" placeholder="Entrez votre réponse ">
+        <input type="text" name="answer" placeholder="Entrez votre réponse ">
         <button type="submit">Soumettre</button>
     </form>
 <?php elseif (isset($_SESSION['team']) && $_SESSION['team'] === "bob") : ?>
@@ -103,9 +103,9 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
         <p>On a recree un mot de passe plus robuste </p>
     </div>
 
-    <form action="index.php?module=game&action=finalClue" method="post">
+    <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
         <label>Qu'est ce qu'on apprend de plus ?</label>
-        <input type="text" name="anser" placeholder="Entrez votre réponse ">
+        <input type="text" name="answer" placeholder="Entrez votre réponse ">
         <button type="submit">Soumettre</button>
     </form>
 <?php else : ?>

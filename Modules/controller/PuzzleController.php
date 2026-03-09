@@ -242,7 +242,8 @@ class PuzzleController
         }
 
         // Message d'avertissement
-        $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens suspects dans un courriel non vérifié.";
+        $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens suspects dans un courriel 
+        non vérifié.";
 
         // Mémorise l'état
         $_SESSION['phishing_state'] = [
@@ -326,7 +327,7 @@ class PuzzleController
     /**
      * Enigme 6 - Résumé des indices
      */
-    public function valideIndice()
+    public function valideSummary()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
@@ -338,60 +339,33 @@ class PuzzleController
         }
 
         $team = $_SESSION['team'];
-        $epreuve = $_POST['epreuve'] ?? '';
-        $ans1Raw = $_POST['answer1'] ?? '';
-        $ans2Raw = $_POST['answer2'] ?? '';
+        $ans = $_POST['answer'] ?? '';
 
-        $ans1 = $this->normalize($ans1Raw);
-        $ans2 = $this->normalize($ans2Raw);
-        if (!isset($_SESSION['saved_indices'])) {
-            $_SESSION['saved_indices'] = [];
-        }
+        $ans1 = $this->normalize($ans);
 
-        if ($ans1 === '' || $ans2 === '') {
-            $_SESSION['flash_error'] = "Tous les indices doivent être remplis.";
+        if ($ans1 === '') {
+            $_SESSION['flash_error'] = "Votre reponse est vide. Veuillez entrer une réponse.";
             header("Location: index.php?controller=Redirection&action=openSummaryClue");
             exit;
         }
 
         $solutions = [
-            'alice' => [
-                '1' => ['indice1' => 'solution1', 'indice2' => 'solution2'],
-                '2' => ['indice1' => 'solution3', 'indice2' => 'solution4'],
-                '3' => ['indice1' => 'solution5', 'indice2' => 'solution6'],
-            ],
-            'bob' => [
-                '1' => ['indice1' => 'valeur1', 'indice2' => 'valeur2'],
-                '2' => ['indice1' => 'valeur3', 'indice2' => 'valeur4'],
-                '3' => ['indice1' => 'valeur5', 'indice2' => 'valeur6'],
-            ]
+            'alice' => 'cousin',
+            'bob' => 'cousine'
         ];
 
-        $expected = $solutions[$team][$epreuve] ?? null;
+        $expected = $this->normalize($solutions[$team]);
 
-        if ($expected) {
-            $isCorrect1 = ($ans1 === $this->normalize($expected['indice1']));
-            $isCorrect2 = ($ans2 === $this->normalize($expected['indice2']));
-
-            // On ne sauvegarde en session QUE si c'est correct
-            if ($isCorrect1) {
-                $_SESSION['saved_indices'][$team][$epreuve]['ans1'] = $ans1Raw;
-            }
-            if ($isCorrect2) {
-                $_SESSION['saved_indices'][$team][$epreuve]['ans2'] = $ans2Raw;
-            }
-
-            if ($isCorrect1 && $isCorrect2) {
-                $userId = $_SESSION['utilisateur']['id'];
-                $progressModel = new GameProgressModel();
-                $progressModel->updateLevel($userId, 7);
-                $_SESSION['flash_success'] = "Indices de l'épreuve $epreuve validés !";
-            } else {
-                $_SESSION['flash_error'] = "Certains indices pour l'épreuve $epreuve sont incorrects.";
-            }
+        if ($ans1 == $expected) {
+            $userId = $_SESSION['utilisateur']['id'];
+            $progressModel = new GameProgressModel();
+            $progressModel->updateLevel($userId, 7);
+            $_SESSION['flash_success'] = "Bravo ! Vous avez compris le lien de parenté et avancé dans l’enquête.";
+        } else {
+            $_SESSION['flash_error'] = "Non, ce n’est pas la bonne réponse. Relisez bien les indices.";
         }
 
-        header("Location: index.php?controller=Redirection&action=openSummaryClue");
+        header("Location: index.php?controller=Redirection&action=openSearchSM");
         exit;
     }
 
