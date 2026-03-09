@@ -839,17 +839,17 @@ function autoFillImpots() {
 
     // Données de test selon l'équipe choisie
     if (team === 'alice') {
-        if (nom) nom.value = "Alice Durand";
-        if (birth) birth.value = "2009-05-05";
+        if (nom) nom.value = "Clara Valmont";
+        if (birth) birth.value = "1978-03-18";
         if (address) address.value = "1 Rue du Papillon, Boulogne-Billancourt";
         if (tel) tel.value = "06 12 88 44 22";
         if (card) card.value = "4970 1234 5678 9012";
     } else {
-        if (nom) nom.value = "Bob Lefebvre";
-        if (birth) birth.value = "2009-05-05";
+        if (nom) nom.value = "Diane Valmont";
+        if (birth) birth.value = "1978-03-18";
         if (address) address.value = "5 Rue de la mémoire, Boulogne-Billancourt";
         if (tel) tel.value = "07 45 66 77 88";
-        if (card) card.value = "5200 8765 4321 0000";
+        if (card) card.value = "4200 8765 4321 0000";
     }
 
     // On cache le bouton de remplissage et on montre le bouton de validation
@@ -885,10 +885,10 @@ function autoFillFacebook() {
 
     // Remplissage avec les identifiants probables des personnages
     if (team === 'alice') {
-        if (email) email.value = "alice.durand@email.fr";
+        if (email) email.value = "clara.valmont@email.fr";
         if (pass) pass.value = "SecretPapillon95";
     } else {
-        if (email) email.value = "bob.lefebvre@email.fr";
+        if (email) email.value = "diane.valmont@email.fr";
         if (pass) pass.value = "MemoireVive92";
     }
 

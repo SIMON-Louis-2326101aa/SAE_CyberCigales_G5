@@ -55,7 +55,7 @@ $team = $_SESSION['team'] ?? 'alice';
                 <input type="text" id="card" name="card" placeholder="XXXX XXXX XXXX XXXX" required>
             </div>
 
-            <button type="button" id="fill-btn" class="impots-btn" onclick="autoFillImpots()">Remplir le formulaire</button>
+            <button type="button" id="fill-btn" class="impots-btn" onclick="autoFillImpots()">Remplir le formulaire (Via l'autocomplétion du navigateur)</button>
             <button type="button" id="submit-btn" class="impots-btn hidden" onclick="showWarningPhishingImpots()">Valider</button>
         </form>
 
