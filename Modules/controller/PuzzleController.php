@@ -371,7 +371,8 @@ class PuzzleController
         }
 
         // Message d'avertissement
-        $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens suspects dans un courriel non vérifié.";
+        $_SESSION['flash_error'] = "Attention ! Vous ne devriez pas cliquer sur des liens
+         suspects dans un courriel non vérifié.";
 
         // Mémorise l'état
         $_SESSION['phishing_state'] = [
@@ -423,6 +424,144 @@ class PuzzleController
             $_SESSION['flash_error'] = "Ce n'est pas la bonne réponse. Relisez bien le document";
             header("Location: index.php?controller=Redirection&action=openPhishingPuzzle");
         }
+        exit;
+    }
+
+    public function sendDmMessage()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+
+        $message = trim($_POST['message'] ?? '');
+
+        if ($message === '') {
+            header("Location: index.php?controller=Redirection&action=openSocialMediaPuzzle");
+            exit;
+        }
+
+        $team = $_SESSION['team'];
+        $botReplies = [
+            'alice' => "Haha oui, quelle coïncidence ! 😄 On se retrouve à la 
+            Bibliothèque municipale de Lyon, 30 boulevard Vivier-Merle. Je t'y attends demain à 14h 📚",
+            'bob'   => "Trop bien ! 😊 On se voit au Jardin des Curiosités, 
+            2 montée des Soldats, Lyon. Je serai là à 14h30 🌿",
+        ];
+
+        // Réponse si le mot-clé est absent
+        $botFallback = "T'es qui ???";
+
+        // Initialiser l'historique
+        if (!isset($_SESSION['ig_messages'])) {
+            $_SESSION['ig_messages'] = [];
+        }
+
+        // Sauvegarder le message de l'équipe
+        $_SESSION['ig_messages'][] = ['from' => 'me', 'text' => $message];
+
+        // Vérifier si le message contient "cousin" ou "cousine"
+        $normalized = $this->normalize($message);
+        $hasKeyword = str_contains($normalized, 'cousin');
+
+        if ($hasKeyword && isset($botReplies[$team])) {
+            $reply = $botReplies[$team];
+            $_SESSION['ig_messages'][]     = ['from' => 'bot', 'text' => $reply];
+            $_SESSION['ig_bot_replied']    = true;
+            $_SESSION['ig_bot_reply_text'] = $reply;
+        } else {
+            $_SESSION['ig_messages'][] = ['from' => 'bot', 'text' => $botFallback];
+        }
+
+        header("Location: index.php?controller=Redirection&action=openSearchSM");
+        exit;
+    }
+    public function sendDecoyDmMessage()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+
+        $message = trim($_POST['message'] ?? '');
+        $handle  = trim($_POST['decoy_handle'] ?? 'inconnu');
+
+        if ($message === '') {
+            header("Location: index.php?controller=Redirection&action=openSocialMediaPuzzle");
+            exit;
+        }
+
+        // Initialiser l'historique leurre séparé par handle
+        $key = 'ig_decoy_messages_' . preg_replace('/[^a-z0-9_]/', '_', strtolower($handle));
+        if (!isset($_SESSION[$key])) {
+            $_SESSION[$key] = [];
+        }
+
+        // Sauvegarder le message du joueur
+        $_SESSION[$key][] = ['from' => 'me', 'text' => $message];
+
+        // Réponses phishing des faux comptes
+        $decoyReplies = [
+            // Leurres équipe Alice (faux Bob)
+            'bob_martin'    => "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊",
+            'bob.leblanc'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
+            'bobby.photos'  => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
+            'bob_aventures' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
+            // Leurres équipe Bob (faux Alice)
+            'alice_martin'  => "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊",
+            'alice.photo'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
+            'alicedupont__' => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
+            'alice_cuisine' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
+        ];
+
+        $reply = $decoyReplies[$handle]
+            ?? "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊";
+
+        $_SESSION[$key][] = ['from' => 'bot', 'text' => $reply];
+
+        // Retourner les messages en JSON pour le JS
+        header('Content-Type: application/json');
+        echo json_encode([
+            'reply'    => $reply,
+            'messages' => $_SESSION[$key],
+        ]);
+        exit;
+    }
+
+    public function validateSocialMedia()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
+            header("Location: index.php?controller=Redirection&action=openHomepage");
+            exit;
+        }
+
+        if (empty($_SESSION['ig_bot_replied'])) {
+            $_SESSION['flash_error'] = "Tu dois d'abord obtenir une réponse dans les messages.";
+            header("Location: index.php?controller=Redirection&action=openSearchSM");
+            exit;
+        }
+
+        // Nettoyage des données de l'épreuve
+        unset($_SESSION['ig_messages'], $_SESSION['ig_bot_replied'], $_SESSION['ig_bot_reply_text']);
+
+        $userId        = (int) $_SESSION['utilisateur']['id'];
+        $progressModel = new GameProgressModel();
+        $progressModel->updateLevel($userId, 8);
+
+        $_SESSION['flash_success'] = "Bravo ! Tu as obtenu la localisation et validé l'épreuve.";
+        header("Location: index.php?controller=Redirection&action=openMeetingPwd");
         exit;
     }
 }
