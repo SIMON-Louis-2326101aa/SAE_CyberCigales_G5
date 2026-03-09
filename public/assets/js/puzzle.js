@@ -822,3 +822,52 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Fonction pour remplir automatiquement le formulaire des impôts avec les données de l'équipe
+function autoFillImpots() {
+    const container = document.querySelector('.impots-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const nom = document.getElementById('nom');
+    const birth = document.getElementById('birth');
+    const address = document.getElementById('address');
+    const tel = document.getElementById('tel');
+    const card = document.getElementById('card');
+
+    const fillBtn = document.getElementById('fill-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Données de test selon l'équipe choisie
+    if (team === 'alice') {
+        if (nom) nom.value = "Alice Durand";
+        if (birth) birth.value = "2009-05-05";
+        if (address) address.value = "1 Rue du Papillon, Boulogne-Billancourt";
+        if (tel) tel.value = "06 12 88 44 22";
+        if (card) card.value = "4970 1234 5678 9012";
+    } else {
+        if (nom) nom.value = "Bob Lefebvre";
+        if (birth) birth.value = "2009-05-05";
+        if (address) address.value = "5 Rue de la mémoire, Boulogne-Billancourt";
+        if (tel) tel.value = "07 45 66 77 88";
+        if (card) card.value = "5200 8765 4321 0000";
+    }
+
+    // On cache le bouton de remplissage et on montre le bouton de validation
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (submitBtn) submitBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing sur la page des impôts
+function showWarningPhishingImpots() {
+    const form = document.getElementById('phishing-form');
+    const msg = document.getElementById('warning-msg');
+    const btn = document.getElementById('return-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (form) form.style.display = 'none';
+    if (msg) msg.style.display = 'block';
+    if (btn) btn.style.display = 'block';
+    if (submitBtn) submitBtn.style.display = 'none';
+
+    if (msg) msg.scrollIntoView({ behavior: 'smooth' });
+}

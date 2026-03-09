@@ -893,6 +893,145 @@
 }
 
 
+
+/* ============ Page Phishing Impots ============ */
+.impots-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #fff;
+    color: #333;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    text-align: left;
+    overflow: hidden;
+}
+.impots-header {
+    background-color: #003463;
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.impots-content {
+    padding: 30px;
+}
+.impots-content h3 {
+    color: #003463 !important;
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+    border-bottom: 2px solid #003463 !important;
+    padding-bottom: 10px !important;
+    text-align: left !important;
+    text-transform: none !important;
+    font-size: 1.17em !important;
+}
+.impots-content p {
+    margin-bottom: 25px !important;
+    color: #333 !important;
+    text-align: left !important;
+}
+.impots-form {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    max-width: none !important;
+    background: transparent !important;
+    width: 100% !important;
+}
+.impots-form-group {
+    margin-bottom: 20px;
+}
+.impots-form-group label {
+    display: block !important;
+    margin-bottom: 8px !important;
+    color: #333 !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-size: 1rem !important;
+    text-align: left !important;
+}
+.impots-form-group input {
+    width: 100% !important;
+    padding: 12px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+}
+.impots-form-group input:focus {
+    background-color: #fff !important;
+    border-color: #003463 !important;
+    box-shadow: none !important;
+    color: #333 !important;
+}
+.impots-btn {
+    background-color: #e1000f !important;
+    color: white !important;
+    padding: 15px 25px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    text-transform: none !important;
+}
+.impots-btn:hover {
+    background-color: #b3000c !important;
+    transform: none !important;
+}
+.warning-message {
+    display: none;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+    line-height: 1.5;
+    text-align: left;
+}
+.warning-message strong {
+    color: #856404;
+}
+.warning-message ul {
+    list-style: disc !important;
+    padding-left: 20px !important;
+    margin-top: 10px !important;
+    text-align: left !important;
+}
+.warning-message li {
+    color: #856404 !important;
+    margin-bottom: 5px;
+}
+.return-container {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
+.impots-return-link {
+    display: inline-block !important;
+    width: auto !important;
+    background-color: var(--secondary) !important;
+    text-decoration: none !important;
+    padding: 10px 20px !important;
+    color: white !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+}
+.impots-footer {
+    background-color: #f5f5f5;
+    padding: 15px;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #ddd;
+}
+
 /* ============ Password Game ============ */
 #passwordGameForm {
     max-width: 1000px;
