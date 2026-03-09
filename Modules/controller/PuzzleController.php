@@ -344,28 +344,38 @@ class PuzzleController
         $ans1 = $this->normalize($ans);
 
         if ($ans1 === '') {
-            $_SESSION['flash_error'] = "Votre reponse est vide. Veuillez entrer une réponse.";
+            $_SESSION['flash_error'] = "Votre réponse est vide. Veuillez entrer une réponse.";
             header("Location: index.php?controller=Redirection&action=openSummaryClue");
             exit;
         }
 
+        // mots acceptés selon l'équipe
         $solutions = [
-            'alice' => 'cousin',
-            'bob' => 'cousine'
+            'alice' => ['cousin', 'cousins'],
+            'bob'   => ['cousine', 'cousines']
         ];
 
-        $expected = $this->normalize($solutions[$team]);
+        $words = preg_split('/\s+/', $ans1);
+        $valid = false;
 
-        if ($ans1 == $expected) {
+        foreach ($words as $word) {
+            if (in_array($word, $solutions[$team])) {
+                $valid = true;
+                break;
+            }
+        }
+
+        if ($valid) {
             $userId = $_SESSION['utilisateur']['id'];
             $progressModel = new GameProgressModel();
             $progressModel->updateLevel($userId, 7);
             $_SESSION['flash_success'] = "Bravo ! Vous avez compris le lien de parenté et avancé dans l’enquête.";
+            header("Location: index.php?controller=Redirection&action=openSearchSM");
         } else {
             $_SESSION['flash_error'] = "Non, ce n’est pas la bonne réponse. Relisez bien les indices.";
+            header("Location: index.php?controller=Redirection&action=openSummaryClue");
         }
 
-        header("Location: index.php?controller=Redirection&action=openSearchSM");
         exit;
     }
 
