@@ -1466,6 +1466,7 @@ h2 {
     font-weight: 600;
     font-size: 0.9rem;
     text-align: left;
+    color: #40AAAA !important;
 }
 .genealogie-form-group input {
     width: 100% !important;
@@ -1473,7 +1474,11 @@ h2 {
     border: 1px solid #ced4da !important;
     border-radius: 6px !important;
     background-color: #fff !important;
-    color: #495057 !important;
+    color: #111 !important;
+}
+.genealogie-form-group input::placeholder {
+    color: #444 !important;
+    opacity: 1;
 }
 .genealogie-btn-fill {
     background-color: #6c757d !important;
@@ -1537,4 +1542,147 @@ h2 {
     margin-left: 20px !important;
     margin-bottom: 15px !important;
     text-align: left !important;
+    color: #222 !important;
+}
+
+/* ============ Page Phishing Colis (La Poste) ============ */
+.colis-container {
+    background-color: #fdfdfd;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.colis-header {
+    background-color: #ffde00; /* Jaune La Poste */
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.colis-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #004494; /* Bleu La Poste */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.colis-card {
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #eee;
+}
+
+.colis-card h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.colis-form-group {
+    margin-bottom: 15px;
+}
+
+.colis-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: left;
+    color: #40AAAA !important;
+}
+
+.colis-form-group input {
+    width: 100% !important;
+    padding: 12px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    font-size: 1rem !important;
+    color: #111 !important;
+}
+
+.colis-form-group input::placeholder {
+    color: #444 !important;
+    opacity: 1;
+}
+
+.colis-btn-fill {
+    background-color: #AAAAAA !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin-bottom: 10px !important;
+    font-weight: bold !important;
+}
+
+.colis-btn-submit {
+    background-color: #004494 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 15px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+}
+
+.colis-warning {
+    display: none;
+    background-color: #fff;
+    border: 2px solid #e74c3c;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.colis-warning h2 {
+    color: #e74c3c !important;
+    margin-top: 0 !important;
+    text-align: center !important;
+}
+
+.colis-warning p {
+    color: #333 !important;
+    line-height: 1.6 !important;
+    margin-bottom: 15px !important;
+}
+
+.colis-warning ul {
+    list-style: disc !important;
+    margin-left: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.colis-return-link {
+    display: inline-block !important;
+    background-color: #333 !important;
+    color: white !important;
+    padding: 12px 25px !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+}
+
+.colis-footer {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #999;
 }

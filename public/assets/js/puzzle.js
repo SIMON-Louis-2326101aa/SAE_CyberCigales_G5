@@ -944,3 +944,38 @@ function showWarningPhishingGenealogie() {
     if (warningMsg) warningMsg.style.display = 'block';
     if (returnBtn) returnBtn.style.display = 'block';
 }
+
+// Fonction pour remplir automatiquement le formulaire Colis (La Poste)
+function autoFillColis() {
+    const container = document.querySelector('.colis-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const email = document.getElementById('colis-email');
+    const pass = document.getElementById('colis-pass');
+
+    const fillBtn = document.getElementById('colis-fill-btn');
+    const loginBtn = document.getElementById('colis-login-btn');
+
+    // Identifiants cohérents avec les autres pages
+    if (team === 'alice') {
+        if (email) email.value = "clara.valmont@email.fr";
+        if (pass) pass.value = "SecretPapillon95";
+    } else {
+        if (email) email.value = "diane.valmont@email.fr";
+        if (pass) pass.value = "MemoireVive92";
+    }
+
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (loginBtn) loginBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing Colis
+function showWarningPhishingColis() {
+    const loginCard = document.getElementById('colis-login-card');
+    const warningMsg = document.getElementById('colis-warning-msg');
+    const returnBtn = document.getElementById('colis-return-btn');
+
+    if (loginCard) loginCard.style.display = 'none';
+    if (warningMsg) warningMsg.style.display = 'block';
+    if (returnBtn) returnBtn.style.display = 'block';
+}
