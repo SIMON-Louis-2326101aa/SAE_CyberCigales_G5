@@ -5,7 +5,21 @@
     <div id="info-handle" class="tab-handle disabled">ℹ️</div>
     <div id="info-content" class="tab-content">
         <h3>Informations</h3>
-        <?php echo $info; ?>
+        <?php
+        switch ($info) {
+            case "encryption":
+                include __DIR__ . "/../../Modules/view/infos/encryption.php";
+                break;
+
+            case "phishing":
+                include __DIR__ . "/../../Modules/view/infos/phishing.php";
+                break;
+
+            case "password":
+                include __DIR__ . "/../../Modules/view/infos/password.php";
+                break;
+        }
+        ?>
     </div>
 </div>
 <div id="clue-tab">
@@ -14,7 +28,8 @@
         <h3>Indice</h3>
         <?php echo $clue; ?>
     </div>
-</div><div id="inventory-tab">
+</div>
+<div id="inventory-tab">
     <div id="inventory-handle" class="tab-handle">🎒</div>
 
     <div id="inventory-content" class="tab-content">

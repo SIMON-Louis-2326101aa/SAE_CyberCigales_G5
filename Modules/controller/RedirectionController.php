@@ -209,5 +209,16 @@ class RedirectionController
         ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
 
+    public function openVictory()
+    {
+        $this->logRedirection('openVictoryView');
+        $this->requireAuth();
+        ViewHandler::show('victoryView', ['pageTitle' => 'Victoire']);
+    }
 
+    public function openInformation()
+    {
+        $this->logRedirection('openInformationView');
+        ViewHandler::show('informationView', ['pageTitle' => 'Informations']);
+    }
 }

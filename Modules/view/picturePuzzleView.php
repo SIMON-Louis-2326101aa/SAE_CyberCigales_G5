@@ -3,7 +3,7 @@
 $info = "Cette epreuve ne necessite pas d'information supplementaire, Vous en etes capable !";
 $clue = "Indice (5min):<span id=\"clue-text-1\" class=\"timed-clue\">La photo tourne</span>";
 
-require_once __DIR__ . "./../../includes/layout/headerClue.php";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 
 if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="enigma-container">

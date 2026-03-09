@@ -415,21 +415,33 @@ class PuzzleController
             exit;
         }
 
-        $answer = strtolower(trim($_POST['answer'] ?? ''));
-        if ($answer === '') {
+        $answer1 = strtolower(trim($_POST['answer1'] ?? ''));
+        $answer2 = strtolower(trim($_POST['answer2'] ?? ''));
+        if ($answer1 === '' || $answer2 === '') {
             $_SESSION['flash_error'] = "Réponse vide.";
             header("Location: index.php?controller=Redirection&action=openEndText");
             exit;
         }
 
-        $solutions = [
+        $solutionsLieu = [
             'alice' => ['d9', '9d'],
             'bob'   => ['d9', '9d']
         ];
 
         $team = $_SESSION['team'];
-        if (!in_array($answer, $solutions[$team])) {
-            $_SESSION['flash_error'] = "Ce n’est pas la bonne réponse.";
+        if (!in_array($answer1, $solutionsLieu[$team])) {
+            $_SESSION['flash_error'] = "Ce n’est pas le bonne endroit.";
+            header("Location: index.php?controller=Redirection&action=openEndText");
+            exit;
+        }
+
+        $solutionsCode = [
+            'alice' => ['1803'],
+            'bob'   => ['1803']
+        ];
+
+        if (!in_array($answer2, $solutionsCode[$team])) {
+            $_SESSION['flash_error'] = "Ce n’est pas le bon code.";
             header("Location: index.php?controller=Redirection&action=openEndText");
             exit;
         }
@@ -438,9 +450,9 @@ class PuzzleController
         $userId = $_SESSION['utilisateur']['id'];
         $progressModel = new GameProgressModel();
         $progressModel->finishGame($userId);
-        $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre et terminé l’enquête.";
+        $_SESSION['flash_success'] = "Félicitations ! Tu as trouvé où est le coffre.";
 
-        header("Location: index.php?controller=Redirection&action=openEndText");
+        header("Location: index.php?controller=Redirection&action=openVictory");
         exit;
     }
 }
