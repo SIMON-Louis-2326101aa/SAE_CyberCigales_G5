@@ -843,13 +843,13 @@ function autoFillImpots() {
         if (birth) birth.value = "1978-03-18";
         if (address) address.value = "1 Rue du Papillon, Boulogne-Billancourt";
         if (tel) tel.value = "06 12 88 44 22";
-        if (card) card.value = "4970 1234 5678 9012";
+        if (card) card.value = "4532 0123 4567 8901";
     } else {
         if (nom) nom.value = "Diane Valmont";
         if (birth) birth.value = "1978-03-18";
         if (address) address.value = "5 Rue de la mémoire, Boulogne-Billancourt";
         if (tel) tel.value = "07 45 66 77 88";
-        if (card) card.value = "4200 8765 4321 0000";
+        if (card) card.value = "5105 9876 5432 1098";
     }
 
     // On cache le bouton de remplissage et on montre le bouton de validation
@@ -903,6 +903,44 @@ function showWarningPhishingFacebook() {
     const returnBtn = document.getElementById('fb-return-btn');
 
     if (loginCard) loginCard.style.display = 'none';
+    if (warningMsg) warningMsg.style.display = 'block';
+    if (returnBtn) returnBtn.style.display = 'block';
+}
+
+// Fonction pour remplir automatiquement le formulaire Généalogie
+function autoFillGenealogie() {
+    const container = document.querySelector('.genealogie-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const nom = document.getElementById('gen-nom');
+    const email = document.getElementById('gen-email');
+    const card = document.getElementById('gen-card');
+
+    const fillBtn = document.getElementById('gen-fill-btn');
+    const submitBtn = document.getElementById('gen-submit-btn');
+
+    // Données
+    if (team === 'alice') {
+        if (nom) nom.value = "Clara Valmont";
+        if (email) email.value = "clara.valmont@email.fr";
+        if (card) card.value = "4532 0123 4567 8901";
+    } else {
+        if (nom) nom.value = "Diane Valmont";
+        if (email) email.value = "diane.valmont@email.fr";
+        if (card) card.value = "5105 9876 5432 1098";
+    }
+
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (submitBtn) submitBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing Généalogie
+function showWarningPhishingGenealogie() {
+    const cardBox = document.getElementById('gen-card-box');
+    const warningMsg = document.getElementById('gen-warning-msg');
+    const returnBtn = document.getElementById('gen-return-btn');
+
+    if (cardBox) cardBox.style.display = 'none';
     if (warningMsg) warningMsg.style.display = 'block';
     if (returnBtn) returnBtn.style.display = 'block';
 }
