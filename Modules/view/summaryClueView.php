@@ -44,7 +44,21 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <div class="s-section">
         <p>Epreuve 4</p>
         <p>On a trouvez le certificat de naissance de notre tante, on a decouvert l'existance d'une tante !</p>
-        <p>(acte de naissance ??)</p>
+        <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+            <div class="pdf-header-border">
+                <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
+            </div>
+            <div class="pdf-body-content">
+                <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
+                <h3 class="pdf-person-name">Clara VALMONT</h3>
+                <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de Diane VALMONT.</p>
+                <div class="pdf-handwritten">
+                    <span class="handwritten-label">Note manuscrite :</span>
+                    <strong>D</strong>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="s-section">
@@ -95,7 +109,21 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <div class="s-section">
         <p>Epreuve 4</p>
         <p>On a trouvez le certificat de naissance de notre tante, on a decouvert l'existance d'une tante !</p>
-        <p>(acte de naissance ??)</p>
+        <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+            <div class="pdf-header-border">
+                <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
+            </div>
+            <div class="pdf-body-content">
+                <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
+                <h3 class="pdf-person-name">Diane VALMONT</h3>
+                <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de Clara VALMONT.</p>
+                <div class="pdf-handwritten">
+                    <span class="handwritten-label">Note manuscrite :</span>
+                    <strong>9</strong>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="s-section">
