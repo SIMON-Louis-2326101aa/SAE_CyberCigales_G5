@@ -131,6 +131,7 @@ class AdminController
     public function banUser()
     {
         $userId = $_GET['id'] ?? null;
+        $reason = $_POST['reason'] ?? '';
 
         // Protection compte admin
         if ($userId == 5) {
@@ -140,7 +141,7 @@ class AdminController
         }
 
         if ($userId) {
-            $this->userModel->banUser((int)$userId);
+            $this->userModel->banUser((int)$userId, $reason);
             $_SESSION['flash_success'] = "Utilisateur banni avec succès.";
         }
 
@@ -161,4 +162,22 @@ class AdminController
         exit;
     }
 
+    public function showBanForm()
+    {
+        $userId = $_GET['id'] ?? null;
+
+        if (!$userId) {
+            header("Location: index.php?controller=Admin&action=listUsers");
+            exit;
+        }
+
+        $user = $this->userModel->getUserById((int)$userId);
+
+        if (!$user) {
+            header("Location: index.php?controller=Admin&action=listUsers");
+            exit;
+        }
+
+        ViewHandler::show("admin/userBanView", ["user" => $user]);
+    }
 }

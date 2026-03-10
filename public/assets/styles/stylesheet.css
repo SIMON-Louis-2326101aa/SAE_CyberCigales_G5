@@ -1164,12 +1164,12 @@ body[data-theme="tritanopia"] {
     color: #000 !important;
 }
 
-#ban-user-btn{
+.ban-user-btn{
     background: #f00;
     color: #000 !important;
 }
 
-#unban-user-btn{
+.unban-user-btn{
     background: #5f0;
     color: #000 !important;
 }
