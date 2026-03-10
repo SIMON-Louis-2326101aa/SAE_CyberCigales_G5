@@ -519,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // La fonction de validation prend le mot de passe (pwd) et retourne `true` si la règle est respectée, sinon `false`
     const rules = [
         // Règle 1: Longueur minimale
-        { text: "Règle 1: Votre mot de passe doit contenir au moins 8 caractères.", validate: (pwd) => pwd.length >= 8 },
+        { text: "Règle 1: Votre mot de passe doit contenir au moins 12 caractères.", validate: (pwd) => pwd.length >= 12 },
 
         // Règle 2: Présence d'une majuscule
         { text: "Règle 2: Votre mot de passe doit contenir au moins une majuscule.", validate: (pwd) => /[A-Z]/.test(pwd) },
