@@ -30,6 +30,7 @@
                     <?php if ($user['is_banned'] == 1) : ?>
                         <button type="button" class="unban-user-btn" data-user-id="<?= $user['id']; ?>">Débannir
                         </button>
+                        <p>Raison de bannisment : <br><?php echo htmlspecialchars($user['ban_reason']); ?></p>
                     <?php endif; ?>
                 </td>
             </tr>
