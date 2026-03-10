@@ -611,4 +611,3 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
         decoyAccounts: <?= $decoyAccounts ?>,
     };
 </script>
-<script src="public/assets/js/puzzle.js"></script>
