@@ -474,10 +474,15 @@ class PuzzleController
             $_SESSION['ig_bot_replied']    = true;
             $_SESSION['ig_bot_reply_text'] = $reply;
         } else {
-            $_SESSION['ig_messages'][] = ['from' => 'bot', 'text' => $botFallback];
+            $reply = $botFallback;
+            $_SESSION['ig_messages'][] = ['from' => 'bot', 'text' => $reply];
         }
 
-        header("Location: index.php?controller=Redirection&action=openSearchSM");
+        header('Content-Type: application/json');
+        echo json_encode([
+            'reply'      => $reply,
+            'botReplied' => $_SESSION['ig_bot_replied'] ?? false,
+        ]);
         exit;
     }
     public function sendDecoyDmMessage()

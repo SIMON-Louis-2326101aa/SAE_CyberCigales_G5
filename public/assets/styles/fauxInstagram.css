@@ -387,13 +387,18 @@
 .ig-suggest-info small { font-size: 11px; color: #8e8e8e; }
 
 .ig-suggest-follow {
-    background: none;
-    border: none;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     color: #0095f6;
     font-weight: 600;
     font-size: 12px;
     cursor: pointer;
     white-space: nowrap;
+    padding: 0 !important;
+    width: auto !important;
+    min-width: unset !important;
+    flex-shrink: 0;
 }
 
 .ig-sidebar-footer {

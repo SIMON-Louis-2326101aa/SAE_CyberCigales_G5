@@ -465,7 +465,7 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                 </div>
             </div>
 
-            <div class="ig-dm-messages">
+            <div class="ig-dm-messages" id="igDmMessages">
                 <div class="ig-dm-info-bubble">
                     Connecté avec <strong><?= htmlspecialchars($targetHandle) ?></strong>.<br>
                     Envoie-lui un message pour obtenir un indice 💬
@@ -488,17 +488,18 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
 
             <?php if (!$botReplied) : ?>
                 <div class="ig-dm-input-wrap">
-                    <form action="index.php?controller=Puzzle&action=sendDmMessage" method="POST" class="ig-dm-form">
-                        <input type="text" name="message" class="ig-dm-input"
-                               placeholder="Message…" autocomplete="off" required/>
-                        <button type="submit" class="ig-dm-send-btn">
+                    <div class="ig-dm-form">
+                        <input type="text" id="igDmInput" class="ig-dm-input"
+                               placeholder="Message…" autocomplete="off"
+                               onkeydown="if(event.key==='Enter'){igSendDmMessage();event.preventDefault();}"/>
+                        <button type="button" class="ig-dm-send-btn" onclick="igSendDmMessage()">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                                  stroke="currentColor" stroke-width="2">
                                 <line x1="22" y1="2" x2="11" y2="13"/>
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"/>
                             </svg>
                         </button>
-                    </form>
+                    </div>
                 </div>
             <?php endif; ?>
 

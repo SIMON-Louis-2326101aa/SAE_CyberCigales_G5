@@ -12,10 +12,11 @@
 
     const TARGET = (typeof IG_TARGET !== 'undefined') ? IG_TARGET : {};
 
-    // Si le bot a déjà répondu (session active), rouvrir le bon profil
+    // Si le bot a déjà répondu (session active), rouvrir le bon profil + le DM directement
     if (TARGET.botReplied) {
         el('igDmHeaderBtn').classList.remove('hidden');
         _showRealProfile();
+        igOpenDm();
     }
 
     // ════════════════════════════════════════════════════════
@@ -138,7 +139,7 @@
         }
     };
 
-   //DM du bon compte
+    //DM du bon compte
     window.igOpenDm = function () {
         show('igDmOverlay');
         const msgs = el('igDmMessages');
@@ -147,6 +148,65 @@
 
     window.igCloseDm = function () {
         hide('igDmOverlay');
+    };
+
+    window.igSendDmMessage = function () {
+        const input = el('igDmInput');
+        if (!input) return;
+        const text = input.value.trim();
+        if (!text) return;
+
+        const msgs = el('igDmMessages');
+
+        // Bulle envoyée par le joueur
+        const bubbleMe = document.createElement('div');
+        bubbleMe.className = 'ig-dm-bubble ig-dm-bubble--me';
+        bubbleMe.textContent = text;
+        msgs.appendChild(bubbleMe);
+
+        input.value = '';
+        msgs.scrollTop = msgs.scrollHeight;
+
+        // Envoi au serveur via fetch (la réponse reste côté PHP)
+        const formData = new FormData();
+        formData.append('message', text);
+
+        fetch('index.php?controller=Puzzle&action=sendDmMessage', {
+            method: 'POST',
+            body: formData
+        })
+            .then(r => r.json())
+            .then(data => {
+                const wrap = document.createElement('div');
+                wrap.className = 'ig-dm-bubble-wrap';
+
+                const avatar = document.createElement('div');
+                avatar.className = 'ig-dm-bubble-avatar';
+                avatar.textContent = TARGET.letter || '?';
+
+                const bubble = document.createElement('div');
+                bubble.className = 'ig-dm-bubble ig-dm-bubble--them';
+                bubble.textContent = data.reply;
+
+                wrap.appendChild(avatar);
+                wrap.appendChild(bubble);
+                msgs.appendChild(wrap);
+                msgs.scrollTop = msgs.scrollHeight;
+
+                // Si le bot a répondu avec le bon mot-clé, afficher le bouton de validation
+                if (data.botReplied) {
+                    el('igDmInput').closest('.ig-dm-input-wrap').remove();
+                    const validateWrap = document.createElement('div');
+                    validateWrap.className = 'ig-dm-validate-wrap';
+                    validateWrap.innerHTML = `
+                    <p class="ig-dm-validate-hint">📍 Tu as reçu la localisation ! Valide l'épreuve :</p>
+                    <form action="index.php?controller=Puzzle&action=validateSocialMedia" method="POST"
+                          class="ig-dm-validate-form">
+                        <button type="submit" class="ig-dm-validate-btn">✓ Valider l'épreuve</button>
+                    </form>`;
+                    el('igDmOverlay').querySelector('.ig-dm-panel').appendChild(validateWrap);
+                }
+            });
     };
 
     //DM leurres
