@@ -740,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (validationSection) validationSection.classList.add('hidden');
     }
 
-     // Gère l'affichage d'un email spécifique
+    // Gère l'affichage d'un email spécifique
     function selectMail(id) {
         const item = Array.from(emailItems).find(el => el.getAttribute('data-id') === id);
         if (!item) return;
