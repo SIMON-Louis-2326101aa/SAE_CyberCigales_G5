@@ -411,7 +411,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (codeZone) {
-            codeZone.style.display = st.showCode ? "block" : "none";
+            if (st.showCode) {
+                codeZone.style.display = "block";
+                codeZone.classList.add("is-visible");
+            } else {
+                codeZone.style.display = "none";
+                codeZone.classList.remove("is-visible");
+            }
         }
     }
 
@@ -451,16 +457,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function turn() {
-        // Si l’action attendue à l’étape actuelle est B, alors c’est un “bon move”
         const st = loadState();
+
+        // Si on a déjà fini (code affiché), on ne fait plus rien pour éviter de reset par accident
+        if (st.showCode || st.step >= maxSteps) return;
+
         const expected = path[st.step] || "R";
 
+        // Si B est attendu (dernière étape), on force le déblocage et on valide
         if (expected === "B") {
+            st.blocked = false;
+            saveState(st);
             move("B");
             return;
         }
 
-        // Sinon retour au début
+        // Sinon (si B n'est pas le bon chemin ou qu'on veut reset), on revient à zéro
         st.step = 0;
         st.score = 0;
         st.blocked = false;
