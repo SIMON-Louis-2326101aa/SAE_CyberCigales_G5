@@ -82,6 +82,7 @@
                 <?php if ($_SESSION["level"] >= 3) : ?>
                     <li>
                         <strong>Épreuve 2 :</strong> Une photo de famille mystérieuse avec un message caché.
+                        <img src="./assets/images/photoFamille.png" alt="photodefamille" >
                         <?php if ($_SESSION["team"] === "alice") : ?>
                         Le message etait "Le papillon garde la mémoire." et on a retenu de cette phrase PAPILLON MEMOIRE
                         <?php else : ?>
@@ -107,6 +108,41 @@
                     <li>
                         <strong>Épreuve 4 :</strong> Un document important dans un mail nous fait prendre connaissance
                         qu'on a une tante
+                        <?php if ($_SESSION["team"] === "alice") : ?>
+                            <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+                                <div class="pdf-header-border">
+                                    <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                                    <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
+                                </div>
+                                <div class="pdf-body-content">
+                                    <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
+                                    <h3 class="pdf-person-name">Clara VALMONT</h3>
+                                    <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC.
+                                        Soeur de Diane VALMONT.</p>
+                                    <div class="pdf-handwritten">
+                                        <span class="handwritten-label">Note manuscrite :</span>
+                                        <strong>D</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else : ?>
+                            <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+                                <div class="pdf-header-border">
+                                    <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                                    <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
+                                </div>
+                                <div class="pdf-body-content">
+                                    <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
+                                    <h3 class="pdf-person-name">Diane VALMONT</h3>
+                                    <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de Clara VALMONT.</p>
+                                    <div class="pdf-handwritten">
+                                        <span class="handwritten-label">Note manuscrite :</span>
+                                        <strong>9</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
                     </li>
                 <?php endif; ?>
 
