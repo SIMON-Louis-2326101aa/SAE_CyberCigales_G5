@@ -887,6 +887,10 @@
     display: none;
 }
 
+#video-card p {
+    color: #000000;
+}
+
 .multimedia-action-container {
     text-align: center;
     margin: 30px 0;
@@ -1045,6 +1049,12 @@
     display: none;
     margin-top: 20px;
     text-align: center;
+}
+
+.return-container-visible {
+    margin-top: 30px;
+    text-align: center;
+    padding-bottom: 40px;
 }
 
 .impots-return-link {
@@ -1703,4 +1713,92 @@ h2 {
     margin-top: 30px;
     font-size: 0.8rem;
     color: #999;
+}
+
+/* ============ Page Phishing Vidéo (VideoCloud) ============ */
+.video-site-container {
+    background-color: #0f0f0f; /* Fond sombre type YouTube/VideoCloud */
+    min-height: 90vh;
+    color: #fff;
+    font-family: Roboto, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.video-site-header {
+    width: 100%;
+    background-color: #0f0f0f;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.video-site-logo {
+    color: #ff0000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.video-player-container {
+    max-width: 900px;
+    width: 95%;
+    margin-top: 30px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.video-unlock-overlay {
+    padding: 60px 20px;
+    text-align: center;
+    background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+}
+
+.video-title-placeholder {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.video-info-section {
+    width: 95%;
+    max-width: 900px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.video-main-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.video-meta {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.video-description-box {
+    background: #272727;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.video-warning-box {
+    padding: 80px 20px;
+    text-align: center;
+    background: #000;
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 1.3rem;
+    border: 1px solid #333;
 }

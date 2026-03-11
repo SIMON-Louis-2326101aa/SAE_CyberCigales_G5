@@ -814,11 +814,23 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const unlockBtn = document.getElementById('unlock-video-btn');
     const trapVideo = document.getElementById('trap-video');
+    const unlockOverlay = document.getElementById('unlock-overlay');
+    const epilepsyWarning = document.getElementById('epilepsy-warning');
+
     if (unlockBtn && trapVideo) {
         unlockBtn.addEventListener('click', () => {
-            trapVideo.classList.remove('video-hidden');
-            unlockBtn.parentElement.style.display = 'none'; // Cache le conteneur du bouton
-            trapVideo.play();
+            // Cache l'overlay initial
+            if (unlockOverlay) unlockOverlay.style.display = 'none';
+
+            // Affiche l'avertissement d'épilepsie
+            if (epilepsyWarning) epilepsyWarning.classList.remove('hidden');
+
+            // Attend 2 secondes avant de lancer la vidéo
+            setTimeout(() => {
+                if (epilepsyWarning) epilepsyWarning.classList.add('hidden');
+                trapVideo.classList.remove('video-hidden');
+                trapVideo.play();
+            }, 2000);
         });
     }
 });
