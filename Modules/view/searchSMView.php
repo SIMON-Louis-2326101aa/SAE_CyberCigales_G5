@@ -25,6 +25,8 @@ if ($team === 'alice') {
                     'followers' => 57,  'bio' => "Photographe amateur 📷"],
             ['handle' => 'bob_aventures', 'name' => 'Bob Durand',    'letter' => 'B',
                     'followers' => 331, 'bio' => "Voyageur passionné ✈️"],
+            ['handle' => 'bob.VALM0NT',    'name' => 'Bob Valmont',    'letter' => 'B',
+                    'followers' => 189,  'bio' => "j'adore manger :)"],
     ]);
 
     $posts = json_encode([
@@ -154,7 +156,7 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                         type="text"
                         id="igSearchInput"
                         class="ig-search-input"
-                        placeholder="Rechercher <?= htmlspecialchars(explode(' ', $targetName)[0]) ?>..."
+                        placeholder="Rechercher..."
                         autocomplete="off"
                         oninput="igOnSearch(this.value)"
                         onfocus="igOnSearch(this.value)"

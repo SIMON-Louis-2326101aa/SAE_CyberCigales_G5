@@ -34,8 +34,8 @@
         ];
 
         const matches = allAccounts.filter(a =>
-            a.handle.toLowerCase().includes(val) ||
-            a.name.toLowerCase().includes(val)
+            a.handle.toLowerCase().startsWith(val) ||
+            a.name.toLowerCase().startsWith(val)
         );
 
         // Mélanger pour que le bon compte ne soit pas toujours en premier
