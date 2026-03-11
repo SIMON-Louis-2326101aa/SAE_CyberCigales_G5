@@ -26,42 +26,42 @@ require_once __DIR__ . "/../../includes/layout/headerClue.php";
 if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <br>
 
-    <p>Voyons voir tout ce qu'on a touvez jusqu'ici pour voir ci on trouve plus </p><br>
+    <p>Voyons voir tout ce qu'on a trouvé jusqu'ici pour voir si on découvre quelque chose de plus.</p><br>
 
     <div class="s-section">
         <p>Epreuve 1</p>
-        <p>On a eu la lettre decripter :</p>
+        <p>On a eu la lettre décryptée :</p>
         <p>Ma chère Diane,
-        Si tu lis ces lignes, c’est que le temps a poursuivi sa route sans nous attendre.
-        Nous ne savons pas ce que la vie t’a réservé, mais nous espérons qu’elle t’a offert
-        autant de raisons d’aimer que de pardonner.
-        Il est des blessures que l’on tait trop longtemps, croyant qu’elles disparaîtront
-        d’elles-mêmes. Mais le silence ne soigne pas, il endort seulement la douleur.
-        Nous avons vu, dans le regard de ta fille Alice, cette même lueur que tu avais enfant :
-        celle de la curiosité et du courage mêlés.
-        Ne la laisse pas s’éteindre, même si le monde tente de la couvrir d’ombre.
-        Tout ce que nous avons construit, tout ce que nous avons caché, nous l’avons fait
-        pour que quelqu’un comme elle puisse un jour comprendre.
-        Avec toute la tendresse que le vent n’a pas emportée.
-        Tes grands-parents qui t'aiment.</p>
-        <p>et le mot en morse : REFLET </p>
+            Si tu lis ces lignes, c’est que le temps a poursuivi sa route sans nous attendre.
+            Nous ne savons pas ce que la vie t’a réservé, mais nous espérons qu’elle t’a offert
+            autant de raisons d’aimer que de pardonner.
+            Il est des blessures que l’on tait trop longtemps, croyant qu’elles disparaîtront
+            d’elles-mêmes. Mais le silence ne soigne pas, il endort seulement la douleur.
+            Nous avons vu, dans le regard de ta fille Alice, cette même lueur que tu avais enfant :
+            celle de la curiosité et du courage mêlés.
+            Ne la laisse pas s’éteindre, même si le monde tente de la couvrir d’ombre.
+            Tout ce que nous avons construit, tout ce que nous avons caché, nous l’avons fait
+            pour que quelqu’un comme elle puisse un jour comprendre.
+            Avec toute la tendresse que le vent n’a pas emportée.
+            Tes grands-parents qui t'aiment.</p>
+        <p>et le mot en morse : REFLET</p>
     </div>
 
     <div class="s-section">
         <p>Epreuve 2</p>
-        <p>Puis nous avons trovez la photo de famille en morceau et les deux mot clé</p>
+        <p>Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <img src="./assets/images/photoFamille.png" alt="photodefamille">
-        <p>PAPILLION et MEMOIRE</p>
+        <p>PAPILLON et MEMOIRE</p>
     </div>
 
     <div class="s-section">
         <p>Epreuve 3</p>
-        <p>Ici on a suivie le signale deguissait en papilon qui nous a mene a ADMIN</p>
+        <p>Ici, on a suivi le signal déguisé en papillon qui nous a menés à ADMIN</p>
     </div>
 
     <div class="s-section">
         <p>Epreuve 4</p>
-        <p>On a trouvez le certificat de naissance de notre tante, on a decouvert l'existance d'une tante !</p>
+        <p>On a trouvé le certificat de naissance de notre tante. On a découvert l'existence d'une tante !</p>
         <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
             <div class="pdf-header-border">
                 <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
@@ -70,7 +70,7 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
             <div class="pdf-body-content">
                 <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
                 <h3 class="pdf-person-name">Clara VALMONT</h3>
-                <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de Diane VALMONT.</p>
+                <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Sœur de Diane VALMONT.</p>
                 <div class="pdf-handwritten">
                     <span class="handwritten-label">Note manuscrite :</span>
                     <strong>D</strong>
@@ -81,21 +81,23 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
 
     <div class="s-section">
         <p>Epreuve 5</p>
-        <p>On a recree un mot de passe plus robuste </p>
+        <p>On a recréé un mot de passe plus robuste</p>
     </div>
 
     <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
-        <label>Qu'est ce qu'on apprend de plus ?</label>
-        <input type="text" name="answer" placeholder="Entrez votre réponse ">
+        <label>Qu'est-ce qu'on apprend de plus ?</label>
+        <input type="text" name="answer" placeholder="Entrez votre réponse">
         <button type="submit">Soumettre</button>
     </form>
+
 <?php elseif (isset($_SESSION['team']) && $_SESSION['team'] === "bob") : ?>
     <br>
-    <p>Voyons voir tout ce qu'on a touvez jusqu'ici pour voir ci on trouve plus </p><br>
+
+    <p>Voyons voir tout ce qu'on a trouvé jusqu'ici pour voir si on découvre quelque chose de plus.</p><br>
 
     <div class="s-section">
         <p>Epreuve 1</p>
-        <p>On a eu la lettre decripter :</p>
+        <p>On a eu la lettre décryptée :</p>
         <p>Ma chère Clara,
         Le temps nous a glissé entre les doigts comme du sable, mais avant qu’il ne disparaisse
         complètement, nous voulions te confier ces mots.
@@ -114,19 +116,19 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
 
     <div class="s-section">
         <p>Epreuve 2</p>
-        <p>Puis nous avons trovez la photo de famille en morceau et les deux mot clé</p>
+        <p>Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <img src="./assets/images/photoFamille.png" alt="photodefamille">
         <p>PASSE et CLE</p>
     </div>
 
     <div class="s-section">
         <p>Epreuve 3</p>
-        <p>Ici on a suivie le signale deguissait en papilon qui nous a mene a ROOT</p>
+        <p>Ici, on a suivi le signal déguisé en papillon qui nous a menés à ROOT</p>
     </div>
 
     <div class="s-section">
         <p>Epreuve 4</p>
-        <p>On a trouvez le certificat de naissance de notre tante, on a decouvert l'existance d'une tante !</p>
+        <p>On a trouvé le certificat de naissance de notre tante. On a découvert l'existence d'une tante !</p>
         <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
             <div class="pdf-header-border">
                 <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
@@ -135,7 +137,7 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
             <div class="pdf-body-content">
                 <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
                 <h3 class="pdf-person-name">Diane VALMONT</h3>
-                <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de Clara VALMONT.</p>
+                <p style="color: #333;">Fille de Pierre VALMONT et de Suzanne LECLERC. Sœur de Clara VALMONT.</p>
                 <div class="pdf-handwritten">
                     <span class="handwritten-label">Note manuscrite :</span>
                     <strong>9</strong>
@@ -146,14 +148,15 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
 
     <div class="s-section">
         <p>Epreuve 5</p>
-        <p>On a recree un mot de passe plus robuste </p>
+        <p>On a recréé un mot de passe plus robuste</p>
     </div>
 
     <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
-        <label>Qu'est ce qu'on apprend de plus ?</label>
-        <input type="text" name="answer" placeholder="Entrez votre réponse ">
+        <label>Qu'est-ce qu'on apprend de plus ?</label>
+        <input type="text" name="answer" placeholder="Entrez votre réponse">
         <button type="submit">Soumettre</button>
     </form>
+
 <?php else : ?>
-    <p>Erreur : Veuillez choisir une équipe ou vous reconnecter</p>
+    <p>Erreur : veuillez choisir une équipe ou vous reconnecter.</p>
 <?php endif; ?>
