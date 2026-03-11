@@ -995,6 +995,24 @@
     transform: none !important;
 }
 
+.scammer-message {
+    display: none;
+    background-color: #000 !important;
+    color: #fff !important;
+    padding: 40px !important;
+    margin-top: 20px !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    font-size: 1.5rem !important;
+    border: 4px solid #ff0000 !important;
+}
+
+.scammer-message p {
+    color: #fff !important;
+    margin: 10px 0 !important;
+}
+
 .warning-message {
     display: none;
     background-color: #fff3cd;

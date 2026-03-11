@@ -22,12 +22,14 @@ $team = $_SESSION['team'] ?? 'alice';
     </div>
     
     <div class="impots-content">
-        <h3>Formulaire de remboursement d'impôt</h3>
-        
-        <p>
-            Après les derniers calculs de votre activité annuelle, nous avons déterminé que vous êtes admissible à recevoir un remboursement d'impôt de <strong>184.50 €</strong>.
-            Veuillez remplir le formulaire ci-dessous pour confirmer vos informations.
-        </p>
+        <div id="impots-intro">
+            <h3>Formulaire de remboursement d'impôt</h3>
+            
+            <p>
+                Après les derniers calculs de votre activité annuelle, nous avons déterminé que vous êtes admissible à recevoir un remboursement d'impôt de <strong>184.50 €</strong>.
+                Veuillez remplir le formulaire ci-dessous pour confirmer vos informations.
+            </p>
+        </div>
 
         <form id="phishing-form" class="impots-form" onsubmit="event.preventDefault();">
             <div class="impots-form-group">
@@ -59,9 +61,14 @@ $team = $_SESSION['team'] ?? 'alice';
             <button type="button" id="submit-btn" class="impots-btn hidden" onclick="showWarningPhishingImpots()">Valider</button>
         </form>
 
+        <div id="scammer-msg" class="scammer-message">
+            <p>Merci l'idiot ! Tes coordonnées bancaires sont maintenant entre nos mains. $$$$$</p>
+            <p>On va bien s'amuser avec ta thune...</p>
+        </div>
+
         <div id="warning-msg" class="warning-message">
             <strong class="impots-warning-title">⚠️ ATTENTION !</strong><br><br>
-            Vous étiez sur le point de fournir des informations personnelles et bancaires sensibles sur une page frauduleuse.
+            C'est exactement ce qui arrive lors d'un vol de données. L'arnaqueur se moque de vous dès qu'il a ce qu'il veut.
             <br><br>
             <strong>Conseils de sécurité :</strong>
             <ul class="impots-warning-list">

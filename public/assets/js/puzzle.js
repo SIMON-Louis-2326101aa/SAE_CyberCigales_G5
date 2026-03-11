@@ -860,16 +860,31 @@ function autoFillImpots() {
 // Fonction pour afficher l'avertissement de phishing sur la page des impôts
 function showWarningPhishingImpots() {
     const form = document.getElementById('phishing-form');
-    const msg = document.getElementById('warning-msg');
-    const btn = document.getElementById('return-btn');
+    const scammerMsg = document.getElementById('scammer-msg');
+    const warningMsg = document.getElementById('warning-msg');
+    const returnBtn = document.getElementById('return-btn');
     const submitBtn = document.getElementById('submit-btn');
+    const intro = document.getElementById('impots-intro');
 
+    // On cache le formulaire, le bouton valider et l'introduction
     if (form) form.style.display = 'none';
-    if (msg) msg.style.display = 'block';
-    if (btn) btn.style.display = 'block';
     if (submitBtn) submitBtn.style.display = 'none';
+    if (intro) intro.style.display = 'none';
 
-    if (msg) msg.scrollIntoView({ behavior: 'smooth' });
+    // On affiche le message méchant des arnaqueurs
+    if (scammerMsg) {
+        scammerMsg.style.display = 'block';
+        scammerMsg.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Après 7 secondes, on remplace par le message explicatif et le bouton retour
+    setTimeout(() => {
+        if (scammerMsg) scammerMsg.style.display = 'none';
+        if (warningMsg) warningMsg.style.display = 'block';
+        if (returnBtn) returnBtn.style.display = 'block';
+
+        if (warningMsg) warningMsg.scrollIntoView({ behavior: 'smooth' });
+    }, 7000);
 }
 
 // Fonction pour remplir automatiquement le formulaire Facebook
