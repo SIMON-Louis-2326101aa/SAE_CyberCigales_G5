@@ -518,6 +518,11 @@
     justify-self:end;
 }
 
+#bw-hint, #bw-feedback {
+    color: #DDDDDD;
+    font-weight: bold;
+}
+
 @media (width <= 640px){
     .bw-actions{
         grid-template-columns: 1fr;
