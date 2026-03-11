@@ -3,12 +3,15 @@
 ?>
 <h1>Centre d'informations</h1>
 
-<?php if ($_SESSION["level"] = 2) :
-     include __DIR__ . "/infos/encryption.php";
-elseif (($_SESSION["level"] = 5)) :
+<?php if ($_SESSION["level"] >= 6) :
+    include __DIR__ . "/infos/encryption.php";
     include __DIR__ . "/infos/phishing.php";
-elseif ($_SESSION["level"] = 6) :
     include __DIR__ . "/infos/password.php";
+elseif ($_SESSION["level"] >= 5) :
+    include __DIR__ . "/infos/encryption.php";
+    include __DIR__ . "/infos/phishing.php";
+elseif ($_SESSION["level"] >= 2) :
+    include __DIR__ . "/infos/encryption.php";
 else : ?>
-<p>Information a venir</p>
+    <p>Information à venir...</p>
 <?php endif; ?>
