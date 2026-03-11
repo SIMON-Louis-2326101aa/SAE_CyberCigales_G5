@@ -3,6 +3,42 @@
 ?>
 <section class="password-info">
 
+    <h4>Comprendre les chiffres romains</h4>
+
+    <p>
+        Les chiffres romains sont un ancien système de numérotation utilisé dans la Rome antique.
+        On les retrouve encore aujourd’hui dans certains contextes comme les horloges, les siècles,
+        les chapitres de livres ou certains codes.
+    </p>
+
+    <h4>Les symboles principaux</h4>
+
+    <ul>
+        <li>I = 1</li>
+        <li>V = 5</li>
+        <li>X = 10</li>
+        <li>L = 50</li>
+        <li>C = 100</li>
+        <li>D = 500</li>
+        <li>M = 1000</li>
+    </ul>
+
+    <h4>Comment lire un nombre</h4>
+
+    <p>
+        Les chiffres romains fonctionnent principalement par addition : on additionne les symboles
+        de gauche à droite.
+    </p>
+
+    <ul>
+        <li>II = 2 (1 + 1)</li>
+        <li>VI = 6 (5 + 1)</li>
+        <li>XV = 15 (10 + 5)</li>
+    </ul>
+</section>
+<section class="password-info">
+    <h4>L'importance d'un bon mot de passe</h4>
+
     <h4>Pourquoi un mot de passe robuste est-il important ?</h4>
 
     <p>
