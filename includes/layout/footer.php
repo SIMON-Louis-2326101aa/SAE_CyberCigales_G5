@@ -24,7 +24,7 @@
         <div class="footer-column">
             <h3>Nos réseaux</h3>
             <div class="social-icons">
-                <a href="#" class="container-link-footer">
+                <a href="https://www.instagram.com/p/DVgD5USDBZt/" class="container-link-footer">
                     <img class='footer-img' src="./assets/images/instagram-logo.webp" alt="Instagram">
                 </a>
                 <a href="#" class="container-link-footer">
