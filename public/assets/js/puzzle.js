@@ -691,8 +691,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialOpenPdf = container ? container.getAttribute('data-open-pdf') === '1' : false;
 
     // Détermination du contenu selon l'équipe
-    const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
-    const motherName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
+    const targetName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
+    const motherName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
     const gpsCoord = (team === 'alice') ? 'D' : '9';
 
 

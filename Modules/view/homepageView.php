@@ -22,6 +22,11 @@ if (isset($_SESSION['user_id'])) : ?>
             pour vous aider à avancer dans votre aventure, et vous informer sur les éléments plus complexes du jeu.<br>
             Les informations et indices vous arriveront au fur et à mesure du temps, il sera de votre devoir de penser à
             les regarder.
+            <br>Nous vous conseillons de vous munir d'une feuille et d'un stylo, cela pourrait vous être très utile pour
+            résoudre certaines énigmes du jeu.
+            <br>Il vous est interdit de vous aider de ressources externes
+            (internet, livres, etc.) pour résoudre les énigmes, tout doit être fait à l'aide de votre esprit
+            et des éléments fournis dans le jeu.
             <br>Vous pourrez retrouver les informations que nous vous donnons dans la page du même nom qui arrive au
             vur et a mesure de vos decouverte. </p>
         <a  href='index.php?controller=Team&action=play'

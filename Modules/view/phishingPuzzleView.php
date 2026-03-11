@@ -11,7 +11,7 @@ require_once __DIR__ . "/../../includes/layout/headerClue.php";
 $team = $_SESSION['team'] ?? 'alice';
 /* Récupération de l'équipe et de l'état mémorisé en session pour la restauration après fausse réponse */
 $state = $_SESSION['phishing_state'] ?? null;
-$motherName = ($team === 'alice') ? 'Clara' : 'Diane';
+$motherName = ($team === 'alice') ? 'Diane' : 'Clara';
 ?>
 
 <div class="hero-container-welcome">
