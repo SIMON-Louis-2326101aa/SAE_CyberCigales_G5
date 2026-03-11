@@ -464,15 +464,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const expected = path[st.step] || "R";
 
-        // Si B est attendu (dernière étape), on force le déblocage et on valide
-        if (expected === "B") {
-            st.blocked = false;
-            saveState(st);
+        // Si B est attendu (dernière étape) ET qu'on n'est pas déjà bloqué, on valide
+        if (expected === "B" && !st.blocked) {
             move("B");
             return;
         }
 
-        // Sinon (si B n'est pas le bon chemin ou qu'on veut reset), on revient à zéro
+        // Sinon (si B n'est pas le bon chemin, si on est bloqué, ou qu'on veut reset), on revient à zéro
         st.step = 0;
         st.score = 0;
         st.blocked = false;
