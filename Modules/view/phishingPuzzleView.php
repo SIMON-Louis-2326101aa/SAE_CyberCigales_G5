@@ -4,8 +4,18 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 $info = "phishing";
-$clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\">
-Le mail 3 semble provenir d'une source officielle.</span><br>";
+$clue = "
+<ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        Le mail 3 semble provenir d'une source officielle.
+    </div>
+</li>
+</ul>";
 
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 $team = $_SESSION['team'] ?? 'alice';

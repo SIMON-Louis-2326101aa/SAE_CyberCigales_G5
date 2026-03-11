@@ -52,15 +52,6 @@ class PuzzleController
                 Si tu lis ces lignes, c’est que le temps a poursuivi sa route sans nous attendre.
                 Nous ne savons pas ce que la vie t’a réservé, mais nous espérons qu’elle t’a offert
                 autant de raisons d’aimer que de pardonner.
-                Il est des blessures que l’on tait trop longtemps, croyant qu’elles disparaîtront
-                d’elles-mêmes. Mais le silence ne soigne pas, il endort seulement la douleur.
-                Nous avons vu, dans le regard de ta fille Alice, cette même lueur que tu avais enfant :
-                celle de la curiosité et du courage mêlés.
-                Ne la laisse pas s’éteindre, même si le monde tente de la couvrir d’ombre.
-                Tout ce que nous avons construit, tout ce que nous avons caché, nous l’avons fait
-                pour que quelqu’un comme elle puisse un jour comprendre.
-                Avec toute la tendresse que le vent n’a pas emportée.
-                Tes grands-parents qui t'aiment.
             ",
 
             'bob' => "
@@ -69,14 +60,6 @@ class PuzzleController
                 complètement, nous voulions te confier ces mots.
                 Il n’y a pas de faute trop ancienne pour être pardonnée, ni de distance trop grande
                 pour être franchie.
-                Parfois, la vie nous sépare non pour nous punir, mais pour nous apprendre à revenir.
-                Ton fils Bob possède déjà cette flamme que nous avons reconnue : la soif de comprendre,
-                d’aller au-delà des évidences.
-                Aide-le à écouter ce qu’on ne dit pas, à lire ce qu’on ne montre plus.
-                Ce que nous avons laissé derrière nous n’est pas un trésor d’or ou de pierre, mais un
-                message, une part de notre histoire, cachée dans les plis du temps.
-                Avec l’espoir que les chemins perdus se croisent à nouveau.
-                Tes grands-parents qui t'aiment.
             "
         ];
 

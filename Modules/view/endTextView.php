@@ -1,10 +1,20 @@
 <?php
 
 $info = " ";
-$clue = " Indice code coffre (5min): <span id=\"clue-text-1\" class=\"timed-clue\">
-ou nous fetions la vie -> regardes bien la photo 
-premier papier de cette vie -> regarde les certificats de naissance
-jour si special -> regarde les dates sur les deux";
+$clue = " 
+<ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        ou nous fetions la vie -> regardes bien la photo 
+        premier papier de cette vie -> regarde les certificats de naissance
+        jour si special -> regarde les dates sur les deux
+    </div>
+</li>
+</ul>";
 
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 ?>

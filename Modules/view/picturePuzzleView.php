@@ -1,7 +1,18 @@
 <?php
 
 $info = "Cette epreuve ne necessite pas d'information supplementaire, Vous en etes capable !";
-$clue = "Indice (5min):<span id=\"clue-text-1\" class=\"timed-clue\">La photo tourne</span>";
+$clue = "
+<ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        La photo tourne
+    </div>
+</li>
+</ul>";
 
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 
@@ -11,7 +22,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
         <div class="enigma-text">
             <p>Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme ça ?
                 Et de quel trésor mes arrière-grandparents parlent.</p>
-            <p> Oh on dirait des morceau de photo au fond de l'enveloppe. </p>
+            <p> Oh on dirait des morceaux de photo au fond de l'enveloppe. </p>
         </div>
 
         <div class="photo-enigma">

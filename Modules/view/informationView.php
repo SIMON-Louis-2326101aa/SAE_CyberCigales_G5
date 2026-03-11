@@ -3,7 +3,7 @@
 ?>
 <h1>Centre d'informations</h1>
 
-<?php if ($_SESSION["level"] >= 6) :
+<?php if ($_SESSION["level"] >= 6 || $_SESSION["utilisateur"]["nbTry"] > 1) :
     include __DIR__ . "/infos/encryption.php";
     include __DIR__ . "/infos/phishing.php";
     include __DIR__ . "/infos/password.php";

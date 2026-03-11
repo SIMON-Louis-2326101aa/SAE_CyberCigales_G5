@@ -4,21 +4,37 @@
 <h2>Choisis ton équipe.</h2>
 
 <div class="rules">
-    <p>Pour percer les mystères de ce jeu, il vous faudra être deux<br>
-        Mais pas le droit de regarder ce que votre associé fait (ça ne vous aidera pas)<br>
-        Vous choisirez chacun une équipe différente qui vous mènera ensemble au mystère de cette histoire</p><br>
+    <p class="rules">
+        Pour percer les mystères de ce jeu, vous devrez être <strong>deux joueurs</strong>.<br>
+        Chacun choisira une <strong>équipe différente</strong> et suivra sa propre aventure.<br>
+        ⚠️ <strong>Interdiction de regarder ce que fait votre partenaire</strong> : cela ne vous aidera pas.
+    </p>
 
-    <p>Des petits onglets d'information (ℹ️), d'indice (💡) et un inventaire(🎒) seront là tout au long de votre jeu,<br>
-        pour vous aider à avancer dans votre aventure, et vous informer sur les éléments plus complexes du jeu.<br>
-        Les informations et indices vous arriveront au fur et à mesure du temps, il sera de votre devoir de penser à
-        les regarder.
-        <br>Nous vous conseillons de vous munir d'une feuille et d'un stylo, cela pourrait vous être très utile pour
-        résoudre certaines énigmes du jeu.
-        <br>Il vous est interdit de vous aider de ressources externes
-        (internet, livres, etc.) pour résoudre les énigmes, tout doit être fait à l'aide de votre esprit
-        et des éléments fournis dans le jeu.
-        <br>Vous pourrez retrouver les informations que nous vous donnons dans la page du même nom qui arrive au
-        vur et a mesure de vos decouverte. </p>
+    <p class="rules">
+        Pendant le jeu, plusieurs onglets vous aideront :
+        <br>
+        <strong>ℹ️ Informations</strong> : explications utiles pour comprendre certaines énigmes.<br>
+        <strong>💡 Indices</strong> : aides débloquées au fur et à mesure du temps.<br>
+        <strong>🎒 Inventaire</strong> : objets et éléments découverts pendant l’aventure.
+    </p>
+
+    <p class="rules">
+        Les <strong>indices et informations apparaîtront progressivement</strong> : pensez à les consulter
+        régulièrement.
+        <br>
+        Nous vous conseillons de prendre <strong>une feuille et un stylo</strong> pour noter vos découvertes.
+    </p>
+
+    <p class="rules">
+        ⚠️ <strong>Aucune ressource externe n’est autorisée</strong>
+        (pas d’internet, livres, etc.).<br>
+        Toutes les solutions se trouvent <strong>dans le jeu</strong>.
+    </p>
+
+    <p class="rules">
+        Les informations découvertes seront accessibles dans la <strong>page Informations</strong> au fur et à
+        mesure de votre progression.
+    </p>
 </div>
 
 <div class="team-select">

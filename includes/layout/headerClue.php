@@ -2,7 +2,7 @@
 
 ?>
 <div id="info-tab">
-    <div id="info-handle" class="tab-handle disabled">ℹ️</div>
+    <div id="info-handle" class="tab-handle disabled">ℹ️<br><p id="info-chrono">01:00</p></div>
     <div id="info-content" class="tab-content">
         <h3>Informations</h3>
         <?php
@@ -56,8 +56,7 @@
                             pour que quelqu’un comme elle puisse un jour comprendre.
                             Avec toute la tendresse que le vent n’a pas emportée.
                             Tes grands-parents qui t'aiment.
-
-                            Et a l'arriere le mot : REFLET
+                            Et à l'arrière le mot : REFLET
                         <?php else : ?>
                             Ma chère Clara,
                             Le temps nous a glissé entre les doigts comme du sable, mais avant qu’il ne disparaisse
@@ -72,8 +71,7 @@
                             message, une part de notre histoire, cachée dans les plis du temps.
                             Avec l’espoir que les chemins perdus se croisent à nouveau.
                             Tes grands-parents qui t'aiment.
-
-                            Et a l'arriere le mot : REFLET
+                            Et à l'arrière le mot : REFLET
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
@@ -82,10 +80,13 @@
                 <?php if ($_SESSION["level"] >= 3) : ?>
                     <li>
                         <strong>Épreuve 2 :</strong> Une photo de famille mystérieuse avec un message caché.
+                        <img src="./assets/images/photoFamille.png" alt="photodefamille" >
                         <?php if ($_SESSION["team"] === "alice") : ?>
-                        Le message etait "Le papillon garde la mémoire." et on a retenu de cette phrase PAPILLON MEMOIRE
+                            Le message était : "Le papillon garde la mémoire."
+                            Nous avons retenu de cette phrase : PAPILLON MÉMOIRE.
                         <?php else : ?>
-                        Le message etait "La clé ouvre le passé." et on a retenu de cette phrase CLE PASSE
+                            Le message était : "La clé ouvre le passé."
+                            Nous avons retenu de cette phrase : CLÉ PASSÉ.
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
@@ -93,20 +94,61 @@
 
                 <?php if ($_SESSION["level"] >= 4) : ?>
                     <li>
-                        <strong>Épreuve 3 :</strong> On a suivi la piste d'un signale deguise en papillon, qui nous a
-                        mené  <?php if ($_SESSION["team"] === "alice") : ?>
+                        <strong>Épreuve 3 :</strong> On a suivi la piste d'un signal déguisé en papillon,
+                        qui nous a menés
+                        <?php if ($_SESSION["team"] === "alice") : ?>
                             admin
-                              <?php else : ?>
+                        <?php else : ?>
                             root
-                              <?php endif; ?>
+                        <?php endif; ?>
                     </li>
                 <?php endif; ?>
 
 
                 <?php if ($_SESSION["level"] >= 5) : ?>
                     <li>
-                        <strong>Épreuve 4 :</strong> Un document important dans un mail nous fait prendre connaissance
-                        qu'on a une tante
+                        <strong>Épreuve 4 :</strong> Un document important dans un mail nous a fait découvrir
+                        que nous avons une tante.
+                        <?php if ($_SESSION["team"] === "alice") : ?>
+                            <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+                                <div class="pdf-header-border">
+                                    <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                                    <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
+                                </div>
+                                <div class="pdf-body-content">
+                                    <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
+                                    <h3 class="pdf-person-name">Clara VALMONT</h3>
+                                    <p style="color: #333;">
+                                        Fille de Pierre VALMONT et de Suzanne LECLERC.
+                                        Sœur de Diane VALMONT.
+                                    </p>
+                                    <div class="pdf-handwritten">
+                                        <span class="handwritten-label">Note manuscrite :</span>
+                                        <strong>D</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else : ?>
+                            <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+                                <div class="pdf-header-border">
+                                    <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
+                                    <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
+                                </div>
+                                <div class="pdf-body-content">
+                                    <p style="color: #333;">Le <strong>18 mars 1978</strong>, est née :</p>
+                                    <h3 class="pdf-person-name">Diane VALMONT</h3>
+                                    <p style="color: #333;">
+                                        Fille de Pierre VALMONT et de Suzanne LECLERC.
+                                        Sœur de Clara VALMONT.
+                                    </p>
+                                    <div class="pdf-handwritten">
+                                        <span class="handwritten-label">Note manuscrite :</span>
+                                        <strong>9</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
                     </li>
                 <?php endif; ?>
 
@@ -120,7 +162,7 @@
 
                 <?php if ($_SESSION["level"] >= 7) : ?>
                     <li>
-                        <strong>Epreuve 6 :</strong> Plusieurs fragments de l'histoire familiale ont été rassemblés.
+                        <strong>Épreuve 6 :</strong> Plusieurs fragments de l'histoire familiale ont été rassemblés.
                     </li>
                 <?php endif; ?>
 

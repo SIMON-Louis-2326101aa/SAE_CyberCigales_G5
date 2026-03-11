@@ -76,58 +76,83 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// ===== Révélation des indices avec délai (setTimeout) & Chronomètre (pas de changement) =====
 document.addEventListener("DOMContentLoaded", function () {
-    // Délai en millisecondes avant l'apparition de chaque indice (exemple : 2 minutes = 120000 ms)
-    const delayClue1 = 300000; // 5 minutes
-    const delayClue2 = 600000; // 10 minute
-    const delayClue3 = 900000; // 15 minutes
 
-    const delayTabInfo = 60000; // 2 minutes
+    const clues = [
+        { delay: 300000, text: "clue-text-1", time: "clue-time-1" },
+        { delay: 600000, text: "clue-text-2", time: "clue-time-2" },
+        { delay: 900000, text: "clue-text-3", time: "clue-time-3" }
+    ];
 
-    const clue1 = document.getElementById("clue-text-1");
-    const clue2 = document.getElementById("clue-text-2");
-    const clue3 = document.getElementById("clue-text-3");
+    clues.forEach(clue => startClueTimer(clue.delay, clue.text, clue.time));
+
+    const delayTabInfo = 60000; // 1 minute
 
     const infoTab = document.getElementById("info-handle");
+    const infoChrono = document.getElementById("info-chrono");
 
-    // Fonction pour afficher l'indice
-    function showClue(element)
+
+    // ===== Chrono pour l'onglet info =====
+    if (infoTab && infoChrono) {
+
+        let remainingTime = delayTabInfo / 1000; // en secondes
+
+        const countdown = setInterval(function () {
+
+            let minutes = Math.floor(remainingTime / 60);
+            let seconds = remainingTime % 60;
+
+            minutes = String(minutes).padStart(2, "0");
+            seconds = String(seconds).padStart(2, "0");
+
+            infoChrono.textContent = minutes + ":" + seconds;
+
+            remainingTime--;
+
+            if (remainingTime < 0) {
+                clearInterval(countdown);
+                infoChrono.textContent = "00:00";
+                infoTab.classList.remove("disabled");
+                console.log("L'onglet d'info est activé !");
+            }
+
+        }, 1000);
+    }
+
+    // ===== Indices =====
+    function startClueTimer(delay, textId, timeId)
     {
-        if (element) {
-            element.classList.add("show");
-        }
-    }
+        const clueText = document.getElementById(textId);
+        const clueTime = document.getElementById(timeId);
 
-    // Minuteur tab info : Révéler tab d'info
-    if (infoTab) {
-        setTimeout(function () {
-            infoTab.classList.remove("disabled");
-            console.log("L'onglet d'info est activer !"); // Pour le débogage
-        }, delayTabInfo);
-    }
+        if (!clueText || !clueTime) return;
 
-    // Minuteur 1 : Révéler l'indice 1 après 0 minute
-    if (clue1) {
-        setTimeout(function () {
-            showClue(clue1);
-            console.log("Indice 1 révélé !"); // Pour le débogage
-        }, delayClue1);
-    }
+        let remaining = delay / 1000;
 
-    // Minuteur 2 : Révéler l'indice 2 après 15 minute
-    if (clue2) {
-        setTimeout(function () {
-            showClue(clue2);
-            console.log("Indice 2 révélé !"); // Pour le débogage
-        }, delayClue2);
-    }
+        const timer = setInterval(function(){
 
-    // Minuteur 3 : Révéler l'indice 3 après 30 minutes
-    if (clue3) {
-        setTimeout(function () {
-            showClue(clue3);
-        }, delayClue3);
+            let minutes = Math.floor(remaining / 60);
+            let seconds = remaining % 60;
+
+            minutes = String(minutes).padStart(2,"0");
+            seconds = String(seconds).padStart(2,"0");
+
+            clueTime.textContent = minutes + ":" + seconds;
+
+            remaining--;
+
+            if(remaining < 0)
+            {
+                clearInterval(timer);
+
+                clueTime.textContent = "disponible";
+                clueText.classList.add("show");
+
+                const header = clueTime.parentElement;
+                header.innerHTML = header.innerHTML.replace("🔒","💡");
+            }
+
+        },1000);
     }
 
     // Chronomètre de jeu (Game Timer)
