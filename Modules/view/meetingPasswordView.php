@@ -1,8 +1,18 @@
 <?php
 
 $info = " ";
-$clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\">
- Quel autre mot avont nous retenu avec CLE et MEMOIRE ? ";
+$clue = "
+ <ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        Quel autre mot avont nous retenu avec CLE et MEMOIRE ? 
+    </div>
+</li>
+</ul>";
 
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 ?>

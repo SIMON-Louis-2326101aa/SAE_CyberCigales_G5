@@ -1,8 +1,26 @@
 <?php
 
 $info = "";
-$clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\"
-Qui est cette autre enfant sur la photo de famille ?</span>";
+$clue = "
+<ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        Qui est cette autre enfant sur la photo de famille ?
+    </div>
+</li>
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Solution <span id='clue-time-3'>15:00</span>
+    </div>
+    <div id='clue-text-3' class='clue-text'>
+        C'est votre cousin !
+    </div>
+</li>
+</ul>";
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 
 if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>

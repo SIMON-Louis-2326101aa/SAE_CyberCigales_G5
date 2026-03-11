@@ -2,7 +2,7 @@
 
 ?>
 <div id="info-tab">
-    <div id="info-handle" class="tab-handle disabled">ℹ️</div>
+    <div id="info-handle" class="tab-handle disabled">ℹ️<br><p id="info-chrono">01:00</p></div>
     <div id="info-content" class="tab-content">
         <h3>Informations</h3>
         <?php

@@ -1,7 +1,18 @@
 <?php
 
 $info = "Cette epreuve ne necessite pas d'information supplementaire, Vous en etes capable !";
-$clue = "Indice (5min):<span id=\"clue-text-1\" class=\"timed-clue\">La photo tourne</span>";
+$clue = "
+<ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        La photo tourne
+    </div>
+</li>
+</ul>";
 
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 

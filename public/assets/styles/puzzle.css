@@ -53,7 +53,7 @@
 
 #clue-tab {
     position: fixed;
-    top: 30%;
+    top: 33%;
     right: 0;
     transform: translateY(-50%);
     z-index: 2000;
@@ -61,7 +61,7 @@
 
 #inventory-tab {
     position: fixed;
-    top: 40%;
+    top: 43%;
     right: 0;
     transform: translateY(-50%);
     z-index: 2000;
@@ -99,6 +99,10 @@
 .tab-handle:hover {
     background: var(--primary-light);
     transform: translateX(-3px);
+}
+
+.tab-handle p {
+    font-size : 0.9rem;
 }
 
 /* Panneau masqué par défaut (en dehors de l’écran) */
@@ -2045,4 +2049,31 @@ section h4 {
     margin-top: 0;
     color: var(--text-secondary);
     font-size: 2.5rem;
+}
+
+.clues{
+    list-style:none;
+    padding:0;
+}
+
+.clue-block{
+    border:2px solid var(--border);
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:8px;
+    background:var(--bg-light);
+    color:white;
+}
+
+.clue-header{
+    font-weight:bold;
+}
+
+.clue-text{
+    margin-top:8px;
+    display:none;
+}
+
+.clue-text.show{
+    display:block;
 }

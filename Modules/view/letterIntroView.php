@@ -1,13 +1,37 @@
 <?php
 $info = "encryption";
-$clue = "<ul>
-    <li>Indice 1 (5min): </li>
-    <li><span id=\"clue-text-1\" class=\"timed-clue\">La clée est cacher dans la lettre.</span></li>
-    <li>Indice 2 (10min):</li>
-    <li><span id=\"clue-text-2\" class=\"timed-clue\">La clée ce cache dans la date. </span></li>
-    <li>Solution (15min):</li>
-    <li><span id=\"clue-text-3\" class=\"timed-clue\">La clée est 10.</span></li>
-</ul>";
+$clue = "
+<ul class='clues'>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        La clé est cachée dans la lettre.
+    </div>
+</li>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 2 <span id='clue-time-2'>10:00</span>
+    </div>
+    <div id='clue-text-2' class='clue-text'>
+        La clé se cache dans la date.
+    </div>
+</li>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Solution <span id='clue-time-3'>15:00</span>
+    </div>
+    <div id='clue-text-3' class='clue-text'>
+        La clé est 10.
+    </div>
+</li>
+
+</ul>
+";
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="intro-letter-content">
