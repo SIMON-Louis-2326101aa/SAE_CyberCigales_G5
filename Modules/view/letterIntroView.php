@@ -85,7 +85,8 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div id="solutionLetter" class="solution-letter-content">
         <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
             <label>
-                Qu'est-ce veut dire cette lettre ?<br>
+                Qu'est-ce veut dire cette lettre ?<br> Il est nessaire de decoder que le premiere paragraphe de la
+                lettre <br>Vous pourrez ensuite retrouver la lettre entiere decode dans votre inventaire.<br>
                 <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
                             ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
             </label>
