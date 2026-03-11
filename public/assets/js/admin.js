@@ -41,4 +41,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // --- Bannir utilisateur
+    const banButtons = document.querySelectorAll('.ban-form-user-btn');
+
+    banButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const userId = this.dataset.userId;
+            window.location.href = `index.php?controller=Admin&action=showBanForm&id=${userId}`;
+        });
+    });
+
+    // --- Débannir utilisateur
+    const unbanButtons = document.querySelectorAll('.unban-user-btn');
+
+    unbanButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            const userId = this.dataset.userId;
+            window.location.href = `index.php?controller=Admin&action=unbanUser&id=${userId}`;
+        });
+    });
 });

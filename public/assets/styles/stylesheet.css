@@ -87,6 +87,10 @@ body::before {
     z-index: 0;
 }
 
+p {
+    font-size: 1.25rem;
+}
+
 /* ============ Navigation ============ */
 nav, .nav-menu {
     background: linear-gradient(135deg, rgb(10 27 42 / 98%), rgb(164 69 255 / 15%));
@@ -413,7 +417,7 @@ h5 {
 
 .rules{
     font-family: Handlee, cursive;
-    font-size: 18px;
+    font-size: 1.2rem;
 }
 
 .hero-container-welcome{
@@ -1160,12 +1164,12 @@ body[data-theme="tritanopia"] {
     color: #000 !important;
 }
 
-#ban-user-btn{
+.ban-user-btn{
     background: #f00;
     color: #000 !important;
 }
 
-#unban-user-btn{
+.unban-user-btn{
     background: #5f0;
     color: #000 !important;
 }

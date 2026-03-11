@@ -120,11 +120,12 @@ class UserModel extends Database
         return $users[0] ?? null;
     }
 
-    public function banUser(int $userId): bool
+    public function banUser(int $userId, string $reason): bool
     {
         return $this->db->update(
             'users',
-            ['is_banned' => 1],
+            ['is_banned' => 1,
+            'ban_reason' => $reason,],
             ['id' => $userId]
         ) > 0;
     }

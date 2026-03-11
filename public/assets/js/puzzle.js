@@ -66,16 +66,24 @@ document.addEventListener("DOMContentLoaded", function () {
             clueTab.classList.toggle("open");
         });
     }
+
+    const inventoryTab = document.getElementById("inventory-tab");
+    const inventoryHandle = document.getElementById("inventory-handle");
+    if (inventoryTab && inventoryHandle) {
+        inventoryHandle.addEventListener("click", function () {
+            inventoryTab.classList.toggle("open");
+        });
+    }
 });
 
 // ===== Révélation des indices avec délai (setTimeout) & Chronomètre (pas de changement) =====
 document.addEventListener("DOMContentLoaded", function () {
     // Délai en millisecondes avant l'apparition de chaque indice (exemple : 2 minutes = 120000 ms)
-    const delayClue1 = 600000; // 10 minutes
-    const delayClue2 = 900000; // 15 minute
-    const delayClue3 = 1800000; // 30 minutes
+    const delayClue1 = 300000; // 5 minutes
+    const delayClue2 = 600000; // 10 minute
+    const delayClue3 = 900000; // 15 minutes
 
-    const delayTabInfo = 300000; // 5 minutes
+    const delayTabInfo = 60000; // 2 minutes
 
     const clue1 = document.getElementById("clue-text-1");
     const clue2 = document.getElementById("clue-text-2");
@@ -235,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function () {
     photoPuzzle.style.height = "400px";
     photoPuzzle.style.gap = "0";
 
-    shuffled.forEach((value, index) => {
+    shuffled.forEach((value) => {
 
         let piece = document.createElement("div");
         piece.classList.add("piece");
@@ -403,7 +411,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (codeZone) {
-            codeZone.style.display = st.showCode ? "" : "none";
+            codeZone.style.display = st.showCode ? "block" : "none";
         }
     }
 
@@ -511,7 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // La fonction de validation prend le mot de passe (pwd) et retourne `true` si la règle est respectée, sinon `false`
     const rules = [
         // Règle 1: Longueur minimale
-        { text: "Règle 1: Votre mot de passe doit contenir au moins 8 caractères.", validate: (pwd) => pwd.length >= 8 },
+        { text: "Règle 1: Votre mot de passe doit contenir au moins 12 caractères.", validate: (pwd) => pwd.length >= 12 },
 
         // Règle 2: Présence d'une majuscule
         { text: "Règle 2: Votre mot de passe doit contenir au moins une majuscule.", validate: (pwd) => /[A-Z]/.test(pwd) },
@@ -536,7 +544,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Règle 7: Doit contenir le nom d'un sponsor
         {
-            text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos"><img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung"><img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi"><img src="./assets/images/Logo_Lamborghini.png" alt="Logo Lamborghini" title="Lamborghini"></div>',
             text: 'Règle 7: Votre mot de passe doit inclure le nom d\'un de nos sponsors. <div class="sponsor-logos">' +
                 '<img src="./assets/images/Logo_Samsung.png" alt="Logo Samsung" title="Samsung">' +
                 '<img src="./assets/images/Logo_Mitsubishi.png" alt="Logo Mitsubishi" title="Mitsubishi">' +
@@ -641,12 +648,12 @@ document.addEventListener('DOMContentLoaded', () => {
         1: {
             from: "service-client@inf0-impots.gouv.fr",
             subject: "Remboursement de trop-perçu",
-            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=1'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
+            body: "<p>Cher(e) contribuable,</p><p>Après examen de votre dossier fiscal, un remboursement de 450,20€ est en votre faveur.</p><p>Veuillez confirmer vos coordonnées sur notre portail sécurisé : <br><a href='index.php?controller=Puzzle&action=openImpotsPhishing'>http://impots-gouv-remboursement-virement.net/ref45</a></p><p>Cordialement,<br>L'administration fiscale.</p>"
         },
         2: {
             from: "secure-check@faceb00k.security.com",
             subject: "Alerte de sécurité importante",
-            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div class='button class' id='block-button-facebook-phishing'><a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=2' class='btn-nav' id='button-facebook-phishing'>SÉCURISER MON COMPTE</a></div><p>L'équipe de sécurité.</p>"
+            body: "<p>Bonjour,</p><p>Une tentative de connexion suspecte a été détectée depuis Singapour. Si vous n'êtes pas à l'origine de cette action, sécurisez votre compte immédiatement.</p><div class='mail-button-container'><a href='index.php?controller=Puzzle&action=openFacebookPhishing' class='btn-nav btn-mail-action'>SÉCURISER MON COMPTE</a></div><p>L'équipe de sécurité.</p>"
         },
         3: {
             from: "archives.departementales@hauts-de-seine.fr",
@@ -672,8 +679,18 @@ document.addEventListener('DOMContentLoaded', () => {
                            <span class="attachment-action-text">Cliquer pour visualiser</span>
                        </div>
                    </div>
-                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le <a href='index.php?controller=Puzzle&action=phishingLinkClick&from_id=4'>lien sécurisé</a>.</p>
+                   <p>Pour visualiser ce document inédit, veuillez régulariser votre abonnement annuel (19,99€) en cliquant sur le <a href='index.php?controller=Puzzle&action=openGenealogiePhishing'>lien sécurisé</a>.</p>
                    <p>L'équipe Généalogie Direct.</p>`
+        },
+        5: {
+            from: "info@lapostee-suivi.fr",
+            subject: "Votre colis n°8L9452 est bloqué",
+            body: "<p>Bonjour,</p><p>Votre colis n'a pas pu être livré car il manque un affranchissement de 1,99€.</p><p>Pour programmer une nouvelle livraison, veuillez régulariser les frais de port via le lien ci-dessous :</p><p><a href='index.php?controller=Puzzle&action=openColisPhishing'>https://lapostee.fr/suivi/paiement-frais-douane</a></p><p>Attention, sans action de votre part sous 48h, le colis sera renvoyé à l'expéditeur.</p>"
+        },
+        6: {
+            from: "nepasrepondre@videocloud-share.com",
+            subject: "Vous avez reçu une vidéo !",
+            body: "<p>Bonjour,</p><p>Un de vos contacts vous a partagé une vidéo privée via notre plateforme sécurisée.</p><p>Pour la visionner, cliquez sur le bouton ci-dessous :</p><div class='mail-button-container'><a href='index.php?controller=Puzzle&action=openVideoPhishing' class='btn-nav btn-mail-action'>VISIONNER LA VIDÉO</a></div>"
         }
     };
 
@@ -684,9 +701,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const initialOpenPdf = container ? container.getAttribute('data-open-pdf') === '1' : false;
 
     // Détermination du contenu selon l'équipe
-    const targetName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
-    const motherName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
-    const gpsCoord = (team === 'alice') ? '43°14\'18.6\"N' : '5°26\'18.1\"E';
+    const targetName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
+    const motherName = (team === 'alice') ? 'Diane VALMONT' : 'Clara VALMONT';
+    const gpsCoord = (team === 'alice') ? 'D' : '9';
 
 
     // Affiche le contenu de l'acte de naissance (simule l'ouverture d'un PDF)
@@ -702,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3 class="pdf-person-name">${targetName}</h3>
                 <p>Fille de Pierre VALMONT et de Suzanne LECLERC. Soeur de ${motherName}.</p>
                 <div class="pdf-handwritten">
-                    <span class="handwritten-label">Note manuscrite :</span><br>
+                    <span class="handwritten-label">Note manuscrite :</span>
                     <strong>${gpsCoord}</strong>
                 </div>
             </div>
@@ -733,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (validationSection) validationSection.classList.add('hidden');
     }
 
-     // Gère l'affichage d'un email spécifique
+    // Gère l'affichage d'un email spécifique
     function selectMail(id) {
         const item = Array.from(emailItems).find(el => el.getAttribute('data-id') === id);
         if (!item) return;
@@ -800,3 +817,200 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// Gestion de la vidéo de phishing (Déblocage et lecture)
+document.addEventListener('DOMContentLoaded', () => {
+    const unlockBtn = document.getElementById('unlock-video-btn');
+    const trapVideo = document.getElementById('trap-video');
+    const unlockOverlay = document.getElementById('unlock-overlay');
+    const epilepsyWarning = document.getElementById('epilepsy-warning');
+
+    if (unlockBtn && trapVideo) {
+        unlockBtn.addEventListener('click', () => {
+            // Cache l'overlay initial
+            if (unlockOverlay) unlockOverlay.style.display = 'none';
+
+            // Affiche l'avertissement d'épilepsie
+            if (epilepsyWarning) epilepsyWarning.classList.remove('hidden');
+
+            // Attend 2 secondes avant de lancer la vidéo
+            setTimeout(() => {
+                if (epilepsyWarning) epilepsyWarning.classList.add('hidden');
+                trapVideo.classList.remove('video-hidden');
+                trapVideo.play();
+            }, 2000);
+        });
+    }
+});
+
+// Fonction pour remplir automatiquement le formulaire des impôts avec les données de l'équipe
+function autoFillImpots() {
+    const container = document.querySelector('.impots-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const nom = document.getElementById('nom');
+    const birth = document.getElementById('birth');
+    const address = document.getElementById('address');
+    const tel = document.getElementById('tel');
+    const card = document.getElementById('card');
+
+    const fillBtn = document.getElementById('fill-btn');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Données de test selon l'équipe choisie
+    if (team === 'alice') {
+        if (nom) nom.value = "Clara Valmont";
+        if (birth) birth.value = "1978-03-18";
+        if (address) address.value = "1 Rue du Papillon, Boulogne-Billancourt";
+        if (tel) tel.value = "06 12 88 44 22";
+        if (card) card.value = "4532 0123 4567 8901";
+    } else {
+        if (nom) nom.value = "Diane Valmont";
+        if (birth) birth.value = "1978-03-18";
+        if (address) address.value = "5 Rue de la mémoire, Boulogne-Billancourt";
+        if (tel) tel.value = "07 45 66 77 88";
+        if (card) card.value = "5105 9876 5432 1098";
+    }
+
+    // On cache le bouton de remplissage et on montre le bouton de validation
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (submitBtn) submitBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing sur la page des impôts
+function showWarningPhishingImpots() {
+    const form = document.getElementById('phishing-form');
+    const scammerMsg = document.getElementById('scammer-msg');
+    const warningMsg = document.getElementById('warning-msg');
+    const returnBtn = document.getElementById('return-btn');
+    const submitBtn = document.getElementById('submit-btn');
+    const intro = document.getElementById('impots-intro');
+
+    // On cache le formulaire, le bouton valider et l'introduction
+    if (form) form.style.display = 'none';
+    if (submitBtn) submitBtn.style.display = 'none';
+    if (intro) intro.style.display = 'none';
+
+    // On affiche le message méchant des arnaqueurs
+    if (scammerMsg) {
+        scammerMsg.style.display = 'block';
+        scammerMsg.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Après 7 secondes, on remplace par le message explicatif et le bouton retour
+    setTimeout(() => {
+        if (scammerMsg) scammerMsg.style.display = 'none';
+        if (warningMsg) warningMsg.style.display = 'block';
+        if (returnBtn) returnBtn.style.display = 'block';
+
+        if (warningMsg) warningMsg.scrollIntoView({ behavior: 'smooth' });
+    }, 7000);
+}
+
+// Fonction pour remplir automatiquement le formulaire Facebook
+function autoFillFacebook() {
+    const container = document.querySelector('.facebook-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const email = document.getElementById('fb-email');
+    const pass = document.getElementById('fb-pass');
+
+    const fillBtn = document.getElementById('fb-fill-btn');
+    const loginBtn = document.getElementById('fb-login-btn');
+
+    // Remplissage avec les identifiants probables des personnages
+    if (team === 'alice') {
+        if (email) email.value = "clara.valmont@email.fr";
+        if (pass) pass.value = "SecretPapillon95";
+    } else {
+        if (email) email.value = "diane.valmont@email.fr";
+        if (pass) pass.value = "MemoireVive92";
+    }
+
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (loginBtn) loginBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing Facebook
+function showWarningPhishingFacebook() {
+    const loginCard = document.getElementById('fb-login-card');
+    const warningMsg = document.getElementById('fb-warning-msg');
+    const returnBtn = document.getElementById('fb-return-btn');
+
+    if (loginCard) loginCard.style.display = 'none';
+    if (warningMsg) warningMsg.style.display = 'block';
+    if (returnBtn) returnBtn.style.display = 'block';
+}
+
+// Fonction pour remplir automatiquement le formulaire Généalogie
+function autoFillGenealogie() {
+    const container = document.querySelector('.genealogie-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const nom = document.getElementById('gen-nom');
+    const email = document.getElementById('gen-email');
+    const card = document.getElementById('gen-card');
+
+    const fillBtn = document.getElementById('gen-fill-btn');
+    const submitBtn = document.getElementById('gen-submit-btn');
+
+    // Données
+    if (team === 'alice') {
+        if (nom) nom.value = "Clara Valmont";
+        if (email) email.value = "clara.valmont@email.fr";
+        if (card) card.value = "4532 0123 4567 8901";
+    } else {
+        if (nom) nom.value = "Diane Valmont";
+        if (email) email.value = "diane.valmont@email.fr";
+        if (card) card.value = "5105 9876 5432 1098";
+    }
+
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (submitBtn) submitBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing Généalogie
+function showWarningPhishingGenealogie() {
+    const cardBox = document.getElementById('gen-card-box');
+    const warningMsg = document.getElementById('gen-warning-msg');
+    const returnBtn = document.getElementById('gen-return-btn');
+
+    if (cardBox) cardBox.style.display = 'none';
+    if (warningMsg) warningMsg.style.display = 'block';
+    if (returnBtn) returnBtn.style.display = 'block';
+}
+
+// Fonction pour remplir automatiquement le formulaire Colis (La Poste)
+function autoFillColis() {
+    const container = document.querySelector('.colis-container');
+    const team = container ? container.getAttribute('data-team') : 'alice';
+
+    const email = document.getElementById('colis-email');
+    const pass = document.getElementById('colis-pass');
+
+    const fillBtn = document.getElementById('colis-fill-btn');
+    const loginBtn = document.getElementById('colis-login-btn');
+
+    // Identifiants cohérents avec les autres pages
+    if (team === 'alice') {
+        if (email) email.value = "clara.valmont@email.fr";
+        if (pass) pass.value = "SecretPapillon95";
+    } else {
+        if (email) email.value = "diane.valmont@email.fr";
+        if (pass) pass.value = "MemoireVive92";
+    }
+
+    if (fillBtn) fillBtn.classList.add('hidden');
+    if (loginBtn) loginBtn.classList.remove('hidden');
+}
+
+// Fonction pour afficher l'avertissement de phishing Colis
+function showWarningPhishingColis() {
+    const loginCard = document.getElementById('colis-login-card');
+    const warningMsg = document.getElementById('colis-warning-msg');
+    const returnBtn = document.getElementById('colis-return-btn');
+
+    if (loginCard) loginCard.style.display = 'none';
+    if (warningMsg) warningMsg.style.display = 'block';
+    if (returnBtn) returnBtn.style.display = 'block';
+}

@@ -13,6 +13,9 @@
             <ul>
                 <li><a href="index.php">Accueil</a></li>
                 <li><a href="index.php?controller=Redirection&action=openSiteMap">Plan du site</a></li>
+                <?php if (isset($_SESSION['utilisateur'])) { ?>
+                <li><a href="index.php?controller=Redirection&action=openInformation">Informations</a> </li>
+                <?php } ?>
                 <li><a href="index.php?controller=Redirection&action=openContact">Contact</a></li>
             </ul>
         </div>

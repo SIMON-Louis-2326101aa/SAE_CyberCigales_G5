@@ -1,52 +1,15 @@
-<!-- Marque-page latéral -->
-<div id="info-tab">
-    <div id="info-handle" class="tab-handle disabled">ℹ️</div>
-    <div id="info-content" class="tab-content">
-        <h3>Informations</h3>
-        <h4>Le Chiffrement de César</h4>
-        <p>Le chiffrement de César est l’un des plus anciens systèmes de cryptographie.
-            Il a été utilisé par Jules César pour envoyer des messages secrets à ses généraux.</p>
-        <ul>
-            <li>
-                L’idée est simple :<br>
-                ➡ Chaque lettre du message est décalée d’un certain nombre de positions dans l’alphabet.
-            </li>
-            <li>Exemple :<br>
-                Clé = 3<br>
-                A → D<br>
-                B → E<br>
-                C → F<br>
-                ...<br>
-                Z → C<br>
-
-                Ainsi, le mot “BONJOUR” devient “ERQMRXU”.</li>
-            <li>Comment déchiffrer ?</li>
-            <li>
-                Pour retrouver le texte d’origine, il suffit de faire l’inverse du décalage.
-                Si le message a été codé avec une clé de +3, il faut le décaler de −3.
-            </li>
-            <li>
-                Exemple :<br>
-                “ERQMRXU” (clé +3) → “BONJOUR”</li>
-        </ul>
-        <p>mais pour cela, il faut connaître la clé utilisée.</p>
-    </div>
-</div>
-<div id="clue-tab">
-    <div id="clue-handle" class="tab-handle">💡</div>
-    <div id="clue-content" class="tab-content">
-        <h3>Indice</h3>
-        <ul>
-            <li>Indice 1 : </li>
-            <li><span id="clue-text-1" class="timed-clue">La clée est cacher dans la lettre.</span></li>
-            <li>Indice 2 :</li>
-            <li><span id="clue-text-2" class="timed-clue">La clée ce cache dans la date. </span></li>
-            <li>Solution :</li>
-            <li><span id="clue-text-3" class="timed-clue">La clée est 10.</span></li>
-        </ul>
-    </div>
-</div>
-<?php if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
+<?php
+$info = "encryption";
+$clue = "<ul>
+    <li>Indice 1 (5min): </li>
+    <li><span id=\"clue-text-1\" class=\"timed-clue\">La clée est cacher dans la lettre.</span></li>
+    <li>Indice 2 (10min):</li>
+    <li><span id=\"clue-text-2\" class=\"timed-clue\">La clée ce cache dans la date. </span></li>
+    <li>Solution (15min):</li>
+    <li><span id=\"clue-text-3\" class=\"timed-clue\">La clée est 10.</span></li>
+</ul>";
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
+if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="intro-letter-content">
         <p>Vous incarnez le personnage d'Alice, une jeune lycéenne de 16 ans, vivant aux alentours de Marseille avec
             ses parents. Un après-midi de fin d’hiver, vous rangez discrètement les chaussures de votre mère que vous

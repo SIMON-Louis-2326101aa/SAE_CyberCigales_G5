@@ -3,14 +3,19 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+$info = "phishing";
+$clue = "Indice 1 (5min): <span id=\"clue-text-1\" class=\"timed-clue\">
+Le mail 3 semble provenir d'une source officielle.</span><br>";
+
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 $team = $_SESSION['team'] ?? 'alice';
 /* Récupération de l'équipe et de l'état mémorisé en session pour la restauration après fausse réponse */
 $state = $_SESSION['phishing_state'] ?? null;
-$motherName = ($team === 'alice') ? 'Clara' : 'Diane';
+$motherName = ($team === 'alice') ? 'Diane' : 'Clara';
 ?>
 
 <div class="hero-container-welcome">
-    <h1>La boîte mail</h1>
+    <p>Le papillon vous mene sur votre PC</p>
     <p>Vous ouvrez la boîte mail de votre mère (<?php echo $motherName; ?>).</p>
 </div>
 
@@ -42,6 +47,14 @@ $motherName = ($team === 'alice') ? 'Clara' : 'Diane';
                     <div class="mail-sender-name">Généalogie Direct</div>
                     <div class="mail-subject-preview">Découvrez votre arbre!</div>
                 </li>
+                <li class="email-item-logic" data-id="5">
+                    <div class="mail-sender-name">La Poste</div>
+                    <div class="mail-subject-preview">Colis bloqué</div>
+                </li>
+                <li class="email-item-logic" data-id="6">
+                    <div class="mail-sender-name">Video Cloud</div>
+                    <div class="mail-subject-preview">Vidéo reçue</div>
+                </li>
             </ul>
         </div>
 
@@ -67,7 +80,7 @@ $motherName = ($team === 'alice') ? 'Clara' : 'Diane';
     </div>
 </div>
 
-<?php 
+<?php
 /* Suppression de l'état après affichage pour ne pas interférer avec les futures tentatives */
-unset($_SESSION['phishing_state']); 
+unset($_SESSION['phishing_state']);
 ?>

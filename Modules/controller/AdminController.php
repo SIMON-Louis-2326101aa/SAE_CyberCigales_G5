@@ -6,6 +6,7 @@
 
 namespace SAE_CyberCigales_G5\Modules\controller ;
 
+use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\includes\ViewHandler;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
 use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
@@ -131,6 +132,8 @@ class AdminController
     public function banUser()
     {
         $userId = $_GET['id'] ?? null;
+        $reason = $_POST['reason'] ?? '';
+        $email = $_POST['email'] ?? '';
 
         // Protection compte admin
         if ($userId == 5) {
@@ -140,7 +143,12 @@ class AdminController
         }
 
         if ($userId) {
-            $this->userModel->banUser((int)$userId);
+            $this->userModel->banUser((int)$userId, $reason);
+            $subject = 'Votre compte a etait banni.';
+            $message = $this->renderEmailTemplate([
+                'ban_reason' => $reason
+            ]);
+            Mailer::send($email, $subject, $message);
             $_SESSION['flash_success'] = "Utilisateur banni avec succès.";
         }
 
@@ -161,4 +169,31 @@ class AdminController
         exit;
     }
 
+    public function showBanForm()
+    {
+        $userId = $_GET['id'] ?? null;
+
+        if (!$userId) {
+            header("Location: index.php?controller=Admin&action=listUsers");
+            exit;
+        }
+
+        $user = $this->userModel->getUserById((int)$userId);
+
+        if (!$user) {
+            header("Location: index.php?controller=Admin&action=listUsers");
+            exit;
+        }
+
+        ViewHandler::show("admin/userBanView", ["user" => $user]);
+    }
+
+    private function renderEmailTemplate(array $data): string
+    {
+        extract($data);
+
+        ob_start();
+        require __DIR__ . '/../view/email/banniEmail.php';
+        return ob_get_clean();
+    }
 }

@@ -118,9 +118,9 @@ class UserController
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
-        if (strlen($password) < 8) {
-            $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 8 caractères.";
-            log_console('Register: mot de passe < 8 caractères', 'error');
+        if (strlen($password) < 12) {
+            $_SESSION['flash_error'] = "Votre mot de passe n'est pas assez long : minimum 12 caractères.";
+            log_console('Register: mot de passe < 12 caractères', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");
             exit;
         }
@@ -131,7 +131,7 @@ class UserController
             !preg_match('/[0-9]/', $password) ||
             !preg_match('/[^a-zA-Z0-9]/', $password)
         ) {
-            $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 8 caractères, une majuscule, 
+            $_SESSION['flash_error'] = "Le mot de passe doit contenir au moins : 12 caractères, une majuscule, 
             une minuscule, un chiffre et un caractère spécial.";
             log_console('Register: complexité insuffisante', 'error');
             header("Location: index.php?controller=Redirection&action=openFormRegister");

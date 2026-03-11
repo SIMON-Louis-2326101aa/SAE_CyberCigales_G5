@@ -24,11 +24,13 @@
                         Modifier</button>
                     <br>
                     <?php if ($user['is_banned'] == 0) : ?>
-                    <a href="index.php?controller=Admin&action=banUser&id=<?= $user['id']; ?>" class="active btn-nav"
-                       id="ban-user-btn">Bannir</a>
-                    <?php else : ?>
-                    <a href="index.php?controller=Admin&action=unbanUser&id=<?= $user['id']; ?>"
-                       id="unban-user-btn" class="active btn-nav"> Débannir </a>
+                    <button type="button" class="ban-form-user-btn" data-user-id="<?= $user['id']; ?>">Bannir</button>
+                    <?php endif; ?>
+
+                    <?php if ($user['is_banned'] == 1) : ?>
+                        <button type="button" class="unban-user-btn" data-user-id="<?= $user['id']; ?>">Débannir
+                        </button>
+                        <p>Raison de bannisment : <br><?php echo htmlspecialchars($user['ban_reason']); ?></p>
                     <?php endif; ?>
                 </td>
             </tr>

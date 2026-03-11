@@ -59,12 +59,24 @@
     z-index: 2000;
 }
 
+#inventory-tab {
+    position: fixed;
+    top: 40%;
+    right: 0;
+    transform: translateY(-50%);
+    z-index: 2000;
+}
+
 /* Quand on ouvre le panneau, tout le bloc glisse */
 #info-tab.open {
     right: 580px; /* la largeur du panneau */
 }
 
 #clue-tab.open {
+    right: 580px; /* la largeur du panneau */
+}
+
+#inventory-tab.open {
     right: 580px; /* la largeur du panneau */
 }
 
@@ -104,7 +116,7 @@
     transition: transform 0.6s ease, opacity 0.6s ease;
     backdrop-filter: blur(8px);
     opacity: 0;
-    max-height: 650px;
+    max-height: 520px;
     overflow-y: auto;
 }
 
@@ -115,6 +127,11 @@
 }
 
 #clue-tab.open .tab-content {
+    opacity: 1;
+    right: -580px; /* ajusté pour être visible */
+}
+
+#inventory-tab.open .tab-content {
     opacity: 1;
     right: -580px; /* ajusté pour être visible */
 }
@@ -205,6 +222,10 @@
     font-size : 2.5rem;
     display: flex;
     z-index: 1;
+}
+
+.letter-back p{
+    font-size: 2.5rem;
 }
 
 .letter-content.open.turn .letter-front {
@@ -528,6 +549,10 @@
     display:none;
 }
 
+#bw-code-zone.is-visible{
+    display:block;
+}
+
 .bw-code-form{
     width:min(560px,92vw);
     display:flex;
@@ -563,14 +588,24 @@
 
 @keyframes float{ 0%,100%{ transform:translateY(0)} 50%{ transform:translateY(-6px)} }
 
+/* ============ Phishing ============ */
+.email-list-simple li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.email-list-simple li:hover {
+    background: #f0f0f0;
+}
 
 /* ============ Password Game ============ */
-#passwordGameForm {
+#password-game-form {
     max-width: 1000px;
     width: 95%;
 }
 
-#passwordRules li {
+#password-rules li {
     font-weight: bold;
     list-style: none; /* Enlève les points devant la liste pour laisser place aux emojis */
     margin-bottom: 10px;
@@ -616,20 +651,20 @@
     display: none;
     margin-top: 30px;
     padding: 20px;
-    border: 2px solid #00FF00;
+    border: 2px solid #0F0;
     border-radius: 10px;
-    background: rgba(0, 255, 0, 0.1);
+    background: rgb(0 255 0 / 10%);
 }
 
 #message-congratulation {
     font-weight: bold;
-    color: #00FF00;
+    color: #0F0;
     font-size: 1.2rem;
 }
 
 #btn-after-pwdgame {
     display: inline-block;
-    background: #00FF00;
+    background: #0F0;
     color: #000;
     font-weight: bold;
     padding: 10px 20px;
@@ -640,7 +675,7 @@
 #final-password-container {
     margin: 15px 0;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgb(255 255 255 / 10%);
     border-radius: 5px;
     word-break: break-all;
     font-family: monospace;
@@ -648,7 +683,7 @@
 }
 
 #final-password-display {
-    color: #00FF00;
+    color: #0F0;
     font-weight: bold;
 }
 
@@ -668,18 +703,26 @@ h2 {
     border-radius: 8px;
     padding: 30px;
     margin: 0 auto 30px;
-    width: 95%;           /* Prend 95% de la largeur de l'écran */
+    width: 80%;           /* Prend 95% de la largeur de l'écran */
     max-width: 1100px;    /* Limite la largeur sur les très grands écrans */
 }
 
 .s-section p {
-    font-size: 1.8rem;
+    font-size: 1.25rem;
     color: var(--text-primary);
     border-bottom: 1px solid var(--border-light);
-    padding-bottom: 10px;
-    margin-bottom: 20px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
     font-family: cursive;
     text-align: center; /* Centré comme sur votre image */
+}
+
+.s-section img {
+    margin: 20px auto;
+    max-width: 100%;
+    height: 450px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px var(--border-light);
 }
 
 .s-section form {
@@ -1022,4 +1065,984 @@ h2 {
 .email-item-logic.active {
     background: #e7f1ff;
     border-left: 4px solid var(--primary);
+}
+
+/* ============ Pages Phishing ============ */
+.phishing-trap-title {
+    color: #e74c3c;
+}
+
+.phishing-trap-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    color: #333;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.phishing-trap-card h2 {
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.phishing-trap-list {
+    text-align: left;
+    display: inline-block;
+    margin: 1rem 0;
+}
+
+.phishing-trap-warning {
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.btn-phishing-return {
+    background-color: var(--secondary) !important;
+}
+
+.mail-button-container {
+    text-align: center;
+    margin: 20px;
+}
+
+.btn-mail-action {
+    display: inline-block;
+    text-decoration: none;
+    background: #ff4444;
+}
+
+.video-hidden {
+    display: none;
+}
+
+#video-card p {
+    color: #000000;
+}
+
+.multimedia-action-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+/* ============ Page Phishing Impots ============ */
+.impots-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #fff;
+    color: #333;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    text-align: left;
+    overflow: hidden;
+}
+
+.impots-header {
+    background-color: #003463;
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.impots-content {
+    padding: 30px;
+}
+
+.impots-content h3 {
+    color: #003463 !important;
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+    border-bottom: 2px solid #003463 !important;
+    padding-bottom: 10px !important;
+    text-align: left !important;
+    text-transform: none !important;
+    font-size: 1.17em !important;
+}
+
+.impots-content p {
+    margin-bottom: 25px !important;
+    color: #333 !important;
+    text-align: left !important;
+}
+
+.impots-form {
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    backdrop-filter: none !important;
+    max-width: none !important;
+    background: transparent !important;
+    width: 100% !important;
+}
+
+.impots-form-group {
+    margin-bottom: 20px;
+}
+
+.impots-form-group label {
+    display: block !important;
+    margin-bottom: 8px !important;
+    color: #333 !important;
+    font-weight: bold !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    font-size: 1rem !important;
+    text-align: left !important;
+}
+
+.impots-form-group input {
+    width: 100% !important;
+    padding: 12px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    background-color: #f9f9f9 !important;
+    color: #333 !important;
+}
+
+.impots-form-group input:focus {
+    background-color: #fff !important;
+    border-color: #003463 !important;
+    box-shadow: none !important;
+    color: #333 !important;
+}
+
+.impots-btn {
+    background-color: #e1000f !important;
+    color: white !important;
+    padding: 15px 25px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    text-transform: none !important;
+}
+
+.impots-btn:hover {
+    background-color: #b3000c !important;
+    transform: none !important;
+}
+
+.scammer-message {
+    display: none;
+    background-color: #000 !important;
+    color: #fff !important;
+    padding: 40px !important;
+    margin-top: 20px !important;
+    border-radius: 8px !important;
+    text-align: center !important;
+    font-weight: bold !important;
+    font-size: 1.5rem !important;
+    border: 4px solid #ff0000 !important;
+}
+
+.scammer-message p {
+    color: #fff !important;
+    margin: 10px 0 !important;
+}
+
+.warning-message {
+    display: none;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.warning-message strong {
+    color: #856404;
+}
+
+.warning-message ul {
+    list-style: disc !important;
+    padding-left: 20px !important;
+    margin-top: 10px !important;
+    text-align: left !important;
+}
+
+.warning-message li {
+    color: #856404 !important;
+    margin-bottom: 5px;
+}
+
+.return-container {
+    display: none;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.return-container-visible {
+    margin-top: 30px;
+    text-align: center;
+    padding-bottom: 40px;
+}
+
+.impots-return-link {
+    display: inline-block !important;
+    width: auto !important;
+    background-color: var(--secondary) !important;
+    text-decoration: none !important;
+    padding: 10px 20px !important;
+    color: white !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+}
+
+.impots-footer {
+    background-color: #f5f5f5;
+    padding: 15px;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #ddd;
+}
+
+
+.impots-fr-header {
+    margin: 0 !important;
+    font-size: 1.2rem !important;
+}
+.impots-warning-title {
+    color: #856404 !important;
+}
+.impots-warning-list {
+    list-style: disc !important;
+    padding-left: 20px !important;
+    margin-top: 10px !important;
+    text-align: left !important;
+    color: #856404 !important;
+}
+
+/* ============ Page Phishing Facebook ============ */
+.facebook-container {
+    background-color: #f0f2f5;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Helvetica, Arial, sans-serif;
+    padding: 20px;
+}
+
+.facebook-logo {
+    color: #1877f2;
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.facebook-login-card {
+    background: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    box-sizing: border-box;
+    padding: 20px;
+    width: 396px;
+    text-align: center;
+}
+
+.facebook-form input {
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    color: #1d2129;
+    font-size: 17px;
+    height: 52px;
+    margin-bottom: 12px;
+    padding: 14px 16px;
+    width: 100% !important;
+    background-color: #fff !important;
+}
+
+.facebook-form input:focus {
+    border-color: #1877f2 !important;
+    box-shadow: 0 0 0 2px #e7f3ff !important;
+    outline: none !important;
+}
+
+.facebook-btn-login {
+    background-color: #1877f2 !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: #fff !important;
+    font-size: 20px !important;
+    font-weight: bold !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin-top: 10px !important;
+    text-transform: none !important;
+}
+
+.facebook-btn-login:hover {
+    background-color: #166fe5 !important;
+    transform: none !important;
+}
+
+.facebook-btn-fill {
+    background-color: #42b72a !important;
+    border: none !important;
+    border-radius: 6px !important;
+    color: #fff !important;
+    font-size: 17px !important;
+    font-weight: bold !important;
+    height: 48px !important;
+    padding: 0 16px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin-top: 15px !important;
+    text-transform: none !important;
+}
+
+.facebook-btn-fill:hover {
+    background-color: #36a420 !important;
+    transform: none !important;
+}
+
+.facebook-warning {
+    display: none;
+    max-width: 500px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    text-align: left;
+    color: #1c1e21;
+}
+
+.facebook-warning h2 {
+    color: #d32f2f !important;
+    margin-bottom: 15px !important;
+    font-size: 1.5rem !important;
+}
+
+.facebook-warning p {
+    margin-bottom: 15px !important;
+    line-height: 1.5 !important;
+    color: #1c1e21 !important;
+    text-align: left !important;
+}
+
+.facebook-warning ul {
+    list-style: disc !important;
+    margin-left: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.facebook-warning li {
+    margin-bottom: 8px !important;
+    color: #1c1e21 !important;
+}
+
+.facebook-return-container {
+    display: none;
+    margin-top: 20px;
+}
+
+.facebook-return-link {
+    background-color: #1877f2 !important;
+    color: white !important;
+    padding: 12px 24px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+}
+
+.fb-forgot-pass {
+    margin-top: 15px !important;
+    color: #1877f2 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+}
+
+.fb-divider {
+    margin: 20px 0 !important;
+    border: 0 !important;
+    border-top: 1px solid #dddfe2 !important;
+}
+
+.fb-btn-create {
+    background-color: #42b72a !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-size: 17px !important;
+    font-weight: bold !important;
+    height: 48px !important;
+    padding: 0 16px !important;
+    cursor: pointer !important;
+    text-transform: none !important;
+}
+
+/* ============ Password Game ============ */
+#passwordGameForm {
+    max-width: 1000px;
+    width: 95%;
+}
+
+#passwordRules li {
+    font-weight: bold;
+    list-style: none; /* Enlève les points devant la liste pour laisser place aux emojis */
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* Pour le bouton "valider" ait une couleur différent et qu'on ne puisse pas appuyer quand on ne peut pas encore valider */
+#password-game-form button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed; /* désactive la possibilité de cliquer sur le bouton */
+    background-color: var(--text-secondary);
+    box-shadow: none;
+    transform: none;
+}
+
+#pwdhead {
+    font-weight:800;
+    letter-spacing:-.02em;
+    font-size:clamp(1.6rem,1.2rem + 2.2vw,3rem);
+    margin:0;
+}
+
+.sponsor-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+    justify-content: center;
+}
+
+.sponsor-logos img {
+    height: 20vh;
+    max-width: 100%;
+    width: auto;
+    background-color: white;
+    padding: 2px;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+#block-message-good-pwd {
+    display: none;
+    margin-top: 30px;
+    padding: 20px;
+    border: 2px solid #00FF00;
+    border-radius: 10px;
+    background: rgba(0, 255, 0, 0.1);
+}
+
+#message-congratulation {
+    font-weight: bold;
+    color: #00FF00;
+    font-size: 1.2rem;
+}
+
+#btn-after-pwdgame {
+    display: inline-block;
+    background: #00FF00;
+    color: #000;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+#final-password-container {
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+#final-password-display {
+    color: #00FF00;
+    font-weight: bold;
+}
+
+/* ============ Résumé des indices (Summary View - Large & Simple) ============ */
+
+h2 {
+    text-align: center;
+    color: var(--primary);
+    font-family: 'Cormorant Garamond', serif;
+    margin: 30px 0;
+    font-size: 2.5rem; /* Titre un peu plus grand */
+}
+
+.s-section {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 30px;
+    margin: 0 auto 30px;
+    width: 95%;           /* Prend 95% de la largeur de l'écran */
+    max-width: 1100px;    /* Limite la largeur sur les très grands écrans */
+}
+
+.s-section p {
+    font-size: 1.8rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-family: cursive;
+    text-align: center; /* Centré comme sur votre image */
+}
+
+.s-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto; /* Centre le formulaire dans le grand bloc */
+}
+
+.s-section label {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    display: block;
+    text-align: center; /* Labels centrés */
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.s-section textarea {
+    width: 100%;
+    min-height: 70px;
+    margin-top: 10px;
+    padding: 15px;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    font-family: sans-serif;
+    resize: vertical;
+    font-size: 1.1rem;
+}
+
+.s-section button {
+    align-self: center;
+    background-color: var(--primary-dark);
+    color: var(--bg-dark);
+    border: none;
+    padding: 12px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    text-transform: uppercase;
+}
+
+.s-section button:hover {
+    opacity: 0.9;
+}
+
+.end-image {
+    display: block;
+    margin: 30px auto ;
+    max-width: 100%;
+    height: 700px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px var(--border-light);
+}
+
+.end p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    line-height: 1.8;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+    text-align: center;
+}
+
+/* ============ Page Phishing Généalogie ============ */
+.genealogie-container {
+    background-color: #f4f7f1;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2e4a23;
+}
+.genealogie-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.genealogie-title {
+    font-size: 2.5rem;
+    color: #4a7c2c;
+    margin: 0;
+    font-weight: bold;
+}
+.genealogie-subtitle {
+    font-style: italic;
+    color: #6a8c54;
+}
+.genealogie-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #e0e6db;
+}
+.genealogie-card h3 {
+    margin-top: 0;
+    color: #4a7c2c;
+    border-bottom: 2px solid #f0f4eb;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.genealogie-form-group {
+    margin-bottom: 15px;
+}
+.genealogie-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: left;
+    color: #40AAAA !important;
+}
+.genealogie-form-group input {
+    width: 100% !important;
+    padding: 12px !important;
+    border: 1px solid #ced4da !important;
+    border-radius: 6px !important;
+    background-color: #fff !important;
+    color: #111 !important;
+}
+.genealogie-form-group input::placeholder {
+    color: #444 !important;
+    opacity: 1;
+}
+.genealogie-btn-fill {
+    background-color: #6c757d !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 12px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+}
+.genealogie-btn-submit {
+    background-color: #4a7c2c !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 15px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+}
+.genealogie-warning {
+    display: none;
+    background-color: #fff;
+    border-left: 5px solid #d32f2f;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 600px;
+    text-align: left;
+}
+.genealogie-warning h2 {
+    color: #d32f2f !important;
+    margin-top: 0 !important;
+}
+.genealogie-warning p {
+    color: #333 !important;
+}
+.genealogie-return-link {
+    display: inline-block !important;
+    margin-top: 20px !important;
+    background-color: #6a8c54 !important;
+    color: white !important;
+    padding: 12px 25px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+}
+
+.gen-intro-text {
+    font-size: 0.9rem !important;
+    color: #666 !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+}
+
+.gen-warning-list {
+    list-style: disc !important;
+    margin-left: 20px !important;
+    margin-bottom: 15px !important;
+    text-align: left !important;
+    color: #222 !important;
+}
+
+/* ============ Page Phishing Colis (La Poste) ============ */
+.colis-container {
+    background-color: #fdfdfd;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.colis-header {
+    background-color: #ffde00; /* Jaune La Poste */
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.colis-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #004494; /* Bleu La Poste */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.colis-card {
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    border: 1px solid #eee;
+}
+
+.colis-card h3 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.colis-form-group {
+    margin-bottom: 15px;
+}
+
+.colis-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: left;
+    color: #40AAAA !important;
+}
+
+.colis-form-group input {
+    width: 100% !important;
+    padding: 12px !important;
+    border: 1px solid #ccc !important;
+    border-radius: 4px !important;
+    font-size: 1rem !important;
+    color: #111 !important;
+}
+
+.colis-form-group input::placeholder {
+    color: #444 !important;
+    opacity: 1;
+}
+
+.colis-btn-fill {
+    background-color: #AAAAAA !important;
+    color: #333 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    padding: 10px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    margin-bottom: 10px !important;
+    font-weight: bold !important;
+}
+
+.colis-btn-submit {
+    background-color: #004494 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 4px !important;
+    padding: 15px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+    font-size: 1.1rem !important;
+    font-weight: bold !important;
+}
+
+.colis-warning {
+    display: none;
+    background-color: #fff;
+    border: 2px solid #e74c3c;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 600px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.colis-warning h2 {
+    color: #e74c3c !important;
+    margin-top: 0 !important;
+    text-align: center !important;
+}
+
+.colis-warning p {
+    color: #333 !important;
+    line-height: 1.6 !important;
+    margin-bottom: 15px !important;
+}
+
+.colis-warning ul {
+    list-style: disc !important;
+    margin-left: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+.colis-return-link {
+    display: inline-block !important;
+    background-color: #333 !important;
+    color: white !important;
+    padding: 12px 25px !important;
+    border-radius: 4px !important;
+    text-decoration: none !important;
+    font-weight: bold !important;
+}
+
+.colis-footer {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+/* ============ Page Phishing Vidéo (VideoCloud) ============ */
+.video-site-container {
+    background-color: #0f0f0f; /* Fond sombre type YouTube/VideoCloud */
+    min-height: 90vh;
+    color: #fff;
+    font-family: Roboto, Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.video-site-header {
+    width: 100%;
+    background-color: #0f0f0f;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.video-site-logo {
+    color: #ff0000;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.video-player-container {
+    max-width: 900px;
+    width: 95%;
+    margin-top: 30px;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.video-unlock-overlay {
+    padding: 60px 20px;
+    text-align: center;
+    background: linear-gradient(180deg, #1a1a1a 0%, #000 100%);
+}
+
+.video-title-placeholder {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.video-info-section {
+    width: 95%;
+    max-width: 900px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.video-main-title {
+    font-size: 1.4rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.video-meta {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.video-description-box {
+    background: #272727;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.video-warning-box {
+    padding: 80px 20px;
+    text-align: center;
+    background: #000;
+    color: #ffcc00;
+    font-weight: bold;
+    font-size: 1.3rem;
+    border: 1px solid #333;
+}
+section {
+    background-color: var(--bg-light);
+    padding: 20px;
+    margin: 25px 0;
+    border-radius: 10px;
+    border-left: 6px solid #3a7afe;
+    box-shadow: 0 4px 10px var(--border);
+}
+
+section h4 {
+    margin-top: 0;
+    color: var(--text-secondary);
+    font-size: 2.5rem;
 }
