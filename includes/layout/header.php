@@ -35,6 +35,7 @@ if (isset($_SESSION['user_id'])) {
     <?php if (($_GET['action'] ?? '') === 'openSearchSM') : ?>
         <link rel="stylesheet" href="./assets/styles/fauxInstagram.css">
         <script src="./assets/js/instagram.js" defer></script>
+        <script src="./assets/js/puzzle.js" defer></script>
     <?php endif; ?>
 </head>
 <?php if (isset($_SESSION['game_start_time'])) : ?>
