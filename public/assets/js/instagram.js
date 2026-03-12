@@ -235,7 +235,8 @@
         const text  = input.value.trim();
         if (!text) return;
 
-        const msgs = el('igDecoyDmMessages');
+        const msgs   = el('igDecoyDmMessages');
+        const handle = el('igDecoyDmHandle').textContent || '';
 
         // Bulle envoyée par le joueur
         const bubbleMe = document.createElement('div');
@@ -244,31 +245,48 @@
         msgs.appendChild(bubbleMe);
 
         input.value = '';
-
-        // Réponse automatique du bot leurre après un court délai (simuler la frappe)
-        setTimeout(() => {
-            const wrap = document.createElement('div');
-            wrap.className = 'ig-dm-bubble-wrap';
-
-            const avatar = document.createElement('div');
-            avatar.className = 'ig-dm-bubble-avatar';
-            avatar.textContent = el('igDecoyDmAvatar').textContent || '?';
-
-            const bubble = document.createElement('div');
-            bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
-            bubble.innerHTML = `Salut ! Clique sur ce lien pour qu'on se retrouve 👉 <span class="ig-fake-link">bit.ly/r3nd3zv0us-secret</span> 😊`;
-
-            wrap.appendChild(avatar);
-            wrap.appendChild(bubble);
-            msgs.appendChild(wrap);
-
-            // Laisser la saisie active (le joueur peut continuer à écrire)
-            // Pas d'avertissement — le piège doit rester crédible
-
-            msgs.scrollTop = msgs.scrollHeight;
-        }, 900);
-
         msgs.scrollTop = msgs.scrollHeight;
+
+        // Appel serveur pour obtenir la réponse du bot leurre
+        const formData = new FormData();
+        formData.append('message',      text);
+        formData.append('decoy_handle', handle);
+
+        fetch('index.php?controller=Puzzle&action=sendDecoyDmMessage', {
+            method: 'POST',
+            body: formData
+        })
+            .then(r => r.json())
+            .then(data => {
+                setTimeout(() => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'ig-dm-bubble-wrap';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'ig-dm-bubble-avatar';
+                    avatar.textContent = el('igDecoyDmAvatar').textContent || '?';
+
+                    const bubble = document.createElement('div');
+                    bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
+
+                    // Si la réponse contient le marqueur vidéo, insérer un vrai lien
+                    if (data.videoLink) {
+                        bubble.innerHTML =
+                            `je te réponds que si tu regarde la vidéo 😉 👉 ` +
+                            `<a href="${data.videoLink}" class="ig-fake-link ig-video-link">` +
+                            `Regarder la vidéo</a>`;
+                    } else {
+                        bubble.innerHTML = data.reply
+                            .replace(/👉\s*(bit\.ly\/\S+)/g,
+                                `👉 <span class="ig-fake-link">$1</span>`);
+                    }
+
+                    wrap.appendChild(avatar);
+                    wrap.appendChild(bubble);
+                    msgs.appendChild(wrap);
+                    msgs.scrollTop = msgs.scrollHeight;
+                }, 900);
+            });
     };
 
     // ════════════════════════════════════════════════════════

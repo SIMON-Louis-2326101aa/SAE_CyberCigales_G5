@@ -761,11 +761,17 @@ class PuzzleController
 
         $_SESSION[$key][] = ['from' => 'bot', 'text' => $reply];
 
+        // Ajouter un lien vidéo pour le compte leurre bob.VALM0NT
+        $videoLink = ($handle === 'bob.VALM0NT')
+            ? 'index.php?controller=Puzzle&action=openVideoPhishing'
+            : null;
+
         // Retourner les messages en JSON pour le JS
         header('Content-Type: application/json');
         echo json_encode([
-            'reply'    => $reply,
-            'messages' => $_SESSION[$key],
+            'reply'     => $reply,
+            'messages'  => $_SESSION[$key],
+            'videoLink' => $videoLink,
         ]);
         exit;
     }
