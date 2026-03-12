@@ -10,12 +10,13 @@
     let currentPost  = null;
     let currentDecoy = null; // compte leurre actuellement affiché
 
+    /* global IG_TARGET */
     const TARGET = (typeof IG_TARGET !== 'undefined') ? IG_TARGET : {};
 
     // Si le bot a déjà répondu (session active), rouvrir le bon profil + le DM directement
     if (TARGET.botReplied) {
         _showRealProfile();
-        igOpenDm();
+        window.igOpenDm();
     }
 
     // ════════════════════════════════════════════════════════
@@ -204,7 +205,7 @@
     };
 
     //DM leurres
-    window.igOpenDecoyDm = function (handle, letter, name) {
+    window.igOpenDecoyDm = function (handle, letter) {
         // Accepte les infos passées directement depuis le bouton HTML
         // ou depuis currentDecoy si disponible
         const h = handle || (currentDecoy && currentDecoy.handle) || '—';
@@ -234,7 +235,8 @@
         const text  = input.value.trim();
         if (!text) return;
 
-        const msgs = el('igDecoyDmMessages');
+        const msgs   = el('igDecoyDmMessages');
+        const handle = el('igDecoyDmHandle').textContent || '';
 
         // Bulle envoyée par le joueur
         const bubbleMe = document.createElement('div');
@@ -243,31 +245,55 @@
         msgs.appendChild(bubbleMe);
 
         input.value = '';
-
-        // Réponse automatique du bot leurre après un court délai (simuler la frappe)
-        setTimeout(() => {
-            const wrap = document.createElement('div');
-            wrap.className = 'ig-dm-bubble-wrap';
-
-            const avatar = document.createElement('div');
-            avatar.className = 'ig-dm-bubble-avatar';
-            avatar.textContent = el('igDecoyDmAvatar').textContent || '?';
-
-            const bubble = document.createElement('div');
-            bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
-            bubble.innerHTML = `Salut ! Clique sur ce lien pour qu'on se retrouve 👉 <span class="ig-fake-link">bit.ly/r3nd3zv0us-secret</span> 😊`;
-
-            wrap.appendChild(avatar);
-            wrap.appendChild(bubble);
-            msgs.appendChild(wrap);
-
-            // Laisser la saisie active (le joueur peut continuer à écrire)
-            // Pas d'avertissement — le piège doit rester crédible
-
-            msgs.scrollTop = msgs.scrollHeight;
-        }, 900);
-
         msgs.scrollTop = msgs.scrollHeight;
+
+        // Appel serveur pour obtenir la réponse du bot leurre
+        const formData = new FormData();
+        formData.append('message',      text);
+        formData.append('decoy_handle', handle);
+
+        fetch('index.php?controller=Puzzle&action=sendDecoyDmMessage', {
+            method: 'POST',
+            body: formData
+        })
+            .then(r => r.json())
+            .then(data => {
+                setTimeout(() => {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'ig-dm-bubble-wrap';
+
+                    const avatar = document.createElement('div');
+                    avatar.className = 'ig-dm-bubble-avatar';
+                    avatar.textContent = el('igDecoyDmAvatar').textContent || '?';
+
+                    const bubble = document.createElement('div');
+                    bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
+
+                    // Si c'est bob.VALM0NT ou alice.VALM0NT, afficher un lien vers la vidéo
+                    if (handle === 'bob.VALM0NT' || handle === 'alice.VALM0NT') {
+                        bubble.innerHTML =
+                            `je te réponds que si tu regarde la vidéo 😉 👉 ` +
+                            `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +
+                            `onclick="window.location='index.php?controller=Puzzle&action=openVideoPhishing&from=instagram'">` +
+                            `Regarder la vidéo</span>`;
+                    } else if (handle === 'bob.leblanc' || handle === 'alice_martin') {
+                        bubble.innerHTML =
+                            `Salut, je crois te reconnaître, c'est toi sur cette photo 👉 ` +
+                            `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +
+                            `onclick="window.location='index.php?controller=Puzzle&action=openFacebookPhishing&from=instagram'">` +
+                            `Voir la photo</span>`;
+                    } else {
+                        bubble.innerHTML = data.reply
+                            .replace(/👉\s*(bit\.ly\/\S+)/g,
+                                `👉 <span class="ig-fake-link">$1</span>`);
+                    }
+
+                    wrap.appendChild(avatar);
+                    wrap.appendChild(bubble);
+                    msgs.appendChild(wrap);
+                    msgs.scrollTop = msgs.scrollHeight;
+                }, 900);
+            });
     };
 
     // ════════════════════════════════════════════════════════
@@ -308,7 +334,7 @@
     };
 
     window.igCloseModalOutside = function (e) {
-        if (e.target === el('igModal')) igCloseModal();
+        if (e.target === el('igModal')) window.igCloseModal();
     };
 
     window.igToggleModalLike = function () {

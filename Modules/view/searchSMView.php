@@ -105,6 +105,8 @@ if ($team === 'alice') {
                     'A', 'followers' => 62,  'bio' => "Passionnée de voyages ✈️"],
             ['handle' => 'alice_cuisine', 'name' => 'Alice Bernard', 'letter' =>
                     'A', 'followers' => 289, 'bio' => "Cheffe cuisinière 🍳 Bordeaux"],
+            ['handle' => 'alice.VALM0NT', 'name' => 'Alice Val', 'letter' =>
+                    'A', 'followers' => 67, 'bio' => "SIIIIIX-SEEEVEEEEN"],
     ]);
 
     $posts = json_encode([
@@ -156,6 +158,13 @@ $savedMessages = $_SESSION['ig_messages'];
 $botReplied    = $_SESSION['ig_bot_replied'] ?? false;
 $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
 ?>
+
+<div class="enigma-text">
+    <br>
+    <p>Nous avons donc un cousin ! Essayons de le retrouver et de
+        le voir pour voir si il est le sait aussi.</p>
+
+</div>
 
 <div class="ig-game-window">
 
