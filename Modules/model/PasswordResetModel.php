@@ -8,6 +8,13 @@ use PDO;
 
 class PasswordResetModel extends Database
 {
+    private static function log(string $message, string $type, array $context = []): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type, $context);
+        }
+    }
+
     // Crée et stocke un token pour l'utilisateur identifié par l'email
     public function createTokenForEmail(string $email, int $ttlMinutes = 60)
     {
@@ -18,6 +25,9 @@ class PasswordResetModel extends Database
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$user) {
+            self::log("Password reset demandé pour email inconnu", "warn", [
+                "email" => $email
+            ]);
             return false;
         }
 
@@ -27,7 +37,14 @@ class PasswordResetModel extends Database
             'INSERT INTO password_reset_tokens (user_id, token, expires_at, used, created_at)
              VALUES (?, ?, DATE_ADD(NOW(), INTERVAL ? MINUTE), 0, NOW())'
         );
+
         $stmt->execute([$user['id'], $token, $ttlMinutes]);
+
+        self::log("Token reset password créé", "ok", [
+            "user_id" => $user['id'],
+            "email" => $email,
+            "ttl_minutes" => $ttlMinutes
+        ]);
 
         return $token;
     }
@@ -41,8 +58,23 @@ class PasswordResetModel extends Database
              WHERE prt.token = ? AND prt.used = 0 AND prt.expires_at >= NOW()
              LIMIT 1'
         );
+
         $stmt->execute([$token]);
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: false;
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            self::log("Token reset invalide ou expiré", "warn", [
+                "token_prefix" => substr($token, 0, 8)
+            ]);
+        } else {
+            self::log("Token reset valide récupéré", "file", [
+                "user_id" => $row['user_id'],
+                "email" => $row['email']
+            ]);
+        }
+
+        return $row ?: false;
     }
 
     public function markTokenUsed(string $token)
@@ -50,7 +82,14 @@ class PasswordResetModel extends Database
         $stmt = $this->getBdd()->prepare(
             'UPDATE password_reset_tokens SET used = 1 WHERE token = ?'
         );
-        return $stmt->execute([$token]);
+
+        $result = $stmt->execute([$token]);
+
+        self::log("Token reset marqué utilisé", $result ? "ok" : "error", [
+            "token_prefix" => substr($token, 0, 8)
+        ]);
+
+        return $result;
     }
 
     public function purgeExpired()
@@ -58,6 +97,13 @@ class PasswordResetModel extends Database
         $stmt = $this->getBdd()->prepare(
             'DELETE FROM password_reset_tokens WHERE expires_at < NOW()'
         );
-        return $stmt->execute();
+
+        $stmt->execute();
+
+        self::log("Tokens reset expirés supprimés", "file", [
+            "deleted_count" => $stmt->rowCount()
+        ]);
+
+        return true;
     }
 }

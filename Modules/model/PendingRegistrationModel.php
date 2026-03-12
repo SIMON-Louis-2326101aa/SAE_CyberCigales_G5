@@ -8,9 +8,18 @@ class PendingRegistrationModel extends Database
 {
     private ConnectionDB $db;
 
+    private static function log(string $message, string $type, array $context = []): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type, $context);
+        }
+    }
+
     public function __construct()
     {
         $this->db = ConnectionDB::getInstance();
+
+        self::log("PendingRegistrationModel initialisé", "ok");
     }
 
     public function storePendingRegistration(
@@ -19,6 +28,8 @@ class PendingRegistrationModel extends Database
         string $email,
         string $password
     ): bool {
+
+        // supprimer une éventuelle ancienne inscription
         $this->db->delete('pending_registrations', ['email' => $email]);
 
         $this->db->insert('pending_registrations', [
@@ -27,6 +38,10 @@ class PendingRegistrationModel extends Database
             'email' => $email,
             'password' => $password,
             'created_at' => date('Y-m-d H:i:s')
+        ]);
+
+        self::log("Inscription en attente enregistrée", "ok", [
+            "email" => $email
         ]);
 
         return true;
@@ -40,12 +55,25 @@ class PendingRegistrationModel extends Database
             1
         );
 
-        return $rows[0] ?? null;
+        $result = $rows[0] ?? null;
+
+        self::log("Recherche inscription en attente", "file", [
+            "email" => $email,
+            "found" => $result !== null
+        ]);
+
+        return $result;
     }
 
     public function getAllPendingRegistrations(): array
     {
-        return $this->db->getAll('pending_registrations');
+        $rows = $this->db->getAll('pending_registrations');
+
+        self::log("Liste des inscriptions en attente récupérée", "file", [
+            "count" => count($rows)
+        ]);
+
+        return $rows;
     }
 
     public function getPendingRegistrationById(int $id): ?array
@@ -56,14 +84,31 @@ class PendingRegistrationModel extends Database
             1
         );
 
-        return $rows[0] ?? null;
+        $result = $rows[0] ?? null;
+
+        self::log("Recherche inscription en attente par ID", "file", [
+            "id" => $id,
+            "found" => $result !== null
+        ]);
+
+        return $result;
     }
 
     public function deletePendingRegistrationById(int $id): bool
     {
-        return $this->db->delete(
+        $deleted = $this->db->delete(
             'pending_registrations',
             ['id' => $id]
         ) > 0;
+
+        self::log(
+            "Suppression inscription en attente",
+            $deleted ? "ok" : "warn",
+            [
+                "id" => $id
+            ]
+        );
+
+        return $deleted;
     }
 }
