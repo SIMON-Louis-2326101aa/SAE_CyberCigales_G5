@@ -149,7 +149,7 @@ final class ControllerHandler
             ]);
             return;
         } else {
-            self::log('Contrôleur trouvé', 'info', [
+            self::log('Contrôleur trouvé', 'file', [
                 'controller' => $controller,
                 'fqcn' => $FQCN,
             ]);

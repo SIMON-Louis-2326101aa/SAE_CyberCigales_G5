@@ -40,7 +40,7 @@ if (class_exists(\Dotenv\Dotenv::class)) {
     $dotenv->load();
 
     if (function_exists('log_console')) {
-        log_console('Backup DB: fichier .env chargé', 'info', [
+        log_console('Backup DB: fichier .env chargé', 'file', [
             'env_path' => $rootDir . '/config/.env',
             'app_env' => $_ENV['APP_ENV'] ?? 'dev',
         ]);
@@ -173,7 +173,7 @@ natsort($files);
 $files = array_values($files);
 
 if (function_exists('log_console')) {
-    log_console('Backup DB: analyse rotation sauvegardes', 'info', [
+    log_console('Backup DB: analyse rotation sauvegardes', 'file', [
         'total_backups_found' => count($files),
         'max_backups_to_keep' => $maxBackupsToKeep,
     ]);

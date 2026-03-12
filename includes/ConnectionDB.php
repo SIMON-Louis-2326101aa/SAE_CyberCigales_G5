@@ -65,7 +65,7 @@ class ConnectionDB
     public static function getInstance(): self
     {
         if (self::$instance === null) {
-            self::log('Création de l’instance singleton ConnectionDB', 'info');
+            self::log('Création de l’instance singleton ConnectionDB', 'file');
             self::$instance = new self();
         } else {
             self::log('Réutilisation de l’instance singleton ConnectionDB', 'file');

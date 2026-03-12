@@ -169,7 +169,11 @@ if (!function_exists('log_console')) {
             }
         }
 
-        $appEnv = $_ENV['APP_ENV'] ?? 'dev';
+
+        $appEnv = $_ENV['APP_ENV']
+            ?? getenv('APP_ENV')
+            ?? $_SERVER['APP_ENV']
+            ?? 'prod';
 
         // Filtrage prod
         if ($appEnv === 'prod') {
@@ -199,7 +203,7 @@ if (!function_exists('log_console')) {
 
 if (!function_exists('trimAndSortLogFile')) {
 
-    function trimAndSortLogFile(string $file, int $maxBytes = 50 * 1024 * 1024): void
+    function trimAndSortLogFile(string $file, int $maxBytes = 20 * 1024 * 1024): void
     {
 
         if (!is_file($file)) {
@@ -269,7 +273,7 @@ if (!function_exists('registerLogRotation')) {
         register_shutdown_function(static function () use ($logDir, $logFile) {
 
             try {
-                trimAndSortLogFile($logFile, 50 * 1024 * 1024);
+                trimAndSortLogFile($logFile, 20 * 1024 * 1024);
 
                 $logFiles = glob("{$logDir}/app-*.log");
                 $deletedCount = 0;
@@ -291,7 +295,7 @@ if (!function_exists('registerLogRotation')) {
                 }
 
                 if (function_exists('log_console')) {
-                    log_console('Rotation des logs terminée', 'ok', [
+                    log_console('Rotation des logs terminée', 'file', [
                         'file' => $logFile,
                         'size' => is_file($logFile) ? filesize($logFile) : 0,
                         'deleted_files' => $deletedCount,

@@ -65,7 +65,7 @@ final class Constant
 
         $root = self::normalize($resolved);
 
-        self::log('Racine projet détectée', 'info', [
+        self::log('Racine projet détectée', 'file', [
             'root' => $root,
         ]);
 
@@ -132,7 +132,7 @@ final class Constant
             $env = strtolower(trim((string)$env));
             $isDev = in_array($env, ['dev', 'development', 'local'], true);
 
-            self::log('Détection environnement via APP_ENV', 'info', [
+            self::log('Détection environnement via APP_ENV', 'file', [
                 'app_env' => $env,
                 'is_dev' => $isDev,
             ]);
@@ -147,7 +147,7 @@ final class Constant
 
         foreach ($devEnvironments as $dev) {
             if ($dev !== '' && (strpos($server, $dev) !== false || strpos($host, $dev) !== false)) {
-                self::log('Détection environnement via host/serveur', 'info', [
+                self::log('Détection environnement via host/serveur', 'file', [
                     'server_name' => $server,
                     'http_host' => $host,
                     'matched' => $dev,
@@ -157,7 +157,7 @@ final class Constant
             }
         }
 
-        self::log('Aucun environnement dev détecté, mode production supposé', 'info', [
+        self::log('Aucun environnement dev détecté, mode production supposé', 'file', [
             'server_name' => $server,
             'http_host' => $host,
             'is_dev' => false,

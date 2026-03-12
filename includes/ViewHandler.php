@@ -39,7 +39,7 @@ final class ViewHandler
                 'ob_level' => ob_get_level(),
             ]);
         } else {
-            self::log('Buffer déjà actif (aucune action)', 'info', [
+            self::log('Buffer déjà actif (aucune action)', 'file', [
                 'ob_level' => ob_get_level(),
             ]);
         }
@@ -59,7 +59,7 @@ final class ViewHandler
             return (string)$content;
         }
 
-        self::log('Aucun buffer à collecter', 'info');
+        self::log('Aucun buffer à collecter', 'file');
         return '';
     }
 
@@ -124,7 +124,7 @@ final class ViewHandler
         // Mise à disposition des paramètres dans la portée de la vue
         if (!empty($parametres)) {
             extract($parametres, EXTR_SKIP);
-            self::log('Paramètres extraits pour la vue', 'info', [
+            self::log('Paramètres extraits pour la vue', 'file', [
                 'view' => $loc,
                 'params_count' => count($parametres),
             ]);

@@ -385,9 +385,8 @@ class UserController
 
         $_SESSION['flash_success'] = "Vous avez été déconnecté.";
 
-        self::log('Logout effectué', 'info', [
+        self::log('Logout effectué', 'file', [
             'user_id' => $userId,
-            'email' => $email,
         ]);
 
         header("Location: index.php?controller=Redirection&action=openHomepage");

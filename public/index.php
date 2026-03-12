@@ -28,6 +28,32 @@ $ROOT_DIR = dirname(__DIR__);
 
 require_once $ROOT_DIR . '/includes/functions.php';
 
+// Pré-charge APP_ENV avant les premiers logs bootstrap
+$earlyEnvFile = $ROOT_DIR . '/config/.env';
+
+if (!isset($_ENV['APP_ENV']) && is_file($earlyEnvFile)) {
+    $envLines = file($earlyEnvFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+    if ($envLines !== false) {
+        foreach ($envLines as $line) {
+            $line = trim($line);
+
+            if ($line === '' || str_starts_with($line, '#')) {
+                continue;
+            }
+
+            if (str_starts_with($line, 'APP_ENV=')) {
+                $value = trim(substr($line, strlen('APP_ENV=')));
+                $value = trim($value, " \t\n\r\0\x0B\"'");
+
+                $_ENV['APP_ENV'] = $value;
+                putenv("APP_ENV={$value}");
+                break;
+            }
+        }
+    }
+}
+
 //  Timer de requête pour mesurer la durée totale du traitement
 $REQUEST_START = microtime(true);
 
@@ -136,7 +162,7 @@ switch ($appEnv) {
 }
 
 if (function_exists('log_console')) {
-    log_console('Configuration environnement appliquée', 'info', [
+    log_console('Configuration environnement appliquée', 'file', [
         'APP_ENV' => $appEnv,
         'LOG_MODE' => $_ENV['LOG_MODE'],
         'LOG_LEVEL' => $_ENV['LOG_LEVEL']
@@ -305,7 +331,7 @@ try {
         $C_controller = new ControllerHandler($S_controller, $S_action);
         $C_controller->execute();
         if (function_exists('log_console')) {
-            log_console('Contrôleur exécuté', 'info');
+            log_console('Contrôleur exécuté', 'file');
         }
     } else {
         if (function_exists('log_console')) {
