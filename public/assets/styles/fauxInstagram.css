@@ -6,7 +6,7 @@
     height: 680px;
     margin: 40px auto;
     border-radius: 8px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 30px;
     position: relative;
     overflow: hidden;
     display: flex;
@@ -19,7 +19,7 @@
 /* ── Header Instagram ── */
 .ig-game-window .header,
 .ig-game-window .ig-game-header {
-    position: relative;       /* pas fixed : reste dans la fenêtre */
+    position: relative;
     width: 100%;
     background: #fff;
     border-bottom: 1px solid #dbdbdb;
@@ -28,17 +28,24 @@
     z-index: 50;
 }
 
-.ig-game-window .header__content {
+.ig-game-window .ig-header-content {
     display: flex;
     align-items: center;
     height: 100%;
     padding: 0 16px;
     gap: 12px;
+    background: #fff !important;
+    background-image: none !important;
+    border-image: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    position: static !important;
 }
 
 /* Logo Instagram */
 .ig-logo-text {
-    font-family: 'Billabong', 'Dancing Script', cursive;
+    font-family: 'Dancing Script', cursive;
     font-size: 26px;
     font-weight: 400;
     color: #262626;
@@ -87,7 +94,7 @@
     right: 0;
     background: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 4px 20px;
     border: 1px solid #dbdbdb;
     z-index: 200;
     overflow: hidden;
@@ -118,8 +125,16 @@
     flex-shrink: 0;
 }
 
-.ig-search-name { font-weight: 600; font-size: 14px; color: #262626; }
-.ig-search-sub  { font-size: 13px; color: #8e8e8e; }
+.ig-search-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #262626;
+}
+
+.ig-search-sub {
+    font-size: 13px;
+    color: #8e8e8e;
+}
 
 .ig-search-empty {
     padding: 18px 14px;
@@ -276,9 +291,21 @@
     flex: 1;
 }
 
-.ig-feed-username { font-weight: 600; font-size: 13px; }
-.ig-feed-location { font-size: 11px; color: #8e8e8e; }
-.ig-feed-more     { font-size: 18px; cursor: pointer; color: #262626; }
+.ig-feed-username {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.ig-feed-location {
+    font-size: 11px;
+    color: #8e8e8e;
+}
+
+.ig-feed-more {
+    font-size: 18px;
+    cursor: pointer;
+    color: #262626;
+}
 
 .ig-feed-img {
     width: 100%;
@@ -299,9 +326,23 @@
     align-items: center;
 }
 
-.ig-feed-likes   { font-size: 13px; margin-bottom: 4px; }
-.ig-feed-caption { font-size: 13px; line-height: 1.5; margin-bottom: 4px; }
-.ig-feed-time    { font-size: 10px; color: #8e8e8e; text-transform: uppercase; letter-spacing: 0.3px; }
+.ig-feed-likes {
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.ig-feed-caption {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+}
+
+.ig-feed-time {
+    font-size: 10px;
+    color: #8e8e8e;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
 
 /* ── Sidebar ── */
 .ig-sidebar {
@@ -335,9 +376,20 @@
     flex-shrink: 0;
 }
 
-.ig-sidebar-me-info { display: flex; flex-direction: column; }
-.ig-sidebar-handle  { font-weight: 600; font-size: 13px; }
-.ig-sidebar-name    { font-size: 12px; color: #8e8e8e; }
+.ig-sidebar-me-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.ig-sidebar-handle {
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.ig-sidebar-name {
+    font-size: 12px;
+    color: #8e8e8e;
+}
 
 .ig-sidebar-section-title {
     display: flex;
@@ -356,7 +408,11 @@
     cursor: pointer;
 }
 
-.ig-sidebar-suggestions { display: flex; flex-direction: column; gap: 10px; }
+.ig-sidebar-suggestions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
 .ig-sidebar-suggest {
     display: flex;
@@ -392,7 +448,10 @@
     text-overflow: ellipsis;
 }
 
-.ig-suggest-info small { font-size: 11px; color: #8e8e8e; }
+.ig-suggest-info small {
+    font-size: 11px;
+    color: #8e8e8e;
+}
 
 .ig-suggest-follow {
     background: transparent !important;
@@ -458,20 +517,6 @@
     min-width: 0;
 }
 
-.ig-profile-title {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-}
-
-.ig-profile-handle {
-    font-size: 20px;
-    font-weight: 300;
-    margin: 0;
-}
-
 /* ── Handle seul sur sa ligne ── */
 .ig-profile-handle {
     font-size: 20px;
@@ -487,11 +532,6 @@
     flex-wrap: wrap;
 }
 
-.ig-profile-actions .ig-btn-follow,
-.ig-profile-actions .ig-btn-message {
-    flex: 1;
-}
-
 .ig-btn-follow {
     background: #0095f6;
     color: #fff;
@@ -504,7 +544,13 @@
     transition: background 0.2s;
 }
 
+.ig-profile-actions .ig-btn-follow,
+.ig-profile-actions .ig-btn-message {
+    flex: 1;
+}
+
 .ig-btn-follow:hover    { background: #1877f2; }
+
 .ig-btn-follow.following {
     background: transparent;
     color: #262626;
@@ -532,6 +578,7 @@
     display: flex;
     justify-content: center;
     margin-bottom: 16px;
+    width: 100%;
 }
 
 .ig-profile-tabs span {
@@ -557,11 +604,6 @@
     margin: 0;
 }
 
-/* Tabs pleine largeur */
-.ig-profile-tabs {
-    width: 100%;
-}
-
 .ig-grid-item {
     aspect-ratio: 1 / 1;
     background: #efefef;
@@ -576,7 +618,10 @@
 
 .ig-grid-item:hover { opacity: 0.85; }
 
-.ig-grid-emoji { font-size: 42px; pointer-events: none; }
+.ig-grid-emoji {
+    font-size: 42px;
+    pointer-events: none;
+}
 
 .ig-grid-item img {
     width: 100%;
@@ -585,70 +630,10 @@
     position: absolute;
 }
 
-/* ── Zone de validation ── */
-.ig-validation {
-    padding: 12px 16px;
-    background: #fff;
-    border-top: 1px solid #dbdbdb;
-    flex-shrink: 0;
-}
-
-.ig-val-hint {
-    text-align: center;
-    font-size: 13px;
-    color: #8e8e8e;
-    margin-bottom: 8px;
-}
-
-.ig-val-form {
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-}
-
-.ig-val-form input {
-    flex: 1;
-    max-width: 320px;
-    padding: 9px 12px;
-    border: 1px solid #dbdbdb;
-    border-radius: 8px;
-    background: #fafafa;
-    color: #262626;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-}
-
-.ig-val-form input:focus   { border-color: #0095f6; }
-.ig-val-form input.ig-input-error { border-color: #ed4956 !important; }
-
-.ig-val-form button {
-    padding: 9px 18px;
-    background: #0095f6;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
-}
-
-.ig-val-form button:hover { background: #1877f2; }
-
-.ig-val-error {
-    text-align: center;
-    color: #ed4956;
-    font-size: 13px;
-    margin-top: 6px;
-}
-
 /* ── Modal post ── */
 .ig-modal-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
     z-index: 100;
     display: flex;
     align-items: center;
@@ -663,7 +648,7 @@
     max-width: 780px;
     max-height: 90%;
     overflow: hidden;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 40px;
     position: relative;
 }
 
@@ -671,7 +656,6 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background: rgba(255,255,255,0.15);
     border: none;
     color: #fff;
     font-size: 20px;
@@ -698,7 +682,11 @@
     min-height: 300px;
 }
 
-.ig-modal-img img { width: 100%; height: 100%; object-fit: contain; }
+.ig-modal-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
 
 .ig-modal-right {
     flex: 1;
@@ -730,8 +718,15 @@
     font-size: 13px;
 }
 
-.ig-modal-username { font-weight: 600; font-size: 14px; }
-.ig-modal-location { font-size: 12px; color: #8e8e8e; }
+.ig-modal-username {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.ig-modal-location {
+    font-size: 12px;
+    color: #8e8e8e;
+}
 
 .ig-modal-body {
     flex: 1;
@@ -1095,25 +1090,8 @@
 /* ── Utilitaire ── */
 .hidden { display: none !important; }
 
-/* ── Profil leurre ── */
-.ig-decoy-back {
-    padding: 10px 12px 0;
-}
-
 .ig-decoy-ring {
     background: #c7c7c7 !important;  /* anneau gris au lieu du dégradé Instagram */
-}
-
-.ig-btn-disabled {
-    opacity: 0.4;
-    cursor: not-allowed !important;
-}
-
-.ig-decoy-hint {
-    margin-top: 12px;
-    font-size: 13px;
-    color: #ed4956;
-    font-weight: 500;
 }
 
 .ig-grid-locked {
@@ -1124,37 +1102,6 @@
 
 .ig-grid-locked:hover { opacity: 1 !important; }
 
-/* ── Avertissement phishing ── */
-.ig-phishing-warning {
-    margin: 12px 14px;
-    padding: 14px 16px;
-    background: #fff3cd;
-    border: 1px solid #f5a623;
-    border-radius: 10px;
-    text-align: center;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #5a3e00;
-}
-
-.ig-phishing-icon {
-    font-size: 28px;
-    margin-bottom: 8px;
-}
-
-.ig-phishing-warning strong {
-    color: #c0392b;
-    font-size: 14px;
-}
-
-.ig-phishing-warning em {
-    display: block;
-    margin-top: 8px;
-    color: #8e8e8e;
-    font-style: normal;
-}
-
-/* Faux lien dans la bulle leurre */
 .ig-dm-bubble--phishing {
     background: #efefef !important;
 }
@@ -1166,96 +1113,8 @@
     font-weight: 500;
 }
 
-/* ── Inbox (boîte de réception) ── */
-.ig-inbox-list {
-    flex: 1;
-    overflow-y: auto;
-}
-
-.ig-inbox-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    cursor: pointer;
-    transition: background 0.15s;
-    border-bottom: 1px solid #f5f5f5;
-    position: relative;
-}
-
-.ig-inbox-item:hover { background: #fafafa; }
-
-.ig-inbox-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #833ab4, #fd1d1d, #fcb045);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-weight: 700;
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.ig-inbox-info {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-width: 0;
-}
-
-.ig-inbox-handle {
-    font-weight: 600;
-    font-size: 14px;
-    color: #262626;
-}
-
-.ig-inbox-preview {
-    font-size: 13px;
-    color: #8e8e8e;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.ig-inbox-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #0095f6;
-    flex-shrink: 0;
-}
-
-.ig-inbox-empty {
-    text-align: center;
-    color: #8e8e8e;
-    font-size: 14px;
-    padding: 40px 20px;
-    line-height: 1.8;
-}
-
-/* ── Boutons nav icône header ── */
-.ig-nav-icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #262626;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    transition: background 0.15s;
-    position: relative;
-    flex-shrink: 0;
-}
-.ig-nav-icon-btn:hover { background: #f5f5f5; }
-
-.ig-game-window nav,
-.ig-game-window .header__content {
+/* ── Écrase le style global nav sur le header Instagram ── */
+.ig-game-window nav {
     background: #fff !important;
     background-image: none !important;
     border-image: none !important;

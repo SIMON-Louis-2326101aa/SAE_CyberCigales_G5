@@ -144,7 +144,7 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
 
 
     <header class="header ig-game-header">
-        <nav class="header__content">
+        <nav class="ig-header-content">
             <span class="ig-logo-text">Instagram</span>
 
             <div class="ig-search-wrap">
