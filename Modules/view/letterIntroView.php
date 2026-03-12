@@ -96,7 +96,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
         <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
             <label>
                 Qu'est-ce que veut dire cette lettre ?<br>
-                Il est nécessaire de décoder seulement le premier paragraphe de la lettre.<br>
+                Il est nécessaire de décoder seulement le premier paragraphe (les 4 premiere ligne) de la lettre.<br>
                 Vous pourrez ensuite retrouver la lettre entière décodée dans votre inventaire.<br>
 
                 <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
