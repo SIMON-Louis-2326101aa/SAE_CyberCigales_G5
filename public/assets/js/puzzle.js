@@ -1059,3 +1059,14 @@ function showWarningPhishingColis() {
     if (warningMsg) warningMsg.style.display = 'block';
     if (returnBtn) returnBtn.style.display = 'block';
 }
+window.autoFillImpots = autoFillImpots;
+window.showWarningPhishingImpots = showWarningPhishingImpots;
+
+window.autoFillFacebook = autoFillFacebook;
+window.showWarningPhishingFacebook = showWarningPhishingFacebook;
+
+window.autoFillGenealogie = autoFillGenealogie;
+window.showWarningPhishingGenealogie = showWarningPhishingGenealogie;
+
+window.autoFillColis = autoFillColis;
+window.showWarningPhishingColis = showWarningPhishingColis;
