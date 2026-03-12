@@ -105,18 +105,14 @@
     }
 
     window.igGoHome = function () {
+        hide('igDmOverlay');
+        hide('igDecoyDmOverlay');
+        hide('igModal');
         hide('ig-profile-state');
         hide('ig-decoy-state');
         show('ig-home-state');
         el('igSearchInput').value = '';
         el('igSearchDropdown').classList.add('hidden');
-    };
-
-    window.igBackToSearch = function () {
-        hide('ig-decoy-state');
-        show('ig-home-state');
-        currentDecoy = null;
-        el('igSearchInput').focus();
     };
 
     // ════════════════════════════════════════════════════════
@@ -335,23 +331,6 @@
                              l1.06 1.06L12 21.23l7.78-7.78
                              1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                 </svg>`;
-    }
-
-    function igGoHome() {
-        // Ferme tous les overlays/panels ouverts
-        document.getElementById('igDmOverlay')?.classList.add('hidden');
-        document.getElementById('igDecoyDmOverlay')?.classList.add('hidden');
-        document.getElementById('igModal')?.classList.add('hidden');
-        // Masque la vue profil et affiche le feed
-        const profileState = document.getElementById('ig-profile-state');
-        if (profileState) profileState.classList.add('hidden');
-        const homeState = document.getElementById('ig-home-state');
-        if (homeState) homeState.classList.remove('hidden');
-        // Vide la recherche
-        const searchInput = document.getElementById('igSearchInput');
-        if (searchInput) searchInput.value = '';
-        const dropdown = document.getElementById('igSearchDropdown');
-        if (dropdown) dropdown.classList.add('hidden');
     }
 
 
