@@ -150,6 +150,10 @@ if ($team === 'alice') {
     ]);
 }
 
+// Réinitialiser l'état de l'épreuve à chaque visite
+unset($_SESSION['ig_messages'], $_SESSION['ig_bot_replied'], $_SESSION['ig_bot_reply_text']);
+
+
 // Historique DM + état bot
 if (!isset($_SESSION['ig_messages'])) {
     $_SESSION['ig_messages'] = [];
