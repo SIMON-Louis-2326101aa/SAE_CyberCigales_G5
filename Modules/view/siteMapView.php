@@ -2,7 +2,7 @@
     <h1>Plan du site</h1>
     <ul class="sitemap-list">
         <?php
-        if (isset($_SESSION['user_id']) && $_SESSION['user_id'] == 5) {
+        if (isset($_SESSION['email']) && $_SESSION['email'] === $_ENV['ADMIN_EMAIL']) {
             ?>
             <li>
                 <a href="index.php?controller=Redirection&action=openHomepage">Accueil</a>
@@ -10,6 +10,7 @@
                 <a href="index.php?controller=Redirection&action=openAccount">Compte</a>
                 <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
+                <a href="index.php?controller=CrashTest&action=index">Boutons Crash Test</a>
                 <br>
                 <a href="index.php?controller=Redirection&action=openChoice">Changer d'équipe</a>
                 <br>
