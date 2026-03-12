@@ -20,6 +20,14 @@
             case "password":
                 include __DIR__ . "/../../Modules/view/infos/password.php";
                 break;
+
+            case "rien":
+                echo "<p>Cette épreuve ne nécessite pas d'information supplémentaire. Vous en êtes capable !</p>";
+                break;
+
+            case "papillon":
+                echo "<p>Dans cette épreuve le papillon represente le signal</p>";
+                break;
         }
         ?>
     </div>

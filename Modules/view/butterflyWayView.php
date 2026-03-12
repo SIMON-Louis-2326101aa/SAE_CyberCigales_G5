@@ -1,5 +1,21 @@
 <?php
 
+$info = "papillon";
+$solution = ($_SESSION["team"] === 'alice') ? "ROOT" : "Admin";
+
+$clue = "
+<ul class='clues'>
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Solution <span id='clue-time-3'>15:00</span>
+    </div>
+    <div id='clue-text-3' class='clue-text'>
+        $solution
+    </div>
+</li>
+</ul>";
+
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
 /** @var array $data */
 
 $team = $_SESSION['team'] ?? 'alice';

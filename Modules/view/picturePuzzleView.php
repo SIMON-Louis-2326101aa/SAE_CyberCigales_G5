@@ -1,6 +1,6 @@
 <?php
 
-$info = "Cette epreuve ne necessite pas d'information supplementaire, Vous en etes capable !";
+$info = "rien";
 $clue = "
 <ul class='clues'>
 

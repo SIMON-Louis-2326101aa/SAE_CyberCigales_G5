@@ -1,6 +1,6 @@
 <?php
 
-$info = "";
+$info = "rien";
 $clue = "
 <ul class='clues'>
 

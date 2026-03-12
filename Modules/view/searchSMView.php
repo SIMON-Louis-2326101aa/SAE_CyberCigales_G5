@@ -3,6 +3,23 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+$info = "rien";
+$solution = ($_SESSION["team"] === 'alice') ? "bob.VALMONT" : "alice.VALMONT";
+
+$clue = "
+<ul class='clues'>
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Solution <span id='clue-time-3'>15:00</span>
+    </div>
+    <div id='clue-text-3' class='clue-text'>
+        $solution
+    </div>
+</li>
+</ul>";
+
+require_once __DIR__ . "/../../includes/layout/headerClue.php";
+
 $team = $_SESSION['team'] ?? 'alice';
 
 if ($team === 'alice') {
