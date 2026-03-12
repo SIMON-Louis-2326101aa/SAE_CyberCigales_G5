@@ -47,9 +47,16 @@ $team = $_SESSION['team'] ?? 'alice';
         <p><em>Conseil : Activez toujours l'authentification à deux facteurs (2FA) pour protéger vos comptes.</em></p>
     </div>
 
-    <div id="fb-return-btn" class="facebook-return-container">
-        <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=2" class="facebook-return-link">
-            RETOUR SUR LA BOÎTE MAIL
+    <?php
+    $from = $_GET['from'] ?? 'email';
+    $returnUrl = match ($from) {
+        'instagram' => 'index.php?controller=Redirection&action=openSearchSM',
+        default     => 'index.php?controller=Puzzle&action=phishingLinkClick&from_id=6',
+    };
+    ?>
+    <div class="return-container-visible">
+        <a href="<?= htmlspecialchars($returnUrl) ?>" class="impots-return-link">
+            RETOUR
         </a>
     </div>
 </div>

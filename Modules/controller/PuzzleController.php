@@ -745,10 +745,8 @@ class PuzzleController
         $decoyReplies = [
             // Leurres équipe Alice (faux Bob)
             'bob_martin'    => "Salut je suis vraiment désolé je te connaît pas",
-            'bob.leblanc'   => "Salut, je crois te reconnaître, c'est toi sur cette photo ",
             'bobby.photos'  => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
             'bob_aventures' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
-            //'bob.VALM0NT' => "je te réponds que si tu regarde la vidéo ;)", Il est géré dans le js
             // Leurres équipe Bob (faux Alice)
             'alice_martin'  => "Salut je suis vraiment désolé je te connaît pas",
             'alice.photo'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",

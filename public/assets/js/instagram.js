@@ -276,6 +276,12 @@
                             `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +
                             `onclick="window.location='index.php?controller=Puzzle&action=openVideoPhishing&from=instagram'">` +
                             `Regarder la vidéo</span>`;
+                    } else if (handle === 'bob.leblanc') {
+                        bubble.innerHTML =
+                            `Salut, je crois te reconnaître, c'est toi sur cette photo 👉 ` +
+                            `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +
+                            `onclick="window.location='index.php?controller=Puzzle&action=openFacebookPhishing&from=instagram'">` +
+                            `Voir la photo</span>`;
                     } else {
                         bubble.innerHTML = data.reply
                             .replace(/👉\s*(bit\.ly\/\S+)/g,
