@@ -4,7 +4,7 @@
  * Constant
  * - Centralise les répertoires clés du projet.
  * - Fournit des helpers pour récupérer les chemins absolus.
-
+ *
  * Remarques :
  * - Les constantes *_DIR conservent les slashes d'origine pour ne rien casser.
  * - Les méthodes *Dir() retournent des chemins absolus normalisés et sans slash final.
@@ -22,10 +22,10 @@ final class Constant
     public const CONTROLLER_DIR = '/Modules/controller/';
     public const INCLUDES_DIR   = '/includes/';
 
-    private static function log(string $message, string $type): void
+    private static function log(string $message, string $type, array $context = []): void
     {
         if (function_exists('log_console')) {
-            log_console($message, $type);
+            log_console($message, $type, $context);
         }
     }
 
@@ -53,16 +53,22 @@ final class Constant
 
         // __DIR__ pointe sur /includes ; on remonte d'un cran vers la racine du projet
         $resolved = realpath(__DIR__ . '/../');
+
         if ($resolved === false) {
-            // En cas d'échec improbable, on retombe sur calcul brut
             $fallback = self::normalize(__DIR__ . '/..');
-            self::log("realpath a échoué, fallback sur {$fallback}", 'file');
+            self::log('realpath a échoué, fallback utilisé pour la racine projet', 'warn', [
+                'fallback' => $fallback,
+            ]);
             $root = $fallback;
             return $root;
         }
 
         $root = self::normalize($resolved);
-        self::log("Racine projet détectée: {$root}", 'info');
+
+        self::log('Racine projet détectée', 'info', [
+            'root' => $root,
+        ]);
+
         return $root;
     }
 
@@ -72,7 +78,9 @@ final class Constant
     public static function viewDir(): string
     {
         $dir = self::normalize(self::indexDir() . self::VIEW_DIR);
-        self::log("viewDir: {$dir}", 'file');
+        self::log('Répertoire vues résolu', 'file', [
+            'view_dir' => $dir,
+        ]);
         return $dir;
     }
 
@@ -82,6 +90,9 @@ final class Constant
     public static function modelDir(): string
     {
         $dir = self::normalize(self::indexDir() . self::MODEL_DIR);
+        self::log('Répertoire modèles résolu', 'file', [
+            'model_dir' => $dir,
+        ]);
         return $dir;
     }
 
@@ -91,6 +102,9 @@ final class Constant
     public static function controllerDir(): string
     {
         $dir = self::normalize(self::indexDir() . self::CONTROLLER_DIR);
+        self::log('Répertoire contrôleurs résolu', 'file', [
+            'controller_dir' => $dir,
+        ]);
         return $dir;
     }
 
@@ -100,6 +114,9 @@ final class Constant
     public static function includesDir(): string
     {
         $dir = self::normalize(self::indexDir() . self::INCLUDES_DIR);
+        self::log('Répertoire includes résolu', 'file', [
+            'includes_dir' => $dir,
+        ]);
         return $dir;
     }
 
@@ -110,9 +127,17 @@ final class Constant
         if ($env === null) {
             $env = getenv('APP_ENV') ?: ($_SERVER['APP_ENV'] ?? null);
         }
+
         if ($env !== null) {
             $env = strtolower(trim((string)$env));
-            return in_array($env, ['dev', 'development', 'local'], true);
+            $isDev = in_array($env, ['dev', 'development', 'local'], true);
+
+            self::log('Détection environnement via APP_ENV', 'info', [
+                'app_env' => $env,
+                'is_dev' => $isDev,
+            ]);
+
+            return $isDev;
         }
 
         // 2) Fallback sur host/serveur (utile si on n'utilise pas de .env en local)
@@ -122,11 +147,22 @@ final class Constant
 
         foreach ($devEnvironments as $dev) {
             if ($dev !== '' && (strpos($server, $dev) !== false || strpos($host, $dev) !== false)) {
+                self::log('Détection environnement via host/serveur', 'info', [
+                    'server_name' => $server,
+                    'http_host' => $host,
+                    'matched' => $dev,
+                    'is_dev' => true,
+                ]);
                 return true;
             }
         }
 
-        // Par défaut, considérer comme production
+        self::log('Aucun environnement dev détecté, mode production supposé', 'info', [
+            'server_name' => $server,
+            'http_host' => $host,
+            'is_dev' => false,
+        ]);
+
         return false;
     }
 }

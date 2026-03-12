@@ -11,12 +11,13 @@ use RuntimeException;
 
 class ConnectionDB
 {
-    private static function log(string $message, string $type): void
+    private static function log(string $message, string $type, array $context = []): void
     {
         if (function_exists('log_console')) {
-            log_console($message, $type);
+            log_console($message, $type, $context);
         }
     }
+
     private PDO $pdo;
     private static ?self $instance = null;
 
@@ -29,7 +30,11 @@ class ConnectionDB
         $pass = $_ENV['DB_PASS'] ?? getenv('DB_PASS');
 
         if (!$host || !$name || !$user) {
-            self::log("Variables DB manquantes", 'error');
+            self::log('Variables DB manquantes', 'error', [
+                'has_host' => (bool)$host,
+                'has_name' => (bool)$name,
+                'has_user' => (bool)$user,
+            ]);
             throw new RuntimeException("Les variables d'environnement DB sont manquantes.");
         }
 
@@ -42,16 +47,31 @@ class ConnectionDB
 
         try {
             $this->pdo = new PDO($dsn, $user, $pass, $options);
-            self::log("Connexion DB réussie ($host / $name)", 'ok');
+            self::log('Connexion DB réussie', 'ok', [
+                'db_host' => $host,
+                'db_name' => $name,
+            ]);
         } catch (PDOException $e) {
-            self::log("Erreur PDO: " . $e->getMessage(), 'error');
-            throw new RuntimeException("Erreur de connexion à la base de données.");
+            self::log('Erreur PDO lors de la connexion', 'error', [
+                'db_host' => $host,
+                'db_name' => $name,
+                'pdo_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+            throw new RuntimeException('Erreur de connexion à la base de données.');
         }
     }
 
     public static function getInstance(): self
     {
-        return self::$instance ??= new self();
+        if (self::$instance === null) {
+            self::log('Création de l’instance singleton ConnectionDB', 'info');
+            self::$instance = new self();
+        } else {
+            self::log('Réutilisation de l’instance singleton ConnectionDB', 'file');
+        }
+
+        return self::$instance;
     }
 
     public function getPdo(): PDO
@@ -63,8 +83,12 @@ class ConnectionDB
     private function assertIdentifier(string $name): string
     {
         if (!preg_match('/^[A-Za-z0-9_]+$/', $name)) {
+            self::log('Identifiant SQL invalide détecté', 'error', [
+                'identifier' => $name,
+            ]);
             throw new InvalidArgumentException("Identifiant SQL invalide: $name");
         }
+
         return $name;
     }
 
@@ -82,13 +106,18 @@ class ConnectionDB
         }
 
         $sql = $clauses ? (' WHERE ' . implode(' AND ', $clauses)) : '';
+
         return [$sql, $params];
     }
 
     public function insert(string $table, array $data): int
     {
         $table = $this->assertIdentifier($table);
+
         if (!$data) {
+            self::log('Tentative INSERT sans données', 'warn', [
+                'table' => $table,
+            ]);
             throw new InvalidArgumentException('Aucune donnée à insérer.');
         }
 
@@ -111,33 +140,74 @@ class ConnectionDB
             implode(', ', $placeholders)
         );
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        self::log("INSERT sur $table réussi", 'ok');
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $lastId = (int)$this->pdo->lastInsertId();
 
-        return (int)$this->pdo->lastInsertId();
+            self::log('INSERT réussi', 'ok', [
+                'table' => $table,
+                'columns_count' => count($data),
+                'last_insert_id' => $lastId,
+            ]);
+
+            return $lastId;
+        } catch (PDOException $e) {
+            self::log('Erreur PDO pendant INSERT', 'error', [
+                'table' => $table,
+                'columns_count' => count($data),
+                'pdo_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 
     public function delete(string $table, array $where): int
     {
         $table = $this->assertIdentifier($table);
         [$whereSql, $params] = $this->buildWhere($where);
+
         if ($whereSql === '') {
+            self::log('Tentative DELETE sans WHERE bloquée', 'error', [
+                'table' => $table,
+            ]);
             throw new InvalidArgumentException('DELETE sans WHERE interdit.');
         }
 
         $sql = "DELETE FROM `$table`" . $whereSql;
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        self::log("DELETE sur $table : {$stmt->rowCount()} ligne(s)", 'file');
 
-        return $stmt->rowCount();
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $rowCount = $stmt->rowCount();
+
+            self::log('DELETE exécuté', 'file', [
+                'table' => $table,
+                'where_count' => count($where),
+                'affected_rows' => $rowCount,
+            ]);
+
+            return $rowCount;
+        } catch (PDOException $e) {
+            self::log('Erreur PDO pendant DELETE', 'error', [
+                'table' => $table,
+                'where_count' => count($where),
+                'pdo_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 
     public function update(string $table, array $data, array $where): int
     {
         $table = $this->assertIdentifier($table);
+
         if (!$data) {
+            self::log('Tentative UPDATE sans données', 'warn', [
+                'table' => $table,
+            ]);
             throw new InvalidArgumentException('Aucune donnée à mettre à jour.');
         }
 
@@ -152,18 +222,42 @@ class ConnectionDB
         }
 
         [$whereSql, $whereParams] = $this->buildWhere($where);
+
         if ($whereSql === '') {
+            self::log('Tentative UPDATE sans WHERE bloquée', 'error', [
+                'table' => $table,
+                'data_count' => count($data),
+            ]);
             throw new InvalidArgumentException('UPDATE sans WHERE interdit.');
         }
 
         $params += $whereParams;
 
         $sql = "UPDATE `$table` SET " . implode(', ', $setParts) . $whereSql;
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        self::log("UPDATE sur $table : {$stmt->rowCount()} ligne(s)", 'file');
 
-        return $stmt->rowCount();
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $rowCount = $stmt->rowCount();
+
+            self::log('UPDATE exécuté', 'file', [
+                'table' => $table,
+                'data_count' => count($data),
+                'where_count' => count($where),
+                'affected_rows' => $rowCount,
+            ]);
+
+            return $rowCount;
+        } catch (PDOException $e) {
+            self::log('Erreur PDO pendant UPDATE', 'error', [
+                'table' => $table,
+                'data_count' => count($data),
+                'where_count' => count($where),
+                'pdo_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 
     public function getAll(string $table, array $where = [], ?int $limit = null): array
@@ -173,14 +267,32 @@ class ConnectionDB
 
         $sql = "SELECT * FROM `$table`" . $whereSql;
         if ($limit !== null) {
-            $sql .= " LIMIT " . (int)$limit;
+            $sql .= ' LIMIT ' . (int)$limit;
         }
 
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        self::log("SELECT * FROM $table", 'file');
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $rows = $stmt->fetchAll();
 
-        return $stmt->fetchAll();
+            self::log('SELECT * exécuté', 'file', [
+                'table' => $table,
+                'where_count' => count($where),
+                'limit' => $limit,
+                'rows_count' => count($rows),
+            ]);
+
+            return $rows;
+        } catch (PDOException $e) {
+            self::log('Erreur PDO pendant SELECT *', 'error', [
+                'table' => $table,
+                'where_count' => count($where),
+                'limit' => $limit,
+                'pdo_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 
     public function getElement(string $table, string $field, array $where): mixed
@@ -189,16 +301,40 @@ class ConnectionDB
         $field = $this->assertIdentifier($field);
 
         [$whereSql, $params] = $this->buildWhere($where);
+
         if ($whereSql === '') {
+            self::log('Tentative getElement sans WHERE bloquée', 'error', [
+                'table' => $table,
+                'field' => $field,
+            ]);
             throw new InvalidArgumentException('getElement requiert un WHERE.');
         }
 
-        $sql = "SELECT `$field` FROM `$table`" . $whereSql . " LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
-        $row = $stmt->fetch();
-        self::log("SELECT `$field` FROM `$table` réussi", 'ok');
+        $sql = "SELECT `$field` FROM `$table`" . $whereSql . ' LIMIT 1';
 
-        return $row[$field] ?? null;
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $row = $stmt->fetch();
+            $value = $row[$field] ?? null;
+
+            self::log('SELECT élément exécuté', 'ok', [
+                'table' => $table,
+                'field' => $field,
+                'where_count' => count($where),
+                'found' => $value !== null,
+            ]);
+
+            return $value;
+        } catch (PDOException $e) {
+            self::log('Erreur PDO pendant SELECT élément', 'error', [
+                'table' => $table,
+                'field' => $field,
+                'where_count' => count($where),
+                'pdo_code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
+            throw $e;
+        }
     }
 }

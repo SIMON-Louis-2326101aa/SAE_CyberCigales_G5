@@ -18,7 +18,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $rootDir = dirname(__DIR__);
 require $rootDir . '/includes/functions.php';
 
-$logDir  = $rootDir . '/var/log';
+$logDir = $rootDir . '/var/log';
 if (!is_dir($logDir)) {
     @mkdir($logDir, 0775, true);
 }
@@ -27,19 +27,27 @@ $logFile = $logDir . '/app-' . date('Y-m-d') . '.log';
 ini_set('log_errors', '1');
 ini_set('error_log', $logFile);
 
-// programme la rotation à la fin du script
 registerLogRotation($logDir, $logFile);
 
-// (Optionnel) tu peux log ici que le backup démarre
 if (function_exists('log_console')) {
-    log_console('Backup DB: démarrage', 'file');
+    log_console('Backup DB: démarrage script', 'file', [
+        'script' => basename(__FILE__),
+    ]);
 }
 
 if (class_exists(\Dotenv\Dotenv::class)) {
     $dotenv = Dotenv\Dotenv::createImmutable($rootDir . '/config');
     $dotenv->load();
+
     if (function_exists('log_console')) {
-        log_console('Backup DB: fichier .env chargé', 'info');
+        log_console('Backup DB: fichier .env chargé', 'info', [
+            'env_path' => $rootDir . '/config/.env',
+            'app_env' => $_ENV['APP_ENV'] ?? 'dev',
+        ]);
+    }
+} else {
+    if (function_exists('log_console')) {
+        log_console('Backup DB: Dotenv indisponible', 'warn');
     }
 }
 
@@ -52,24 +60,35 @@ $dbPass = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: '';
 // Validation minimale
 if ($dbHost === '' || $dbName === '' || $dbUser === '') {
     if (function_exists('log_console')) {
-        log_console('Backup DB: variables DB manquantes pour le backup', 'error');
-        log_console('Backup DB: variables manquantes (DB_HOST/DB_NAME/DB_USER)', 'error');
+        log_console('Backup DB: variables DB manquantes pour le backup', 'error', [
+            'has_host' => $dbHost !== '',
+            'has_name' => $dbName !== '',
+            'has_user' => $dbUser !== '',
+        ]);
     }
     exit(1);
 }
 
-// Répertoire de backup.
+// Répertoire de backup
 $backupDir = '/home/escapethecode/backups';
 if (!is_dir($backupDir)) {
     if (!@mkdir($backupDir, 0755, true) && !is_dir($backupDir)) {
         if (function_exists('log_console')) {
-            log_console("Backup DB: impossible de créer le répertoire: {$backupDir}", 'error');
+            log_console('Backup DB: impossible de créer le répertoire de backup', 'error', [
+                'backup_dir' => $backupDir,
+            ]);
         }
         exit(1);
     }
+
+    if (function_exists('log_console')) {
+        log_console('Backup DB: répertoire de backup créé', 'ok', [
+            'backup_dir' => $backupDir,
+        ]);
+    }
 }
 
-// Nom de fichier : tri naturel fiable => YYYYMMDD_HHMMSS
+// Nom de fichier
 $fileName = $dbName . '_' . date('Ymd_His') . '.sql';
 $fullPath = rtrim($backupDir, "/\\") . DIRECTORY_SEPARATOR . $fileName;
 
@@ -77,18 +96,23 @@ $fullPath = rtrim($backupDir, "/\\") . DIRECTORY_SEPARATOR . $fileName;
 $defaultsFile = tempnam(sys_get_temp_dir(), 'mysqldump_');
 if ($defaultsFile === false) {
     if (function_exists('log_console')) {
-        log_console('Backup DB: impossible de créer le fichier temporaire pour credentials', 'error');
+        log_console('Backup DB: impossible de créer le fichier temporaire des credentials', 'error');
     }
     exit(1);
 }
 
+if (function_exists('log_console')) {
+    log_console('Backup DB: fichier temporaire credentials créé', 'file', [
+        'temp_file' => $defaultsFile,
+    ]);
+}
+
 // Écrit les infos dans le fichier .cnf temporaire
-// ATTENTION : on évite de logguer ce contenu !
 $defaultsContent = "[client]\nuser={$dbUser}\npassword={$dbPass}\nhost={$dbHost}\n";
 file_put_contents($defaultsFile, $defaultsContent);
 @chmod($defaultsFile, 0600);
 
-// Construis la commande mysqldump
+// Construit la commande mysqldump
 $command = sprintf(
     implode(' ', [
         'mysqldump',
@@ -104,55 +128,83 @@ $command = sprintf(
     ])
 );
 
+if (function_exists('log_console')) {
+    log_console('Backup DB: lancement du dump MySQL', 'file', [
+        'db_name' => $dbName,
+        'backup_file' => $fullPath,
+        'backup_dir' => $backupDir,
+    ]);
+}
 
 // Exécute la commande et capture la sortie
-if (function_exists('log_console')) {
-    log_console('Backup DB: lancement du dump MySQL', 'file');
-}
 $output = shell_exec($command);
 
 // Nettoie le fichier temporaire des infos au plus tôt
 @unlink($defaultsFile);
 
+if (function_exists('log_console')) {
+    log_console('Backup DB: fichier temporaire credentials supprimé', 'file');
+}
+
 // Vérifie le résultat
 if (!is_file($fullPath) || filesize($fullPath) === 0) {
     if (function_exists('log_console')) {
-        log_console('Backup DB: échec du dump MySQL (fichier vide ou absent)', 'error');
+        log_console('Backup DB: échec du dump MySQL (fichier vide ou absent)', 'error', [
+            'backup_file' => $fullPath,
+            'shell_output' => is_string($output) ? mb_substr($output, 0, 500) : null,
+        ]);
     }
     exit(1);
 }
 
 if (function_exists('log_console')) {
-    log_console("Backup DB: dump terminé: {$fullPath}", 'ok');
+    log_console('Backup DB: dump terminé', 'ok', [
+        'backup_file' => $fullPath,
+        'size_bytes' => filesize($fullPath),
+    ]);
 }
 
 // --- Rotation des sauvegardes ---
-// Conserver au max 5 sauvegardes les plus récentes
 $maxBackupsToKeep = 5;
 
 // Liste les .sql et trie par nom
 $files = glob(rtrim($backupDir, "/\\") . DIRECTORY_SEPARATOR . '*.sql') ?: [];
-natsort($files);                 // du plus ancien au plus récent
-$files = array_values($files);   // réindexe
+natsort($files);
+$files = array_values($files);
+
+if (function_exists('log_console')) {
+    log_console('Backup DB: analyse rotation sauvegardes', 'info', [
+        'total_backups_found' => count($files),
+        'max_backups_to_keep' => $maxBackupsToKeep,
+    ]);
+}
 
 $toDelete = count($files) - $maxBackupsToKeep;
+
 if ($toDelete > 0) {
     for ($i = 0; $i < $toDelete; $i++) {
         $old = $files[$i];
+
         if (@unlink($old)) {
             if (function_exists('log_console')) {
-                log_console("Backup DB: ancienne sauvegarde supprimée", 'file', ['file' => $old]);
+                log_console('Backup DB: ancienne sauvegarde supprimée', 'file', [
+                    'file' => $old,
+                ]);
             }
         } else {
             if (function_exists('log_console')) {
-                log_console("Backup DB: suppression impossible", 'warn', ['file' => $old]);
+                log_console('Backup DB: suppression sauvegarde impossible', 'warn', [
+                    'file' => $old,
+                ]);
             }
         }
     }
 }
 
 if (function_exists('log_console')) {
-    log_console('Backup DB: rotation des sauvegardes terminée', 'ok');
+    log_console('Backup DB: rotation des sauvegardes terminée', 'ok', [
+        'remaining_backups' => min(count($files), $maxBackupsToKeep),
+    ]);
 }
 
 exit(0);

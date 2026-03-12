@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace SAE_CyberCigales_G5\includes;
 
 use RuntimeException;
-use SAE_CyberCigales_G5\Modules\controller\ButterflyWayController;
 
 final class ControllerHandler
 {
@@ -23,10 +22,10 @@ final class ControllerHandler
     /** Paramètres collectés depuis le contrôleur exécuté. */
     private array $params = [];
 
-    private static function log(string $message, string $type): void
+    private static function log(string $message, string $type, array $context = []): void
     {
         if (function_exists('log_console')) {
-            log_console($message, $type);
+            log_console($message, $type, $context);
         }
     }
 
@@ -38,8 +37,15 @@ final class ControllerHandler
     {
         $this->url['controller'] = $this->controllerName($S_controller);
         $this->url['action']     = $this->actionName($S_action);
-        self::log("Résolution route -> controller={$this->url['controller']},
-        action={$this->url['action']}", 'file');
+
+        self::log(
+            "Résolution route",
+            'file',
+            [
+                'controller' => $this->url['controller'],
+                'action' => $this->url['action'],
+            ]
+        );
     }
 
     /**
@@ -52,15 +58,15 @@ final class ControllerHandler
     {
         $controller = (string)($controller ?? '');
 
-        // On filtre les caractères autorisés pour éviter l'injection / traversal.
         if (!preg_match('/^[A-Za-z0-9_]+$/', $controller)) {
+            self::log('Nom de contrôleur invalide détecté, fallback appliqué', 'warn', [
+                'raw_controller' => $controller,
+            ]);
             $controller = 'Redirection';
         }
 
-        // Suffixe standard.
         $controller .= 'Controller';
 
-        // On retourne une valeur brute.
         return $controller;
     }
 
@@ -74,6 +80,9 @@ final class ControllerHandler
         $action = (string)($action ?? '');
 
         if ($action === '' || !preg_match('/^[A-Za-z0-9_]+$/', $action)) {
+            self::log('Nom d’action invalide détecté, fallback appliqué', 'warn', [
+                'raw_action' => $action,
+            ]);
             return 'login';
         }
 
@@ -89,6 +98,34 @@ final class ControllerHandler
     }
 
     /**
+     * Affiche la page 404 sans passer par le catch global.
+     */
+    private function render404(string $reason, array $context = []): void
+    {
+        http_response_code(404);
+
+        self::log('404 déclenchée', 'warn', array_merge([
+            'reason' => $reason,
+            'controller' => $this->url['controller'] ?? null,
+            'action' => $this->url['action'] ?? null,
+        ], $context));
+
+        $notFoundFile = dirname(__DIR__) . '/404.php';
+
+        if (is_file($notFoundFile)) {
+            require $notFoundFile;
+            return;
+        }
+
+        // Fallback si le fichier 404.php est introuvable
+        echo "<main>";
+        echo "<h1>Erreur 404 - Page non trouvée</h1>";
+        echo "<p>Désolé, la page que vous cherchez n'existe pas ou a été déplacée.</p>";
+        echo "<p><a href='index.php'>Retour à l'accueil</a></p>";
+        echo "</main>";
+    }
+
+    /**
      * Exécute l'action du contrôleur.
      * - Charge le fichier si nécessaire (l'autoloader devrait déjà le faire).
      * - Instancie la classe contrôleur et appelle la méthode d'action.
@@ -98,41 +135,70 @@ final class ControllerHandler
         $controller = $this->url['controller'];
         $action     = $this->url['action'];
 
-        // Ceci est le namespace où sont rangés tous vos contrôleurs
         $controllerNamespace = 'SAE_CyberCigales_G5\\Modules\\controller\\';
         $FQCN = $controllerNamespace . $controller;
 
-        // Vérifie l'existence de la classe contrôleur.(au cas où l'autoloader ne l'aurait pas déjà chargé).
+        // Contrôleur introuvable => 404
         if (!class_exists($FQCN)) {
-            self::log("Contrôleur introuvable: {$controller}", 'error');
-            throw new RuntimeException("'{$controller}' est introuvable.");
+            self::log("Contrôleur introuvable", 'warn', [
+                'controller' => $controller,
+                'fqcn' => $FQCN,
+            ]);
+            $this->render404('controller_not_found', [
+                'fqcn' => $FQCN,
+            ]);
+            return;
         } else {
-            log_console("Fichier contrôleur non trouvé
-              (autoloader prendra le relais) : {$FQCN}", 'info');
+            self::log('Contrôleur trouvé', 'info', [
+                'controller' => $controller,
+                'fqcn' => $FQCN,
+            ]);
         }
 
         $controllerInstance = new $FQCN();
 
-        // Vérifie l'existence de l'action.
+        // Action introuvable => 404
         if (!method_exists($controllerInstance, $action)) {
-            self::log("Action introuvable: {$controller}::{$action}", 'error');
-            throw new RuntimeException("L'action '{$action}' est introuvable dans le contrôleur '{$controller}'.");
+            self::log("Action introuvable", 'warn', [
+                'controller' => $controller,
+                'action' => $action,
+            ]);
+            $this->render404('action_not_found');
+            return;
         }
 
-        // Exécute l'action.
+        // Exécute l'action
         try {
-            self::log("Exécution: {$controller}::{$action}()", 'file');
+            self::log("Exécution contrôleur/action", 'file', [
+                'controller' => $controller,
+                'action' => $action,
+            ]);
+
             call_user_func_array([$controllerInstance, $action], []);
         } catch (\Throwable $e) {
-            self::log("Exception pendant {$controller}::{$action}() - " . $e->getMessage(), 'error');
-            throw new RuntimeException("Erreur lors de l'exécution de l'action '{$action}' : "
-                . $e->getMessage(), (int)$e->getCode(), $e);
+            self::log("Exception pendant exécution contrôleur/action", 'error', [
+                'controller' => $controller,
+                'action' => $action,
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+
+            throw new RuntimeException(
+                "Erreur lors de l'exécution de l'action '{$action}' : " . $e->getMessage(),
+                (int)$e->getCode(),
+                $e
+            );
         }
 
-        // Récupère d'éventuels paramètres exposés par le contrôleur.
+        // Récupère d'éventuels paramètres exposés par le contrôleur
         if (method_exists($controllerInstance, 'getParams')) {
             $this->params = $controllerInstance->getParams();
-            self::log("Params récupérés depuis {$controller}::getParams()", 'file');
+
+            self::log("Params récupérés depuis le contrôleur", 'file', [
+                'controller' => $controller,
+                'count' => count($this->params),
+            ]);
         }
     }
 

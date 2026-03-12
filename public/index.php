@@ -20,13 +20,16 @@ use SAE_CyberCigales_G5\Modules\model\GameProgressModel;
 date_default_timezone_set('Europe/Paris');
 
 // ============================================================
-//  CONFIGURATION DU LOG SERVEUR (AVANT TOUT)
+//  CONFIGURATION DU LOG SERVEUR
 // ============================================================
 
 // Détermine le dossier racine du projet
 $ROOT_DIR = dirname(__DIR__);
 
 require_once $ROOT_DIR . '/includes/functions.php';
+
+//  Timer de requête pour mesurer la durée totale du traitement
+$REQUEST_START = microtime(true);
 
 // ============================================================
 //  Configuration des logs (1 fichier par jour, max 7 fichiers)
@@ -43,69 +46,17 @@ $today = date('Y-m-d');
 $logFile = "{$logDir}/app-{$today}.log";
 
 // Active le log PHP côté serveur
-// Change dynamiquement le fichier de log PHP
 ini_set('log_errors', '1');
 ini_set('error_log', $logFile);
 
 registerLogRotation($logDir, $logFile);
 
 /* ============================================================
-    Session sécurisée
-   ============================================================ */
-
-// Configuration sécurisée des sessions
-if (session_status() === PHP_SESSION_NONE) {
-    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
-    $forceSecure = isset($_ENV['FORCE_SECURE']) && $_ENV['FORCE_SECURE'] === '1';
-    $cookieSecure = $forceSecure ? true : $isHttps;
-// Si on n’est pas en HTTPS → on ne met pas SameSite=None
-    $cookieSameSite = $cookieSecure ? 'None' : 'Lax';
-    session_start([
-        'use_strict_mode' => true,
-        'cookie_httponly' => true,
-        'cookie_secure'   => $cookieSecure,
-        'cookie_samesite' => $cookieSameSite,
-    ]);
-    if (function_exists('log_console')) {
-        log_console('Session démarrée', 'ok');
-    }
-}
-
-set_error_handler(function ($severity, $message, $file, $line) {
-
-    // Ignore les erreurs masquées par @
-    if (!(error_reporting() & $severity)) {
-        return false;
-    }
-    if (function_exists('log_console')) {
-        log_console("$message @ $file:$line", 'warn');
-    }
-    return false;
-});
-
-set_exception_handler(function (Throwable $e) {
-    if (function_exists('log_console')) {
-        log_console($e->getMessage() . " @ {$e->getFile()}:{$e->getLine()}", 'error', [
-            'trace' => substr($e->getTraceAsString(), 0, 2000),
-        ]);
-    }
-});
-
-register_shutdown_function(function () {
-
-    $e = error_get_last();
-    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
-        log_console($e['message'] . " @ {$e['file']}:{$e['line']}", 'error');
-    }
-});
-/* ============================================================
     Chargements initiaux
    ============================================================ */
 
 $composerAutoload = $ROOT_DIR . '/vendor/autoload.php';
 
-// Chargement des variables d'environnement depuis le fichier .env
 if (is_file($composerAutoload)) {
     require $composerAutoload;
     if (function_exists('log_console')) {
@@ -144,7 +95,9 @@ try {
         $dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config');
         $dotenv->load();
         if (function_exists('log_console')) {
-            log_console('Fichier .env chargé', 'ok');
+            log_console('Fichier .env chargé', 'ok', [
+                'env_path' => $ROOT_DIR . '/config/.env',
+            ]);
         }
     } else {
         if (function_exists('log_console')) {
@@ -156,7 +109,6 @@ try {
         log_console('Erreur chargement .env (vérifier /config/.env)', 'error');
     }
 }
-
 
 /* ============================================================
     CONFIGURATION AUTOMATIQUE SELON APP_ENV
@@ -172,7 +124,6 @@ switch ($appEnv) {
         $_ENV['LOG_CONTEXT_ENABLED'] = '0';
         $_ENV['LOG_SECURITY_ENABLED'] = '1';
         $_ENV['FORCE_SECURE'] = '1';
-
         break;
 
     case 'dev':
@@ -183,7 +134,6 @@ switch ($appEnv) {
         $_ENV['LOG_CONTEXT_ENABLED'] = '1';
         $_ENV['LOG_SECURITY_ENABLED'] = '1';
         $_ENV['FORCE_SECURE'] = '0';
-
         break;
 }
 
@@ -196,12 +146,73 @@ if (function_exists('log_console')) {
 }
 
 /* ============================================================
-    Gestion des erreurs (dev/prod)
-    APP_ENV=dev | prod (dev par défaut)
+    Session sécurisée
    ============================================================ */
 
-$appEnv = $_ENV['APP_ENV'] ?? 'dev';
-if ($_ENV['APP_DEBUG'] === '1') {
+if (session_status() === PHP_SESSION_NONE) {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+    $forceSecure = isset($_ENV['FORCE_SECURE']) && $_ENV['FORCE_SECURE'] === '1';
+    $cookieSecure = $forceSecure ? true : $isHttps;
+
+    // Si on n’est pas en HTTPS → on ne met pas SameSite=None
+    $cookieSameSite = $cookieSecure ? 'None' : 'Lax';
+
+    session_start([
+        'use_strict_mode' => true,
+        'cookie_httponly' => true,
+        'cookie_secure'   => $cookieSecure,
+        'cookie_samesite' => $cookieSameSite,
+    ]);
+
+    if (function_exists('log_console')) {
+        log_console('Session démarrée', 'ok', [
+            'cookie_secure' => $cookieSecure,
+            'cookie_samesite' => $cookieSameSite,
+            'https_detected' => $isHttps,
+        ]);
+    }
+}
+
+set_error_handler(function ($severity, $message, $file, $line) {
+
+    // Ignore les erreurs masquées par @
+    if (!(error_reporting() & $severity)) {
+        return false;
+    }
+    if (function_exists('log_console')) {
+        log_console("$message @ $file:$line", 'warn', [
+            'severity' => $severity,
+        ]);
+    }
+    return false;
+});
+
+set_exception_handler(function (Throwable $e) {
+    if (function_exists('log_console')) {
+        log_console($e->getMessage() . " @ {$e->getFile()}:{$e->getLine()}", 'error', [
+            'trace' => substr($e->getTraceAsString(), 0, 2000),
+            'uri' => $_SERVER['REQUEST_URI'] ?? null,
+            'app_env' => $_ENV['APP_ENV'] ?? 'dev',
+        ]);
+    }
+});
+
+register_shutdown_function(function () {
+
+    $e = error_get_last();
+    if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        log_console($e['message'] . " @ {$e['file']}:{$e['line']}", 'error', [
+            'type' => $e['type'],
+        ]);
+    }
+});
+
+/* ============================================================
+    Gestion des erreurs (dev/prod)
+   ============================================================ */
+
+if (($_ENV['APP_DEBUG'] ?? '1') === '1') {
     ini_set('display_errors', '1');
     ini_set('display_startup_errors', '1');
     error_reporting(E_ALL);
@@ -222,7 +233,7 @@ if ($_ENV['APP_DEBUG'] === '1') {
    ============================================================ */
 
 try {
-// Normalisation et nettoyage de l'URI
+    // Normalisation et nettoyage de l'URI
     $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
     $uri = '/' . trim($uri, '/');
     if (function_exists('log_console')) {
@@ -253,9 +264,23 @@ try {
 
         if ($progress) {
             $_SESSION['team']  = $progress['team'];
-            $_SESSION['level'] = (int) $progress['level'];
+            $_SESSION['level'] = (int)$progress['level'];
+
+            if (function_exists('log_console')) {
+                log_console('Progression utilisateur restaurée', 'info', [
+                    'user_id' => $_SESSION['utilisateur']['id'],
+                    'team' => $progress['team'] ?? null,
+                    'level' => (int)($progress['level'] ?? 0),
+                ]);
+            }
         } else {
             $_SESSION['level'] = 0;
+
+            if (function_exists('log_console')) {
+                log_console('Aucune progression trouvée pour l’utilisateur connecté', 'info', [
+                    'user_id' => $_SESSION['utilisateur']['id'],
+                ]);
+            }
         }
     }
 
@@ -288,29 +313,61 @@ try {
 
     // Récupère le contenu tamponné
     $displayContent = ViewHandler::bufferCollect();
-// Paramètres potentiels exposés par le handler
+
+    // Paramètres potentiels exposés par le handler
     $A_params = method_exists($C_controller, 'getParams') ? $C_controller->getParams() : [];
     if (!empty($A_params)) {
         if (function_exists('log_console')) {
-            log_console('Params contrôleur collectés', 'file');
+            log_console('Params contrôleur collectés', 'file', [
+                'count' => count($A_params),
+            ]);
         }
     }
 
     // Affiche le contenu
     echo $displayContent;
     if (function_exists('log_console')) {
-        log_console('Contenu affiché', 'ok');
+        log_console('Contenu affiché', 'ok', [
+            'controller' => $S_controller,
+            'action' => $S_action,
+            'duration_ms' => round((microtime(true) - $REQUEST_START) * 1000, 2),
+            'memory_peak_mb' => round(memory_get_peak_usage(true) / 1024 / 1024, 2),
+        ]);
     }
 } catch (Throwable $e) {
-// Gestion d'erreur globale
     http_response_code(500);
-    echo "<main><h1>ERREUR FATALE (DÉBOGAGE)</h1>";
-    echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
-    echo "<p><strong>Fichier:</strong> " . htmlspecialchars($e->getFile()) . " (Ligne: " . $e->getLine() . ")</p>";
-    echo "<hr>";
-    echo "<h2>Trace complète (Stack Trace)</h2>";
-    echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
+
+    // Log serveur toujours actif
     if (function_exists('log_console')) {
-        log_console('Exception globale capturée', 'error');
+        log_console('Exception globale capturée', 'error', [
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]);
+    }
+
+    $isDebug = ($_ENV['APP_DEBUG'] ?? '0') === '1';
+
+    $requestId = $GLOBALS['req_id'] ?? 'unknown';
+
+    if ($isDebug) {
+        // ===== MODE DEV =====
+        echo "<main><h1>ERREUR FATALE (DEV)</h1>";
+        echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+        echo "<p><strong>Fichier:</strong> " . htmlspecialchars($e->getFile()) . " (Ligne: " . $e->getLine() . ")</p>";
+        echo "<hr>";
+        echo "<h2>Trace complète (Stack Trace)</h2>";
+        echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre></main>";
+        echo "<p><strong>ID de l'erreur :</strong> " . htmlspecialchars($requestId) . "</p>";
+        echo "<p><a href='index.php'>Retour à l'accueil</a></p>";
+    } else {
+        // ===== MODE PROD =====
+        echo "<main>";
+        echo "<h1>Une erreur est survenue.</h1>";
+        echo "<p>Le problème a été enregistré.</p>";
+        echo "<p>Si le problème persiste, veuillez contacter les développeurs via la section contact.</p>";
+        echo "<p><strong>ID de l'erreur :</strong> " . htmlspecialchars($requestId) . "</p>";
+        echo "<p><a href='index.php'>Retour à l'accueil</a></p>";
+        echo "</main>";
     }
 }

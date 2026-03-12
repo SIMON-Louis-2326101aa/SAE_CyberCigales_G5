@@ -11,36 +11,156 @@
 
 declare(strict_types=1);
 
-/*  Récupère une ancienne valeur de formulaire stockée en session
-    pour la réafficher dans le formulaire. */
-
 if (!function_exists('old')) {
     function old(string $key, string $default = ''): string
     {
         $val = $_SESSION['old'][$key] ?? $default;
 
-        // Normalisation & nettoyage agressif
         $val = (string)$val;
-        $val = strip_tags($val);                 // vire <script>...</script> & toutes balises
-        $val = preg_replace('/[\x00-\x1F\x7F]/', '', $val); // caractères de contrôle
-        $val = preg_replace('/\s+/', ' ', $val); // espaces multiples
+        $val = strip_tags($val);
+        $val = preg_replace('/[\x00-\x1F\x7F]/', '', $val);
+        $val = preg_replace('/\s+/', ' ', $val);
         $val = trim($val);
-        $val = mb_substr($val, 0, 120);         // limite défensive
+        $val = mb_substr($val, 0, 120);
 
-        // Sortie sûre pour un attribut HTML
         return htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
     }
 }
 
 /* ============================================================
-    Utilitaire de log DEV (commentaires HTML)
-    Types: ok, error, file, song, info, warn
+   Helpers logs
+   ============================================================ */
+
+if (!function_exists('logTypeToNumericLevel')) {
+    function logTypeToNumericLevel(string $type): int
+    {
+        return match ($type) {
+            'error' => 40,
+            'warn'  => 30,
+            'ok', 'info', 'file', 'song' => 20,
+            default => 10,
+        };
+    }
+}
+
+if (!function_exists('logEnvMinLevel')) {
+    function logEnvMinLevel(): int
+    {
+        $level = strtolower($_ENV['LOG_LEVEL'] ?? 'debug');
+
+        return match ($level) {
+            'error' => 40,
+            'warn'  => 30,
+            'info'  => 20,
+            'debug' => 10,
+            default => 10,
+        };
+    }
+}
+
+if (!function_exists('sanitizeLogContext')) {
+    function sanitizeLogContext(array $context): array
+    {
+        $sensitiveKeys = [
+            'pwd', 'password', 'confirm_pwd', 'token', 'code',
+            'access_token', 'refresh_token', 'authorization',
+            'secret', 'api_key', 'apikey', 'csrf', 'xsrf'
+        ];
+
+        $clean = [];
+
+        foreach ($context as $key => $value) {
+            $lowerKey = is_string($key) ? strtolower($key) : $key;
+
+            if (is_array($value)) {
+                $clean[$key] = sanitizeLogContext($value);
+                continue;
+            }
+
+            if (in_array($lowerKey, $sensitiveKeys, true)) {
+                $clean[$key] = '***MASKED***';
+                continue;
+            }
+
+            if (is_string($value)) {
+                $clean[$key] = mb_substr($value, 0, 500);
+            } else {
+                $clean[$key] = $value;
+            }
+        }
+
+        return $clean;
+    }
+}
+
+if (!function_exists('filterLogContextByMode')) {
+    function filterLogContextByMode(array $context): array
+    {
+        $mode = $_ENV['LOG_MODE'] ?? 'private';
+        $contextEnabled = ($_ENV['LOG_CONTEXT_ENABLED'] ?? '1') === '1';
+
+        if (!$contextEnabled) {
+            return [];
+        }
+
+        $context = sanitizeLogContext($context);
+
+        if ($mode === 'public') {
+            $allowedKeys = [
+                'controller',
+                'action',
+                'uri',
+                'user_id',
+                'team',
+                'level',
+                'duration_ms',
+                'memory_peak_mb',
+                'count',
+                'severity',
+                'type',
+                'APP_ENV',
+                'LOG_MODE',
+                'LOG_LEVEL',
+                'cookie_secure',
+                'cookie_samesite',
+                'https_detected',
+                'file',
+                'size',
+                'env_path'
+            ];
+
+            $filtered = [];
+
+            foreach ($context as $key => $value) {
+                if (in_array((string)$key, $allowedKeys, true)) {
+                    $filtered[$key] = $value;
+                }
+            }
+
+            return $filtered;
+        }
+
+        return $context;
+    }
+}
+
+/* ============================================================
+   Utilitaire de log APP
    ============================================================ */
 
 if (!function_exists('log_console')) {
+
     function log_console(string $message, string $type = 'info', array $context = []): void
     {
-        // map niveau → libellé
+
+        $currentLevel = logTypeToNumericLevel($type);
+        $minLevel = logEnvMinLevel();
+
+        // Ignore les logs sous le seuil
+        if ($currentLevel < $minLevel) {
+            return;
+        }
+
         $label = match ($type) {
             'error' => 'ERROR',
             'warn'  => 'WARNING',
@@ -50,7 +170,7 @@ if (!function_exists('log_console')) {
             'info'  => 'INFO',
             default => 'D-INFO',
         };
-        // Ajoute un ID de requête pour suivre un flux
+
         if (!isset($GLOBALS['req_id'])) {
             try {
                 $GLOBALS['req_id'] = bin2hex(random_bytes(4));
@@ -59,83 +179,126 @@ if (!function_exists('log_console')) {
             }
         }
 
-        // Nettoie le contexte
-        unset($context['pwd'], $context['password'], $context['confirm_pwd'], $context['token'], $context['code']);
-        $ctx = $context ? (' ' . json_encode($context, JSON_UNESCAPED_UNICODE)) : '';
-        // [date] [LEVEL] [req:abcd1234] message {ctx}
-        $line = sprintf('[%s] [%s] [req:%s] %s%s', date('c'), $label, $GLOBALS['req_id'], $message, $ctx);
-        // écrit côté serveur (AlwaysData ou app.log selon ini_set plus haut)
+        $filteredContext = filterLogContextByMode($context);
+
+        $ctx = $filteredContext
+            ? (' ' . json_encode($filteredContext, JSON_UNESCAPED_UNICODE))
+            : '';
+
+        $line = sprintf(
+            '[req:%s] [%s] %s%s',
+            $GLOBALS['req_id'],
+            $label,
+            $message,
+            $ctx
+        );
+
         error_log($line);
     }
-
 }
 
-function trimAndSortLogFile(string $file, int $maxBytes = 100 * 1024 * 1024): void
-{
-    if (!is_file($file)) {
-        return;
-    }
+/* ============================================================
+   Trim + tri fichier logs
+   ============================================================ */
 
-    $size = filesize($file);
-    if ($size <= $maxBytes) {
-        return;
-    }
+if (!function_exists('trimAndSortLogFile')) {
 
-    $keepBytes = (int) floor($maxBytes * 0.8);
+    function trimAndSortLogFile(string $file, int $maxBytes = 100 * 1024 * 1024): void
+    {
 
-    $src = fopen($file, 'rb');
-    fseek($src, max(0, $size - $keepBytes));
-    fgets($src); // saute la ligne partielle
+        if (!is_file($file)) {
+            return;
+        }
 
-    $lines = [];
-    while (!feof($src)) {
-        $line = fgets($src);
-        if ($line !== false) {
-            $lines[] = $line;
+        $size = filesize($file);
+
+        if ($size <= $maxBytes) {
+            return;
+        }
+
+        $keepBytes = (int) floor($maxBytes * 0.8);
+
+        $src = fopen($file, 'rb');
+
+        if ($src === false) {
+            error_log('[LOG-TRIM ERROR] Impossible d’ouvrir le fichier de log.');
+            return;
+        }
+
+        fseek($src, max(0, $size - $keepBytes));
+        fgets($src);
+
+        $lines = [];
+
+        while (!feof($src)) {
+            $line = fgets($src);
+
+            if ($line !== false) {
+                $lines[] = $line;
+            }
+        }
+
+        fclose($src);
+
+        usort($lines, function ($a, $b) {
+
+            preg_match('/\[(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $a, $ma);
+            preg_match('/\[(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $b, $mb);
+
+            return strcmp($ma[1] ?? '', $mb[1] ?? '');
+        });
+
+        file_put_contents($file, implode('', $lines));
+
+        if (function_exists('log_console')) {
+            log_console('Trim du fichier de logs effectué', 'warn', [
+                'file' => $file,
+                'old_size_bytes' => $size,
+                'kept_bytes' => $keepBytes,
+                'remaining_lines' => count($lines),
+            ]);
         }
     }
-    fclose($src);
-
-    // Tri par timestamp ISO (deuxième bloc entre crochets)
-    usort($lines, function ($a, $b) {
-        preg_match('/\[(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $a, $ma);
-        preg_match('/\[(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})/', $b, $mb);
-        return strcmp($ma[1] ?? '', $mb[1] ?? '');
-    });
-
-    file_put_contents($file, implode('', $lines));
 }
 
-// ===================
-// Rotation différée
-// ===================
+/* ============================================================
+   Rotation différée
+   ============================================================ */
 
 if (!function_exists('registerLogRotation')) {
-    /**
-     * Active la rotation automatique des logs à la fin de chaque requête.
-     */
+
     function registerLogRotation(string $logDir, string $logFile): void
     {
+
         register_shutdown_function(static function () use ($logDir, $logFile) {
+
             try {
-                // Trim du fichier principal (limite 100 Mo avec 80% gardés)
                 trimAndSortLogFile($logFile, 100 * 1024 * 1024);
 
-                // Rotation des logs : garder seulement les 7 plus récents
                 $logFiles = glob("{$logDir}/app-*.log");
+                $deletedCount = 0;
+
                 if ($logFiles !== false && count($logFiles) > 7) {
                     usort($logFiles, static fn($a, $b) => filemtime($a) <=> filemtime($b));
-                    $filesToDelete = array_slice($logFiles, 0, count($logFiles) - 7);
+
+                    $filesToDelete = array_slice(
+                        $logFiles,
+                        0,
+                        count($logFiles) - 7
+                    );
+
                     foreach ($filesToDelete as $oldLog) {
-                        @unlink($oldLog);
+                        if (@unlink($oldLog)) {
+                            $deletedCount++;
+                        }
                     }
                 }
 
-                // Confirmation dans le log du jour
                 if (function_exists('log_console')) {
                     log_console('Rotation des logs terminée', 'ok', [
                         'file' => $logFile,
-                        'size' => filesize($logFile),
+                        'size' => is_file($logFile) ? filesize($logFile) : 0,
+                        'deleted_files' => $deletedCount,
                     ]);
                 }
             } catch (Throwable $e) {
