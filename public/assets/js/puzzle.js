@@ -458,19 +458,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function turn() {
         const st = loadState();
-
-        // Si on a déjà fini (code affiché), on ne fait plus rien pour éviter de reset par accident
-        if (st.showCode || st.step >= maxSteps) return;
-
         const expected = path[st.step] || "R";
 
-        // Si B est attendu (dernière étape) ET qu'on n'est pas déjà bloqué, on valide
-        if (expected === "B" && !st.blocked) {
+        // Si on est bloqué (erreur commise) ou qu'on a déjà fini (11/11)
+        // Cliquer au milieu réinitialise tout
+        if (st.blocked || st.step >= maxSteps) {
+            st.step = 0;
+            st.score = 0;
+            st.blocked = false;
+            st.showCode = false;
+
+            if (elFeedback) elFeedback.textContent = "Tu te retournes… et tu reprends la piste depuis le début.";
+            saveState(st);
+            render(st);
+            return;
+        }
+
+        // Si on est à l'étape 10 sans être bloqué et que B est attendu, on finit
+        if (st.step === 10 && expected === "B") {
             move("B");
             return;
         }
 
-        // Sinon (si B n'est pas le bon chemin, si on est bloqué, ou qu'on veut reset), on revient à zéro
+        // Par défaut, le bouton central réinitialise (comportement normal du labyrinthe)
         st.step = 0;
         st.score = 0;
         st.blocked = false;
