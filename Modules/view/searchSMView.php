@@ -142,6 +142,13 @@ $botReplied    = $_SESSION['ig_bot_replied'] ?? false;
 $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
 ?>
 
+<div class="enigma-text">
+    <br>
+    <p>Nous avons donc un cousin ! Essayons de le retrouver et de
+        le voir pour voir si il est le sait aussi.</p>
+
+</div>
+
 <div class="ig-game-window">
 
 
