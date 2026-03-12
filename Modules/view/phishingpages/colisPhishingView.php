@@ -56,7 +56,7 @@ $team = $_SESSION['team'] ?? 'alice';
 
     <div id="colis-return-btn" class="return-container">
         <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=5" class="colis-return-link">
-            RETOUR SUR LA BOITE MAIL
+            RETOUR SUR LA BOÎTE MAIL
         </a>
     </div>
 

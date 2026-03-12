@@ -42,6 +42,8 @@ if ($team === 'alice') {
                     'followers' => 57,  'bio' => "Photographe amateur 📷"],
             ['handle' => 'bob_aventures', 'name' => 'Bob Durand',    'letter' => 'B',
                     'followers' => 331, 'bio' => "Voyageur passionné ✈️"],
+            ['handle' => 'bob.VALM0NT',    'name' => 'Bob Valmont',    'letter' => 'B',
+                    'followers' => 189,  'bio' => "j'adore manger :)"],
     ]);
 
     $posts = json_encode([
@@ -171,7 +173,7 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                         type="text"
                         id="igSearchInput"
                         class="ig-search-input"
-                        placeholder="Rechercher <?= htmlspecialchars(explode(' ', $targetName)[0]) ?>..."
+                        placeholder="Rechercher..."
                         autocomplete="off"
                         oninput="igOnSearch(this.value)"
                         onfocus="igOnSearch(this.value)"
@@ -180,14 +182,13 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
             </div>
 
             <div class="ig-header-right">
-                <button class="ig-dm-header-btn hidden" id="igDmHeaderBtn" onclick="igOpenDm()" title="Messages">
+
+                <button class="ig-dm-header-btn" onclick="igGoHome()" title="Accueil">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="1.5">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/>
+                        <polyline points="9 21 9 12 15 12 15 21"/>
                     </svg>
-                    <?php if ($botReplied) : ?>
-                        <span class="ig-dm-notif"></span>
-                    <?php endif; ?>
                 </button>
                 <div class="ig-avatar-mini"><?= htmlspecialchars($myLetter) ?></div>
             </div>
@@ -423,9 +424,9 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                 <div class="ig-profile-info">
                     <h2 class="ig-profile-handle" id="igDecoyHandle">—</h2>
                     <ul class="ig-profile-stats">
-                        <li><strong>0</strong> publications</li>
+                        <li><strong>3</strong> publications</li>
                         <li><strong id="igDecoyFollowers">0</strong> abonnés</li>
-                        <li><strong>12</strong> abonnements</li>
+                        <li><strong>28</strong> abonnements</li>
                     </ul>
                     <div class="ig-profile-bio">
                         <strong id="igDecoyName">—</strong><br>
@@ -489,13 +490,13 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                 </div>
                 <?php foreach ($savedMessages as $msg) : ?>
                     <?php if ($msg['from'] === 'me') : ?>
-                        <div class="ig-dm-bubble ig-dm-bubble--me">
+                        <div class="ig-dm-bubble ig-dm-bubble-me">
                             <?= htmlspecialchars($msg['text']) ?>
                         </div>
                     <?php else : ?>
                         <div class="ig-dm-bubble-wrap">
                             <div class="ig-dm-bubble-avatar"><?= htmlspecialchars($targetLetter) ?></div>
-                            <div class="ig-dm-bubble ig-dm-bubble--them">
+                            <div class="ig-dm-bubble ig-dm-bubble-them">
                                 <?= nl2br(htmlspecialchars($msg['text'])) ?>
                             </div>
                         </div>

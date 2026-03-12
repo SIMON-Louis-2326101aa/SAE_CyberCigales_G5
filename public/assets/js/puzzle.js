@@ -436,7 +436,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (codeZone) {
-            codeZone.style.display = st.showCode ? "block" : "none";
+            if (st.showCode) {
+                codeZone.style.display = "block";
+                codeZone.classList.add("is-visible");
+            } else {
+                codeZone.style.display = "none";
+                codeZone.classList.remove("is-visible");
+            }
         }
     }
 
@@ -476,16 +482,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function turn() {
-        // Si l’action attendue à l’étape actuelle est B, alors c’est un “bon move”
         const st = loadState();
         const expected = path[st.step] || "R";
 
-        if (expected === "B") {
+        // Si on est bloqué (erreur commise) ou qu'on a déjà fini (11/11)
+        // Cliquer au milieu réinitialise tout
+        if (st.blocked || st.step >= maxSteps) {
+            st.step = 0;
+            st.score = 0;
+            st.blocked = false;
+            st.showCode = false;
+
+            if (elFeedback) elFeedback.textContent = "Tu te retournes… et tu reprends la piste depuis le début.";
+            saveState(st);
+            render(st);
+            return;
+        }
+
+        // Si on est à l'étape 10 sans être bloqué et que B est attendu, on finit
+        if (st.step === 10 && expected === "B") {
             move("B");
             return;
         }
 
-        // Sinon retour au début
+        // Par défaut, le bouton central réinitialise (comportement normal du labyrinthe)
         st.step = 0;
         st.score = 0;
         st.blocked = false;

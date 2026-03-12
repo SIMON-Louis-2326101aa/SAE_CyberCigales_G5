@@ -67,7 +67,7 @@ $team = $_SESSION['team'] ?? 'alice';
                         L’écran affiche : <strong>INPUT REQUIRED</strong>.<br>
                         Il attend que tu identifies une chose : <br>
                         Un terme simple, souvent utilisé pour désigner l’accès total<br>
-                        ou plutot le rôle qui supervise tout.<br>
+                        ou plutôt le rôle qui supervise tout.<br>
                         Ou alors, Un mot court, connu de ceux qui touchent au cœur des systèmes,<br>
                         l’identifiant de l’accès le plus absolu.<br>
                         Une chose est sûre : il n’y a de place que pour <strong>4 à 5 caractères</strong>.<br>
