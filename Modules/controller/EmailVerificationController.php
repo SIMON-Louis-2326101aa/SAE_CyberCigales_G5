@@ -2,11 +2,6 @@
 
 namespace SAE_CyberCigales_G5\Modules\controller;
 
-//require_once __DIR__ . '/../model/EmailVerificationModel.php';
-//require_once __DIR__ . '/../../includes/Mailer.php';
-//require_once __DIR__ . '/../model/UserModel.php';
-//require_once __DIR__ . '/../../includes/ViewHandler.php';
-
 use SAE_CyberCigales_G5\includes\Constant;
 use SAE_CyberCigales_G5\includes\Mailer;
 use SAE_CyberCigales_G5\Modules\model\EmailVerificationModel;
@@ -28,14 +23,21 @@ class EmailVerificationController
      *
      * @var EmailVerificationModel
      */
-    private $eModel;
+    private EmailVerificationModel $eModel;
 
     /**
      * Instance du modèle utilisateur
      *
      * @var UserModel
      */
-    private $user;
+    private UserModel $user;
+
+    private function logEmailVerification(string $message, string $type, array $context = []): void
+    {
+        if (function_exists('log_console')) {
+            log_console($message, $type, $context);
+        }
+    }
 
     /**
      * Constructeur du contrôleur
@@ -46,30 +48,40 @@ class EmailVerificationController
     {
         $this->eModel = new EmailVerificationModel();
         $this->user = new UserModel();
+
+        $this->logEmailVerification('EmailVerificationController initialisé', 'ok');
     }
 
     /**
      * Génère et envoie un code de vérification par email
      *
-     * Cette méthode génère un code de vérification à 6 chiffres,
-     * le stocke en base de données et l'envoie par email à l'utilisateur.
-     * En mode développement, le code est affiché dans un message flash.
-     *
-     * @return void Redirige vers la page de saisie du code
-     *
-     * @throws void Affiche un message d'erreur si l'email est manquant
+     * @return void
      */
     public function request()
     {
         $email = $_GET['email'] ?? '';
+
         if (!$email) {
             $_SESSION['flash_error'] = "Adresse e-mail manquante.";
+
+            $this->logEmailVerification('Demande code vérification refusée: email manquant', 'warn', [
+                'email' => $email,
+            ]);
+
             header('Location: index.php?controller=Redirection&action=openFormRegister');
             exit;
         }
 
+        $this->logEmailVerification('Demande code vérification reçue', 'info', [
+            'email' => $email,
+        ]);
+
         // Toujours regénérer un code frais pour éviter un délai expiré/perdu
         $code = $this->eModel->generateAndStoreCode($email);
+
+        $this->logEmailVerification('Code de vérification généré et stocké', 'file', [
+            'email' => $email,
+        ]);
 
         $subject = 'Vérification de votre adresse email';
         $message = $this->renderEmailTemplate([
@@ -78,88 +90,130 @@ class EmailVerificationController
 
         $sent = Mailer::send($email, $subject, $message);
 
-        // L'email doit être passé dans l'URL pour être récupéré par l'afficheur
         $url = 'Location: index.php?controller=Redirection&action=openEmailVerification&email=' . urlencode($email);
 
         if ($sent) {
             $_SESSION['flash_success'] = "Un code vous a été envoyé.";
+
+            $this->logEmailVerification('Code de vérification envoyé par email', 'ok', [
+                'email' => $email,
+            ]);
         } else {
-            if (class_exists('Constant') && method_exists('Constant', 'isDev') && Constant::isDev()) {
+            if (class_exists(Constant::class) && method_exists(Constant::class, 'isDev') && Constant::isDev()) {
                 $_SESSION['flash_info'] = "Le mail n'a pas été envoyé. Code pour dev: {$code}";
+
+                $this->logEmailVerification('Envoi mail vérification échoué en mode dev', 'warn', [
+                    'email' => $email,
+                ]);
             } else {
                 $_SESSION['flash_error'] = "Erreur lors de l'envoi du code.";
+
+                $this->logEmailVerification('Envoi mail vérification échoué', 'error', [
+                    'email' => $email,
+                ]);
             }
         }
 
-        header($url); // Redirige vers le redirectionController
+        header($url);
         exit;
     }
 
     /**
      * Vérifie le code de vérification saisi par l'utilisateur
      *
-     * Cette méthode vérifie que le code saisi correspond à celui envoyé par email,
-     * qu'il n'est pas expiré (10 minutes) et crée le compte utilisateur si tout est valide.
-     *
-     * Contrôles effectués :
-     * - Présence de l'email et du code
-     * - Format du code (6 chiffres)
-     * - Validité et expiration du code
-     *
-     * @return void Redirige vers la page de connexion en cas de succès,
-     *              vers la page de saisie du code en cas d'échec
-     *
-     * @uses EmailVerificationModel::checkCodeStatus() Pour vérifier le statut du code
-     * @uses UserModel::createUserAfterVerification() Pour créer le compte après vérification
+     * @return void
      */
     public function verify()
     {
-        //  Nettoyage des codes expirés AVANT toute vérification
+        // Nettoyage des codes expirés AVANT toute vérification
         $this->eModel->deleteExpiredCodes();
 
         $email = $_POST['email'] ?? '';
-        $code  = $_POST['code']  ?? '';
+        $code  = $_POST['code'] ?? '';
 
-        //Ajout de l'email à l'URL de redirection en cas d'erreur
+        $this->logEmailVerification('Vérification code email demandée', 'info', [
+            'email' => $email,
+            'has_code' => $code !== '',
+        ]);
+
         $errorRedirectUrl = 'Location: index.php?controller=Redirection&action=openEmailVerification&email='
             . urlencode($email);
 
         // Si l'un des deux manque (email ou code)
         if (!$email || !$code) {
             $_SESSION['flash_error'] = "Veuillez saisir l'e-mail et le code.";
-            header($errorRedirectUrl); // Redirection après échec
+
+            $this->logEmailVerification('Vérification code refusée: email ou code manquant', 'warn', [
+                'email' => $email,
+                'has_code' => $code !== '',
+            ]);
+
+            header($errorRedirectUrl);
             exit;
         }
 
         // Validation stricte: 6 chiffres
         if (!preg_match('/^[0-9]{6}$/', $code)) {
             $_SESSION['flash_error'] = "Format du code invalide (6 chiffres).";
-            header($errorRedirectUrl); // Redirection après échec
+
+            $this->logEmailVerification('Format de code invalide', 'warn', [
+                'email' => $email,
+            ]);
+
+            header($errorRedirectUrl);
             exit;
         }
 
         // Vérifier le statut détaillé du code
         $codeStatus = $this->eModel->checkCodeStatus($email, $code);
 
+        $this->logEmailVerification('Statut code vérification récupéré', 'file', [
+            'email' => $email,
+            'valid' => $codeStatus['valid'] ?? false,
+            'reason' => $codeStatus['reason'] ?? null,
+        ]);
+
         if ($codeStatus['valid']) {
             // Créer le compte utilisateur maintenant que l'email est vérifié
             if ($this->user->createUserAfterVerification($email)) {
                 $this->eModel->deleteCode($code);
-                // Succès : Redirection vers la page de connexion
+
                 $_SESSION['flash_success'] = "Compte créé. Vous pouvez vous connecter.";
+
+                $this->logEmailVerification('Compte créé après vérification email', 'ok', [
+                    'email' => $email,
+                ]);
+
                 header('Location: index.php?controller=Redirection&action=openFormConnection');
                 exit;
-            } else {
-                // Erreur lors de la création du compte
-                $_SESSION['flash_error'] = "Erreur lors de la création du compte. Réessayez.";
-                header($errorRedirectUrl); // Redirection après échec
-                exit;
             }
+
+            $_SESSION['flash_error'] = "Erreur lors de la création du compte. Réessayez.";
+
+            $this->logEmailVerification('Échec création compte après validation code', 'error', [
+                'email' => $email,
+            ]);
+
+            header($errorRedirectUrl);
+            exit;
         }
 
         // Afficher un message d'erreur spécifique selon la raison
-        $_SESSION['flash_error'] = ($codeStatus['reason'] === 'expired');
-        header('Location : index.php?controller=Redirection&action=openFormRegister'); // Redirection après échec
+        if (($codeStatus['reason'] ?? '') === 'expired') {
+            $_SESSION['flash_error'] = "Le code a expiré. Veuillez demander un nouveau code.";
+
+            $this->logEmailVerification('Code expiré', 'warn', [
+                'email' => $email,
+            ]);
+        } else {
+            $_SESSION['flash_error'] = "Le code est invalide.";
+
+            $this->logEmailVerification('Code invalide', 'warn', [
+                'email' => $email,
+            ]);
+        }
+
+        header($errorRedirectUrl);
         exit;
     }
 
@@ -169,6 +223,6 @@ class EmailVerificationController
 
         ob_start();
         require __DIR__ . '/../view/email/verificationEmail.php';
-        return ob_get_clean();
+        return (string)ob_get_clean();
     }
 }

@@ -9,25 +9,39 @@ class RedirectionController
     private function logRedirection(string $view): void
     {
         if (function_exists('log_console')) {
-            log_console("Redirection vers $view", 'info');
+            log_console('Redirection vers vue', 'info', [
+                'view' => $view,
+                'user_id' => $_SESSION['user_id'] ?? null,
+            ]);
         }
     }
+
     // petit contrôle optionnel : on bloque si l’utilisateur n’est pas connecté
     private function requireAuth(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
         }
+
         if (empty($_SESSION['user_id'])) {
             if (function_exists('log_console')) {
-                log_console('Accès refusé: non authentifié', 'warn', [
-                    'uri' => $_SERVER['REQUEST_URI'] ?? null
+                log_console('Accès refusé: utilisateur non authentifié', 'warn', [
+                    'uri' => $_SERVER['REQUEST_URI'] ?? null,
+                    'user_id' => $_SESSION['user_id'] ?? null,
                 ]);
             }
+
             $_SESSION['flash_error'] = "Vous devez être connecté pour accéder à cette page.";
             $base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
             header('Location: ' . $base . '/index.php?controller=Redirection&action=openFormConnection');
             exit;
+        }
+
+        if (function_exists('log_console')) {
+            log_console('Accès autorisé: utilisateur authentifié', 'file', [
+                'user_id' => $_SESSION['user_id'] ?? null,
+                'uri' => $_SERVER['REQUEST_URI'] ?? null,
+            ]);
         }
     }
 
@@ -72,15 +86,34 @@ class RedirectionController
     {
         $this->logRedirection('changePwdView');
         $this->requireAuth();
-        ViewHandler::show('changePwdView', ['pageTitle' => 'Changement de mot de passe', 'token' => $_GET['token']
-            ?? '']);
+
+        if (function_exists('log_console')) {
+            log_console('Affichage page changement mot de passe', 'file', [
+                'has_token' => !empty($_GET['token']),
+                'user_id' => $_SESSION['user_id'] ?? null,
+            ]);
+        }
+
+        ViewHandler::show('changePwdView', [
+            'pageTitle' => 'Changement de mot de passe',
+            'token' => $_GET['token'] ?? ''
+        ]);
     }
 
     public function openEmailVerification()
     {
         $this->logRedirection('emailVerificationView');
-        ViewHandler::show('emailVerificationView', ['pageTitle' => 'Vérification de l\'e-mail','email' => $_GET['email']
-            ?? '']);
+
+        if (function_exists('log_console')) {
+            log_console('Affichage page vérification email', 'file', [
+                'has_email' => !empty($_GET['email']),
+            ]);
+        }
+
+        ViewHandler::show('emailVerificationView', [
+            'pageTitle' => 'Vérification de l\'e-mail',
+            'email' => $_GET['email'] ?? ''
+        ]);
     }
 
     /**
@@ -88,14 +121,14 @@ class RedirectionController
      */
     public function openAbout()
     {
-        $this->logRedirection('openAbout');
+        $this->logRedirection('aboutView');
         ViewHandler::show('aboutView', ['pageTitle' => 'À Propos']);
     }
 
     /* Affiche le plan du Site */
     public function openSiteMap()
     {
-        $this->logRedirection('openSiteMap');
+        $this->logRedirection('siteMapView');
         ViewHandler::show('siteMapView', ['pageTitle' => 'Plan du site']);
     }
 
@@ -118,7 +151,7 @@ class RedirectionController
      */
     public function openButterflyWay()
     {
-        $this->logRedirection('ButterflyWayView');
+        $this->logRedirection('butterflyWayView');
         $this->requireAuth();
         ViewHandler::show('butterflyWayView', ['pageTitle' => 'Un Papillon ?']);
     }
@@ -144,7 +177,7 @@ class RedirectionController
      */
     public function openPicturePuzzle()
     {
-        $this->logRedirection('openpicturePuzzleView');
+        $this->logRedirection('picturePuzzleView');
         $this->requireAuth();
         ViewHandler::show('picturePuzzleView', ['pageTitle' => 'Enigme de l\'image']);
     }
@@ -154,7 +187,7 @@ class RedirectionController
      */
     public function openPhishingPuzzle()
     {
-        $this->logRedirection('openPhishingPuzzleView');
+        $this->logRedirection('phishingPuzzleView');
         $this->requireAuth();
         ViewHandler::show('phishingPuzzleView', ['pageTitle' => 'Enigme du mail']);
     }
@@ -164,7 +197,7 @@ class RedirectionController
      */
     public function openPasswordGame()
     {
-        $this->logRedirection('openPasswordGameView');
+        $this->logRedirection('passwordGameView');
         $this->requireAuth();
         ViewHandler::show('passwordGameView', ['pageTitle' => 'Enigme du jeu du mot de passe']);
     }
@@ -174,7 +207,7 @@ class RedirectionController
      */
     public function openSummaryClue()
     {
-        $this->logRedirection('openSummaryClueView');
+        $this->logRedirection('summaryClueView');
         $this->requireAuth();
         ViewHandler::show('summaryClueView', ['pageTitle' => 'Enigme du resumé d\'indices']);
     }
@@ -184,7 +217,7 @@ class RedirectionController
      */
     public function openSearchSM()
     {
-        $this->logRedirection('openSearchSMView');
+        $this->logRedirection('searchSMView');
         $this->requireAuth();
         ViewHandler::show('searchSMView', ['pageTitle' => 'Faux Instagram']);
     }
@@ -194,31 +227,31 @@ class RedirectionController
      */
     public function openMeetingPwd()
     {
-        $this->logRedirection('openMeetingPwdView');
+        $this->logRedirection('meetingPasswordView');
         $this->requireAuth();
         ViewHandler::show('meetingPasswordView', ['pageTitle' => 'rassemblement des équipes']);
     }
 
     /**
-     * Affiche la page de rencontre des deux equipes et mot de passe
+     * Affiche la page finale du coffre
      */
     public function openEndText()
     {
-        $this->logRedirection('openendTextView');
+        $this->logRedirection('endTextView');
         $this->requireAuth();
         ViewHandler::show('endTextView', ['pageTitle' => 'Le coffre']);
     }
 
     public function openVictory()
     {
-        $this->logRedirection('openVictoryView');
+        $this->logRedirection('victoryView');
         $this->requireAuth();
         ViewHandler::show('victoryView', ['pageTitle' => 'Victoire']);
     }
 
     public function openInformation()
     {
-        $this->logRedirection('openInformationView');
+        $this->logRedirection('informationView');
         ViewHandler::show('informationView', ['pageTitle' => 'Informations']);
     }
 }
