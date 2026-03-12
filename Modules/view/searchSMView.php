@@ -174,6 +174,13 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                         <span class="ig-dm-notif"></span>
                     <?php endif; ?>
                 </button>
+                <button class="ig-dm-header-btn" onclick="igGoHome()" title="Accueil">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/>
+                        <polyline points="9 21 9 12 15 12 15 21"/>
+                    </svg>
+                </button>
                 <div class="ig-avatar-mini"><?= htmlspecialchars($myLetter) ?></div>
             </div>
         </nav>

@@ -129,9 +129,17 @@
 }
 
 /* Avatar "moi" dans le header */
-.ig-header-right { margin-left: auto; }
+.ig-header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 
 .ig-avatar-mini {
+    min-width: 28px;
+    min-height: 28px;
+    flex-shrink: 0;
     width: 28px;
     height: 28px;
     border-radius: 50%;
@@ -1245,3 +1253,14 @@
     flex-shrink: 0;
 }
 .ig-nav-icon-btn:hover { background: #f5f5f5; }
+
+.ig-game-window nav,
+.ig-game-window .header__content {
+    background: #fff !important;
+    background-image: none !important;
+    border-image: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    position: static !important;
+}
