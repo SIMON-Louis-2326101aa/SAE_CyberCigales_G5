@@ -512,10 +512,13 @@ h5 {
     right: 10px;
     border: none;
     background: transparent;
-    font-size: 18px;
+    font-size: 40px;
     line-height: 1;
     cursor: pointer;
     color: inherit;
+    padding: 0;
+    width: auto;
+    height: auto;
 }
 
 /* ============ Formulaires ============ */

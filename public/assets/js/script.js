@@ -29,10 +29,10 @@ function setupFlashMessages(options = {}) {
         flash.setAttribute('aria-live', 'polite');
 
         // Ajout bouton de fermeture
-        if (addCloseButton && !flash.querySelector('.flash__close')) {
+        if (addCloseButton && !flash.querySelector('.flash-close')) {
             const btn = document.createElement('button');
             btn.type = 'button';
-            btn.className = 'flash__close';
+            btn.className = 'flash-close';
             btn.setAttribute('aria-label', 'Fermer le message');
             btn.textContent = '×';
             flash.appendChild(btn);
@@ -44,7 +44,7 @@ function setupFlashMessages(options = {}) {
 
         // Fermeture au clic sur le bloc
         flash.addEventListener('click', (e) => {
-            if (e.target.closest('.flash__close')) return; // ignorer si bouton
+            if (e.target.closest('.flash-close')) return; // ignorer si bouton
             hideWithFade(flash, fadeDurationMs);
         });
 
