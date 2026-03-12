@@ -215,4 +215,44 @@ class CrashTestController
         header("Location: index.php?controller=CrashTest&action=index");
         exit;
     }
+
+    public function logFloodTest(): void
+    {
+        $this->requireAdmin();
+
+        $appEnv = $_ENV['APP_ENV'] ?? 'prod';
+        if ($appEnv !== 'dev') {
+            $_SESSION['flash_error'] = "Le flood de logs est autorisé uniquement en mode DEV.";
+            header("Location: index.php?controller=CrashTest&action=index");
+            exit;
+        }
+
+        $iterations = 30000;
+        $payload = str_repeat('LOGFLOOD-', 512); // ~4 Ko par log
+        $start = microtime(true);
+
+        for ($i = 1; $i <= $iterations; $i++) {
+            if (function_exists('log_console')) {
+                log_console('LOG_FLOOD_TEST', 'warn', [
+                    'iteration' => $i,
+                    'payload' => $payload,
+                    'mode' => 'dev_stress_log',
+                ]);
+            }
+        }
+
+        $duration = round(microtime(true) - $start, 4);
+
+        if (function_exists('log_console')) {
+            log_console('Flood de logs terminé', 'warn', [
+                'iterations' => $iterations,
+                'approx_payload_kb_per_log' => 4,
+                'duration_sec' => $duration,
+            ]);
+        }
+
+        $_SESSION['flash_success'] = "Flood de logs DEV terminé en {$duration} seconde(s).";
+        header("Location: index.php?controller=CrashTest&action=index");
+        exit;
+    }
 }

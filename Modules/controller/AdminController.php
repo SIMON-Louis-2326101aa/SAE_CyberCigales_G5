@@ -29,14 +29,12 @@ class AdminController
 
         $this->logAdmin('AdminController initialisé', 'ok', [
             'user_id' => $_SESSION['user_id'] ?? null,
-            'email' => $_SESSION['email'] ?? null,
         ]);
 
         // Si non Admin, pas accès aux pages admin
         if (!isset($_SESSION['email']) || $_SESSION['email'] !== $_ENV['ADMIN_EMAIL']) {
             $this->logAdmin('Accès admin refusé', 'warn', [
                 'user_id' => $_SESSION['user_id'] ?? null,
-                'email' => $_SESSION['email'] ?? null,
                 'uri' => $_SERVER['REQUEST_URI'] ?? null,
             ]);
 
@@ -46,7 +44,6 @@ class AdminController
 
         $this->logAdmin('Accès admin autorisé', 'info', [
             'user_id' => $_SESSION['user_id'] ?? null,
-            'email' => $_SESSION['email'] ?? null,
         ]);
     }
 

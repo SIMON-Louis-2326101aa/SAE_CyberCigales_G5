@@ -213,7 +213,7 @@ if (!function_exists('logSecurityEvent')) {
             $severity = match ($type) {
                 'sql_injection', 'xss_attempt', 'csrf_fail', 'privilege_escalation', 'path_traversal' => 'error',
                 'login_fail', 'forbidden_access', 'suspicious_input' => 'warn',
-                default => 'info',
+                default => 'file',
             };
 
             log_console("SECURITY: {$type}", $severity, [

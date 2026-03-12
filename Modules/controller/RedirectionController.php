@@ -250,7 +250,7 @@ class RedirectionController
 
     public function openInformation()
     {
-        $this->logRedirection('informationView');
+        $this->logRedirection('infoinformationView');
         ViewHandler::show('informationView', ['pageTitle' => 'Informations']);
     }
 }
