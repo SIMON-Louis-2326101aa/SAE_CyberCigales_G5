@@ -46,7 +46,7 @@ $team = $_SESSION['team'] ?? 'alice';
 
     <div id="fb-return-btn" class="facebook-return-container">
         <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=2" class="facebook-return-link">
-            RETOUR SUR LA BOITE MAIL
+            RETOUR SUR LA BOÎTE MAIL
         </a>
     </div>
 </div>

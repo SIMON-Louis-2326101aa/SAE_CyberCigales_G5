@@ -15,7 +15,7 @@ $motherName = ($team === 'alice') ? 'Diane' : 'Clara';
 ?>
 
 <div class="hero-container-welcome">
-    <p>Le papillon vous mene sur votre PC</p>
+    <p>Le papillon vous mène sur votre PC</p>
     <p>Vous ouvrez la boîte mail de votre mère (<?php echo $motherName; ?>).</p>
 </div>
 
@@ -23,11 +23,11 @@ $motherName = ($team === 'alice') ? 'Diane' : 'Clara';
      data-team="<?php echo $team; ?>"
      data-open-mail="<?php echo htmlspecialchars((string)($state['open_mail'] ?? '')); ?>"
      data-open-pdf="<?php echo htmlspecialchars((string)($state['open_pdf'] ?? '')); ?>">
-    
+
     <div class="mail-header">
         <span class="mail-app-name">Boîte Mail</span>
     </div>
-    
+
     <div class="mail-main-container">
         <div class="mail-sidebar">
             <ul class="email-list-simple">
@@ -45,7 +45,7 @@ $motherName = ($team === 'alice') ? 'Diane' : 'Clara';
                 </li>
                 <li class="email-item-logic" data-id="4">
                     <div class="mail-sender-name">Généalogie Direct</div>
-                    <div class="mail-subject-preview">Découvrez votre arbre!</div>
+                    <div class="mail-subject-preview">Découvrez votre arbre !</div>
                 </li>
                 <li class="email-item-logic" data-id="5">
                     <div class="mail-sender-name">La Poste</div>
