@@ -407,9 +407,9 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                 <div class="ig-profile-info">
                     <h2 class="ig-profile-handle" id="igDecoyHandle">—</h2>
                     <ul class="ig-profile-stats">
-                        <li><strong>0</strong> publications</li>
+                        <li><strong>3</strong> publications</li>
                         <li><strong id="igDecoyFollowers">0</strong> abonnés</li>
-                        <li><strong>12</strong> abonnements</li>
+                        <li><strong>28</strong> abonnements</li>
                     </ul>
                     <div class="ig-profile-bio">
                         <strong id="igDecoyName">—</strong><br>

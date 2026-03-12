@@ -553,14 +553,14 @@ class PuzzleController
         // Réponses phishing des faux comptes
         $decoyReplies = [
             // Leurres équipe Alice (faux Bob)
-            'bob_martin'    => "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊",
-            'bob.leblanc'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
+            'bob_martin'    => "Salut je suis vraiment désolé je te connaît pas",
+            'bob.leblanc'   => "C'est vrai, mais incroyable alors c'est toi sur cette photo ",
             'bobby.photos'  => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
             'bob_aventures' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
             // Leurres équipe Bob (faux Alice)
-            'alice_martin'  => "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊",
+            'alice_martin'  => "Salut je suis vraiment désolé je te connaît pas",
             'alice.photo'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
-            'alicedupont__' => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
+            'alicedupont__' => "C'est vrai, mais incroyable alors c'est toi sur cette photo ",
             'alice_cuisine' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
         ];
 
