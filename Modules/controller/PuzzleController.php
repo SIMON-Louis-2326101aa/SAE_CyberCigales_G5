@@ -664,39 +664,35 @@ class PuzzleController
         }
 
         if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
-            $this->logPuzzle('DM principal refusé: session utilisateur ou équipe absente', 'warn');
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }
 
-        $userId = (int)$_SESSION['utilisateur']['id'];
-        $team = $_SESSION['team'];
         $message = trim($_POST['message'] ?? '');
 
         if ($message === '') {
-            $this->logPuzzle('DM principal ignoré: message vide', 'warn', [
-                'user_id' => $userId,
-                'team' => $team,
-            ]);
             header("Location: index.php?controller=Redirection&action=openSocialMediaPuzzle");
             exit;
         }
 
+        $team = $_SESSION['team'];
         $botReplies = [
-            'alice' => "Haha oui, quelle coïncidence ! 😄 On se retrouve à la 
-            Bibliothèque municipale de Lyon, 30 boulevard Vivier-Merle. Je t'y attends demain à 14h 📚",
-            'bob'   => "Trop bien ! 😊 On se voit au Jardin des Curiosités, 
-            2 montée des Soldats, Lyon. Je serai là à 14h30 🌿",
+            'alice' => "Non vraiment, on doit se voir !",
+            'bob'   => "tu me mens pas quand même, viens on se voit !",
         ];
 
+        // Réponse si le mot-clé est absent
         $botFallback = "T'es qui ???";
 
+        // Initialiser l'historique
         if (!isset($_SESSION['ig_messages'])) {
             $_SESSION['ig_messages'] = [];
         }
 
+        // Sauvegarder le message de l'équipe
         $_SESSION['ig_messages'][] = ['from' => 'me', 'text' => $message];
 
+        // Vérifier si le message contient "cousin" ou "cousine"
         $normalized = $this->normalize($message);
         $hasKeyword = str_contains($normalized, 'cousin');
 
@@ -705,20 +701,9 @@ class PuzzleController
             $_SESSION['ig_messages'][]     = ['from' => 'bot', 'text' => $reply];
             $_SESSION['ig_bot_replied']    = true;
             $_SESSION['ig_bot_reply_text'] = $reply;
-
-            $this->logPuzzle('DM principal: réponse bot valide envoyée', 'ok', [
-                'user_id' => $userId,
-                'team' => $team,
-            ]);
         } else {
             $reply = $botFallback;
             $_SESSION['ig_messages'][] = ['from' => 'bot', 'text' => $reply];
-
-            $this->logPuzzle('DM principal: fallback bot envoyé', 'info', [
-                'user_id' => $userId,
-                'team' => $team,
-                'has_keyword' => $hasKeyword,
-            ]);
         }
 
         header('Content-Type: application/json');
@@ -728,7 +713,6 @@ class PuzzleController
         ]);
         exit;
     }
-
     public function sendDecoyDmMessage()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -736,39 +720,38 @@ class PuzzleController
         }
 
         if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
-            $this->logPuzzle('DM leurre refusé: session utilisateur ou équipe absente', 'warn');
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }
 
-        $userId = (int)$_SESSION['utilisateur']['id'];
         $message = trim($_POST['message'] ?? '');
         $handle  = trim($_POST['decoy_handle'] ?? 'inconnu');
 
         if ($message === '') {
-            $this->logPuzzle('DM leurre ignoré: message vide', 'warn', [
-                'user_id' => $userId,
-                'handle' => $handle,
-            ]);
             header("Location: index.php?controller=Redirection&action=openSocialMediaPuzzle");
             exit;
         }
 
+        // Initialiser l'historique leurre séparé par handle
         $key = 'ig_decoy_messages_' . preg_replace('/[^a-z0-9_]/', '_', strtolower($handle));
         if (!isset($_SESSION[$key])) {
             $_SESSION[$key] = [];
         }
 
+        // Sauvegarder le message du joueur
         $_SESSION[$key][] = ['from' => 'me', 'text' => $message];
 
+        // Réponses phishing des faux comptes
         $decoyReplies = [
-            'bob_martin'    => "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊",
-            'bob.leblanc'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
+            // Leurres équipe Alice (faux Bob)
+            'bob_martin'    => "Salut je suis vraiment désolé je te connaît pas",
+            'bob.leblanc'   => "C'est vrai, mais incroyable alors c'est toi sur cette photo ",
             'bobby.photos'  => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
             'bob_aventures' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
-            'alice_martin'  => "Salut ! Clique sur ce lien pour qu'on se retrouve 👉 bit.ly/r3nd3zv0us-secret 😊",
+            // Leurres équipe Bob (faux Alice)
+            'alice_martin'  => "Salut je suis vraiment désolé je te connaît pas",
             'alice.photo'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
-            'alicedupont__' => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
+            'alicedupont__' => "C'est vrai, mais incroyable alors c'est toi sur cette photo ",
             'alice_cuisine' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
         ];
 
@@ -777,11 +760,7 @@ class PuzzleController
 
         $_SESSION[$key][] = ['from' => 'bot', 'text' => $reply];
 
-        $this->logPuzzle('DM leurre envoyé', 'file', [
-            'user_id' => $userId,
-            'handle' => $handle,
-        ]);
-
+        // Retourner les messages en JSON pour le JS
         header('Content-Type: application/json');
         echo json_encode([
             'reply'    => $reply,
@@ -797,36 +776,24 @@ class PuzzleController
         }
 
         if (!isset($_SESSION['utilisateur'], $_SESSION['team'])) {
-            $this->logPuzzle('Validation réseaux refusée: session utilisateur ou équipe absente', 'warn');
             header("Location: index.php?controller=Redirection&action=openHomepage");
             exit;
         }
 
-        $userId = (int)$_SESSION['utilisateur']['id'];
-
         if (empty($_SESSION['ig_bot_replied'])) {
             $_SESSION['flash_error'] = "Tu dois d'abord obtenir une réponse dans les messages.";
-
-            $this->logPuzzle('Validation réseaux échouée: aucune réponse bot', 'warn', [
-                'user_id' => $userId,
-            ]);
-
             header("Location: index.php?controller=Redirection&action=openSearchSM");
             exit;
         }
 
+        // Nettoyage des données de l'épreuve
         unset($_SESSION['ig_messages'], $_SESSION['ig_bot_replied'], $_SESSION['ig_bot_reply_text']);
 
+        $userId        = (int) $_SESSION['utilisateur']['id'];
         $progressModel = new GameProgressModel();
         $progressModel->updateLevel($userId, 8);
 
         $_SESSION['flash_success'] = "Bravo ! Tu as obtenu la localisation et validé l'épreuve.";
-
-        $this->logPuzzle('Épreuve réseaux réussie', 'ok', [
-            'user_id' => $userId,
-            'new_level' => 8,
-        ]);
-
         header("Location: index.php?controller=Redirection&action=openMeetingPwd");
         exit;
     }
