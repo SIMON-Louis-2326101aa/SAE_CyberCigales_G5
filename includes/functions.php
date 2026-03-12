@@ -203,7 +203,7 @@ if (!function_exists('log_console')) {
 
 if (!function_exists('trimAndSortLogFile')) {
 
-    function trimAndSortLogFile(string $file, int $maxBytes = 100 * 1024 * 1024): void
+    function trimAndSortLogFile(string $file, int $maxBytes = 50 * 1024 * 1024): void
     {
 
         if (!is_file($file)) {
@@ -273,7 +273,7 @@ if (!function_exists('registerLogRotation')) {
         register_shutdown_function(static function () use ($logDir, $logFile) {
 
             try {
-                trimAndSortLogFile($logFile, 100 * 1024 * 1024);
+                trimAndSortLogFile($logFile, 50 * 1024 * 1024);
 
                 $logFiles = glob("{$logDir}/app-*.log");
                 $deletedCount = 0;

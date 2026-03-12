@@ -85,7 +85,6 @@ class RedirectionController
     public function openChangePwd()
     {
         $this->logRedirection('changePwdView');
-        $this->requireAuth();
 
         if (function_exists('log_console')) {
             log_console('Affichage page changement mot de passe', 'file', [
