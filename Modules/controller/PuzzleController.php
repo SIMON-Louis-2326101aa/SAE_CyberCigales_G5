@@ -486,10 +486,8 @@ class PuzzleController
 
         $team = $_SESSION['team'];
         $botReplies = [
-            'alice' => "Haha oui, quelle coïncidence ! 😄 On se retrouve à la 
-            Bibliothèque municipale de Lyon, 30 boulevard Vivier-Merle. Je t'y attends demain à 14h 📚",
-            'bob'   => "Trop bien ! 😊 On se voit au Jardin des Curiosités, 
-            2 montée des Soldats, Lyon. Je serai là à 14h30 🌿",
+            'alice' => "Non vraiment, on doit se voir !",
+            'bob'   => "tu me mens pas quand même, viens on se voit !",
         ];
 
         // Réponse si le mot-clé est absent
