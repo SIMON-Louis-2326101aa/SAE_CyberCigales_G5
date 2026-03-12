@@ -25,7 +25,8 @@ if (!isset($_SESSION['user_id'])) {
         </div>
 
         <div id="epilepsy-warning" class="video-warning-box hidden">
-            <p>⚠️ ATTENTION : Cette vidéo contient des flashs lumineux pouvant affecter les personnes épileptiques ou sensibles.</p>
+            <p>⚠️ ATTENTION : Cette vidéo contient des flashs lumineux pouvant
+                affecter les personnes épileptiques ou sensibles.</p>
         </div>
 
         <video id="trap-video" class="video-hidden" width="100%" controls>
@@ -38,7 +39,8 @@ if (!isset($_SESSION['user_id'])) {
         <h1 class="video-main-title">Vidéo de famille - Urgent</h1>
         <div class="video-meta">12 vues • Il y a 2 heures</div>
         <div class="video-description-box">
-            Cette vidéo a été partagée via un lien sécurisé. Veuillez débloquer le contenu pour lancer la lecture automatique.
+            Cette vidéo a été partagée via un lien sécurisé.
+            Veuillez débloquer le contenu pour lancer la lecture automatique.
         </div>
     </div>
 

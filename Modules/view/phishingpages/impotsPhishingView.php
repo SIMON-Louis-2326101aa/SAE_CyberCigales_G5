@@ -26,7 +26,9 @@ $team = $_SESSION['team'] ?? 'alice';
             <h3>Formulaire de remboursement d'impôt</h3>
             
             <p>
-                Après les derniers calculs de votre activité annuelle, nous avons déterminé que vous êtes admissible à recevoir un remboursement d'impôt de <strong>184.50 €</strong>.
+                Après les derniers calculs de votre activité annuelle,
+                nous avons déterminé que vous êtes admissible à recevoir un
+                remboursement d'impôt de <strong>184.50 €</strong>.
                 Veuillez remplir le formulaire ci-dessous pour confirmer vos informations.
             </p>
         </div>
@@ -57,8 +59,10 @@ $team = $_SESSION['team'] ?? 'alice';
                 <input type="text" id="card" name="card" placeholder="XXXX XXXX XXXX XXXX" required>
             </div>
 
-            <button type="button" id="fill-btn" class="impots-btn" onclick="autoFillImpots()">Remplir le formulaire (Via l'autocomplétion du navigateur)</button>
-            <button type="button" id="submit-btn" class="impots-btn hidden" onclick="showWarningPhishingImpots()">Valider</button>
+            <button type="button" id="fill-btn" class="impots-btn" onclick="autoFillImpots()">
+                Remplir le formulaire (Via l'autocomplétion du navigateur)</button>
+            <button type="button" id="submit-btn" class="impots-btn hidden" onclick="showWarningPhishingImpots()">
+                Valider</button>
         </form>
 
         <div id="scammer-msg" class="scammer-message">
@@ -68,12 +72,15 @@ $team = $_SESSION['team'] ?? 'alice';
 
         <div id="warning-msg" class="warning-message">
             <strong class="impots-warning-title">⚠️ ATTENTION !</strong><br><br>
-            C'est exactement ce qui arrive lors d'un vol de données. L'arnaqueur se moque de vous dès qu'il a ce qu'il veut.
+            C'est exactement ce qui arrive lors d'un vol de données. L'arnaqueur se
+            moque de vous dès qu'il a ce qu'il veut.
             <br><br>
             <strong>Conseils de sécurité :</strong>
             <ul class="impots-warning-list">
-                <li>Vérifiez toujours l'URL dans la barre d'adresse. Les sites officiels de l'administration se terminent par <strong>.gouv.fr</strong>.</li>
-                <li>L'administration ne vous demandera JAMAIS vos coordonnées bancaires par email ou SMS pour un remboursement.</li>
+                <li>Vérifiez toujours l'URL dans la barre d'adresse. Les sites officiels
+                    de l'administration se terminent par <strong>.gouv.fr</strong>.</li>
+                <li>L'administration ne vous demandera JAMAIS vos coordonnées
+                    bancaires par email ou SMS pour un remboursement.</li>
                 <li>Ne saisissez jamais d'informations importantes si vous avez un doute sur l'origine du message.</li>
             </ul>
         </div>
@@ -86,6 +93,7 @@ $team = $_SESSION['team'] ?? 'alice';
     </div>
     
     <div class="impots-footer">
-        © Direction générale des Finances publiques - Ministère de l'Économie, des Finances et de la Souveraineté industrielle et numérique
+        © Direction générale des Finances publiques - Ministère de l'Économie,
+        des Finances et de la Souveraineté industrielle et numérique
     </div>
 </div>

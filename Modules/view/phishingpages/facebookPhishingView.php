@@ -37,9 +37,12 @@ $team = $_SESSION['team'] ?? 'alice';
         </p>
         <p><strong>Dangers spécifiques aux réseaux sociaux :</strong></p>
         <ul>
-            <li><strong>Usurpation d'identité :</strong> Le pirate peut contacter vos amis en votre nom pour les arnaquer.</li>
-            <li><strong>Accès à vos données privées :</strong> Photos, messages personnels et informations de contact sont exposés.</li>
-            <li><strong>Revente de compte :</strong> Votre compte peut être utilisé pour diffuser des publicités frauduleuses ou du spam.</li>
+            <li><strong>Usurpation d'identité :</strong> Le pirate peut contacter
+                vos amis en votre nom pour les arnaquer.</li>
+            <li><strong>Accès à vos données privées :</strong> Photos,
+                messages personnels et informations de contact sont exposés.</li>
+            <li><strong>Revente de compte :</strong> Votre compte
+                peut être utilisé pour diffuser des publicités frauduleuses ou du spam.</li>
         </ul>
         <p><em>Conseil : Activez toujours l'authentification à deux facteurs (2FA) pour protéger vos comptes.</em></p>
     </div>
