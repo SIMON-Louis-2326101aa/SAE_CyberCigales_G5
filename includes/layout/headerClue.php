@@ -1,5 +1,7 @@
 <?php
 
+/** @var string|null $info */
+/** @var string|null $clue */
 ?>
 <div id="info-tab">
     <div id="info-handle" class="tab-handle disabled">ℹ️<br><p id="info-chrono">01:00</p></div>
