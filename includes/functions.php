@@ -149,18 +149,8 @@ if (!function_exists('filterLogContextByMode')) {
    ============================================================ */
 
 if (!function_exists('log_console')) {
-
     function log_console(string $message, string $type = 'info', array $context = []): void
     {
-
-        $currentLevel = logTypeToNumericLevel($type);
-        $minLevel = logEnvMinLevel();
-
-        // Ignore les logs sous le seuil
-        if ($currentLevel < $minLevel) {
-            return;
-        }
-
         $label = match ($type) {
             'error' => 'ERROR',
             'warn'  => 'WARNING',
@@ -179,20 +169,26 @@ if (!function_exists('log_console')) {
             }
         }
 
-        $filteredContext = filterLogContextByMode($context);
+        $appEnv = $_ENV['APP_ENV'] ?? 'dev';
 
-        $ctx = $filteredContext
-            ? (' ' . json_encode($filteredContext, JSON_UNESCAPED_UNICODE))
-            : '';
+        // Filtrage prod
+        if ($appEnv === 'prod') {
+            if (in_array($type, ['file', 'ok', 'song'], true)) {
+                return;
+            }
+        }
 
-        $line = sprintf(
-            '[req:%s] [%s] %s%s',
-            $GLOBALS['req_id'],
-            $label,
-            $message,
-            $ctx
+        unset(
+            $context['pwd'],
+            $context['password'],
+            $context['confirm_pwd'],
+            $context['token'],
+            $context['code']
         );
 
+        $ctx = $context ? (' ' . json_encode($context, JSON_UNESCAPED_UNICODE)) : '';
+
+        $line = sprintf('[req:%s] [%s] %s%s', $GLOBALS['req_id'], $label, $message, $ctx);
         error_log($line);
     }
 }

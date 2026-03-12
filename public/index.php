@@ -60,11 +60,11 @@ $composerAutoload = $ROOT_DIR . '/vendor/autoload.php';
 if (is_file($composerAutoload)) {
     require $composerAutoload;
     if (function_exists('log_console')) {
-        log_console('Composer autoload chargé', 'ok');
+        log_console('Composer autoload chargé', 'file');
     }
 } else {
     if (function_exists('log_console')) {
-        log_console('Composer autoload introuvable: ' . $composerAutoload, 'error');
+        log_console('Composer autoload introuvable', 'error');
     }
 }
 
@@ -75,14 +75,14 @@ $internalAutoload = $ROOT_DIR . '/includes/Autoloader.php';
 if (is_file($internalAutoload)) {
     require_once $internalAutoload;
     if (function_exists('log_console')) {
-        log_console('Autoloader interne chargé', 'ok');
+        log_console('Autoloader interne chargé', 'file');
     }
 
     spl_autoload_register([\SAE_CyberCigales_G5\includes\Autoloader::class, 'classLoad']);
-    log_console('Autoloader enregistré', 'info');
+    log_console('Autoloader enregistré', 'file');
 } else {
     if (function_exists('log_console')) {
-        log_console('Autoloader interne introuvable: /includes/Autoloader.php', 'error');
+        log_console('Autoloader interne introuvable', 'error');
     }
 }
 
@@ -95,18 +95,16 @@ try {
         $dotenv = Dotenv\Dotenv::createImmutable($ROOT_DIR . '/config');
         $dotenv->load();
         if (function_exists('log_console')) {
-            log_console('Fichier .env chargé', 'ok', [
-                'env_path' => $ROOT_DIR . '/config/.env',
-            ]);
+            log_console('Configuration environnement chargée', 'file');
         }
     } else {
         if (function_exists('log_console')) {
-            log_console('Dotenv non disponible (classe introuvable)', 'warn');
+            log_console('Dotenv non disponible', 'warn');
         }
     }
 } catch (Throwable $e) {
     if (function_exists('log_console')) {
-        log_console('Erreur chargement .env (vérifier /config/.env)', 'error');
+        log_console('Erreur chargement configuration environnement', 'error');
     }
 }
 
@@ -166,7 +164,7 @@ if (session_status() === PHP_SESSION_NONE) {
     ]);
 
     if (function_exists('log_console')) {
-        log_console('Session démarrée', 'ok', [
+        log_console('Session démarrée', 'file', [
             'cookie_secure' => $cookieSecure,
             'cookie_samesite' => $cookieSameSite,
             'https_detected' => $isHttps,
@@ -237,7 +235,9 @@ try {
     $uri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?? '/';
     $uri = '/' . trim($uri, '/');
     if (function_exists('log_console')) {
-        log_console("URI demandée: {$uri}", 'file');
+        log_console('Route demandée', 'info', [
+            'uri' => $uri,
+        ]);
     }
 
     // Paramètres de route par query string
@@ -255,7 +255,10 @@ try {
     }
 
     if (function_exists('log_console')) {
-        log_console("Route -> controller={$S_controller}, action={$S_action}", 'file');
+        log_console('Route résolue', 'info', [
+            'controller' => $S_controller,
+            'action' => $S_action,
+        ]);
     }
 
     if (isset($_SESSION['utilisateur'])) {
@@ -288,7 +291,7 @@ try {
     if (class_exists(ViewHandler::class)) {
         ViewHandler::bufferStart();
         if (function_exists('log_console')) {
-            log_console('Buffer vue démarré', 'ok');
+            log_console('Buffer vue démarré', 'file');
         }
     } else {
         if (function_exists('log_console')) {
@@ -302,7 +305,7 @@ try {
         $C_controller = new ControllerHandler($S_controller, $S_action);
         $C_controller->execute();
         if (function_exists('log_console')) {
-            log_console('Contrôleur exécuté', 'ok');
+            log_console('Contrôleur exécuté', 'info');
         }
     } else {
         if (function_exists('log_console')) {
@@ -327,7 +330,7 @@ try {
     // Affiche le contenu
     echo $displayContent;
     if (function_exists('log_console')) {
-        log_console('Contenu affiché', 'ok', [
+        log_console('Contenu affiché', 'file', [
             'controller' => $S_controller,
             'action' => $S_action,
             'duration_ms' => round((microtime(true) - $REQUEST_START) * 1000, 2),

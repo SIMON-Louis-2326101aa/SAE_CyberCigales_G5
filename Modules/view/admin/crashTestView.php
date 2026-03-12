@@ -143,5 +143,17 @@
             </p>
         </div>
 
+        <div>
+            <a class="btn active btn-but"
+               href="index.php?controller=CrashTest&action=logFloodTest">
+                Tester flood massif de logs (DEV)
+            </a>
+            <p class="lead">
+                Génère volontairement des dizaines de milliers de lignes de logs avec gros payload.
+                Sert à tester la rotation, la limite de taille des fichiers et le comportement du système
+                sous une vraie surcharge de journalisation. Disponible uniquement en DEV.
+            </p>
+        </div>
+
     </div>
 </div>
