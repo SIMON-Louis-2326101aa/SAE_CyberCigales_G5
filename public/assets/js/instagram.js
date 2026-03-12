@@ -14,7 +14,6 @@
 
     // Si le bot a déjà répondu (session active), rouvrir le bon profil + le DM directement
     if (TARGET.botReplied) {
-        el('igDmHeaderBtn').classList.remove('hidden');
         _showRealProfile();
         igOpenDm();
     }
@@ -83,7 +82,6 @@
         hide('ig-home-state');
         hide('ig-decoy-state');
         show('ig-profile-state');
-        el('igDmHeaderBtn').classList.remove('hidden');
 
         el('igProfileGrid').innerHTML = TARGET.posts
             .map(p => `

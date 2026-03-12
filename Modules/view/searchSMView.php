@@ -165,15 +165,7 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
             </div>
 
             <div class="ig-header-right">
-                <button class="ig-dm-header-btn hidden" id="igDmHeaderBtn" onclick="igOpenDm()" title="Messages">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
-                         stroke="currentColor" stroke-width="1.5">
-                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                    </svg>
-                    <?php if ($botReplied) : ?>
-                        <span class="ig-dm-notif"></span>
-                    <?php endif; ?>
-                </button>
+
                 <button class="ig-dm-header-btn" onclick="igGoHome()" title="Accueil">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="1.5">
