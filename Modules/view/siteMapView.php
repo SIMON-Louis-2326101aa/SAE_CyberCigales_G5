@@ -10,8 +10,8 @@
                 <a href="index.php?controller=Redirection&action=openAccount">Compte</a>
                 <a href="index.php?controller=Redirection&action=openLegal">Mentions Légales</a>
                 <a href="index.php?controller=Redirection&action=openAbout">À propos</a>
-                <a href="index.php?controller=CrashTest&action=index">Boutons Crash Test</a>
                 <br>
+                <a href="index.php?controller=CrashTest&action=index">Boutons Crash Test</a>
                 <a href="index.php?controller=Redirection&action=openChoice">Changer d'équipe</a>
                 <br>
                 <a href="index.php?controller=Redirection&action=openLetterIntro">Enigme 1 - Lettre</a>
