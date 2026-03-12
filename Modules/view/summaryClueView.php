@@ -29,7 +29,7 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <p>Voyons voir tout ce qu'on a trouvé jusqu'ici pour voir si on découvre quelque chose de plus.</p><br>
 
     <div class="s-section">
-        <p>Epreuve 1</p>
+        <p>Épreuve 1</p>
         <p>On a eu la lettre décryptée :</p>
         <p>Ma chère Diane,
             Si tu lis ces lignes, c’est que le temps a poursuivi sa route sans nous attendre.
@@ -48,19 +48,19 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 2</p>
+        <p>Épreuve 2</p>
         <p>Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <img src="./assets/images/photoFamille.png" alt="photodefamille">
-        <p>PAPILLON et MEMOIRE</p>
+        <p>PAPILLON et MÉMOIRE</p>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 3</p>
-        <p>Ici, on a suivi le signal déguisé en papillon qui nous a menés à ADMIN</p>
+        <p>Épreuve 3</p>
+        <p>Ici on a suivi le signal déguisé en papillon qui nous a mené à ADMIN</p>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 4</p>
+        <p>Épreuve 4</p>
         <p>On a trouvé le certificat de naissance de notre tante. On a découvert l'existence d'une tante !</p>
         <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
             <div class="pdf-header-border">
@@ -80,23 +80,22 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 5</p>
+        <p>Épreuve 5</p>
         <p>On a recréé un mot de passe plus robuste</p>
     </div>
 
     <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
         <label>Qu'est-ce qu'on apprend de plus ?</label>
-        <input type="text" name="answer" placeholder="Entrez votre réponse">
+        <input type="text" name="answer" placeholder="Entrez votre réponse ">
         <button type="submit">Soumettre</button>
     </form>
 
 <?php elseif (isset($_SESSION['team']) && $_SESSION['team'] === "bob") : ?>
     <br>
-
-    <p>Voyons voir tout ce qu'on a trouvé jusqu'ici pour voir si on découvre quelque chose de plus.</p><br>
+    <p>Voyons voir tout ce qu'on a trouvé jusqu'ici pour voir si on en trouve plus </p><br>
 
     <div class="s-section">
-        <p>Epreuve 1</p>
+        <p>Épreuve 1</p>
         <p>On a eu la lettre décryptée :</p>
         <p>Ma chère Clara,
         Le temps nous a glissé entre les doigts comme du sable, mais avant qu’il ne disparaisse
@@ -115,19 +114,19 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 2</p>
+        <p>Épreuve 2</p>
         <p>Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <img src="./assets/images/photoFamille.png" alt="photodefamille">
-        <p>PASSE et CLE</p>
+        <p>PASSÉ et CLÉ</p>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 3</p>
-        <p>Ici, on a suivi le signal déguisé en papillon qui nous a menés à ROOT</p>
+        <p>Épreuve 3</p>
+        <p>Ici on a suivi le signal déguisé en papillon qui nous a mené à ROOT</p>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 4</p>
+        <p>Épreuve 4</p>
         <p>On a trouvé le certificat de naissance de notre tante. On a découvert l'existence d'une tante !</p>
         <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
             <div class="pdf-header-border">
@@ -147,13 +146,13 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     </div>
 
     <div class="s-section">
-        <p>Epreuve 5</p>
+        <p>Épreuve 5</p>
         <p>On a recréé un mot de passe plus robuste</p>
     </div>
 
     <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
         <label>Qu'est-ce qu'on apprend de plus ?</label>
-        <input type="text" name="answer" placeholder="Entrez votre réponse">
+        <input type="text" name="answer" placeholder="Entrez votre réponse ">
         <button type="submit">Soumettre</button>
     </form>
 

@@ -46,7 +46,7 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="return-container-visible">
         <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=6" class="impots-return-link">
-            RETOUR SUR LA BOITE MAIL
+            RETOUR SUR LA BOÎTE MAIL
         </a>
     </div>
 </div>

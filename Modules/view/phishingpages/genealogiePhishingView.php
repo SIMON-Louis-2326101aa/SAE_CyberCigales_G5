@@ -62,7 +62,7 @@ $team = $_SESSION['team'] ?? 'alice';
 
     <div id="gen-return-btn" class="return-container">
         <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=4" class="genealogie-return-link">
-            RETOUR SUR LA BOITE MAIL
+            RETOUR SUR LA BOÎTE MAIL
         </a>
     </div>
 </div>

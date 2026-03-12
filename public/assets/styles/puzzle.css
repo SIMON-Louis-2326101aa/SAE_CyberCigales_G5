@@ -522,6 +522,11 @@
     justify-self:end;
 }
 
+#bw-hint, #bw-feedback, #bw-max {
+    color: #DDDDDD;
+    font-weight: bold;
+}
+
 @media (width <= 640px){
     .bw-actions{
         grid-template-columns: 1fr;
@@ -546,7 +551,10 @@
 .bw-status{
     margin-top:8px;
     opacity:.75;
+    color: #DDDDDD;
+    font-weight: bold;
 }
+
 .bw-score.is-negative{ color:#b91c1c; }
 
 #bw-code-zone{
