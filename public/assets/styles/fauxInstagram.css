@@ -531,6 +531,7 @@
 
 /* ── Boutons Suivre + Message côte à côte sous la bio ── */
 .ig-profile-actions {
+    margin-top: 12px;
     display: flex;
     gap: 8px;
     width: 100%;
