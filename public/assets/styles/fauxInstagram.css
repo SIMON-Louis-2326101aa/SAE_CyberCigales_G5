@@ -478,12 +478,21 @@
 /* ── En-tête du profil ── */
 .ig-profile-header {
     display: flex;
-    gap: 36px;
-    align-items: flex-start;
+    gap: 32px;
+    align-items: center;
     width: 100%;
-    margin: 0 0 28px 0;
+    margin: 0 0 16px;
     color: #262626;
     box-sizing: border-box;
+}
+
+.ig-profile-header-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    align-items: flex-start;
 }
 
 .ig-profile-avatar-ring {
@@ -512,24 +521,19 @@
     color: #555;
 }
 
-.ig-profile-info {
-    flex: 1;
-    min-width: 0;
-}
-
-/* ── Handle seul sur sa ligne ── */
 .ig-profile-handle {
     font-size: 20px;
     font-weight: 300;
-    margin: 0 0 14px 0;
+    margin: 0;
+    color: #262626;
+    text-align: left;
 }
 
 /* ── Boutons Suivre + Message côte à côte sous la bio ── */
 .ig-profile-actions {
     display: flex;
     gap: 8px;
-    margin-top: 14px;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
 .ig-btn-follow {
@@ -538,6 +542,22 @@
     border: none;
     border-radius: 8px;
     padding: 6px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* ── Bouton Message sur le profil ── */
+.ig-btn-message {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: #262626;
+    border: 1px solid #dbdbdb;
+    border-radius: 8px;
+    padding: 6px;
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -559,17 +579,19 @@
 
 .ig-profile-stats {
     display: flex;
-    gap: 32px;
+    gap: 28px;
     list-style: none;
-    margin: 0 0 14px 0;
+    margin: 0;
     padding: 0;
     font-size: 14px;
+    color: #262626;
 }
 
 .ig-profile-bio {
     font-size: 14px;
     line-height: 1.5;
     color: #262626;
+    text-align: left;
 }
 
 /* ── Onglets ── */
@@ -670,7 +692,7 @@
     transition: background 0.2s;
 }
 
-.ig-modal-close:hover { background: rgba(255,255,255,0.3); }
+.ig-modal-close:hover { background: rgb(255 255 255 / 30%); }
 
 .ig-modal-img {
     flex: 0 0 52%;
@@ -823,22 +845,6 @@
     cursor: pointer;
 }
 
-/* ── Bouton Message sur le profil ── */
-.ig-btn-message {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: transparent;
-    color: #262626;
-    border: 1px solid #dbdbdb;
-    border-radius: 8px;
-    padding: 6px 6px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
 .ig-btn-message:hover { background: #f5f5f5; }
 
 /* ── Bouton DM dans le header ── */
@@ -962,16 +968,16 @@
 }
 
 /* Bulle envoyée par moi */
-.ig-dm-bubble--me {
+.ig-dm-bubble-me {
     align-self: flex-end;
     background: #3797f0;
     color: #fff;
-    border-radius: 22px 22px 4px 22px;
+    border-radius: 22px 22px 4px;
     padding: 10px 14px;
     max-width: 75%;
     font-size: 14px;
     line-height: 1.5;
-    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 /* Bulle reçue (bot) */
@@ -996,14 +1002,14 @@
     flex-shrink: 0;
 }
 
-.ig-dm-bubble--them {
+.ig-dm-bubble-them {
     background: #efefef;
     color: #262626;
     border-radius: 22px 22px 22px 4px;
     padding: 10px 14px;
     font-size: 14px;
     line-height: 1.5;
-    word-break: break-word;
+    overflow-wrap: break-word
 }
 
 /* Zone de saisie */
@@ -1102,7 +1108,7 @@
 
 .ig-grid-locked:hover { opacity: 1 !important; }
 
-.ig-dm-bubble--phishing {
+.ig-dm-bubble-phishing {
     background: #efefef !important;
 }
 

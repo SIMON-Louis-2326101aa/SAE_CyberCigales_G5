@@ -144,7 +144,7 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
 
 
     <header class="header ig-game-header">
-        <nav class="ig-header-content">
+        <nav class="header__content">
             <span class="ig-logo-text">Instagram</span>
 
             <div class="ig-search-wrap">
@@ -481,13 +481,13 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
                 </div>
                 <?php foreach ($savedMessages as $msg) : ?>
                     <?php if ($msg['from'] === 'me') : ?>
-                        <div class="ig-dm-bubble ig-dm-bubble--me">
+                        <div class="ig-dm-bubble ig-dm-bubble-me">
                             <?= htmlspecialchars($msg['text']) ?>
                         </div>
                     <?php else : ?>
                         <div class="ig-dm-bubble-wrap">
                             <div class="ig-dm-bubble-avatar"><?= htmlspecialchars($targetLetter) ?></div>
-                            <div class="ig-dm-bubble ig-dm-bubble--them">
+                            <div class="ig-dm-bubble ig-dm-bubble-them">
                                 <?= nl2br(htmlspecialchars($msg['text'])) ?>
                             </div>
                         </div>

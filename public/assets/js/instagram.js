@@ -14,6 +14,7 @@
 
     // Si le bot a déjà répondu (session active), rouvrir le bon profil + le DM directement
     if (TARGET.botReplied) {
+        el('igDmHeaderBtn').classList.remove('hidden');
         _showRealProfile();
         igOpenDm();
     }
@@ -82,6 +83,7 @@
         hide('ig-home-state');
         hide('ig-decoy-state');
         show('ig-profile-state');
+        el('igDmHeaderBtn').classList.remove('hidden');
 
         el('igProfileGrid').innerHTML = TARGET.posts
             .map(p => `
@@ -158,7 +160,7 @@
 
         // Bulle envoyée par le joueur
         const bubbleMe = document.createElement('div');
-        bubbleMe.className = 'ig-dm-bubble ig-dm-bubble--me';
+        bubbleMe.className = 'ig-dm-bubble ig-dm-bubble-me';
         bubbleMe.textContent = text;
         msgs.appendChild(bubbleMe);
 
@@ -183,7 +185,7 @@
                 avatar.textContent = TARGET.letter || '?';
 
                 const bubble = document.createElement('div');
-                bubble.className = 'ig-dm-bubble ig-dm-bubble--them';
+                bubble.className = 'ig-dm-bubble ig-dm-bubble-them';
                 bubble.textContent = data.reply;
 
                 wrap.appendChild(avatar);
@@ -242,7 +244,7 @@
 
         // Bulle envoyée par le joueur
         const bubbleMe = document.createElement('div');
-        bubbleMe.className = 'ig-dm-bubble ig-dm-bubble--me';
+        bubbleMe.className = 'ig-dm-bubble ig-dm-bubble-me';
         bubbleMe.textContent = text;
         msgs.appendChild(bubbleMe);
 
@@ -258,7 +260,7 @@
             avatar.textContent = el('igDecoyDmAvatar').textContent || '?';
 
             const bubble = document.createElement('div');
-            bubble.className = 'ig-dm-bubble ig-dm-bubble--them ig-dm-bubble--phishing';
+            bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
             bubble.innerHTML = `Salut ! Clique sur ce lien pour qu'on se retrouve 👉 <span class="ig-fake-link">bit.ly/r3nd3zv0us-secret</span> 😊`;
 
             wrap.appendChild(avatar);
