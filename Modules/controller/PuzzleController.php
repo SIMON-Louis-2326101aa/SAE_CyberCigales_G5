@@ -748,7 +748,7 @@ class PuzzleController
             'bob.leblanc'   => "Salut, je crois te reconnaître, c'est toi sur cette photo ",
             'bobby.photos'  => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
             'bob_aventures' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
-            'bob.VALM0NT'  => "je te réponds que si tu regarde la vidéo ;)",
+            //'bob.VALM0NT' => "je te réponds que si tu regarde la vidéo ;)", Il est géré dans le js
             // Leurres équipe Bob (faux Alice)
             'alice_martin'  => "Salut je suis vraiment désolé je te connaît pas",
             'alice.photo'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
@@ -761,17 +761,11 @@ class PuzzleController
 
         $_SESSION[$key][] = ['from' => 'bot', 'text' => $reply];
 
-        // Ajouter un lien vidéo pour le compte leurre bob.VALM0NT
-        $videoLink = ($handle === 'bob.VALM0NT')
-            ? 'index.php?controller=Puzzle&action=openVideoPhishing'
-            : null;
-
         // Retourner les messages en JSON pour le JS
         header('Content-Type: application/json');
         echo json_encode([
-            'reply'     => $reply,
-            'messages'  => $_SESSION[$key],
-            'videoLink' => $videoLink,
+            'reply'    => $reply,
+            'messages' => $_SESSION[$key],
         ]);
         exit;
     }

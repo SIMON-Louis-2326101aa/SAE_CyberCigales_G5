@@ -269,12 +269,13 @@
                     const bubble = document.createElement('div');
                     bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
 
-                    // Si la réponse contient le marqueur vidéo, insérer un vrai lien
-                    if (data.videoLink) {
+                    // Si c'est bob.VALM0NT, afficher un lien vers la vidéo
+                    if (handle === 'bob.VALM0NT') {
                         bubble.innerHTML =
                             `je te réponds que si tu regarde la vidéo 😉 👉 ` +
-                            `<a href="${data.videoLink}" class="ig-fake-link ig-video-link">` +
-                            `Regarder la vidéo</a>`;
+                            `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +
+                            `onclick="window.location='index.php?controller=Puzzle&action=openVideoPhishing&from=instagram'">` +
+                            `Regarder la vidéo</span>`;
                     } else {
                         bubble.innerHTML = data.reply
                             .replace(/👉\s*(bit\.ly\/\S+)/g,

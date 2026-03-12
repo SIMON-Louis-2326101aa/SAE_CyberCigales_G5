@@ -46,9 +46,16 @@ if (!isset($_SESSION['user_id'])) {
 
     <div class="fb-divider"></div>
 
+    <?php
+    $from = $_GET['from'] ?? 'email';
+    $returnUrl = match ($from) {
+        'instagram' => 'index.php?controller=Redirection&action=openSearchSM',
+        default     => 'index.php?controller=Puzzle&action=phishingLinkClick&from_id=6',
+    };
+    ?>
     <div class="return-container-visible">
-        <a href="index.php?controller=Puzzle&action=phishingLinkClick&from_id=6" class="impots-return-link">
-            RETOUR SUR LA BOÎTE MAIL
+        <a href="<?= htmlspecialchars($returnUrl) ?>" class="impots-return-link">
+            RETOUR
         </a>
     </div>
 </div>
