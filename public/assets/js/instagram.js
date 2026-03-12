@@ -10,12 +10,13 @@
     let currentPost  = null;
     let currentDecoy = null; // compte leurre actuellement affiché
 
+    /* global IG_TARGET */
     const TARGET = (typeof IG_TARGET !== 'undefined') ? IG_TARGET : {};
 
     // Si le bot a déjà répondu (session active), rouvrir le bon profil + le DM directement
     if (TARGET.botReplied) {
         _showRealProfile();
-        igOpenDm();
+        window.igOpenDm();
     }
 
     // ════════════════════════════════════════════════════════
@@ -204,7 +205,7 @@
     };
 
     //DM leurres
-    window.igOpenDecoyDm = function (handle, letter, name) {
+    window.igOpenDecoyDm = function (handle, letter) {
         // Accepte les infos passées directement depuis le bouton HTML
         // ou depuis currentDecoy si disponible
         const h = handle || (currentDecoy && currentDecoy.handle) || '—';
@@ -308,7 +309,7 @@
     };
 
     window.igCloseModalOutside = function (e) {
-        if (e.target === el('igModal')) igCloseModal();
+        if (e.target === el('igModal')) window.igCloseModal();
     };
 
     window.igToggleModalLike = function () {
