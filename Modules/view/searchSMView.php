@@ -4,7 +4,7 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
 }
 
 $info = "rien";
-$solution = ($_SESSION["team"] === 'alice') ? "bob.VALMONT" : "alice.VALMONT";
+$solution = ($_SESSION["team"] === 'alice') ? "bob.valmont" : "alice.valmont";
 
 $clue = "
 <ul class='clues'>
