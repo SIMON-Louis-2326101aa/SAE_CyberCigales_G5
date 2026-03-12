@@ -269,14 +269,14 @@
                     const bubble = document.createElement('div');
                     bubble.className = 'ig-dm-bubble ig-dm-bubble-them ig-dm-bubble-phishing';
 
-                    // Si c'est bob.VALM0NT, afficher un lien vers la vidéo
-                    if (handle === 'bob.VALM0NT') {
+                    // Si c'est bob.VALM0NT ou alice.VALM0NT, afficher un lien vers la vidéo
+                    if (handle === 'bob.VALM0NT' || handle === 'alice.VALM0NT') {
                         bubble.innerHTML =
                             `je te réponds que si tu regarde la vidéo 😉 👉 ` +
                             `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +
                             `onclick="window.location='index.php?controller=Puzzle&action=openVideoPhishing&from=instagram'">` +
                             `Regarder la vidéo</span>`;
-                    } else if (handle === 'bob.leblanc') {
+                    } else if (handle === 'bob.leblanc' || handle === 'alice_martin') {
                         bubble.innerHTML =
                             `Salut, je crois te reconnaître, c'est toi sur cette photo 👉 ` +
                             `<span class="ig-fake-link ig-video-link" style="cursor:pointer;" ` +

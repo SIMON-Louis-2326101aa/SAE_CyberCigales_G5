@@ -88,6 +88,8 @@ if ($team === 'alice') {
                     'A', 'followers' => 62,  'bio' => "Passionnée de voyages ✈️"],
             ['handle' => 'alice_cuisine', 'name' => 'Alice Bernard', 'letter' =>
                     'A', 'followers' => 289, 'bio' => "Cheffe cuisinière 🍳 Bordeaux"],
+            ['handle' => 'alice.VALM0NT', 'name' => 'Alice Val', 'letter' =>
+                    'A', 'followers' => 67, 'bio' => "SIIIIIX-SEEEVEEEEN"],
     ]);
 
     $posts = json_encode([

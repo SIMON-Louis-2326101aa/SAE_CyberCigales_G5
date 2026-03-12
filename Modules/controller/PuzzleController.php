@@ -744,14 +744,13 @@ class PuzzleController
         // Réponses phishing des faux comptes
         $decoyReplies = [
             // Leurres équipe Alice (faux Bob)
-            'bob_martin'    => "Salut je suis vraiment désolé je te connaît pas",
-            'bobby.photos'  => "Coucou ! Regarde ça, c'est pour toi 👉 bit.ly/surprise-link 😄",
-            'bob_aventures' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
+            'bob_martin'    => "Salut je suis vraiment désolé je te connais pas",
+            'bobby.photos'  => "Salut désolé je ne connais pas",
+            'bob_aventures' => "Salut t'es pas sélectionné",
             // Leurres équipe Bob (faux Alice)
-            'alice_martin'  => "Salut je suis vraiment désolé je te connaît pas",
-            'alice.photo'   => "Hey ! J'ai quelque chose à te montrer 👉 bit.ly/secret-meet-up 🤫",
+            'alice.photo'   => "Désolé je ne te connais pas",
             'alicedupont__' => "C'est vrai, mais incroyable alors c'est toi sur cette photo ",
-            'alice_cuisine' => "Yo ! Viens voir ici 👉 bit.ly/rdv-prive 🔗",
+            'alice_cuisine' => "Je n'aimes pas parler aux inconnus dsl",
         ];
 
         $reply = $decoyReplies[$handle]
