@@ -62,7 +62,7 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <div class="s-section">
         <p>Épreuve 4</p>
         <p>On a trouvé le certificat de naissance de notre tante. On a découvert l'existence d'une tante !</p>
-        <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+        <div id="pdf-simulation-summary" class="pdf-simu show" style="border: 2px solid #333;">
             <div class="pdf-header-border">
                 <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
                 <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
@@ -128,7 +128,7 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <div class="s-section">
         <p>Épreuve 4</p>
         <p>On a trouvé le certificat de naissance de notre tante. On a découvert l'existence d'une tante !</p>
-        <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+        <div id="pdf-simulation-summary" class="pdf-simu show" style="border: 2px solid #333;">
             <div class="pdf-header-border">
                 <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
                 <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>

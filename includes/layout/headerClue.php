@@ -120,7 +120,7 @@
                         <strong>Épreuve 4 :</strong> Un document important dans un mail nous a fait découvrir
                         que nous avons une tante.
                         <?php if ($_SESSION["team"] === "alice") : ?>
-                            <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+                            <div id="pdf-simulation-inventory" class="pdf-simu show" style="border: 2px solid #333;">
                                 <div class="pdf-header-border">
                                     <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
                                     <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>
@@ -139,7 +139,7 @@
                                 </div>
                             </div>
                         <?php else : ?>
-                            <div id="pdf-simulation" class="pdf-simu show" style="border: 2px solid #333;">
+                            <div id="pdf-simulation-inventory" class="pdf-simu show" style="border: 2px solid #333;">
                                 <div class="pdf-header-border">
                                     <h2 class="pdf-title">EXTRAIT D'ACTE DE NAISSANCE</h2>
                                     <p class="pdf-subtitle" style="color: #333;">Commune de Boulogne-Billancourt</p>

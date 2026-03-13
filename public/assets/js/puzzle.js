@@ -681,10 +681,13 @@ document.addEventListener('DOMContentLoaded', () => {
 // ===============================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    const emailItems = document.querySelectorAll('.email-item-logic');
-    const displayArea = document.getElementById('email-display-area');
-    const pdfSimu = document.getElementById('pdf-simulation');
-    const validationSection = document.getElementById('validation-section');
+    const container = document.getElementById('phishing-container');
+    if (!container) return;
+
+    const emailItems = container.querySelectorAll('.email-item-logic');
+    const displayArea = container.querySelector('#email-display-area');
+    const pdfSimu = container.querySelector('#pdf-simulation');
+    const validationSection = container.querySelector('#validation-section');
 
     if (!emailItems.length || !displayArea) return;
 
@@ -740,10 +743,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Récupération des paramètres d'initialisation (utile après un rechargement de page)
-    const container = document.getElementById('phishing-container');
-    const team = container ? container.getAttribute('data-team') : 'alice';
-    const initialMailId = container ? container.getAttribute('data-open-mail') : null;
-    const initialOpenPdf = container ? container.getAttribute('data-open-pdf') === '1' : false;
+    const team = (container.getAttribute('data-team') || 'alice').toLowerCase();
+    const initialMailId = container.getAttribute('data-open-mail');
+    const initialOpenPdf = container.getAttribute('data-open-pdf') === '1';
 
     // Détermination du contenu selon l'équipe
     const targetName = (team === 'alice') ? 'Clara VALMONT' : 'Diane VALMONT';
