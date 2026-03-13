@@ -806,6 +806,10 @@ h2 {
 }
 
 /* ============ Mail Phishing ============ */
+#phishing-container-welcome p {
+    max-width: 1200px;
+}
+
 .phishing-area {
     background: #fff;
     color: #333;

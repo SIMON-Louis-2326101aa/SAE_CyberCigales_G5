@@ -24,9 +24,10 @@ $state = $_SESSION['phishing_state'] ?? null;
 $motherName = ($team === 'alice') ? 'Diane' : 'Clara';
 ?>
 
-<div class="hero-container-welcome">
-    <p>Le papillon vous mène sur votre PC</p>
-    <p>Vous ouvrez la boîte mail de votre mère (<?php echo $motherName; ?>).</p>
+<div class="hero-container-welcome" id="phishing-container-welcome">
+    <p>Le signal du papillon s’est enfin stabilisé sur le PC de votre mère (<?php echo $motherName; ?>).</p>
+    <p>En ouvrant sa boîte mail, vous sentez que les archives numériques cachent encore un secret...</p>
+    <p>Explorez ces messages pour retrouver ce que la mémoire a laissé de côté sur la photo de famille.</p>
 </div>
 
 <div class="phishing-area" id="phishing-container" 
