@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
+    /* global ENIGME_START */
 
     const clues = [
         { delay: 300000, text: "clue-text-1", time: "clue-time-1" },
