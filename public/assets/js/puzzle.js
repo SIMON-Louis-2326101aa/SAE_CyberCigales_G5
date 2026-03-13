@@ -249,7 +249,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (!photoPuzzle || !photoCard) return;
 
-    //photoCard.style.display = "none"; // cacher carte au début
 
     const size = 4;
     const total = size * size;
@@ -258,6 +257,29 @@ document.addEventListener("DOMContentLoaded", function () {
     let pieces = [];
     let order = [...Array(total).keys()];
     let shuffled = [...order].sort(() => Math.random() - 0.5);
+
+    const alreadySolved = localStorage.getItem("enigme2_photo_win");
+
+    if (alreadySolved === "true") {
+
+        // Affiche directement l'image complète
+        photoPuzzle.innerHTML = "";
+        photoPuzzle.style.width = "400px";
+        photoPuzzle.style.height = "400px";
+        photoPuzzle.style.backgroundImage = "url('./assets/images/photoFamilleFlou.png')";
+        photoPuzzle.style.backgroundSize = "cover";
+        photoPuzzle.style.backgroundPosition = "center";
+
+
+        const card = document.getElementById("photoCard");
+
+        card.addEventListener("click", () => {
+            card.classList.toggle("turn");
+        });
+
+        return;
+    }
+
 
     photoPuzzle.style.display = "grid";
     photoPuzzle.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -325,6 +347,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (win) {
+
+            // Sauvegarde l'état
+            localStorage.setItem("enigme2_photo_win", "true");
 
             // Bloque les pièces
             pieces.forEach(piece => {
