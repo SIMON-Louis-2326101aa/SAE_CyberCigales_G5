@@ -86,38 +86,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
     clues.forEach(clue => startClueTimer(clue.delay, clue.text, clue.time));
 
-    const delayTabInfo = 60000; // 1 minute
-
-    const infoTab = document.getElementById("info-handle");
-    const infoChrono = document.getElementById("info-chrono");
-
-
     // ===== Chrono pour l'onglet info =====
-    if (infoTab && infoChrono) {
+    function startInfoTimer(delay)
+    {
+        const infoTab = document.getElementById("info-handle");
+        const infoChrono = document.getElementById("info-chrono");
 
-        let remainingTime = delayTabInfo / 1000; // en secondes
+        if (!infoTab || !infoChrono) return;
 
-        const countdown = setInterval(function () {
+        const timer = setInterval(function(){
 
-            let minutes = Math.floor(remainingTime / 60);
-            let seconds = remainingTime % 60;
+            const now = Date.now();
+            let remaining = Math.floor((delay - (now - ENIGME_START)) / 1000);
 
-            minutes = String(minutes).padStart(2, "0");
-            seconds = String(seconds).padStart(2, "0");
+            if (remaining <= 0)
+            {
+                clearInterval(timer);
+                infoChrono.textContent = "00:00";
+                infoTab.classList.remove("disabled");
+                return;
+            }
+
+            let minutes = Math.floor(remaining / 60);
+            let seconds = remaining % 60;
+
+            minutes = String(minutes).padStart(2,"0");
+            seconds = String(seconds).padStart(2,"0");
 
             infoChrono.textContent = minutes + ":" + seconds;
 
-            remainingTime--;
-
-            if (remainingTime < 0) {
-                clearInterval(countdown);
-                infoChrono.textContent = "00:00";
-                infoTab.classList.remove("disabled");
-                console.log("L'onglet d'info est activé !");
-            }
-
-        }, 1000);
+        },1000);
     }
+    startInfoTimer(60000);
+
 
     // ===== Indices =====
     function startClueTimer(delay, textId, timeId)
@@ -127,9 +128,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!clueText || !clueTime) return;
 
-        let remaining = delay / 1000;
-
         const timer = setInterval(function(){
+
+            const now = Date.now();
+            let remaining = Math.floor((delay - (now - ENIGME_START)) / 1000);
+
+            if (remaining <= 0)
+            {
+                clearInterval(timer);
+                clueText.classList.add("show");
+                return;
+            }
 
             let minutes = Math.floor(remaining / 60);
             let seconds = remaining % 60;
@@ -138,19 +147,6 @@ document.addEventListener("DOMContentLoaded", function () {
             seconds = String(seconds).padStart(2,"0");
 
             clueTime.textContent = minutes + ":" + seconds;
-
-            remaining--;
-
-            if(remaining < 0)
-            {
-                clearInterval(timer);
-
-                clueTime.textContent = "disponible";
-                clueText.classList.add("show");
-
-                const header = clueTime.parentElement;
-                header.innerHTML = header.innerHTML.replace("🔒","💡");
-            }
 
         },1000);
     }

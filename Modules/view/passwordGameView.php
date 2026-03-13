@@ -3,7 +3,15 @@
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+if (!isset($_SESSION['enigme5_start'])) {
+    $_SESSION['enigme5_start'] = time();
+}
 
+$start = $_SESSION['enigme5_start'];?>
+<script>
+    const ENIGME_START = <?= $start * 1000 ?>;
+</script>
+<?php
 $info = "password";
 $clue = "Vous n'avez pas besoin d'indice pour cette épreuve, il suffit de suivre les règles pour créer 
 un mot de passe sécurisé.";

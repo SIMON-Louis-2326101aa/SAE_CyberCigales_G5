@@ -1,11 +1,22 @@
 <?php
+
+if (!isset($_SESSION['enigme1_start'])) {
+    $_SESSION['enigme1_start'] = time();
+}
+
+$start = $_SESSION['enigme1_start'];?>
+    <script>
+        const ENIGME_START = <?= $start * 1000 ?>;
+    </script>
+<?php
+
 $info = "encryption";
 $clue = "
 <ul class='clues'>
 
 <li class='clue-block'>
     <div class='clue-header'>
-        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+        🔒 Indice 1 dans <span id='clue-time-1'>05:00</span>
     </div>
     <div id='clue-text-1' class='clue-text'>
         La clé est cachée dans la lettre.
@@ -14,7 +25,7 @@ $clue = "
 
 <li class='clue-block'>
     <div class='clue-header'>
-        🔒 Indice 2 <span id='clue-time-2'>10:00</span>
+        🔒 Indice 2 dans <span id='clue-time-2'>10:00</span>
     </div>
     <div id='clue-text-2' class='clue-text'>
         La clé se cache dans la date.
@@ -23,7 +34,7 @@ $clue = "
 
 <li class='clue-block'>
     <div class='clue-header'>
-        🔒 Solution <span id='clue-time-3'>15:00</span>
+        🔒 Solution dans <span id='clue-time-3'>15:00</span>
     </div>
     <div id='clue-text-3' class='clue-text'>
         La clé est 10.
