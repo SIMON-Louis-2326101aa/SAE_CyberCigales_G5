@@ -14,7 +14,7 @@
         Il ne vous reste plus qu’à vous rendre à l’endroit indiqué pour découvrir ce qu’ils ont laissé derrière eux…
     </p><br>
     <p class="victory-time">
-        Temps de résolution :<strong> <?php $seconds = $_SESSION['gameprogress']['total_time_sec'] ?? 0;
+        Temps de résolution :<strong> <?php $seconds = $gameProgress['total_time_sec'] ?? 0;
             echo htmlspecialchars(gmdate("H:i:s", $seconds)); ?></strong>
     </p><br>
     <p>

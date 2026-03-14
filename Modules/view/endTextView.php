@@ -17,9 +17,9 @@ $clue = "
         🔒 Indice 1 <span id='clue-time-1'>05:00</span>
     </div>
     <div id='clue-text-1' class='clue-text'>
-        ou nous fetions la vie -> regardes bien la photo 
-        premier papier de cette vie -> regarde les certificats de naissance
-        jour si special -> regarde les dates sur les deux
+        ou nous fetions la vie -> regardes bien la photo <br>
+        premier papier de cette vie -> regarde les certificats de naissance<br>
+        jour si special -> regarde les dates sur les deux<br>
     </div>
 </li>
 </ul>";
