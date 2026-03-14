@@ -2,7 +2,15 @@
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
+if (!isset($_SESSION['enigme7_start'])) {
+    $_SESSION['enigme7_start'] = time();
+}
 
+$start = $_SESSION['enigme7_start'];?>
+<script>
+    const ENIGME_START = <?= $start * 1000 ?>;
+</script>
+<?php
 $info = "rien";
 $solution = ($_SESSION["team"] === 'alice') ? "bob.valmont" : "alice.valmont";
 

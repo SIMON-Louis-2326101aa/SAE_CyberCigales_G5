@@ -1,12 +1,20 @@
 <?php
+if (!isset($_SESSION['enigme2_start'])) {
+    $_SESSION['enigme2_start'] = time();
+}
 
+$start = $_SESSION['enigme2_start'];?>
+<script>
+    const ENIGME_START = <?= $start * 1000 ?>;
+</script>
+<?php
 $info = "rien";
 $clue = "
 <ul class='clues'>
 
 <li class='clue-block'>
     <div class='clue-header'>
-        🔒 Indice 1 <span id='clue-time-1'>05:00</span>
+        🔒 Indice 1 dans <span id='clue-time-1'>05:00</span>
     </div>
     <div id='clue-text-1' class='clue-text'>
         La photo tourne

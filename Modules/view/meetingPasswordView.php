@@ -1,5 +1,13 @@
 <?php
+if (!isset($_SESSION['enigme8_start'])) {
+    $_SESSION['enigme8_start'] = time();
+}
 
+$start = $_SESSION['enigme8_start'];?>
+<script>
+    const ENIGME_START = <?= $start * 1000 ?>;
+</script>
+<?php
 $info = "rien";
 $clue = "
  <ul class='clues'>
