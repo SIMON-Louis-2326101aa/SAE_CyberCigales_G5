@@ -796,13 +796,15 @@ h2 {
     box-shadow: 0 4px 15px var(--border-light);
 }
 
-.end p {
+.perso-speak{
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     line-height: 1.8;
     margin-bottom: 10px;
     color: var(--text-primary);
     text-align: center;
+    font-style: italic;
+    padding-left: 10px;
 }
 
 /* ============ Mail Phishing ============ */
@@ -2088,4 +2090,10 @@ section h4 {
 
 .clue-text.show{
     display:block;
+}
+
+.photo-container {
+    display: flex;
+    align-items: center; /* aligne verticalement */
+    gap: 20px; /* espace entre image et texte */
 }
