@@ -20,9 +20,10 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div class="enigma-container">
 
         <div class="enigma-text">
-            <p>Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme ça ?
+            <p class="perso-speak">Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme
+                ça ?
                 Et de quel trésor mes arrière-grandparents parlent.</p>
-            <p> Oh on dirait des morceaux de photo au fond de l'enveloppe. </p>
+            <p class="perso-speak"> Oh on dirait des morceaux de photo au fond de l'enveloppe. </p>
         </div>
 
         <div class="photo-enigma">
@@ -37,7 +38,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
         </div>
 
         <div class="enigma-text">
-            <p>Tiens, la photo est vraiment très floue.</p>
+            <p class="perso-speak">Tiens, la photo est vraiment très floue.</p>
         </div>
 
         <div class="enigma-form">
@@ -56,9 +57,9 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
 <div class="enigma-container">
 
     <div class="enigma-text">
-        <p>Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme ça ?
+        <p class="perso-speak">Cette lettre était donc adressée à ma mère… Mais pourquoi était-elle cryptée comme ça ?
             Et de quel trésor mes arrière-grandparents parlent.</p>
-        <p> Oh on dirait des morceau de photo au fond de l'enveloppe. </p>
+        <p class="perso-speak"> Oh on dirait des morceau de photo au fond de l'enveloppe. </p>
     </div>
 
 <div class="photo-enigma">
@@ -74,7 +75,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     </div>
 </div>
     <div class="enigma-text">
-        <p>tien la photo est vraiment très flou</p>
+        <p class="perso-speak">tien la photo est vraiment très flou</p>
     </div>
 
     <div class="enigma-form">

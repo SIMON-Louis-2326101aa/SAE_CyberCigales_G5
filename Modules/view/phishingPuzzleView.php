@@ -81,7 +81,7 @@ $motherName = ($team === 'alice') ? 'Diane' : 'Clara';
 
     <div id="validation-section" class="phishing-question hidden">
         <h3>Analyse du document</h3>
-        <p>Qui est cette personne ?</p>
+        <p>Qui est cette personne pour vous ? (lien familial)</p>
         
         <form action="index.php?controller=Puzzle&action=validatePhishing" method="POST" class="phishing-form">
             <input type="text" name="answer" placeholder="Votre réponse" required class="phishing-input"
