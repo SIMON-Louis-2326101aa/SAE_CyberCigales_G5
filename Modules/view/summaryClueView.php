@@ -54,8 +54,8 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
         <p class="perso-speak">Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <div class="photo-container">
             <img src="./assets/images/photoFamille.png" alt="photodefamille">
-            <p class="perso-speak">Tien la photo n'est plus flou. Oh mais c'est moi petite a gauche !
-            Avec maman a cote de moi !</p>
+            <p class="perso-speak">Tiens, la photo n'est plus floue. Oh mais c'est moi petite à gauche !
+                Avec maman à côté de moi !</p>
         </div>
         <p>PAPILLON et MÉMOIRE</p>
     </div>
@@ -125,8 +125,8 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
         <p class="perso-speak">Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <div class="photo-container">
             <img src="./assets/images/photoFamille.png" alt="photodefamille">
-            <p class="perso-speak">Tien la photo n'est plus flou. Oh mais c'est moi petite a gauche !
-                Avec maman a cote de moi !</p>
+            <p class="perso-speak">Tiens, la photo n'est plus floue. Oh mais c'est moi petit à droite !
+                Avec maman à côté de moi !</p>
         </div>
         <p>PASSÉ et CLÉ</p>
     </div>

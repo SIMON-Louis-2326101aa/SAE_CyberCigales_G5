@@ -44,7 +44,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
         <div class="enigma-form">
         <form method="POST" action="index.php?controller=Puzzle&action=validatePhoto">
             <label>
-                Quoi retenir de ça ? (2 mot attendu)<br>
+                Quoi retenir de cette phrase ? (2 mot attendu)<br>
                 <textarea name="answer" required></textarea>
             </label>
 
@@ -75,13 +75,13 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     </div>
 </div>
     <div class="enigma-text">
-        <p class="perso-speak">tien la photo est vraiment très flou</p>
+        <p class="perso-speak">Tien la photo est vraiment très flou</p>
     </div>
 
     <div class="enigma-form">
         <form method="POST" action="index.php?controller=Puzzle&action=validatePhoto">
             <label>
-                Quoi retenir de ça ? (2 mot attendu)<br>
+                Quoi retenir de cette phrase ? (2 mot attendu)<br>
                 <textarea name="answer" required></textarea>
             </label>
 
