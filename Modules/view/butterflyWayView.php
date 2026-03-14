@@ -28,7 +28,7 @@ require_once __DIR__ . "/../../includes/layout/headerClue.php";
 
 $team = $_SESSION['team'] ?? 'alice';
 ?>
-<main class="app" data-bw-root data-team="<?= htmlspecialchars($team, ENT_QUOTES, 'UTF-8') ?>">
+<div class="app" data-bw-root data-team="<?= htmlspecialchars($team, ENT_QUOTES, 'UTF-8') ?>">
     <section class="page">
         <div class="center">
             <h1 class="heading">Le chemin du petit papillon</h1>
@@ -104,4 +104,4 @@ $team = $_SESSION['team'] ?? 'alice';
             </p>
         </div>
     </section>
-</main>
+</div>
