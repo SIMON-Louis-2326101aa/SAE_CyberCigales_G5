@@ -633,6 +633,15 @@ class UserController
             }
 
             $this->gameProgressModel->deleteByUserId((int)$userId);
+            unset($_SESSION['enigme1_start']);
+            unset($_SESSION['enigme2_start']);
+            unset($_SESSION['enigme3_start']);
+            unset($_SESSION['enigme4_start']);
+            unset($_SESSION['enigme5_start']);
+            unset($_SESSION['enigme6_start']);
+            unset($_SESSION['enigme7_start']);
+            unset($_SESSION['enigme8_start']);
+            unset($_SESSION['enigme9_start']);
 
             unset($_SESSION['team'], $_SESSION['game_start_time']);
 
