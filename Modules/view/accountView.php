@@ -24,7 +24,8 @@
             <?php if ($_SESSION['email'] !== 'escapethecode2025@gmail.com') : ?>
                 <li>
                     <button type="submit" name="reset_progression"
-                            onclick="return confirm('Confirmer le reset de votre progression ?')"
+                            onclick="if (!confirm('Confirmer le reset de votre progression ?')) return false;
+                            localStorage.removeItem('enigme2_photo_win'); return true;"
                             id="reset-progress-button">
                         Réinitialiser la progression
                     </button>
