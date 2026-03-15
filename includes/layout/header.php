@@ -25,6 +25,7 @@ if (isset($_SESSION['user_id'])) {
     <title><?php echo $A_params['pageTitle'] ?? 'Escape The Code '; ?></title>
     <link rel="stylesheet" href="./assets/styles/stylesheet.css">
     <link rel="stylesheet" href="./assets/styles/puzzle.css">
+    <link rel="stylesheet" href="./assets/styles/responsive-epreuve.css">
     <link rel="icon" href="./assets/images/faviconBis.ico">
     <script src="./assets/js/script.js" defer></script>
     <script src="./assets/js/puzzle.js" defer></script>
