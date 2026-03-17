@@ -173,8 +173,14 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
 
 <div class="enigma-text">
     <br>
-    <p>Nous avons donc un cousin ! Essayons de le retrouver et de
-        le voir pour voir si il est le sait aussi.</p>
+    <?php if ($_SESSION["team"] === "alice") : ?>
+        <p>Nous avons donc un cousin !
+            <br>Essayons de le retrouver et de le rencontrer pour voir si il connait lui aussi mon existence.</p>
+    <?php else : ?>
+        <p>Nous avons donc une cousine !
+            <br>Essayons de la retrouver et de la rencontrer pour voir si elle connait elle aussi mon existence.
+            <br>Mais quel est son nom... J'ai surement du le croiser quelque part.</p>
+    <?php endif; ?>
 
 </div>
 

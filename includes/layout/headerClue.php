@@ -177,17 +177,23 @@
                 <?php if ($_SESSION["level"] >= 7) : ?>
                     <li>
                         <strong>Épreuve 6 :</strong> Plusieurs fragments de l'histoire familiale ont été rassemblés.
+                        <br>Nous avons eu une révélation a ce moment : L'existence :
+                        <?php if ($_SESSION["team"] === "alice") : ?>
+                            <strong>d'un cousin</strong>
+                        <?php else : ?>
+                            <strong>d'une cousine</strong>
+                        <?php endif; ?>
                     </li>
                 <?php endif; ?>
 
 
                 <?php if ($_SESSION["level"] >= 8) : ?>
                     <li>
-                        <strong>Épreuve 7 :</strong> Nous avons eu une révélation a ce moment : L'existence :
+                        <strong>Épreuve 7 :</strong> Un rendez-vous a été placé. Je vais enfin rencontrer
                         <?php if ($_SESSION["team"] === "alice") : ?>
-                        <strong>d'un cousin</strong>
+                            mon cousin
                         <?php else : ?>
-                        <strong>d'une cousine</strong>
+                            ma cousine
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
