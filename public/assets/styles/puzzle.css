@@ -543,6 +543,10 @@
     font-weight: bold;
 }
 
+#bw-feedback {
+    white-space: pre-line;
+}
+
 .lead-feedback {
     opacity: 0.9;
 }
