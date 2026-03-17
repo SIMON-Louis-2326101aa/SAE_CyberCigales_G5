@@ -19,8 +19,18 @@ class PuzzleController
      */
     private function normalize(string $text): string
     {
+        // minuscule
         $text = mb_strtolower($text, 'UTF-8');
+
+        // uniformiser apostrophes
+        $text = str_replace(["’", "`", "´"], "'", $text);
+
+        // supprimer accents
+        $text = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $text);
+
+        // normaliser espaces
         $text = preg_replace('/\s+/', ' ', $text);
+
         return trim($text);
     }
 
