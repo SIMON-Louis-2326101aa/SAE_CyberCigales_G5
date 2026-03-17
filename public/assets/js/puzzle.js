@@ -505,7 +505,7 @@ document.addEventListener("DOMContentLoaded", () => {
         scrambleInterval = setInterval(() => {
             const partial = buildPartialSignal(step);
             elFeedback.textContent = `Réception du signal, correction des erreurs : \n${partial}`;
-        }, 800);
+        }, 750);
     }
 
     // Met à jour le feedback selon l'état courant
