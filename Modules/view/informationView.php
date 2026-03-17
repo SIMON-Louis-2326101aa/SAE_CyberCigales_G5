@@ -10,6 +10,9 @@
 elseif ($_SESSION["level"] >= 5) :
     include __DIR__ . "/infos/encryption.php";
     include __DIR__ . "/infos/phishing.php";
+elseif ($_SESSION["level"] >= 3) :
+    include __DIR__ . "/infos/encryption.php";
+    include __DIR__ . "/infos/butterfly.php";
 elseif ($_SESSION["level"] >= 2) :
     include __DIR__ . "/infos/encryption.php";
 else : ?>

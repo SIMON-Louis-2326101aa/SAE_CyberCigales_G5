@@ -26,7 +26,9 @@
                 break;
 
             case "papillon":
-                echo "<p>Dans cette épreuve le papillon represente le signal</p>";
+                echo "<p>Dans cette épreuve le papillon représente le signal.</p> 
+                        <p>Un code radio semble avoir été intercépté, mais il est complètement brouillé.</p>";
+                include __DIR__ . "/../../Modules/view/infos/butterfly.php";
                 break;
         }
         ?>
