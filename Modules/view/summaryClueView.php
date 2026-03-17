@@ -33,7 +33,6 @@ require_once __DIR__ . "/../../includes/layout/headerClue.php";
 
 if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     <br>
-
     <p class="perso-speak">Voyons voir tout ce qu'on a trouvé jusqu'ici pour voir si on découvre quelque chose de plus.
     </p><br>
 
@@ -62,15 +61,17 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
         <p class="perso-speak">Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <div class="photo-container">
             <img src="./assets/images/photoFamille.png" alt="photodefamille">
-            <p class="perso-speak">Tiens, la photo n'est plus floue. Oh mais c'est moi petite à gauche !
-                Avec maman à côté de moi !</p>
+            <p class="perso-speak">Tiens, la photo n'est plus floue.
+                <br>Oh mais c'est moi petite à gauche ! Avec maman à côté de moi !
+                <br>Mais qui sont ces autres personnes ?</p>
         </div>
         <p>PAPILLON et MÉMOIRE</p>
     </div>
 
     <div class="s-section">
         <p>Épreuve 3</p>
-        <p class="perso-speak">Ici on a suivi le signal déguisé en papillon qui nous a mené à ADMIN</p>
+        <p class="perso-speak">Ici, on a suivi le signal déguisé en papillon qui nous a mené à ADMIN
+        <br>Ainsi qu'à un message étrange : Bravo Oscar Bravo</p>
     </div>
 
     <div class="s-section">
@@ -133,15 +134,17 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
         <p class="perso-speak">Puis nous avons trouvé la photo de famille en morceaux et les deux mots clés</p>
         <div class="photo-container">
             <img src="./assets/images/photoFamille.png" alt="photodefamille">
-            <p class="perso-speak">Tiens, la photo n'est plus floue. Oh mais c'est moi petit à droite !
-                Avec maman à côté de moi !</p>
+            <p class="perso-speak">Tiens, la photo n'est plus floue.
+                <br>Oh mais c'est moi petit à droite ! Avec maman à côté de moi !
+                <br>Mais qui sont ces autres personnes ?</p>
         </div>
         <p>PASSÉ et CLÉ</p>
     </div>
 
     <div class="s-section">
         <p>Épreuve 3</p>
-        <p class="perso-speak">Ici on a suivi le signal déguisé en papillon qui nous a mené à ROOT</p>
+        <p class="perso-speak">Ici, on a suivi le signal déguisé en papillon qui nous a mené à ROOT
+        <br>Ainsi qu'à un message étrange : Alpha Lima India Charlie Echo</p>
     </div>
 
     <div class="s-section">

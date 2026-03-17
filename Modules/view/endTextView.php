@@ -27,6 +27,7 @@ $clue = "
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 ?>
 <div class="end">
+    <br>
     <p class="perso-speak">Nous y sommes presque ils nous reste plus qu'a comprendre où se trouve le trésor !</p>
     <p class="perso-speak">Il nous est dit : </p>
     <p class="perso-speak">“Vous retrouverez nos souvenir la ou nous fêtions la vie, vous le trouverez sur le premier
@@ -38,12 +39,12 @@ require_once __DIR__ . "/../../includes/layout/headerClue.php";
 
 <form action="index.php?controller=Puzzle&action=validateEnd" method="post" id="end-form">
     <label>
-        Où allez ?<br>
+        Où allez ? (2 à 3 caractères)<br>
         <textarea name="answer1" required></textarea><br>
     </label>
 <br>
     <label>
-        Quelle est le code du coffre?<br>
+        Quelle est le code du coffre ? (4 Chiffres)<br>
         <textarea name="answer2" required></textarea><br>
     </label>
 

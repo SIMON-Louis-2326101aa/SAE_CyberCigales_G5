@@ -46,7 +46,8 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
         </div>
 
         <div class="enigma-text">
-            <p class="perso-speak">Tiens, la photo est vraiment très floue.</p>
+            <p class="perso-speak">Tiens, la photo est vraiment très floue et toute mélangée.
+                <br>Je vais devoir la reconstituer avant de pouvoir tenter autre chose.</p>
         </div>
 
         <div class="enigma-form">
@@ -83,7 +84,8 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     </div>
 </div>
     <div class="enigma-text">
-        <p class="perso-speak">Tien la photo est vraiment très flou</p>
+        <p class="perso-speak">Tiens, la photo est vraiment très floue et toute mélangée.
+        <br>Je vais devoir la reconstituer avant de pouvoir tenter autre chose.</p>
     </div>
 
     <div class="enigma-form">
@@ -99,6 +101,6 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
 </div>
 
 <?php else : ?>
-    <p>Erreur : Veuillez choisir une equipe ou vous reconnecter</p>
+    <p>Erreur : Veuillez choisir une équipe ou vous reconnecter</p>
 <br>
 <?php endif; ?>

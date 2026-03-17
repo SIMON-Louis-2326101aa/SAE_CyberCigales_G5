@@ -392,7 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Un trafic évident semble trop parfait.",
         "Une signature ancienne a été laissée volontairement.",
         "Les données se raréfient. Mais le sens est encore là.",
-        "Le papillon ralentit. Il attend que tu realises ce que d’autres ont ignoré.",
+        "Le papillon ralentit. Il attend que tu réalises ce que d’autres ont ignoré.",
     ];
 
     const storyHintsBob = [
@@ -413,12 +413,18 @@ document.addEventListener("DOMContentLoaded", () => {
         "Une alerte s’est déclenchée. Le signal a disparu.",
         "Trop direct. Le papillon s’est volatilisé.",
         "Une action brusque a effacé la trace.",
-        "Avast a détécté une menace et t'a mis en quarantaine.",
+        "Avast a détecté une menace et t'a mis en quarantaine.",
         "Tu as attiré l’attention. Le système t'a redirigé.",
-        "Erreur humaine détectée, tu a été déconnécté du système",
+        "Erreur humaine détectée, tu as été déconnecté du système",
     ];
 
     const hints = (team === "bob") ? storyHintsBob : storyHintsAlice;
+
+    // Signal final différent selon l'équipe
+    const finalSignal =
+        team === "bob"
+            ? "ALPHA LIMA INDIA CHARLIE ECHO"
+            : "BRAVO OSCAR BRAVO";
 
     const elHint = document.getElementById("bw-hint");
     const elFeedback = document.getElementById("bw-feedback");
@@ -429,6 +435,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const key = `bw_state_${team}`; // state séparé par team (optionnel)
     const defaultState = { step: 0, score: 0, blocked: false, showCode: false };
+
+    // Interval pour l'effet de texte brouillé en continu
+    let scrambleInterval = null;
 
     function loadState() {
         try {
@@ -446,7 +455,94 @@ document.addEventListener("DOMContentLoaded", () => {
         return lostMessages[Math.floor(Math.random() * lostMessages.length)];
     }
 
-    function render(st) {
+    // Génère un caractère aléatoire pour brouiller le signal
+    function randomChar() {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#%&*+-/?!";
+        return chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    // Construit un signal partiellement révélé selon l'étape actuelle
+    // Plus on avance, plus des lettres du vrai message apparaissent
+    function buildPartialSignal(step) {
+        const totalChars = finalSignal.length;
+        const revealCount = Math.floor((step / maxSteps) * totalChars);
+
+        // On ignore les espaces pour la progression visuelle
+        const indices = [];
+        for (let i = 0; i < totalChars; i++) {
+            if (finalSignal[i] !== " ") indices.push(i);
+        }
+
+        const revealedSet = new Set(indices.slice(0, revealCount));
+
+        let out = "";
+        for (let i = 0; i < totalChars; i++) {
+            if (finalSignal[i] === " ") {
+                out += " ";
+            } else if (revealedSet.has(i)) {
+                out += finalSignal[i];
+            } else {
+                out += randomChar();
+            }
+        }
+        return out;
+    }
+
+    // Stoppe l'animation de brouillage si elle tourne déjà
+    function stopScramble() {
+        if (scrambleInterval) {
+            clearInterval(scrambleInterval);
+            scrambleInterval = null;
+        }
+    }
+
+    // Lance l'effet de "réception du signal" avec caractères qui changent constamment
+    function startScramble(step) {
+        stopScramble();
+
+        if (!elFeedback) return;
+
+        scrambleInterval = setInterval(() => {
+            const partial = buildPartialSignal(step);
+            elFeedback.textContent = `Réception du signal, correction des erreurs : \n${partial}`;
+        }, 750);
+    }
+
+    // Met à jour le feedback selon l'état courant
+    function updateFeedback(st, customMessage = null) {
+        stopScramble();
+
+        if (!elFeedback) return;
+
+        // Message forcé (ex: reset manuel)
+        if (customMessage) {
+            elFeedback.textContent = customMessage;
+            return;
+        }
+
+        // Si bloqué après erreur
+        if (st.blocked) {
+            elFeedback.textContent = randomLost() + " (Signal bloqué.)";
+            return;
+        }
+
+        // Début du parcours : affichage d'un signal totalement brouillé
+        if (st.step <= 0) {
+            elFeedback.textContent = "Réception du signal, erreurs détectées : \n" + buildPartialSignal(0);
+            return;
+        }
+
+        // Progression normale : brouillage dynamique avec révélation partielle
+        if (st.step < maxSteps) {
+            startScramble(st.step);
+            return;
+        }
+
+        // Fin réussie : signal entièrement reconstitué
+        elFeedback.textContent = `Signal reconstitué : \n${finalSignal}`;
+    }
+
+    function render(st, customMessage = null) {
         if (elMax) elMax.textContent = String(maxSteps);
         if (elStep) elStep.textContent = String(st.step);
         if (elScore) elScore.textContent = String(st.score);
@@ -454,7 +550,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (elHint) {
             elHint.textContent = (st.step < maxSteps)
                 ? (hints[st.step] || "")
-                : "Il semble que tu aie trouvé ce que tu cherchais.";
+                : "Il semble que tu aies trouvé ce que tu cherchais.";
         }
 
         if (codeZone) {
@@ -466,6 +562,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 codeZone.classList.remove("is-visible");
             }
         }
+
+        updateFeedback(st, customMessage);
     }
 
     function move(dir) {
@@ -474,7 +572,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (st.step >= maxSteps) return;
 
         if (st.blocked) {
-            if (elFeedback) elFeedback.textContent = randomLost() + " (Reprends la trace.)";
+            updateFeedback(st, randomLost() + " (Reprends la trace.)");
             return;
         }
 
@@ -487,16 +585,14 @@ document.addEventListener("DOMContentLoaded", () => {
             st.score += 1;
             st.step += 1;
 
-            if (elFeedback) elFeedback.textContent = "Le signal s'amplifie.";
-
+            // Une fois toutes les étapes passées, on affiche la zone finale
             if (st.step >= maxSteps) {
                 st.showCode = true;
-                if (elFeedback) elFeedback.textContent = "Il ne reste plus qu’à valider l’accès.";
             }
         } else {
+            // En cas d'erreur : score perdu et parcours bloqué
             st.score = -1;
             st.blocked = true;
-            if (elFeedback) elFeedback.textContent = randomLost() + " (Signal bloqué.)";
         }
 
         saveState(st);
@@ -515,9 +611,8 @@ document.addEventListener("DOMContentLoaded", () => {
             st.blocked = false;
             st.showCode = false;
 
-            if (elFeedback) elFeedback.textContent = "Tu te retournes… et tu reprends la piste depuis le début.";
             saveState(st);
-            render(st);
+            render(st, "Tu te retournes… et tu reprends la piste depuis le début.");
             return;
         }
 
@@ -533,9 +628,8 @@ document.addEventListener("DOMContentLoaded", () => {
         st.blocked = false;
         st.showCode = false;
 
-        if (elFeedback) elFeedback.textContent = "Tu te retournes… et tu reprends la piste depuis le début.";
         saveState(st);
-        render(st);
+        render(st, "Tu te retournes… et tu reprends la piste depuis le début.");
     }
 
     document.querySelectorAll("[data-bw]").forEach(btn => {

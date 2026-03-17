@@ -25,12 +25,16 @@ $clue = "
 require_once __DIR__ . "/../../includes/layout/headerClue.php";
 ?>
 <br>
-<p>Vous allez pouvoir rencontrez votre cousin (l'autre joueure(use) avec qui vous jouez) </p>
+<?php if ($_SESSION["team"] === "alice") : ?>
+    <p>Vous allez pouvoir rencontrez votre cousin (l'autre joueure(use) avec qui vous jouez) </p>
+<?php else : ?>
+    <p>Vous allez pouvoir rencontrez votre cousine (l'autre joueure(use) avec qui vous jouez) </p>
+<?php endif; ?>
 <p>Rassembler vos information pour voir vers ou ca peut vous mener </p>
 <br>
 <div class="s-section">
     <form method="POST" action="index.php?controller=Puzzle&action=valideMotCle">
-        <p>Entrez les deux mots du passé pour déverrouiller la mémoire .</p>
+        <p>Entrez les deux mots du <strong>passé</strong> pour déverrouiller la <strong>mémoire</strong>.</p>
         <label>Mots-clés : <br>
             <textarea name="answer1" required placeholder="Ex: mot1 et mot2"></textarea>
         </label>

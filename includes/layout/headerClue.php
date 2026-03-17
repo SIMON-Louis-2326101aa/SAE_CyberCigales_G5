@@ -26,7 +26,9 @@
                 break;
 
             case "papillon":
-                echo "<p>Dans cette épreuve le papillon represente le signal</p>";
+                echo "<p>Dans cette épreuve le papillon représente le signal.</p> 
+                        <p>Un code radio semble avoir été intercépté, mais il est complètement brouillé.</p>";
+                include __DIR__ . "/../../Modules/view/infos/butterfly.php";
                 break;
         }
         ?>
@@ -66,7 +68,7 @@
                             pour que quelqu’un comme elle puisse un jour comprendre.
                             Avec toute la tendresse que le vent n’a pas emportée.
                             Tes grands-parents qui t'aiment.
-                            Et à l'arrière le mot : REFLET
+                            <br>Et à l'arrière le mot : <strong>REFLET</strong>
                         <?php else : ?>
                             Ma chère Clara,
                             Le temps nous a glissé entre les doigts comme du sable, mais avant qu’il ne disparaisse
@@ -81,7 +83,7 @@
                             message, une part de notre histoire, cachée dans les plis du temps.
                             Avec l’espoir que les chemins perdus se croisent à nouveau.
                             Tes grands-parents qui t'aiment.
-                            Et à l'arrière le mot : REFLET
+                            <br>Et à l'arrière le mot : <strong>REFLET</strong>
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
@@ -93,10 +95,10 @@
                         <img src="./assets/images/photoFamille.png" alt="photodefamille" >
                         <?php if ($_SESSION["team"] === "alice") : ?>
                             Le message était : "Le papillon garde la mémoire."
-                            Nous avons retenu de cette phrase : PAPILLON MÉMOIRE.
+                            <br>Nous avons retenu de cette phrase : <strong>PAPILLON MÉMOIRE.</strong>
                         <?php else : ?>
                             Le message était : "La clé ouvre le passé."
-                            Nous avons retenu de cette phrase : CLÉ PASSÉ.
+                            <br>Nous avons retenu de cette phrase : <strong>CLÉ PASSÉ.</strong>
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
@@ -105,11 +107,13 @@
                 <?php if ($_SESSION["level"] >= 4) : ?>
                     <li>
                         <strong>Épreuve 3 :</strong> On a suivi la piste d'un signal déguisé en papillon,
-                        qui nous a menés
+                        qui nous a menés un code radio. Mais que signifie-t-il ?
                         <?php if ($_SESSION["team"] === "alice") : ?>
-                            admin
+                            <br>Le mot de passe était : <strong>admin</strong>
+                            <br>Le message claire était : <strong>Bravo Oscar Bravo</strong>
                         <?php else : ?>
-                            root
+                            <br>Le mot de passe était : <strong>root</strong>
+                            <br>Le message claire était : <strong>Alpha Lima India Charlie Echo</strong>
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
@@ -118,7 +122,7 @@
                 <?php if ($_SESSION["level"] >= 5) : ?>
                     <li>
                         <strong>Épreuve 4 :</strong> Un document important dans un mail nous a fait découvrir
-                        que nous avons une tante.
+                        que nous avons : <strong>une tante.</strong>
                         <?php if ($_SESSION["team"] === "alice") : ?>
                             <div id="pdf-simulation-inventory" class="pdf-simu show" style="border: 2px solid #333;">
                                 <div class="pdf-header-border">
@@ -173,17 +177,23 @@
                 <?php if ($_SESSION["level"] >= 7) : ?>
                     <li>
                         <strong>Épreuve 6 :</strong> Plusieurs fragments de l'histoire familiale ont été rassemblés.
+                        <br>Nous avons eu une révélation a ce moment : L'existence :
+                        <?php if ($_SESSION["team"] === "alice") : ?>
+                            <strong>d'un cousin</strong>
+                        <?php else : ?>
+                            <strong>d'une cousine</strong>
+                        <?php endif; ?>
                     </li>
                 <?php endif; ?>
 
 
                 <?php if ($_SESSION["level"] >= 8) : ?>
                     <li>
-                        <strong>Révélation :</strong> L'existence d'un
+                        <strong>Épreuve 7 :</strong> Un rendez-vous a été placé. Je vais enfin rencontrer
                         <?php if ($_SESSION["team"] === "alice") : ?>
-                            cousin 
+                            mon cousin
                         <?php else : ?>
-                            cousine
+                            ma cousine
                         <?php endif; ?>
                     </li>
                 <?php endif; ?>
