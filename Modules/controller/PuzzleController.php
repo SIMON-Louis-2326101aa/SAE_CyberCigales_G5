@@ -552,7 +552,7 @@ class PuzzleController
         $userId = (int)$_SESSION['utilisateur']['id'];
         $input = $this->normalize($_POST['answer1'] ?? '');
         $word1 = 'papillon';
-        $word2 = 'clé';
+        $word2 = 'clef';
 
         $this->logPuzzle('Mot-clé commun soumis', 'file', [
             'user_id' => $userId,
