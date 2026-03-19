@@ -159,10 +159,10 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
             <div class="letter-face letter-front">
                 <p>wk mrobo mvkbk, </p>
                 <p>vo dowzc xyec k qvscco oxdbo voc nysqdc mywwo, ne cklvo wksc kfkxd ae'sv xo nsczkbkscco,
-                    mywzvodowoxd xyec fyevsyxc do myxpsob moc wydc.</p>
+                    mywzvodowoxd xyec fyevsyxc do myxpsob moc wydc. sv x'i k zkc no pkedo dbyz kxmsoxxo
+                    zyeb odbo zkbnyxxoo, xs no nscdkxmo dbyz qbkxno zyeb odbo pbkxmrso.</p>
 
-                <p>sv x'i k zkc no pkedo dbyz kxmsoxxo zyeb odbo zkbnyxxoo, xs no nscdkxmo dbyz qbkxno
-                    zyeb odbo pbkxmrso. zkbpysc, vk fso xyec cozkbo xyx zyeb xyec zexsb,
+                <p>zkbpysc, vk fso xyec cozkbo xyx zyeb xyec zexsb,
                     wksc zyeb xyec kzzboxnbo k bofoxsb.</p>
 
                 <p>dyx psvc lyl zyccono notk moddo pvkwwo aeo xyec kfyxc bomyxxeo :
