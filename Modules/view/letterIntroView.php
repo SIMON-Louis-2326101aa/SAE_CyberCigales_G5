@@ -79,7 +79,6 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
                 <p>iy jk byi sui bywdui, s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu.
                     deki du iqledi fqi su gku bq lyu j q huiuhlu, cqyi deki uifuhedi gk ubbu j q evvuhj
                     qkjqdj tu hqyiedi t qycuh gku tu fqhtedduh.</p>
-
                 <p>yb uij tui rbuiikhui gku b ed jqyj jhef bedwjucfi, sheoqdj gk ubbui tyifqhqyjhedj
                     t ubbui cucui. cqyi bu iybudsu du ieywdu fqi, yb udtehj iukbucudj bq tekbukh</p>
 
@@ -192,6 +191,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
                 Qu'est-ce que veut dire cette lettre ?<br>
                 Il est nécessaire de décoder seulement le premier paragraphe de la lettre.<br>
                 Vous pourrez ensuite retrouver la lettre entière décodée dans votre inventaire.<br>
+                (Deux premiere phrases, ponctuation comprise.)<br>
                 <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
                             ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
             </label>

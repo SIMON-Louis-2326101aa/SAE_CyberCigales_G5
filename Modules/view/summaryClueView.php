@@ -174,7 +174,7 @@ if (isset($_SESSION['team']) && $_SESSION['team'] === "alice") : ?>
     </div>
 
     <form action="index.php?controller=Puzzle&action=valideSummary" method="post">
-        <label>Qu'est-ce qu'on apprend de plus ?</label>
+        <label>Qu'est-ce qu'on apprend de plus ? <br>(Lien familial)<br></label>
         <input type="text" name="answer" placeholder="Entrez votre réponse ">
         <button type="submit">Soumettre</button>
     </form>
