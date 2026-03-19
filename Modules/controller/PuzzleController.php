@@ -692,7 +692,7 @@ class PuzzleController
         ];
 
         // Réponse si le mot-clé est absent
-        $botFallback = "T'es qui ???";
+        $botFallback = "T'es qui pour moi ???";
 
         // Initialiser l'historique
         if (!isset($_SESSION['ig_messages'])) {

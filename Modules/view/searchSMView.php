@@ -487,8 +487,8 @@ $botReplyText  = $_SESSION['ig_bot_reply_text'] ?? '';
             </div>
             <div class="ig-profile-grid">
                 <div class="ig-grid-item ig-grid-locked"><span>🔒</span></div>
-                <div class="ig-grid-item ig-grid-locked"><span>:)</span></div>
-                <div class="ig-grid-item ig-grid-locked"><span><3</span></div>
+                <div class="ig-grid-item ig-grid-locked"><span>🌸</span></div>
+                <div class="ig-grid-item ig-grid-locked"><span>🏛️</span></div>
             </div>
         </div>
 
