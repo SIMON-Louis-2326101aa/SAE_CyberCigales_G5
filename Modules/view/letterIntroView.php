@@ -108,6 +108,7 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
                 Qu'est-ce que veut dire cette lettre ?<br>
                 Il est nécessaire de décoder seulement le premier paragraphe de la lettre.<br>
                 Vous pourrez ensuite retrouver la lettre entière décodée dans votre inventaire.<br>
+                (Deux premiere phrases, ponctuation comprise.)<br>
 
                 <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
                             ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
