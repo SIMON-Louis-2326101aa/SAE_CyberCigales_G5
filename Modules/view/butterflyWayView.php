@@ -15,6 +15,27 @@ $clue = "
 <ul class='clues'>
 <li class='clue-block'>
     <div class='clue-header'>
+        🔒 Indice 1 dans <span id='clue-time-1'>05:00</span>
+    </div>
+    <div id='clue-text-1' class='clue-text'>
+        A l etape 10, un des chemins change de logic.
+        Il est donc conseillé de tester ce qui est risqué, 
+        et de ne pas se contenter de suivre une voie différente.
+    </div>
+</li>
+
+<li class='clue-block'>
+    <div class='clue-header'>
+        🔒 Indice 2 dans <span id='clue-time-2'>10:00</span>
+    </div>
+    <div id='clue-text-2' class='clue-text'>
+        L'un des mots demandé fais référence a une sorte d'utilisateur.
+        L'autre est un mot plus abstrait, qui fait référence à la racine d'un système.
+        Ou plutot sa traduction.
+    </div>
+</li>
+<li class='clue-block'>
+    <div class='clue-header'>
         🔒 Solution dans <span id='clue-time-3'>15:00</span>
     </div>
     <div id='clue-text-3' class='clue-text'>
