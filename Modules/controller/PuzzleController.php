@@ -80,16 +80,12 @@ class PuzzleController
             'alice' => "
                 Ma chère Diane,
                 Si tu lis ces lignes, c’est que le temps a poursuivi sa route sans nous attendre.
-                Nous ne savons pas ce que la vie t’a réservé, mais nous espérons qu’elle t’a offert
-                autant de raisons d’aimer que de pardonner.
             ",
 
             'bob' => "
                 Ma chère Clara,
                 Le temps nous a glissé entre les doigts comme du sable, mais avant qu’il ne disparaisse
                 complètement, nous voulions te confier ces mots.
-                Il n’y a pas de faute trop ancienne pour être pardonnée, ni de distance trop grande
-                pour être franchie.
             "
         ];
 

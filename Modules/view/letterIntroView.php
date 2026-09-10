@@ -76,8 +76,8 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
             <div class="letter-face letter-front">
                 <p>cq sxuhu tyqdu, </p>
 
-                <p>iy jk byi sui bywdui, s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu.
-                    deki du iqledi fqi su gku bq lyu j q huiuhlu, cqyi deki uifuhedi gk ubbu j q evvuhj
+                <p>iy jk byi sui bywdui, s uij gku bu jucfi q fekhikyly iq hekju iqdi deki qjjudthu.</p>
+                <p>deki du iqledi fqi su gku bq lyu j q huiuhlu, cqyi deki uifuhedi gk ubbu j q evvuhj
                     qkjqdj tu hqyiedi t qycuh gku tu fqhtedduh.</p>
                 <p>yb uij tui rbuiikhui gku b ed jqyj jhef bedwjucfi, sheoqdj gk ubbui tyifqhqyjhedj
                     t ubbui cucui. cqyi bu iybudsu du ieywdu fqi, yb udtehj iukbucudj bq tekbukh</p>
@@ -105,10 +105,10 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div id="solutionLetter" class="solution-letter-content">
         <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
             <label>
-                Qu'est-ce que veut dire cette lettre ?<br>
-                Il est nécessaire de décoder seulement le premier paragraphe de la lettre.<br>
+                Que veut dire cette lettre ?<br>
+                Il est nécessaire de décoder seulement la première phrase de la lettre.<br>
                 Vous pourrez ensuite retrouver la lettre entière décodée dans votre inventaire.<br>
-                (Deux premiere phrases, ponctuation comprise.)<br>
+                (Accents, ponctuation comprise.)<br>
 
                 <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
                             ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
@@ -159,7 +159,8 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
             <div class="letter-face letter-front">
                 <p>wk mrobo mvkbk, </p>
                 <p>vo dowzc xyec k qvscco oxdbo voc nysqdc mywwo ne cklvo, wksc kfkxd ae'sv xo nsczkbkscco
-                    mywzvodowoxd, xyec fyevsyxc do myxpsob moc wydc. sv x'i k zkc no pkedo dbyz kxmsoxxo
+                    mywzvodowoxd, xyec fyevsyxc do myxpsob moc wydc.</p>
+                <p>sv x'i k zkc no pkedo dbyz kxmsoxxo
                     zyeb odbo zkbnyxxoo, xs no nscdkxmo dbyz qbkxno zyeb odbo pbkxmrso.</p>
 
                 <p>zkbpysc, vk fso xyec cozkbo xyx zyeb xyec zexsb,
@@ -189,10 +190,10 @@ if (isset($_SESSION['team']) && ($_SESSION['team'] === "alice")) : ?>
     <div id="solutionLetter" class="solution-letter-content">
         <form method="POST" action="index.php?controller=Puzzle&action=validateLetter">
             <label>
-                Qu'est-ce que veut dire cette lettre ?<br>
-                Il est nécessaire de décoder seulement le premier paragraphe de la lettre.<br>
+                Que veut dire cette lettre ?<br>
+                Il est nécessaire de décoder seulement la première phrase de la lettre.<br>
                 Vous pourrez ensuite retrouver la lettre entière décodée dans votre inventaire.<br>
-                (Deux premiere phrases, ponctuation comprise.)<br>
+                (Accents, et ponctuation comprise.)<br>
                 <textarea name="answer1" required><?= isset($_SESSION['old_answer1'])
                             ? htmlspecialchars($_SESSION['old_answer1']) : '' ?></textarea>
             </label>
