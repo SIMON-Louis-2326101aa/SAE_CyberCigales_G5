@@ -15,15 +15,6 @@ Le projet vise principalement à sensibiliser un public non spécialiste, notamm
 
 ---
 
-## Commandes Git utiles
-```bash
-git stash
-git pull
-git stash pop
-```
-
----
-
 ## Présentation
 L’application développée a pour objectif de proposer un support pédagogique interactif permettant :
 - la sensibilisation aux enjeux de la cybersécurité ;
