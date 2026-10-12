@@ -71,21 +71,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ========================================================
-    // 2. Déplacement de la fenêtre par la barre de titre (Drag & Drop)
+    // 2. Déplacement & Redimensionnement de la fenêtre (KDE / Windows)
     // ========================================================
     let isDragging = false;
     let dragStartX = 0;
     let dragStartY = 0;
     let initialLeft = 0;
     let initialTop = 0;
-    let minLeft = -Infinity;
-    let maxLeft = Infinity;
-    let minTop = -Infinity;
-    let maxTop = Infinity;
 
+    // Dimensions et positions personnalisées après redimensionnement
+    let savedNormalWidth = null;
+    let savedNormalHeight = null;
+    let savedNormalLeft = null;
+    let savedNormalTop = null;
+
+    // Déplacement depuis un état maximisé
+    let pendingMaximizedDrag = false;
+    let maxDragStartX = 0;
+    let maxDragStartY = 0;
+
+    // Redimensionnement
+    let isResizing = false;
+    let resizeDir = "";
+    let resizeStartX = 0;
+    let resizeStartY = 0;
+    let resizeStartW = 0;
+    let resizeStartH = 0;
+    let resizeStartLeft = 0;
+    let resizeStartTop = 0;
+
+    // --- Gestion du Drag ---
     function startDrag(clientX, clientY) {
-        // Ne pas déplacer si la fenêtre est maximisée
-        if (terminalWindow.classList.contains("is-maximized")) {
+        if (terminalWindow.classList.contains("is-maximized") || !desktopWorkspace) {
             return;
         }
 
@@ -95,22 +112,23 @@ document.addEventListener("DOMContentLoaded", () => {
         dragStartX = clientX;
         dragStartY = clientY;
 
-        initialLeft = parseFloat(terminalWindow.style.left) || 0;
-        initialTop = parseFloat(terminalWindow.style.top) || 0;
+        const wsRect = desktopWorkspace.getBoundingClientRect();
+        const winRect = terminalWindow.getBoundingClientRect();
 
-        if (desktopWorkspace) {
-            const wsRect = desktopWorkspace.getBoundingClientRect();
-            const winRect = terminalWindow.getBoundingClientRect();
+        // Récupère la position exacte en pixels dans desktopWorkspace
+        initialLeft = winRect.left - wsRect.left;
+        initialTop = winRect.top - wsRect.top;
 
-            // Bloquer vers le haut pour que la barre de titre ne passe pas sous le header
-            minTop = initialTop - (winRect.top - wsRect.top);
-            // Bloquer vers le bas pour garder la barre de titre au-dessus de la barre des tâches
-            maxTop = initialTop + (wsRect.bottom - winRect.top - 40);
+        // Fixe en pixels stricts pour éliminer tout décalage
+        terminalWindow.style.left = `${initialLeft}px`;
+        terminalWindow.style.top = `${initialTop}px`;
+        terminalWindow.style.width = `${winRect.width}px`;
+        terminalWindow.style.height = `${winRect.height}px`;
 
-            // Bloquer sur les côtés tout en permettant d'utiliser toute la largeur de l'écran
-            minLeft = initialLeft - (winRect.right - wsRect.left) + 120;
-            maxLeft = initialLeft + (wsRect.right - winRect.left) - 120;
-        }
+        savedNormalWidth = winRect.width;
+        savedNormalHeight = winRect.height;
+        savedNormalLeft = initialLeft;
+        savedNormalTop = initialTop;
 
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
@@ -119,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function moveDrag(clientX, clientY) {
-        if (!isDragging) return;
+        if (!isDragging || !desktopWorkspace) return;
 
         const deltaX = clientX - dragStartX;
         const deltaY = clientY - dragStartY;
@@ -127,15 +145,19 @@ document.addEventListener("DOMContentLoaded", () => {
         let newLeft = initialLeft + deltaX;
         let newTop = initialTop + deltaY;
 
-        if (Number.isFinite(minLeft) && Number.isFinite(maxLeft)) {
-            newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
-        }
-        if (Number.isFinite(minTop) && Number.isFinite(maxTop)) {
-            newTop = Math.max(minTop, Math.min(newTop, maxTop));
-        }
+        const wsRect = desktopWorkspace.getBoundingClientRect();
+        const winRect = terminalWindow.getBoundingClientRect();
+
+        // Ne passe pas sous le header et garde la barre de titre dans le bureau
+        newTop = Math.max(0, Math.min(newTop, wsRect.height - 40));
+        // Garde au moins 120px de la fenêtre visible horizontalement
+        newLeft = Math.max(-winRect.width + 120, Math.min(newLeft, wsRect.width - 120));
 
         terminalWindow.style.left = `${newLeft}px`;
         terminalWindow.style.top = `${newTop}px`;
+
+        savedNormalLeft = newLeft;
+        savedNormalTop = newTop;
     }
 
     function stopDrag() {
@@ -168,10 +190,83 @@ document.addEventListener("DOMContentLoaded", () => {
         stopDrag();
     }
 
+    // --- Restauration fluide lors du drag d'une fenêtre maximisée ---
+    function unmaximizeAndStartDrag(clientX, clientY, startX, startY) {
+        if (!desktopWorkspace) return;
+
+        const wsRect = desktopWorkspace.getBoundingClientRect();
+        const maxWinRect = terminalWindow.getBoundingClientRect();
+
+        // Ratio horizontal où se trouvait le curseur sur la barre maximisée
+        const ratioX = Math.max(0.1, Math.min(0.9, (startX - maxWinRect.left) / maxWinRect.width));
+
+        // Désactive l'état maximisé
+        terminalWindow.classList.remove("is-maximized");
+        if (terminalPage) {
+            terminalPage.classList.remove("is-maximized");
+        }
+        if (btnMax) {
+            btnMax.innerHTML = "<span>&#x25A2;</span>";
+        }
+
+        // Récupère les dimensions normales sauvegardées
+        const restoredW = savedNormalWidth || (wsRect.width * 0.75);
+        const restoredH = savedNormalHeight || (wsRect.height * 0.85);
+
+        terminalWindow.style.width = `${restoredW}px`;
+        terminalWindow.style.height = `${restoredH}px`;
+
+        // Position sous le curseur
+        let newLeft = (clientX - wsRect.left) - (ratioX * restoredW);
+        let newTop = (clientY - wsRect.top) - 18;
+
+        newLeft = Math.max(0, Math.min(newLeft, wsRect.width - 120));
+        newTop = Math.max(0, Math.min(newTop, wsRect.height - 40));
+
+        terminalWindow.style.left = `${newLeft}px`;
+        terminalWindow.style.top = `${newTop}px`;
+
+        savedNormalLeft = newLeft;
+        savedNormalTop = newTop;
+        savedNormalWidth = restoredW;
+        savedNormalHeight = restoredH;
+
+        // Démarre le drag standard immédiatement
+        startDrag(clientX, clientY);
+    }
+
+    function onMaximizedDragMove(e) {
+        if (!pendingMaximizedDrag) return;
+        const dist = Math.hypot(e.clientX - maxDragStartX, e.clientY - maxDragStartY);
+        if (dist > 5) {
+            pendingMaximizedDrag = false;
+            document.removeEventListener("mousemove", onMaximizedDragMove);
+            document.removeEventListener("mouseup", onMaximizedDragUp);
+            unmaximizeAndStartDrag(e.clientX, e.clientY, maxDragStartX, maxDragStartY);
+        }
+    }
+
+    function onMaximizedDragUp() {
+        pendingMaximizedDrag = false;
+        document.removeEventListener("mousemove", onMaximizedDragMove);
+        document.removeEventListener("mouseup", onMaximizedDragUp);
+    }
+
+    // --- Écouteurs sur la barre de titre ---
     if (titlebar) {
         titlebar.addEventListener("mousedown", (e) => {
-            // Ignorer si on clique sur un bouton de contrôle (min, max, close)
             if (e.target.closest(".ctrl-btn")) return;
+
+            // Si la fenêtre est maximisée, prépare la restauration au drag
+            if (terminalWindow.classList.contains("is-maximized")) {
+                pendingMaximizedDrag = true;
+                maxDragStartX = e.clientX;
+                maxDragStartY = e.clientY;
+                document.addEventListener("mousemove", onMaximizedDragMove);
+                document.addEventListener("mouseup", onMaximizedDragUp);
+                return;
+            }
+
             startDrag(e.clientX, e.clientY);
             e.preventDefault();
         });
@@ -179,6 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
         titlebar.addEventListener("touchstart", (e) => {
             if (e.target.closest(".ctrl-btn")) return;
             if (e.touches.length > 0) {
+                if (terminalWindow.classList.contains("is-maximized")) return;
                 startDrag(e.touches[0].clientX, e.touches[0].clientY);
             }
         }, { passive: true });
@@ -186,9 +282,136 @@ document.addEventListener("DOMContentLoaded", () => {
         // Double-clic sur la barre pour maximiser / restaurer (comme sur KDE / Windows)
         titlebar.addEventListener("dblclick", (e) => {
             if (e.target.closest(".ctrl-btn")) return;
-            if (btnMax) btnMax.click();
+            toggleMaximize();
         });
     }
+
+    // --- Gestion du Redimensionnement par les bords (Resize) ---
+    const resizeHandles = document.querySelectorAll(".resize-handle");
+
+    function initResize(e, dir) {
+        if (terminalWindow.classList.contains("is-maximized") || terminalWindow.classList.contains("is-minimized") || !desktopWorkspace) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+
+        isResizing = true;
+        resizeDir = dir;
+        resizeStartX = e.clientX || (e.touches && e.touches[0].clientX);
+        resizeStartY = e.clientY || (e.touches && e.touches[0].clientY);
+
+        const wsRect = desktopWorkspace.getBoundingClientRect();
+        const rect = terminalWindow.getBoundingClientRect();
+
+        resizeStartW = rect.width;
+        resizeStartH = rect.height;
+        resizeStartLeft = rect.left - wsRect.left;
+        resizeStartTop = rect.top - wsRect.top;
+
+        // Force les dimensions et coordonnées en pixels stricts
+        terminalWindow.style.left = `${resizeStartLeft}px`;
+        terminalWindow.style.top = `${resizeStartTop}px`;
+        terminalWindow.style.width = `${resizeStartW}px`;
+        terminalWindow.style.height = `${resizeStartH}px`;
+
+        terminalWindow.classList.add("is-resizing");
+        document.body.style.userSelect = "none";
+
+        document.addEventListener("mousemove", onResizeMove);
+        document.addEventListener("mouseup", onResizeEnd);
+        document.addEventListener("touchmove", onResizeTouchMove, { passive: false });
+        document.addEventListener("touchend", onResizeEnd);
+    }
+
+    function doResize(clientX, clientY) {
+        if (!isResizing || !desktopWorkspace) return;
+
+        const deltaX = clientX - resizeStartX;
+        const deltaY = clientY - resizeStartY;
+
+        const wsRect = desktopWorkspace.getBoundingClientRect();
+        const minW = 460;
+        const minH = 300;
+        const maxW = wsRect.width;
+        const maxH = wsRect.height;
+
+        let newW = resizeStartW;
+        let newH = resizeStartH;
+        let newLeft = resizeStartLeft;
+        let newTop = resizeStartTop;
+
+        // Côté droit (e) : le bord gauche reste parfaitement cloué en place
+        if (resizeDir.includes("e")) {
+            newW = Math.min(maxW - resizeStartLeft, Math.max(minW, resizeStartW + deltaX));
+        }
+
+        // Côté bas (s) : le bord haut reste parfaitement cloué en place
+        if (resizeDir.includes("s")) {
+            newH = Math.min(maxH - resizeStartTop, Math.max(minH, resizeStartH + deltaY));
+        }
+
+        // Côté gauche (w) : le bord droit reste parfaitement cloué en place (resizeStartLeft + resizeStartW)
+        if (resizeDir.includes("w")) {
+            newW = resizeStartW - deltaX;
+            if (newW < minW) newW = minW;
+            newLeft = resizeStartLeft + (resizeStartW - newW);
+            if (newLeft < 0) {
+                newW += newLeft;
+                newLeft = 0;
+            }
+        }
+
+        // Côté haut (n) : le bord bas reste parfaitement cloué en place (resizeStartTop + resizeStartH)
+        if (resizeDir.includes("n")) {
+            newH = resizeStartH - deltaY;
+            if (newH < minH) newH = minH;
+            newTop = resizeStartTop + (resizeStartH - newH);
+            if (newTop < 0) {
+                newH += newTop;
+                newTop = 0;
+            }
+        }
+
+        terminalWindow.style.width = `${newW}px`;
+        terminalWindow.style.height = `${newH}px`;
+        terminalWindow.style.left = `${newLeft}px`;
+        terminalWindow.style.top = `${newTop}px`;
+
+        savedNormalWidth = newW;
+        savedNormalHeight = newH;
+        savedNormalLeft = newLeft;
+        savedNormalTop = newTop;
+    }
+
+    function onResizeMove(e) {
+        doResize(e.clientX, e.clientY);
+    }
+
+    function onResizeTouchMove(e) {
+        if (isResizing && e.touches.length > 0) {
+            e.preventDefault();
+            doResize(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    }
+
+    function onResizeEnd() {
+        if (!isResizing) return;
+        isResizing = false;
+        terminalWindow.classList.remove("is-resizing");
+        document.body.style.userSelect = "";
+
+        document.removeEventListener("mousemove", onResizeMove);
+        document.removeEventListener("mouseup", onResizeEnd);
+        document.removeEventListener("touchmove", onResizeTouchMove);
+        document.removeEventListener("touchend", onResizeEnd);
+    }
+
+    resizeHandles.forEach((handle) => {
+        const dir = handle.dataset.dir;
+        handle.addEventListener("mousedown", (e) => initResize(e, dir));
+        handle.addEventListener("touchstart", (e) => initResize(e, dir), { passive: false });
+    });
 
     // ========================================================
     // 3. Gestion Réduire / Restaurer / Maximiser / Barre des tâches
@@ -214,7 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
             taskbarItem.classList.add("is-active");
         }
 
-        // Rétablit l'état précédent (maximisé ou normal avec sa position déplacée)
+        // Rétablit l'état précédent (maximisé ou normal avec sa position déplacée et ses dimensions)
         if (wasMaximized) {
             terminalWindow.classList.add("is-maximized");
             if (terminalPage) {
@@ -230,6 +453,18 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             if (btnMax) {
                 btnMax.innerHTML = "<span>&#x25A2;</span>";
+            }
+            if (savedNormalWidth) {
+                terminalWindow.style.width = `${savedNormalWidth}px`;
+            }
+            if (savedNormalHeight) {
+                terminalWindow.style.height = `${savedNormalHeight}px`;
+            }
+            if (savedNormalLeft !== null && savedNormalLeft !== undefined) {
+                terminalWindow.style.left = `${savedNormalLeft}px`;
+            }
+            if (savedNormalTop !== null && savedNormalTop !== undefined) {
+                terminalWindow.style.top = `${savedNormalTop}px`;
             }
         }
 
@@ -272,20 +507,61 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Bouton Agrandir / Restaurer (Maximize)
+    // Fonction centralisée Agrandir / Restaurer (Maximize)
+    function toggleMaximize() {
+        const isMax = terminalWindow.classList.contains("is-maximized");
+
+        if (!isMax) {
+            // Sauvegarder les dimensions et positions normales actuelles AVANT d'appliquer l'état maximisé
+            const wsRect = desktopWorkspace ? desktopWorkspace.getBoundingClientRect() : { left: 0, top: 0 };
+            const rect = terminalWindow.getBoundingClientRect();
+
+            savedNormalWidth = rect.width;
+            savedNormalHeight = rect.height;
+            savedNormalLeft = rect.left - wsRect.left;
+            savedNormalTop = rect.top - wsRect.top;
+
+            terminalWindow.classList.add("is-maximized");
+            if (terminalPage) {
+                terminalPage.classList.add("is-maximized");
+            }
+            if (btnMax) {
+                btnMax.innerHTML = "<span>&#x25F3;</span>";
+            }
+        } else {
+            // Restauration de l'état normal
+            terminalWindow.classList.remove("is-maximized");
+            if (terminalPage) {
+                terminalPage.classList.remove("is-maximized");
+            }
+            if (btnMax) {
+                btnMax.innerHTML = "<span>&#x25A2;</span>";
+            }
+
+            // Réappliquer les dimensions et coordonnées sauvegardées
+            if (savedNormalWidth) {
+                terminalWindow.style.width = `${savedNormalWidth}px`;
+            }
+            if (savedNormalHeight) {
+                terminalWindow.style.height = `${savedNormalHeight}px`;
+            }
+            if (savedNormalLeft !== null && savedNormalLeft !== undefined) {
+                terminalWindow.style.left = `${savedNormalLeft}px`;
+            }
+            if (savedNormalTop !== null && savedNormalTop !== undefined) {
+                terminalWindow.style.top = `${savedNormalTop}px`;
+            }
+        }
+
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        terminalInput.focus();
+    }
+
+    // Bouton Agrandir / Restaurer
     if (btnMax) {
         btnMax.addEventListener("click", (e) => {
             e.stopPropagation();
-            const isNowMax = terminalWindow.classList.toggle("is-maximized");
-            if (terminalPage) {
-                terminalPage.classList.toggle("is-maximized", isNowMax);
-            }
-            btnMax.innerHTML = isNowMax
-                ? "<span>&#x25F3;</span>"
-                : "<span>&#x25A2;</span>";
-
-            window.scrollTo({ top: 0, behavior: "smooth" });
-            terminalInput.focus();
+            toggleMaximize();
         });
     }
 
@@ -394,11 +670,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 outputElem.className += " cmd-info";
                 outputElem.innerHTML = `
 <strong>Commandes disponibles :</strong>
-  <strong>echo</strong> &lt;texte&gt;   : Affiche une ligne de texte (supporte les guillemets et variables $USER, $0, $$, $?...)
+  <strong>echo</strong> [texte]   : Affiche une ligne de texte (supporte les guillemets, apostrophes et variables $USER, $HOME, $PATH, $0, $$...)
   <strong>clear</strong>          : Efface l'écran du terminal
   <strong>help</strong>           : Affiche ce message d'aide
 
-<em>Note : L'environnement est sous Linux/Bash (commandes sensibles à la casse).</em>`;
+<p>Note : L'environnement est sous Linux avec le shell BASH (commandes sensibles à la casse).</p>`;
                 entry.appendChild(outputElem);
                 break;
 

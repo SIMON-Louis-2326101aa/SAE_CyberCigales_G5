@@ -81,6 +81,16 @@ if (!empty($_SESSION['prenom'])) {
                     </div>
                 </div>
             </div>
+
+            <!-- Poignées de redimensionnement de la fenêtre (bords et coins) -->
+            <div class="resize-handle resize-n" data-dir="n"></div>
+            <div class="resize-handle resize-s" data-dir="s"></div>
+            <div class="resize-handle resize-e" data-dir="e"></div>
+            <div class="resize-handle resize-w" data-dir="w"></div>
+            <div class="resize-handle resize-nw" data-dir="nw"></div>
+            <div class="resize-handle resize-ne" data-dir="ne"></div>
+            <div class="resize-handle resize-sw" data-dir="sw"></div>
+            <div class="resize-handle resize-se" data-dir="se"></div>
         </div>
     </div>
 
