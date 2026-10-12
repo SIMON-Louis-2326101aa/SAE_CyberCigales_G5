@@ -261,7 +261,21 @@ class RedirectionController
     {
         $this->logRedirection('terminalView');
         $this->requireAuth();
-        ViewHandler::show('terminalView', ['pageTitle' => 'Terminal']);
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        // On nettoie la session pour éviter qu'un état précédent ne persiste lors d'une future visite
+        unset($_SESSION['terminal_easter']);
+
+        // DinoTofu n'est actif QUE s'il a été explicitement demandé via le paramètre GET (suite à la saisie dans un input)
+        $easter = (($_GET['easter'] ?? '') === 'dinotofu') ? 'dinotofu' : null;
+
+        ViewHandler::show('terminalView', [
+            'pageTitle' => ($easter === 'dinotofu') ? 'CigTerm — DinoTofu' : 'Terminal',
+            'easter'    => $easter,
+        ]);
     }
 }
 

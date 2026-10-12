@@ -13,6 +13,27 @@ if (!empty($_SESSION['prenom'])) {
         $userLogin = $cleanPrenom;
     }
 }
+
+// Détection du mode Easter Egg DinoTofu (uniquement si explicitement demandé via paramètre GET)
+$easterMode = ($_GET['easter'] ?? '') === 'dinotofu' ? 'dinotofu' : null;
+$isDinoTofu = ($easterMode === 'dinotofu');
+
+$dinoAsciiArt = '';
+$dinoFilePath = dirname(__DIR__, 2) . '/public/assets/images/dinotofu.txt';
+if (!file_exists($dinoFilePath)) {
+    $dinoFilePath = dirname(__DIR__, 2) . '/dinotofu.txt';
+}
+if (file_exists($dinoFilePath)) {
+    $rawDino = file_get_contents($dinoFilePath);
+    $dinoLines = explode("\n", str_replace("\r", "", $rawDino));
+    while (!empty($dinoLines) && trim($dinoLines[0]) === '') {
+        array_shift($dinoLines);
+    }
+    while (!empty($dinoLines) && trim(end($dinoLines)) === '') {
+        array_pop($dinoLines);
+    }
+    $dinoAsciiArt = implode("\n", $dinoLines);
+}
 ?>
 
 <main id="terminal-page" class="terminal-main-container" data-user-login="<?= htmlspecialchars($userLogin) ?>">
@@ -27,7 +48,7 @@ if (!empty($_SESSION['prenom'])) {
             <div class="terminal-titlebar" id="terminal-titlebar">
                 <div class="titlebar-left">
                     <img src="./assets/images/CigTerm.svg" alt="CigTerm" class="terminal-app-icon" width="18" height="18">
-                    <span class="terminal-title-text">CigTerm — <?= htmlspecialchars($userLogin) ?>@cyber: ~</span>
+                    <span class="terminal-title-text" id="terminal-title-text"><?= $isDinoTofu ? 'CigTerm [DinoTofu] — ' : 'CigTerm — ' ?><?= htmlspecialchars($userLogin) ?>@cyber: ~</span>
                 </div>
                 <div class="titlebar-controls">
                     <button type="button" class="ctrl-btn ctrl-min" id="terminal-btn-min" title="Réduire" aria-label="Réduire">
@@ -42,10 +63,27 @@ if (!empty($_SESSION['prenom'])) {
                 </div>
             </div>
 
+            <!-- Modèles ASCII Art pour le basculement dynamique dans CigTerm (bash / dinotofu) -->
+            <script type="text/plain" id="tmpl-ascii-cybercigales">
+   ____      _                ____ _             _           
+  / ___|   _| |__   ___ _ __./ ___(_) __ _  __ _| | ___  ___ 
+ | |  | | | | '_ \ / _ \ '__| |   | |/ _` |/ _` | |/ _ \/ __|
+ | |__| |_| | |_) |  __/ |  | |___| | (_| | (_| | |  __/\__ \
+  \____\__, |_.__/ \___|_|   \____|_|\__, |\__,_|_|\___||___/
+       |___/                         |___/                    
+            </script>
+            <script type="text/plain" id="tmpl-ascii-dinotofu"><?= htmlspecialchars($dinoAsciiArt, ENT_QUOTES, 'UTF-8') ?></script>
+
             <!-- Corps du terminal -->
             <div class="terminal-body" id="terminal-body">
-                <div class="terminal-banner">
-                    <pre class="ascii-art">
+                <div class="terminal-banner" id="terminal-banner">
+                    <?php if ($isDinoTofu && !empty($dinoAsciiArt)): ?>
+                    <pre class="ascii-art ascii-dinotofu" id="terminal-ascii-art"><?= htmlspecialchars($dinoAsciiArt, ENT_QUOTES, 'UTF-8') ?></pre>
+                    <p class="banner-hint" id="terminal-banner-hint">
+                        [Easter Egg : DinoTofu Edition] Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.
+                    </p>
+                    <?php else: ?>
+                    <pre class="ascii-art" id="terminal-ascii-art">
    ____      _                ____ _             _           
   / ___|   _| |__   ___ _ __./ ___(_) __ _  __ _| | ___  ___ 
  | |  | | | | '_ \ / _ \ '__| |   | |/ _` |/ _` | |/ _ \/ __|
@@ -53,9 +91,10 @@ if (!empty($_SESSION['prenom'])) {
   \____\__, |_.__/ \___|_|   \____|_|\__, |\__,_|_|\___||___/
        |___/                         |___/                    
                     </pre>
-                    <p class="banner-hint">
+                    <p class="banner-hint" id="terminal-banner-hint">
                         Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.
                     </p>
+                    <?php endif; ?>
                 </div>
 
                 <!-- Historique des commandes exécutées -->
@@ -104,9 +143,9 @@ if (!empty($_SESSION['prenom'])) {
 
         <!-- Liste des applications en cours d'exécution -->
         <div class="taskbar-apps-container" id="taskbar-apps">
-            <button type="button" class="taskbar-app-tab is-active" id="terminal-taskbar-item" title="CigTerm — <?= htmlspecialchars($userLogin) ?>@cyber (Terminal)">
+            <button type="button" class="taskbar-app-tab is-active" id="terminal-taskbar-item" title="<?= $isDinoTofu ? 'CigTerm [DinoTofu] — ' : 'CigTerm — ' ?><?= htmlspecialchars($userLogin) ?>@cyber (Terminal)">
                 <img src="./assets/images/CigTerm.svg" alt="CigTerm" class="app-icon" width="16" height="16">
-                <span class="app-label">CigTerm — <?= htmlspecialchars($userLogin) ?>@cyber: ~</span>
+                <span class="app-label" id="terminal-taskbar-label"><?= $isDinoTofu ? 'CigTerm [DinoTofu]' : 'CigTerm — ' . htmlspecialchars($userLogin) . '@cyber: ~' ?></span>
                 <span class="app-active-glow"></span>
             </button>
 

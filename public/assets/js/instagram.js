@@ -26,6 +26,32 @@
         const dropdown = el('igSearchDropdown');
         val = val.trim().toLowerCase();
 
+        if (['dinotofu', 'dino'].includes(val)) {
+            dropdown.innerHTML = `
+                <div class="ig-search-item" onclick="window.location.href='index.php?controller=Redirection&action=openTerminal&easter=dinotofu'">
+                    <div class="ig-search-avatar" style="background:#22c55e;">🦖</div>
+                    <div>
+                        <div class="ig-search-name">dinotofu</div>
+                        <div class="ig-search-sub">Easter Egg : CigTerm DinoTofu</div>
+                    </div>
+                </div>`;
+            dropdown.classList.remove('hidden');
+            return;
+        }
+
+        if (['terminal', 'bash', 'zsh', 'shell', 'commandes', 'commande'].includes(val)) {
+            dropdown.innerHTML = `
+                <div class="ig-search-item" onclick="window.location.href='index.php?controller=Redirection&action=openTerminal'">
+                    <div class="ig-search-avatar" style="background:#0ea5e9;">💻</div>
+                    <div>
+                        <div class="ig-search-name">${val}</div>
+                        <div class="ig-search-sub">Lancer CigTerm (Terminal)</div>
+                    </div>
+                </div>`;
+            dropdown.classList.remove('hidden');
+            return;
+        }
+
         if (val.length < 2) { dropdown.classList.add('hidden'); return; }
 
         const allAccounts = [
@@ -151,6 +177,16 @@
         const text = input.value.trim();
         if (!text) return;
 
+        const valClean = text.toLowerCase();
+        if (['dinotofu', 'dino'].includes(valClean)) {
+            window.location.href = 'index.php?controller=Redirection&action=openTerminal&easter=dinotofu';
+            return;
+        }
+        if (['terminal', 'bash', 'zsh', 'shell', 'commandes', 'commande'].includes(valClean)) {
+            window.location.href = 'index.php?controller=Redirection&action=openTerminal';
+            return;
+        }
+
         const msgs = el('igDmMessages');
 
         // Bulle envoyée par le joueur
@@ -234,6 +270,16 @@
         const input = el('igDecoyDmInput');
         const text  = input.value.trim();
         if (!text) return;
+
+        const valClean = text.toLowerCase();
+        if (['dinotofu', 'dino'].includes(valClean)) {
+            window.location.href = 'index.php?controller=Redirection&action=openTerminal&easter=dinotofu';
+            return;
+        }
+        if (['terminal', 'bash', 'zsh', 'shell', 'commandes', 'commande'].includes(valClean)) {
+            window.location.href = 'index.php?controller=Redirection&action=openTerminal';
+            return;
+        }
 
         const msgs   = el('igDecoyDmMessages');
         const handle = el('igDecoyDmHandle').textContent || '';

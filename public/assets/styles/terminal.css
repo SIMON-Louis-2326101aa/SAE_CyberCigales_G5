@@ -242,6 +242,38 @@ main#terminal-page,
     color: inherit;
 }
 
+/* Liens cliquables dans le terminal (Style Konsole / Kitty) */
+.terminal-body a,
+.cmd-output a,
+.terminal-link {
+    font-family: inherit !important;
+    font-size: 0.95rem !important;
+    font-weight: normal !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    line-height: inherit !important;
+    color: #2bd9fe !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transition: color 0.15s ease, text-shadow 0.15s ease !important;
+}
+
+.terminal-body a:hover,
+.cmd-output a:hover,
+.terminal-link:hover {
+    color: #6de5ff !important;
+    text-shadow: 0 0 8px rgba(43, 217, 254, 0.7) !important;
+    background: transparent !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 /* Poignées de redimensionnement de la fenêtre (bords et coins) */
 .resize-handle {
     position: absolute;
@@ -355,6 +387,18 @@ main#terminal-page,
     text-align: left;
     text-shadow: 0 0 10px rgba(0, 215, 255, 0.4);
     scrollbar-width: none;
+}
+
+/* Style dédié à l'Easter Egg DinoTofu (format large et densité de caractères) */
+.ascii-art.ascii-dinotofu {
+    font-size: clamp(0.24rem, 0.5vw, 0.44rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+    color: #38ef7d;
+    text-shadow: 0 0 8px rgba(56, 239, 125, 0.4);
+    overflow-x: auto;
+    white-space: pre;
+    max-width: 100%;
 }
 
 .ascii-art::-webkit-scrollbar,

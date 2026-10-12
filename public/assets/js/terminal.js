@@ -670,11 +670,134 @@ document.addEventListener("DOMContentLoaded", () => {
                 outputElem.className += " cmd-info";
                 outputElem.innerHTML = `
 <strong>Commandes disponibles :</strong>
-  <strong>echo</strong> [texte]   : Affiche une ligne de texte (supporte les guillemets, apostrophes et variables $USER, $HOME, $PATH, $0, $$...)
+  <strong>echo</strong> [texte]   : Affiche une ligne de texte (supporte les guillemets, variables $USER, $HOME, $PATH, $0, $$...)
   <strong>clear</strong>          : Efface l'écran du terminal
+  <strong>whoami</strong>         : Affiche l'utilisateur actuel
+  <strong>pwd</strong>            : Affiche le répertoire de travail
   <strong>help</strong>           : Affiche ce message d'aide
 
 <p>Note : L'environnement est sous Linux avec le shell BASH (commandes sensibles à la casse).</p>`;
+                entry.appendChild(outputElem);
+                break;
+
+            case "dinotofu": {
+                const asciiElem = document.getElementById("terminal-ascii-art");
+                const isAlreadyDino = asciiElem && asciiElem.classList.contains("ascii-dinotofu");
+
+                if (isAlreadyDino) {
+                    outputElem.className += " cmd-info";
+                    outputElem.innerHTML = `
+<div style="color: #38ef7d; font-weight: bold; margin-bottom: 0.35rem;">[Easter Egg DinoTofu]</div>
+<div>L'art ASCII de DinoTofu est déjà affiché dans le terminal, cela ne sert à rien de retaper "dinotofu".</div>
+<div><a href="https://github.com/SIMON-Louis-2326101aa/ProjetDinotofu" target="_blank" rel="noopener noreferrer" class="terminal-link">https://github.com/SIMON-Louis-2326101aa/ProjetDinotofu</a></div>`;
+                    entry.appendChild(outputElem);
+                } else {
+                    // 1. Efface l'historique du terminal
+                    terminalOutput.innerHTML = "";
+
+                    // 2. Remplace l'ASCII art par DinoTofu
+                    const dinoTmpl = document.getElementById("tmpl-ascii-dinotofu");
+                    if (asciiElem && dinoTmpl) {
+                        asciiElem.textContent = dinoTmpl.textContent.trim();
+                        asciiElem.classList.add("ascii-dinotofu");
+                    }
+
+                    // 3. Met à jour la description sous l'ASCII
+                    const bannerHint = document.getElementById("terminal-banner-hint");
+                    if (bannerHint) {
+                        bannerHint.innerHTML = `[Easter Egg : DinoTofu Edition] Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.`;
+                    }
+
+                    // 4. Met à jour le titre de la fenêtre et la barre des tâches
+                    const titleText = document.getElementById("terminal-title-text");
+                    if (titleText) {
+                        titleText.textContent = `CigTerm [DinoTofu] — ${userLogin}@cyber: ~`;
+                    }
+                    const taskbarLabel = document.getElementById("terminal-taskbar-label");
+                    if (taskbarLabel) {
+                        taskbarLabel.textContent = `CigTerm [DinoTofu]`;
+                    }
+                    if (taskbarItem) {
+                        taskbarItem.title = `CigTerm [DinoTofu] — ${userLogin}@cyber (Terminal)`;
+                    }
+
+                    // 5. Synchronise l'URL du navigateur
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, "", "index.php?controller=Redirection&action=openTerminal&easter=dinotofu");
+                    }
+
+                    // 6. Affiche le message de confirmation avec le lien cliquable
+                    outputElem.className += " cmd-info";
+                    outputElem.innerHTML = `
+<div style="color: #38ef7d; font-weight: bold; margin-bottom: 0.35rem;">[Easter Egg DinoTofu Activé]</div>
+<div>Jeu DinoTofu créé par notre collègue de l'équipe CyberCigales !</div>
+<div><a href="https://github.com/SIMON-Louis-2326101aa/ProjetDinotofu" target="_blank" rel="noopener noreferrer" class="terminal-link">https://github.com/SIMON-Louis-2326101aa/ProjetDinotofu</a></div>
+<div style="color: #7b889b; font-size: 0.85rem; margin-top: 0.35rem;">Astuce : Pour revenir au shell et à l'ASCII standard, tapez "bash", "zsh" ou "sh".</div>`;
+                    entry.appendChild(outputElem);
+                }
+                break;
+            }
+
+            case "bash":
+            case "zsh":
+            case "sh":
+            case "shell": {
+                const asciiElem = document.getElementById("terminal-ascii-art");
+                const isDinoActive = asciiElem && asciiElem.classList.contains("ascii-dinotofu");
+
+                if (isDinoActive) {
+                    // 1. Efface l'historique du terminal
+                    terminalOutput.innerHTML = "";
+
+                    // 2. Restaure l'ASCII art d'origine (CyberCigales)
+                    const cyberTmpl = document.getElementById("tmpl-ascii-cybercigales");
+                    if (asciiElem && cyberTmpl) {
+                        asciiElem.textContent = cyberTmpl.textContent.replace(/^\n+|\n+$/g, "");
+                        asciiElem.classList.remove("ascii-dinotofu");
+                    }
+
+                    // 3. Restaure le message sous l'ASCII
+                    const bannerHint = document.getElementById("terminal-banner-hint");
+                    if (bannerHint) {
+                        bannerHint.innerHTML = `Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.`;
+                    }
+
+                    // 4. Restaure le titre de la fenêtre et la barre des tâches
+                    const titleText = document.getElementById("terminal-title-text");
+                    if (titleText) {
+                        titleText.textContent = `CigTerm — ${userLogin}@cyber: ~`;
+                    }
+                    const taskbarLabel = document.getElementById("terminal-taskbar-label");
+                    if (taskbarLabel) {
+                        taskbarLabel.textContent = `CigTerm — ${userLogin}@cyber: ~`;
+                    }
+                    if (taskbarItem) {
+                        taskbarItem.title = `CigTerm — ${userLogin}@cyber (Terminal)`;
+                    }
+
+                    // 5. Synchronise l'URL du navigateur (retire le paramètre easter)
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, "", "index.php?controller=Redirection&action=openTerminal");
+                    }
+
+                    outputElem.className += " cmd-info";
+                    outputElem.textContent = `Retour au shell ${cmd} standard (CigTerm v1.0). L'ASCII d'origine CyberCigales a été restauré.`;
+                    entry.appendChild(outputElem);
+                } else {
+                    outputElem.className += " cmd-info";
+                    outputElem.textContent = `Vous êtes déjà connecté au shell ${cmd} (CigTerm v1.0).`;
+                    entry.appendChild(outputElem);
+                }
+                break;
+            }
+
+            case "whoami":
+                outputElem.textContent = userLogin;
+                entry.appendChild(outputElem);
+                break;
+
+            case "pwd":
+                outputElem.textContent = `/home/${userLogin}`;
                 entry.appendChild(outputElem);
                 break;
 

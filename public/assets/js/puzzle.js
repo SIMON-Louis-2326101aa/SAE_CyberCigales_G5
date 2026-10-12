@@ -762,6 +762,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Permet d'"écouter" en direct le mot de passe écrit et appeler validatePassword
     passwordInput.addEventListener('input', validatePassword);
 
+    // Détection des Easter Eggs dans le champ de mot de passe à l'appui sur Entrée
+    passwordInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            const rawVal = (passwordInput.value || '').trim().toLowerCase();
+            const dinoEgg = ['dinotofu', 'dino'];
+            const termEgg = ['terminal', 'bash', 'zsh', 'shell', 'commandes', 'commande'];
+            if (dinoEgg.includes(rawVal)) {
+                event.preventDefault();
+                window.location.href = 'index.php?controller=Redirection&action=openTerminal&easter=dinotofu';
+                return;
+            }
+            if (termEgg.includes(rawVal)) {
+                event.preventDefault();
+                window.location.href = 'index.php?controller=Redirection&action=openTerminal';
+                return;
+            }
+        }
+    });
+
     // Ajout de l'écouteur sur le bouton valider pour aller dans une autre page
     const passwordGameForm = document.getElementById('password-game-form');
     const successBlock = document.getElementById('block-message-good-pwd');
@@ -769,6 +788,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (passwordGameForm) {
         passwordGameForm.addEventListener('submit', (event) => {
             event.preventDefault(); // Empêche le rechargement de la page
+
+            // Vérification Easter Egg lors de la soumission
+            const rawVal = (passwordInput.value || '').trim().toLowerCase();
+            const dinoEgg = ['dinotofu', 'dino'];
+            const termEgg = ['terminal', 'bash', 'zsh', 'shell', 'commandes', 'commande'];
+            if (dinoEgg.includes(rawVal)) {
+                window.location.href = 'index.php?controller=Redirection&action=openTerminal&easter=dinotofu';
+                return;
+            }
+            if (termEgg.includes(rawVal)) {
+                window.location.href = 'index.php?controller=Redirection&action=openTerminal';
+                return;
+            }
 
             // Si toutes les règles sont validées, on affiche le bloc de succès au lieu de rediriger
             if (!submitButton.disabled) {

@@ -14,6 +14,34 @@ class PuzzleController
         }
     }
 
+    /**
+     * Mots-clés déclencheurs du terminal standard (CigTerm)
+     * Vous pouvez facilement ajouter de nouveaux mots-clés dans cette liste.
+     */
+    public const EASTER_EGG_KEYWORDS = [
+        'terminal',
+        'bash',
+        'zsh',
+        'shell',
+        'commandes',
+        'commande',
+        'powershell',
+        'pwsh',
+        'cmd',
+        'kali',
+        'hacker',
+    ];
+
+    /**
+     * Mots-clés déclencheurs de l'Easter Egg DinoTofu
+     */
+    public const EASTER_EGG_DINOTOFU = [
+        'dinotofu',
+        'dino',
+        'tofu',
+    ];
+
+    /** @deprecated Conservé pour rétrocompatibilité */
     public const EASTER_EGG_KEYWORD = 'terminal';
 
     public function __construct()
@@ -22,8 +50,8 @@ class PuzzleController
     }
 
     /**
-     * Vérifie si l'un des champs soumis en POST contient le mot secret (Easter Egg).
-     * Redirige immédiatement vers le terminal si le mot est détecté.
+     * Vérifie si l'un des champs soumis en POST contient un mot secret (Easter Egg).
+     * Redirige immédiatement vers le terminal si l'un des mots est détecté.
      */
     private function checkEasterEgg(): void
     {
@@ -31,10 +59,31 @@ class PuzzleController
             return;
         }
 
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
         foreach ($_POST as $value) {
-            if (is_string($value) && $this->normalize($value) === self::EASTER_EGG_KEYWORD) {
+            if (!is_string($value)) {
+                continue;
+            }
+
+            $normalized = $this->normalize($value);
+
+            // 1. Détection Easter Egg DinoTofu
+            if (in_array($normalized, self::EASTER_EGG_DINOTOFU, true)) {
+                $this->logPuzzle('Easter egg DinoTofu déclenché', 'ok', [
+                    'keyword' => $normalized,
+                    'user_id' => $_SESSION['utilisateur']['id'] ?? null,
+                ]);
+                header("Location: index.php?controller=Redirection&action=openTerminal&easter=dinotofu");
+                exit;
+            }
+
+            // 2. Détection mots-clés Terminal standard (bash, zsh, shell, commandes, terminal...)
+            if (in_array($normalized, self::EASTER_EGG_KEYWORDS, true)) {
                 $this->logPuzzle('Easter egg terminal déclenché', 'ok', [
-                    'keyword' => self::EASTER_EGG_KEYWORD,
+                    'keyword' => $normalized,
                     'user_id' => $_SESSION['utilisateur']['id'] ?? null,
                 ]);
                 header("Location: index.php?controller=Redirection&action=openTerminal");
