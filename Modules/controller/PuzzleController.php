@@ -14,6 +14,35 @@ class PuzzleController
         }
     }
 
+    public const EASTER_EGG_KEYWORD = 'terminal';
+
+    public function __construct()
+    {
+        $this->checkEasterEgg();
+    }
+
+    /**
+     * Vérifie si l'un des champs soumis en POST contient le mot secret (Easter Egg).
+     * Redirige immédiatement vers le terminal si le mot est détecté.
+     */
+    private function checkEasterEgg(): void
+    {
+        if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST' || empty($_POST)) {
+            return;
+        }
+
+        foreach ($_POST as $value) {
+            if (is_string($value) && $this->normalize($value) === self::EASTER_EGG_KEYWORD) {
+                $this->logPuzzle('Easter egg terminal déclenché', 'ok', [
+                    'keyword' => self::EASTER_EGG_KEYWORD,
+                    'user_id' => $_SESSION['utilisateur']['id'] ?? null,
+                ]);
+                header("Location: index.php?controller=Redirection&action=openTerminal");
+                exit;
+            }
+        }
+    }
+
     /**
      * Normalise un texte pour comparaison fiable
      */

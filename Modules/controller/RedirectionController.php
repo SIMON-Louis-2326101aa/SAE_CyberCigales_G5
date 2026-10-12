@@ -253,4 +253,15 @@ class RedirectionController
         $this->logRedirection('infoinformationView');
         ViewHandler::show('informationView', ['pageTitle' => 'Informations']);
     }
+
+    /**
+     * Affiche la page du terminal (Easter Egg)
+     */
+    public function openTerminal()
+    {
+        $this->logRedirection('terminalView');
+        $this->requireAuth();
+        ViewHandler::show('terminalView', ['pageTitle' => 'Terminal']);
+    }
 }
+
