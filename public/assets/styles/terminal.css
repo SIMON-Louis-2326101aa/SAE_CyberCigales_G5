@@ -1,41 +1,44 @@
 /**
- * Styles pour l'émulateur de terminal (Style Kitty & Prompt Kali Linux)
+ * Styles pour l'émulateur de terminal (Style Kitty, Bureau & Barre des tâches)
  * Escape The Code - CyberCigales
  */
 
-/* Conteneur principal */
-.terminal-main-container {
+/* Conteneur principal (Bureau en pleine largeur de page) */
+main#terminal-page,
+#terminal-page.terminal-main-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     min-height: calc(100vh - 160px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 1.5rem 1rem;
     box-sizing: border-box;
     background: radial-gradient(circle at center, #151821 0%, #0d0f14 100%);
-    width: 100%;
     position: relative;
     z-index: 10;
     text-align: left;
+    overflow-x: hidden;
 }
 
-/* Conteneur quand la fenêtre est maximisée */
-.terminal-main-container.is-maximized {
-    padding: 0.75rem 1rem;
-    align-items: stretch;
-    justify-content: flex-start;
-}
-
-/* Conteneur quand la fenêtre est réduite */
-.terminal-main-container.is-minimized {
-    min-height: calc(100vh - 160px);
+/* Espace de travail de bureau (où la fenêtre flotte et se déplace) */
+.desktop-workspace {
+    flex: 1;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    padding-bottom: 2.5rem;
+    padding: 1.5rem 1rem;
+    position: relative;
+    min-height: 520px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
 }
 
+.terminal-main-container.is-maximized .desktop-workspace {
+    padding: 0.5rem 0.75rem;
+    align-items: stretch;
+}
 
 /* Fenêtre de terminal (Style Kitty) */
 .terminal-window {
@@ -49,17 +52,50 @@
     display: flex;
     flex-direction: column;
     text-align: left;
-    transition: max-width 0.25s ease, height 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    transition: max-width 0.25s ease, height 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, opacity 0.2s ease;
 }
 
-/* État Agrandir (Fullscreen délimité entre le header et le footer) */
+/* Quand on déplace la fenêtre */
+.terminal-window.is-dragging {
+    transition: none !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 215, 255, 0.25);
+    z-index: 100;
+}
+
+/* Curseur sur la barre de titre */
+.terminal-titlebar {
+    cursor: grab;
+    user-select: none;
+    background-color: #0b0d12;
+    height: 38px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 1rem;
+    border-bottom: 1px solid #1f2430;
+    text-align: left;
+}
+
+.terminal-window.is-dragging .terminal-titlebar {
+    cursor: grabbing;
+}
+
+.terminal-window.is-maximized .terminal-titlebar {
+    cursor: default;
+}
+
+/* État Agrandir (Fullscreen délimité entre le header et la barre des tâches) */
 .terminal-window.is-maximized {
-    position: static;
-    max-width: 100%;
-    width: 100%;
-    height: calc(100vh - 120px);
+    position: static !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: calc(100vh - 120px - 44px) !important;
     min-height: 480px;
-    margin: 0;
+    margin: 0 !important;
     border-radius: 6px;
     box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
 }
@@ -70,27 +106,27 @@
     flex: 1;
 }
 
-/* Animation de réduction (descente vers le bas / footer) */
+/* Animation de réduction (descente vers la barre des tâches) */
 .terminal-window.is-minimizing {
-    transform: translateY(120px) scale(0.85);
-    opacity: 0;
+    transform: translateY(160px) scale(0.85) !important;
+    opacity: 0 !important;
     pointer-events: none;
-    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
+    transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease !important;
 }
 
-/* État Réduit (la fenêtre est complètement masquée et remplacée par l'icône en bas) */
+/* État Réduit (la fenêtre est complètement masquée) */
 .terminal-window.is-minimized {
     display: none !important;
 }
 
-/* Animation de restauration (remonte depuis le bas) */
+/* Animation de restauration (remonte depuis la barre des tâches) */
 .terminal-window.is-restoring {
-    animation: terminalRestore 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation: terminalRestore 0.26s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 @keyframes terminalRestore {
     from {
-        transform: translateY(100px) scale(0.88);
+        transform: translateY(120px) scale(0.88);
         opacity: 0;
     }
     to {
@@ -99,81 +135,7 @@
     }
 }
 
-/* Bouton de la barre des tâches quand le terminal est réduit (Style KDE / Windows) */
-.terminal-taskbar-item {
-    display: none;
-    position: relative;
-    margin: auto auto 1.5rem auto;
-    background: #11141c;
-    border: 1px solid #313244;
-    border-radius: 8px;
-    padding: 0.65rem 1.4rem;
-    color: #cdd6f4;
-    font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', 'Consolas', monospace;
-    font-size: 0.9rem;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 215, 255, 0.25);
-    align-items: center;
-    gap: 0.75rem;
-    z-index: 100;
-    user-select: none;
-    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.terminal-taskbar-item.is-visible {
-    display: inline-flex;
-    animation: taskbarPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes taskbarPop {
-    from {
-        transform: translateY(20px) scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-    }
-}
-
-.terminal-taskbar-item:hover {
-    background: #181d29;
-    border-color: #00d7ff;
-    color: #ffffff;
-    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 22px rgba(0, 215, 255, 0.4);
-}
-
-.terminal-taskbar-item .taskbar-icon {
-    font-size: 1.05rem;
-    color: #00d7ff;
-}
-
-.terminal-taskbar-item .taskbar-text {
-    font-weight: 500;
-}
-
-.terminal-taskbar-item .taskbar-status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #00d7ff;
-    box-shadow: 0 0 8px #00d7ff;
-}
-
-
-/* Barre de titre (Style KDE / Windows - Contrôles à droite) */
-.terminal-titlebar {
-    background-color: #0b0d12;
-    height: 38px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0 0 1rem;
-    border-bottom: 1px solid #1f2430;
-    user-select: none;
-    text-align: left;
-}
-
+/* Titre de la barre */
 .titlebar-left {
     display: flex;
     align-items: center;
@@ -182,11 +144,15 @@
     color: #8b9bb4;
     font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', 'Consolas', monospace;
     text-align: left;
+    pointer-events: none;
 }
 
 .terminal-app-icon {
-    font-size: 1rem;
-    color: #00d7ff;
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+    flex-shrink: 0;
+    vertical-align: middle;
 }
 
 .terminal-title-text {
@@ -195,36 +161,53 @@
     color: #aab8ce;
 }
 
-/* Boutons de contrôle de la fenêtre à droite */
+/* Boutons de contrôle de la fenêtre à droite (KDE / Windows) */
 .titlebar-controls {
     display: flex;
     height: 100%;
+    align-items: stretch;
 }
 
-.ctrl-btn {
-    background: transparent;
-    border: none;
-    color: #7b889b;
-    width: 44px;
-    height: 100%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.15s ease, color 0.15s ease;
-    outline: none;
-    padding: 0;
+/* Reset strict des styles globaux de stylesheet.css et fine ligne séparatrice */
+.terminal-titlebar .ctrl-btn,
+.titlebar-controls .ctrl-btn {
+    background: transparent !important;
+    border: none !important;
+    border-left: 1px solid #1f2430 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    color: #7b889b !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 100% !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+    outline: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    transition: background-color 0.15s ease, color 0.15s ease !important;
 }
 
-.ctrl-btn:hover {
-    background-color: #232936;
-    color: #ffffff;
+.terminal-titlebar .ctrl-btn:hover,
+.titlebar-controls .ctrl-btn:hover {
+    box-shadow: none !important;
+    transform: none !important;
+    background-color: #232936 !important;
+    color: #ffffff !important;
 }
 
-.ctrl-btn.ctrl-close:hover {
-    background-color: #e81123;
-    color: #ffffff;
+.terminal-titlebar .ctrl-btn.ctrl-close:hover,
+.titlebar-controls .ctrl-btn.ctrl-close:hover {
+    background-color: #e81123 !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 /* Corps du terminal */
@@ -272,23 +255,26 @@
     line-height: 1.15;
     margin: 0 0 0.8rem 0;
     user-select: none;
-    overflow-x: auto;
+    overflow: hidden;
     text-align: left;
     text-shadow: 0 0 10px rgba(0, 215, 255, 0.4);
+    scrollbar-width: none;
 }
 
-.banner-welcome {
-    color: #a6e3a1;
-    font-weight: 600;
-    margin: 0.3rem 0;
-    text-align: left;
+.ascii-art::-webkit-scrollbar,
+.terminal-body *::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
 }
 
 .banner-hint {
     color: #7b889b;
-    font-size: 0.88rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
     margin: 0.2rem 0 1rem 0;
     text-align: left;
+    font-family: inherit;
 }
 
 .cmd-highlight {
@@ -297,6 +283,7 @@
     padding: 1px 6px;
     border-radius: 4px;
     font-weight: bold;
+    font-size: 0.95rem;
 }
 
 /* Historique des commandes */
@@ -311,7 +298,7 @@
     text-align: left;
 }
 
-/* Sorties de commandes - TOUJOURS alignées à gauche */
+/* Sorties de commandes */
 .cmd-output {
     margin: 0.35rem 0 0.75rem 0;
     white-space: pre-wrap;
@@ -402,6 +389,192 @@
     text-align: left;
 }
 
+/* ========================================================
+   Barre des tâches de bureau (Style KDE / Windows)
+   ======================================================== */
+.desktop-taskbar {
+    height: 44px;
+    background-color: #0b0d13;
+    border-top: 1px solid #1f2430;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0.8rem;
+    box-sizing: border-box;
+    width: 100%;
+    user-select: none;
+    z-index: 50;
+    box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Bouton Menu / Démarrer */
+.desktop-taskbar .taskbar-start-btn {
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: #00d7ff !important;
+    padding: 0.35rem 0.75rem !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    font-size: 0.88rem !important;
+    font-weight: 600 !important;
+    box-shadow: none !important;
+    transform: none !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
+    user-select: none !important;
+}
+
+.desktop-taskbar .taskbar-start-btn .start-icon {
+    color: #e05555;
+    font-size: 1.15rem;
+}
+
+.desktop-taskbar .taskbar-start-btn:hover {
+    background-color: #1a202c !important;
+    color: #ffffff !important;
+    border-color: #2a3244 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Zone des applications ouvertes */
+.taskbar-apps-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    margin: 0 1rem;
+    overflow-x: auto;
+}
+
+.desktop-taskbar .taskbar-app-tab {
+    width: auto !important;
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.6rem !important;
+    background-color: #151922 !important;
+    border: 1px solid #232936 !important;
+    border-radius: 5px !important;
+    padding: 0.35rem 0.85rem !important;
+    color: #8b9bb4 !important;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', 'Consolas', monospace !important;
+    font-size: 0.84rem !important;
+    font-weight: normal !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    transform: none !important;
+    text-transform: none !important;
+    letter-spacing: normal !important;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease !important;
+    outline: none !important;
+    max-width: 280px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    user-select: none !important;
+}
+
+.desktop-taskbar .taskbar-app-tab .app-icon {
+    font-size: 0.95rem;
+    color: #00d7ff;
+    flex-shrink: 0;
+}
+
+.desktop-taskbar .taskbar-app-tab img.app-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+.desktop-taskbar .taskbar-app-tab .app-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.desktop-taskbar .taskbar-app-tab:hover {
+    background-color: #1c2230 !important;
+    color: #cdd6f4 !important;
+    border-color: #313a4d !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* État actif de l'application dans la barre des tâches */
+.desktop-taskbar .taskbar-app-tab.is-active {
+    background-color: #1b212e !important;
+    color: #ffffff !important;
+    border-color: #00d7ff44 !important;
+}
+
+.desktop-taskbar .taskbar-app-tab.is-active .app-active-glow {
+    position: absolute;
+    bottom: 0;
+    left: 4px;
+    right: 4px;
+    height: 2px;
+    background-color: #00d7ff;
+    border-radius: 2px;
+    box-shadow: 0 0 8px #00d7ff;
+}
+
+/* Emplacement réservé pour autre application (Placeholder tab) */
+.desktop-taskbar .taskbar-app-tab.is-placeholder {
+    opacity: 0.55 !important;
+    border: 1px dashed #2a3244 !important;
+    background-color: rgba(21, 25, 34, 0.4) !important;
+    cursor: default !important;
+}
+
+.desktop-taskbar .taskbar-app-tab.is-placeholder:hover {
+    background-color: rgba(21, 25, 34, 0.6) !important;
+    color: #8b9bb4 !important;
+    border-color: #3b465e !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Zone de notification / Horloge (Systray) */
+.taskbar-systray {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.82rem;
+    color: #7b889b;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', 'Consolas', monospace;
+}
+
+.tray-status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.tray-dot {
+    width: 7px;
+    height: 7px;
+    background-color: #a6e3a1;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #a6e3a1;
+}
+
+.tray-clock {
+    color: #cdd6f4;
+    font-weight: 500;
+    padding: 0.2rem 0.5rem;
+    background-color: #11141c;
+    border-radius: 4px;
+    border: 1px solid #1f2430;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .ascii-art {
@@ -414,5 +587,11 @@
     }
     .terminal-input {
         font-size: 0.88rem;
+    }
+    .taskbar-start-btn .start-label {
+        display: none;
+    }
+    .taskbar-app-tab {
+        max-width: 140px;
     }
 }

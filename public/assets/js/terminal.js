@@ -5,6 +5,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     const terminalPage = document.getElementById("terminal-page");
+    const desktopWorkspace = document.getElementById("desktop-workspace");
     const terminalWindow = document.getElementById("terminal-window");
     const terminalBody = document.getElementById("terminal-body");
     const terminalOutput = document.getElementById("terminal-output");
@@ -14,7 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnMin = document.getElementById("terminal-btn-min");
     const btnMax = document.getElementById("terminal-btn-max");
     const btnClose = document.getElementById("terminal-btn-close");
+    const titlebar = document.getElementById("terminal-titlebar");
+
     const taskbarItem = document.getElementById("terminal-taskbar-item");
+    const taskbarStartBtn = document.getElementById("taskbar-start-btn");
+    const taskbarClock = document.getElementById("taskbar-clock");
 
     if (!terminalWindow || !terminalInput) {
         return;
@@ -28,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
         USER: userLogin,
         HOME: `/home/${userLogin}`,
         SHELL: "/bin/bash",
-        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/cyber/tools",
+        PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/cyber/bin",
         TERM: "xterm-kitty",
         HOSTNAME: "cybercigales",
         "0": "bash",
@@ -46,76 +51,228 @@ document.addEventListener("DOMContentLoaded", () => {
     const commandHistory = [];
     let historyIndex = -1;
 
+    // ========================================================
+    // 1. Horloge de la barre des tâches (Temps réel)
+    // ========================================================
+    function updateClock() {
+        if (!taskbarClock) return;
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, "0");
+        const m = String(now.getMinutes()).padStart(2, "0");
+        const s = String(now.getSeconds()).padStart(2, "0");
+        taskbarClock.textContent = `${h}:${m}:${s}`;
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
     // Focus automatique sur l'input au clic dans le terminal
     terminalBody.addEventListener("click", () => {
         terminalInput.focus();
     });
 
-    // 1. Bouton Réduire (Minimize) : Animation vers le bas puis affichage de l'icône dans la barre des tâches
+    // ========================================================
+    // 2. Déplacement de la fenêtre par la barre de titre (Drag & Drop)
+    // ========================================================
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialLeft = 0;
+    let initialTop = 0;
+    let minLeft = -Infinity;
+    let maxLeft = Infinity;
+    let minTop = -Infinity;
+    let maxTop = Infinity;
+
+    function startDrag(clientX, clientY) {
+        // Ne pas déplacer si la fenêtre est maximisée
+        if (terminalWindow.classList.contains("is-maximized")) {
+            return;
+        }
+
+        isDragging = true;
+        terminalWindow.classList.add("is-dragging");
+
+        dragStartX = clientX;
+        dragStartY = clientY;
+
+        initialLeft = parseFloat(terminalWindow.style.left) || 0;
+        initialTop = parseFloat(terminalWindow.style.top) || 0;
+
+        if (desktopWorkspace) {
+            const wsRect = desktopWorkspace.getBoundingClientRect();
+            const winRect = terminalWindow.getBoundingClientRect();
+
+            // Bloquer vers le haut pour que la barre de titre ne passe pas sous le header
+            minTop = initialTop - (winRect.top - wsRect.top);
+            // Bloquer vers le bas pour garder la barre de titre au-dessus de la barre des tâches
+            maxTop = initialTop + (wsRect.bottom - winRect.top - 40);
+
+            // Bloquer sur les côtés tout en permettant d'utiliser toute la largeur de l'écran
+            minLeft = initialLeft - (winRect.right - wsRect.left) + 120;
+            maxLeft = initialLeft + (wsRect.right - winRect.left) - 120;
+        }
+
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mouseup", onMouseUp);
+        document.addEventListener("touchmove", onTouchMove, { passive: false });
+        document.addEventListener("touchend", onTouchEnd);
+    }
+
+    function moveDrag(clientX, clientY) {
+        if (!isDragging) return;
+
+        const deltaX = clientX - dragStartX;
+        const deltaY = clientY - dragStartY;
+
+        let newLeft = initialLeft + deltaX;
+        let newTop = initialTop + deltaY;
+
+        if (Number.isFinite(minLeft) && Number.isFinite(maxLeft)) {
+            newLeft = Math.max(minLeft, Math.min(newLeft, maxLeft));
+        }
+        if (Number.isFinite(minTop) && Number.isFinite(maxTop)) {
+            newTop = Math.max(minTop, Math.min(newTop, maxTop));
+        }
+
+        terminalWindow.style.left = `${newLeft}px`;
+        terminalWindow.style.top = `${newTop}px`;
+    }
+
+    function stopDrag() {
+        if (isDragging) {
+            isDragging = false;
+            terminalWindow.classList.remove("is-dragging");
+            document.removeEventListener("mousemove", onMouseMove);
+            document.removeEventListener("mouseup", onMouseUp);
+            document.removeEventListener("touchmove", onTouchMove);
+            document.removeEventListener("touchend", onTouchEnd);
+        }
+    }
+
+    function onMouseMove(e) {
+        moveDrag(e.clientX, e.clientY);
+    }
+
+    function onMouseUp() {
+        stopDrag();
+    }
+
+    function onTouchMove(e) {
+        if (isDragging && e.touches.length > 0) {
+            e.preventDefault();
+            moveDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }
+    }
+
+    function onTouchEnd() {
+        stopDrag();
+    }
+
+    if (titlebar) {
+        titlebar.addEventListener("mousedown", (e) => {
+            // Ignorer si on clique sur un bouton de contrôle (min, max, close)
+            if (e.target.closest(".ctrl-btn")) return;
+            startDrag(e.clientX, e.clientY);
+            e.preventDefault();
+        });
+
+        titlebar.addEventListener("touchstart", (e) => {
+            if (e.target.closest(".ctrl-btn")) return;
+            if (e.touches.length > 0) {
+                startDrag(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        }, { passive: true });
+
+        // Double-clic sur la barre pour maximiser / restaurer (comme sur KDE / Windows)
+        titlebar.addEventListener("dblclick", (e) => {
+            if (e.target.closest(".ctrl-btn")) return;
+            if (btnMax) btnMax.click();
+        });
+    }
+
+    // ========================================================
+    // 3. Gestion Réduire / Restaurer / Maximiser / Barre des tâches
+    // ========================================================
+    function minimizeTerminal() {
+        wasMaximized = terminalWindow.classList.contains("is-maximized");
+        terminalWindow.classList.add("is-minimizing");
+
+        setTimeout(() => {
+            terminalWindow.classList.remove("is-minimizing");
+            terminalWindow.classList.add("is-minimized");
+
+            if (taskbarItem) {
+                taskbarItem.classList.remove("is-active");
+            }
+        }, 260);
+    }
+
+    function restoreTerminal() {
+        terminalWindow.classList.remove("is-minimized");
+
+        if (taskbarItem) {
+            taskbarItem.classList.add("is-active");
+        }
+
+        // Rétablit l'état précédent (maximisé ou normal avec sa position déplacée)
+        if (wasMaximized) {
+            terminalWindow.classList.add("is-maximized");
+            if (terminalPage) {
+                terminalPage.classList.add("is-maximized");
+            }
+            if (btnMax) {
+                btnMax.innerHTML = "<span>&#x25F3;</span>";
+            }
+        } else {
+            terminalWindow.classList.remove("is-maximized");
+            if (terminalPage) {
+                terminalPage.classList.remove("is-maximized");
+            }
+            if (btnMax) {
+                btnMax.innerHTML = "<span>&#x25A2;</span>";
+            }
+        }
+
+        terminalWindow.classList.add("is-restoring");
+        setTimeout(() => {
+            terminalWindow.classList.remove("is-restoring");
+            terminalInput.focus();
+        }, 280);
+    }
+
+    // Bouton Réduire (Minimize)
     if (btnMin) {
         btnMin.addEventListener("click", (e) => {
             e.stopPropagation();
-            wasMaximized = terminalWindow.classList.contains("is-maximized");
-
-            terminalWindow.classList.add("is-minimizing");
-
-            setTimeout(() => {
-                terminalWindow.classList.remove("is-minimizing");
-                terminalWindow.classList.add("is-minimized");
-
-                if (terminalPage) {
-                    terminalPage.classList.remove("is-maximized");
-                    terminalPage.classList.add("is-minimized");
-                }
-
-                if (taskbarItem) {
-                    taskbarItem.classList.add("is-visible");
-                }
-            }, 260);
+            minimizeTerminal();
         });
     }
 
-    // Clic sur l'icône de la barre des tâches pour restaurer le terminal
+    // Clic sur l'application dans la barre des tâches (Style Windows / KDE)
     if (taskbarItem) {
         taskbarItem.addEventListener("click", (e) => {
             e.stopPropagation();
-            taskbarItem.classList.remove("is-visible");
-            terminalWindow.classList.remove("is-minimized");
-
-            if (terminalPage) {
-                terminalPage.classList.remove("is-minimized");
-            }
-
-            // Rétablit l'état précédent (maximisé ou normal)
-
-            if (wasMaximized) {
-                terminalWindow.classList.add("is-maximized");
-                if (terminalPage) {
-                    terminalPage.classList.add("is-maximized");
-                }
-                if (btnMax) {
-                    btnMax.innerHTML = "<span>&#x25F3;</span>";
-                }
+            if (terminalWindow.classList.contains("is-minimized")) {
+                restoreTerminal();
             } else {
-                terminalWindow.classList.remove("is-maximized");
-                if (terminalPage) {
-                    terminalPage.classList.remove("is-maximized");
-                }
-                if (btnMax) {
-                    btnMax.innerHTML = "<span>&#x25A2;</span>";
-                }
+                minimizeTerminal();
             }
-
-            // Animation de remontée depuis le bas
-            terminalWindow.classList.add("is-restoring");
-            setTimeout(() => {
-                terminalWindow.classList.remove("is-restoring");
-                terminalInput.focus();
-            }, 280);
         });
     }
 
-    // 2. Bouton Agrandir (Maximize) : Bascule en plein écran sans défilement intempestif
+    // Clic sur le bouton Démarrer / Menu
+    if (taskbarStartBtn) {
+        taskbarStartBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            if (terminalWindow.classList.contains("is-minimized")) {
+                restoreTerminal();
+            } else {
+                terminalInput.focus();
+            }
+        });
+    }
+
+    // Bouton Agrandir / Restaurer (Maximize)
     if (btnMax) {
         btnMax.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -127,13 +284,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? "<span>&#x25F3;</span>"
                 : "<span>&#x25A2;</span>";
 
-            // Aligne simplement la page tout en haut pour que le header et la barre de titre soient parfaits
             window.scrollTo({ top: 0, behavior: "smooth" });
             terminalInput.focus();
         });
     }
 
-    // 3. Bouton Fermer (Close)
+    // Bouton Fermer (Close)
     if (btnClose) {
         btnClose.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -143,7 +299,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Gestion du clavier dans le terminal
+    // ========================================================
+    // 4. Gestion de la saisie utilisateur & Bash
+    // ========================================================
     terminalInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -281,11 +439,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         text = text.replace(varRegex, (match, p1, p2) => {
             const varName = p1 || p2;
-            // Si la variable est définie, on renvoie sa valeur
             if (envVariables.hasOwnProperty(varName)) {
                 return envVariables[varName];
             }
-            // Si c'est une variable inconnue ou non-définie (ex: $user, $foo, $1), Bash renvoie du vide ""
             return "";
         });
 
