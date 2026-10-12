@@ -17,26 +17,9 @@ if (!empty($_SESSION['prenom'])) {
 // Détection du mode Easter Egg DinoTofu (uniquement si explicitement demandé via paramètre GET)
 $easterMode = ($_GET['easter'] ?? '') === 'dinotofu' ? 'dinotofu' : null;
 $isDinoTofu = ($easterMode === 'dinotofu');
-
-$dinoAsciiArt = '';
-$dinoFilePath = dirname(__DIR__, 2) . '/public/assets/images/dinotofu.txt';
-if (!file_exists($dinoFilePath)) {
-    $dinoFilePath = dirname(__DIR__, 2) . '/dinotofu.txt';
-}
-if (file_exists($dinoFilePath)) {
-    $rawDino = file_get_contents($dinoFilePath);
-    $dinoLines = explode("\n", str_replace("\r", "", $rawDino));
-    while (!empty($dinoLines) && trim($dinoLines[0]) === '') {
-        array_shift($dinoLines);
-    }
-    while (!empty($dinoLines) && trim(end($dinoLines)) === '') {
-        array_pop($dinoLines);
-    }
-    $dinoAsciiArt = implode("\n", $dinoLines);
-}
 ?>
 
-<main id="terminal-page" class="terminal-main-container" data-user-login="<?= htmlspecialchars($userLogin) ?>">
+<main id="terminal-page" class="terminal-main-container" data-user-login="<?= htmlspecialchars($userLogin) ?>" data-easter="<?= $isDinoTofu ? 'dinotofu' : '' ?>">
     <script>
         document.body.dataset.userLogin = <?= json_encode($userLogin) ?>;
     </script>
@@ -63,38 +46,20 @@ if (file_exists($dinoFilePath)) {
                 </div>
             </div>
 
-            <!-- Modèles ASCII Art pour le basculement dynamique dans CigTerm (bash / dinotofu) -->
-            <script type="text/plain" id="tmpl-ascii-cybercigales">
-   ____      _                ____ _             _           
-  / ___|   _| |__   ___ _ __./ ___(_) __ _  __ _| | ___  ___ 
- | |  | | | | '_ \ / _ \ '__| |   | |/ _` |/ _` | |/ _ \/ __|
- | |__| |_| | |_) |  __/ |  | |___| | (_| | (_| | |  __/\__ \
-  \____\__, |_.__/ \___|_|   \____|_|\__, |\__,_|_|\___||___/
-       |___/                         |___/                    
-            </script>
-            <script type="text/plain" id="tmpl-ascii-dinotofu"><?= htmlspecialchars($dinoAsciiArt, ENT_QUOTES, 'UTF-8') ?></script>
-
             <!-- Corps du terminal -->
             <div class="terminal-body" id="terminal-body">
                 <div class="terminal-banner" id="terminal-banner">
-                    <?php if ($isDinoTofu && !empty($dinoAsciiArt)): ?>
-                    <pre class="ascii-art ascii-dinotofu" id="terminal-ascii-art"><?= htmlspecialchars($dinoAsciiArt, ENT_QUOTES, 'UTF-8') ?></pre>
-                    <p class="banner-hint" id="terminal-banner-hint">
-                        [Easter Egg : DinoTofu Edition] Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.
-                    </p>
-                    <?php else: ?>
-                    <pre class="ascii-art" id="terminal-ascii-art">
+                    <pre class="ascii-art<?= $isDinoTofu ? ' ascii-dinotofu' : '' ?>" id="terminal-ascii-art"><?php if (!$isDinoTofu): ?>
    ____      _                ____ _             _           
   / ___|   _| |__   ___ _ __./ ___(_) __ _  __ _| | ___  ___ 
  | |  | | | | '_ \ / _ \ '__| |   | |/ _` |/ _` | |/ _ \/ __|
  | |__| |_| | |_) |  __/ |  | |___| | (_| | (_| | |  __/\__ \
   \____\__, |_.__/ \___|_|   \____|_|\__, |\__,_|_|\___||___/
        |___/                         |___/                    
-                    </pre>
+<?php endif; ?></pre>
                     <p class="banner-hint" id="terminal-banner-hint">
-                        Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.
+                        <?= $isDinoTofu ? '[Easter Egg : DinoTofu Edition] Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l\'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.' : 'Système initialisé. Tapez <span class="cmd-highlight">help</span> pour l\'aide ou testez la commande <span class="cmd-highlight">echo "Hello World"</span>.' ?>
                     </p>
-                    <?php endif; ?>
                 </div>
 
                 <!-- Historique des commandes exécutées -->
