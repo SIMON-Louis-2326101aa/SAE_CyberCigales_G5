@@ -1,0 +1,418 @@
+/**
+ * Styles pour l'émulateur de terminal (Style Kitty & Prompt Kali Linux)
+ * Escape The Code - CyberCigales
+ */
+
+/* Conteneur principal */
+.terminal-main-container {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
+    background: radial-gradient(circle at center, #151821 0%, #0d0f14 100%);
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    text-align: left;
+}
+
+/* Conteneur quand la fenêtre est maximisée */
+.terminal-main-container.is-maximized {
+    padding: 0.75rem 1rem;
+    align-items: stretch;
+    justify-content: flex-start;
+}
+
+/* Conteneur quand la fenêtre est réduite */
+.terminal-main-container.is-minimized {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 2.5rem;
+}
+
+
+/* Fenêtre de terminal (Style Kitty) */
+.terminal-window {
+    width: 100%;
+    max-width: 960px;
+    background-color: #11141c;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(0, 180, 255, 0.1);
+    border: 1px solid #232936;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    transition: max-width 0.25s ease, height 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* État Agrandir (Fullscreen délimité entre le header et le footer) */
+.terminal-window.is-maximized {
+    position: static;
+    max-width: 100%;
+    width: 100%;
+    height: calc(100vh - 120px);
+    min-height: 480px;
+    margin: 0;
+    border-radius: 6px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.9);
+}
+
+.terminal-window.is-maximized .terminal-body {
+    height: calc(100% - 38px);
+    max-height: none;
+    flex: 1;
+}
+
+/* Animation de réduction (descente vers le bas / footer) */
+.terminal-window.is-minimizing {
+    transform: translateY(120px) scale(0.85);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
+}
+
+/* État Réduit (la fenêtre est complètement masquée et remplacée par l'icône en bas) */
+.terminal-window.is-minimized {
+    display: none !important;
+}
+
+/* Animation de restauration (remonte depuis le bas) */
+.terminal-window.is-restoring {
+    animation: terminalRestore 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes terminalRestore {
+    from {
+        transform: translateY(100px) scale(0.88);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Bouton de la barre des tâches quand le terminal est réduit (Style KDE / Windows) */
+.terminal-taskbar-item {
+    display: none;
+    position: relative;
+    margin: auto auto 1.5rem auto;
+    background: #11141c;
+    border: 1px solid #313244;
+    border-radius: 8px;
+    padding: 0.65rem 1.4rem;
+    color: #cdd6f4;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 16px rgba(0, 215, 255, 0.25);
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 100;
+    user-select: none;
+    transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.terminal-taskbar-item.is-visible {
+    display: inline-flex;
+    animation: taskbarPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes taskbarPop {
+    from {
+        transform: translateY(20px) scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+.terminal-taskbar-item:hover {
+    background: #181d29;
+    border-color: #00d7ff;
+    color: #ffffff;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.85), 0 0 22px rgba(0, 215, 255, 0.4);
+}
+
+.terminal-taskbar-item .taskbar-icon {
+    font-size: 1.05rem;
+    color: #00d7ff;
+}
+
+.terminal-taskbar-item .taskbar-text {
+    font-weight: 500;
+}
+
+.terminal-taskbar-item .taskbar-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #00d7ff;
+    box-shadow: 0 0 8px #00d7ff;
+}
+
+
+/* Barre de titre (Style KDE / Windows - Contrôles à droite) */
+.terminal-titlebar {
+    background-color: #0b0d12;
+    height: 38px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0 0 1rem;
+    border-bottom: 1px solid #1f2430;
+    user-select: none;
+    text-align: left;
+}
+
+.titlebar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: #8b9bb4;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Ubuntu Mono', 'Consolas', monospace;
+    text-align: left;
+}
+
+.terminal-app-icon {
+    font-size: 1rem;
+    color: #00d7ff;
+}
+
+.terminal-title-text {
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    color: #aab8ce;
+}
+
+/* Boutons de contrôle de la fenêtre à droite */
+.titlebar-controls {
+    display: flex;
+    height: 100%;
+}
+
+.ctrl-btn {
+    background: transparent;
+    border: none;
+    color: #7b889b;
+    width: 44px;
+    height: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    outline: none;
+    padding: 0;
+}
+
+.ctrl-btn:hover {
+    background-color: #232936;
+    color: #ffffff;
+}
+
+.ctrl-btn.ctrl-close:hover {
+    background-color: #e81123;
+    color: #ffffff;
+}
+
+/* Corps du terminal */
+.terminal-body {
+    padding: 1.25rem 1.5rem;
+    background-color: #0e1118;
+    color: #d1d9e6;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Ubuntu Mono', 'Consolas', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    height: 500px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+/* Scrollbar élégante */
+.terminal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+    background: #0b0d12;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+    background: #252b3b;
+    border-radius: 4px;
+}
+
+.terminal-body::-webkit-scrollbar-thumb:hover {
+    background: #364057;
+}
+
+/* Bannière d'accueil */
+.terminal-banner {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.ascii-art {
+    color: #00d7ff;
+    font-family: monospace;
+    font-size: 0.72rem;
+    line-height: 1.15;
+    margin: 0 0 0.8rem 0;
+    user-select: none;
+    overflow-x: auto;
+    text-align: left;
+    text-shadow: 0 0 10px rgba(0, 215, 255, 0.4);
+}
+
+.banner-welcome {
+    color: #a6e3a1;
+    font-weight: 600;
+    margin: 0.3rem 0;
+    text-align: left;
+}
+
+.banner-hint {
+    color: #7b889b;
+    font-size: 0.88rem;
+    margin: 0.2rem 0 1rem 0;
+    text-align: left;
+}
+
+.cmd-highlight {
+    color: #f9e2af;
+    background-color: #1e2433;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+/* Historique des commandes */
+#terminal-output {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.terminal-entry {
+    margin-bottom: 0.75rem;
+    text-align: left;
+}
+
+/* Sorties de commandes - TOUJOURS alignées à gauche */
+.cmd-output {
+    margin: 0.35rem 0 0.75rem 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: #d1d9e6;
+    text-align: left;
+}
+
+.cmd-output.cmd-error {
+    color: #f38ba8;
+}
+
+.cmd-output.cmd-success {
+    color: #a6e3a1;
+}
+
+.cmd-output.cmd-info {
+    color: #89b4fa;
+}
+
+/* Style du Prompt Kali Linux (Double ligne) */
+.kali-prompt-line1 {
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #5570dd;
+    line-height: 1.3;
+    text-align: left;
+}
+
+.p-bracket {
+    color: #4e73df;
+}
+
+.p-user {
+    color: #00d7ff;
+    font-weight: 600;
+}
+
+.p-symbol {
+    color: #e05555;
+    font-weight: bold;
+    margin: 0 1px;
+}
+
+.p-host {
+    color: #4e73df;
+}
+
+.p-path {
+    color: #f9e2af;
+    font-weight: 500;
+}
+
+.kali-prompt-line2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.3;
+    margin-top: 2px;
+    text-align: left;
+}
+
+.p-arrow {
+    color: #4e73df;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+/* Bloc d'input actif */
+.terminal-input-block {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.terminal-input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    caret-color: #00d7ff;
+    text-align: left;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ascii-art {
+        font-size: 0.45rem;
+    }
+    .terminal-body {
+        height: 420px;
+        padding: 1rem;
+        font-size: 0.88rem;
+    }
+    .terminal-input {
+        font-size: 0.88rem;
+    }
+}

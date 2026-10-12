@@ -38,7 +38,12 @@ if (isset($_SESSION['user_id'])) {
         <script src="./assets/js/instagram.js" defer></script>
         <script src="./assets/js/puzzle.js" defer></script>
     <?php endif; ?>
+    <?php if (($_GET['action'] ?? '') === 'openTerminal') : ?>
+        <link rel="stylesheet" href="./assets/styles/terminal.css">
+        <script src="./assets/js/terminal.js" defer></script>
+    <?php endif; ?>
 </head>
+
 <?php if (isset($_SESSION['game_start_time'])) : ?>
     <script>
         const GAME_START_TIME = <?= $_SESSION['game_start_time'] ?> * 1000;
