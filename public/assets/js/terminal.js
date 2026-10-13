@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    // Heure de chargement pour calcul de l'Uptime (fastfetch / neofetch)
+    const pageStartTime = Date.now();
+
     // ASCII Art de base CyberCigales (mémorisé en mémoire vive pour basculement sans rechargement ni duplication)
     const CYBER_ASCII_DEFAULT =
         "   ____      _                ____ _             _           \n" +
@@ -764,11 +767,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 outputElem.className += " cmd-info";
                 outputElem.innerHTML = `
 <strong>Commandes disponibles :</strong>
-  <strong>echo</strong> [texte]   : Affiche une ligne de texte (supporte les guillemets, variables $USER, $HOME, $PATH, $0, $$...)
-  <strong>clear</strong>          : Efface l'écran du terminal
-  <strong>whoami</strong>         : Affiche l'utilisateur actuel
-  <strong>pwd</strong>            : Affiche le répertoire de travail
-  <strong>help</strong>           : Affiche ce message d'aide
+  <strong>echo</strong> [texte]            : Affiche une ligne de texte (supporte les guillemets, variables $USER, $HOME, $PATH, $0, $$...)
+  <strong>clear</strong>                   : Efface l'écran du terminal
+  <strong>whoami</strong>                  : Affiche l'utilisateur actuel
+  <strong>pwd</strong>                     : Affiche le répertoire de travail
+  <strong>fastfetch</strong> / <strong>neofetch</strong>    : Affiche les informations système et matérielles du client
+  <strong>help</strong>                    : Affiche ce message d'aide
 
 <p>Note : L'environnement est sous Linux avec le shell BASH (commandes sensibles à la casse).</p>`;
                 entry.appendChild(outputElem);
@@ -892,6 +896,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 entry.appendChild(outputElem);
                 break;
 
+            case "fastfetch":
+            case "neofetch":
+                executeFastfetch(entry, outputElem, args);
+                break;
+
             default:
                 outputElem.className += " cmd-error";
                 outputElem.textContent = `bash: ${cmd}: commande introuvable. Tapez "help" pour afficher les commandes.`;
@@ -936,6 +945,323 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         return text;
+    }
+
+    /**
+     * Détection du système d'exploitation client (OS)
+     */
+    function detectOS(override) {
+        if (override) {
+            const low = override.toLowerCase();
+            if (low === "apple" || low === "mac" || low === "macos" || low === "ios") {
+                return { isApple: true, type: "apple", name: "Apple Darwin (macOS / iOS)" };
+            }
+            if (low === "linux") {
+                return { isApple: false, type: "linux", name: "GNU/Linux (x86_64)" };
+            }
+            if (low === "windows") {
+                return { isApple: false, type: "windows", name: "Windows 11 (x86_64)" };
+            }
+            if (low === "android") {
+                return { isApple: false, type: "android", name: "Android 14 (Linux Kernel)" };
+            }
+        }
+
+        const ua = navigator.userAgent || "";
+        const platform = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || "";
+
+        // 1. Détection des produits Apple (macOS, iOS, iPadOS)
+        if (/Macintosh|Mac OS X|iPhone|iPad|iPod/i.test(ua) || /Mac|iPhone|iPad|iPod/i.test(platform)) {
+            return {
+                isApple: true,
+                type: "apple",
+                name: "Apple Darwin (macOS / iOS)"
+            };
+        }
+
+        // 2. Détection Android
+        if (/Android/i.test(ua) || platform.toLowerCase() === "android") {
+            const vMatch = ua.match(/Android\s+([0-9.]+)/i);
+            const version = vMatch ? ` ${vMatch[1]}` : "";
+            return {
+                isApple: false,
+                type: "android",
+                name: `Android${version} (Linux Kernel)`
+            };
+        }
+
+        // 3. Détection Windows
+        if (/Windows|Win64|Win32/i.test(ua) || /Win/i.test(platform)) {
+            let winVer = "10 / 11";
+            if (/Windows NT 10\.0/i.test(ua)) {
+                winVer = "10 / 11";
+            } else if (/Windows NT 6\.3/i.test(ua)) {
+                winVer = "8.1";
+            } else if (/Windows NT 6\.2/i.test(ua)) {
+                winVer = "8";
+            } else if (/Windows NT 6\.1/i.test(ua)) {
+                winVer = "7";
+            } else if (/Windows NT 6\.0/i.test(ua)) {
+                winVer = "Vista";
+            } else if (/Windows NT 5\.1/i.test(ua)) {
+                winVer = "XP";
+            }
+            const arch = /WOW64|Win64|x64/i.test(ua) ? "x86_64" : "x86";
+            return {
+                isApple: false,
+                type: "windows",
+                name: `Windows ${winVer} (${arch})`
+            };
+        }
+
+        // 4. Détection Linux
+        if (/Linux|X11/i.test(ua) || /Linux/i.test(platform)) {
+            let distro = "GNU/Linux";
+            if (/Ubuntu/i.test(ua)) distro = "Ubuntu Linux";
+            else if (/Fedora/i.test(ua)) distro = "Fedora Linux";
+            else if (/Debian/i.test(ua)) distro = "Debian Linux";
+            else if (/Arch/i.test(ua)) distro = "Arch Linux";
+            else if (/CrOS/i.test(ua)) distro = "ChromeOS";
+
+            const isArm = /aarch64|armv/i.test(ua);
+            const arch = isArm ? "aarch64" : "x86_64";
+            return {
+                isApple: false,
+                type: "linux",
+                name: `${distro} (${arch})`
+            };
+        }
+
+        // 5. Fallback générique
+        return {
+            isApple: false,
+            type: "generic",
+            name: platform || "Système Inconnu"
+        };
+    }
+
+    /**
+     * Détection du navigateur et modèle d'appareil
+     */
+    function detectBrowser() {
+        const ua = navigator.userAgent || "";
+        let name = "Navigateur Web";
+        let version = "";
+        let engine = "Blink";
+
+        if (/Firefox\/([0-9.]+)/i.test(ua)) {
+            name = "Mozilla Firefox";
+            version = ua.match(/Firefox\/([0-9.]+)/i)[1];
+            engine = "Gecko";
+        } else if (/Edg\/([0-9.]+)/i.test(ua)) {
+            name = "Microsoft Edge";
+            version = ua.match(/Edg\/([0-9.]+)/i)[1];
+        } else if (/OPR\/([0-9.]+)/i.test(ua)) {
+            name = "Opera";
+            version = ua.match(/OPR\/([0-9.]+)/i)[1];
+        } else if (/Vivaldi\/([0-9.]+)/i.test(ua)) {
+            name = "Vivaldi";
+            version = ua.match(/Vivaldi\/([0-9.]+)/i)[1];
+        } else if (/Chrome\/([0-9.]+)/i.test(ua)) {
+            name = "Google Chrome / Chromium";
+            version = ua.match(/Chrome\/([0-9.]+)/i)[1];
+        } else if (/Safari\/([0-9.]+)/i.test(ua)) {
+            name = "Apple Safari";
+            const v = ua.match(/Version\/([0-9.]+)/i);
+            version = v ? v[1] : "";
+            engine = "WebKit";
+        }
+
+        let deviceModel = "";
+        if (/Android/i.test(ua)) {
+            const m = ua.match(/Android[^;]+;\s*([^;)]+)/i);
+            if (m && m[1] && !/K|Build/i.test(m[1])) {
+                deviceModel = m[1].trim();
+            }
+        }
+
+        return {
+            fullName: version ? `${name} ${version}` : name,
+            engine,
+            deviceModel
+        };
+    }
+
+    /**
+     * Retourne l'ASCII Art officiel du système sélectionné
+     */
+    function getOSLogo(type) {
+        if (type === "linux") {
+            return [
+                "    .--.   ",
+                "   |<span class=\"tux-accent\">o_o</span> |  ",
+                "   |<span class=\"tux-accent\">:_/</span> |  ",
+                "  //   \\ \\ ",
+                " (|     | )",
+                "/'\\_   _/`\\",
+                "\\<span class=\"tux-accent\">___)=(___</span>/"
+            ].join("\n");
+        }
+        if (type === "windows") {
+            return [
+                "  ███████████   ███████████",
+                "  ███████████   ███████████",
+                "  ███████████   ███████████",
+                "  ███████████   ███████████",
+                "",
+                "  ███████████   ███████████",
+                "  ███████████   ███████████",
+                "  ███████████   ███████████",
+                "  ███████████   ███████████"
+            ].join("\n");
+        }
+        if (type === "android") {
+            return [
+                "         -o          o-       ",
+                "          +hydNNNNdyh+        ",
+                "        +mMMMMMMMMMMMMm+      ",
+                "      `dMMm:NMMMMMMN:mMMd`    ",
+                "      hMMMMMMMMMMMMMMMMMMh    ",
+                "  ..  yyyyyyyyyyyyyyyyyyyy  ..",
+                ".mMMm`MMMMMMMMMMMMMMMMMMMM`mMMm.",
+                ":MMMM-MMMMMMMMMMMMMMMMMMMM-MMMM:",
+                ":MMMM-MMMMMMMMMMMMMMMMMMMM-MMMM:",
+                ":MMMM-MMMMMMMMMMMMMMMMMMMM-MMMM:",
+                "-MMMM-MMMMMMMMMMMMMMMMMMMM-MMMM-",
+                " +yy+ MMMMMMMMMMMMMMMMMMMM +yy+ ",
+                "      mMMMMMMMMMMMMMMMMMMm    "
+            ].join("\n");
+        }
+        return [
+            "      .------------.     ",
+            "     /              \\    ",
+            "    |   ┌────────┐   |   ",
+            "    |   │ >_     │   |   ",
+            "    |   │ CIGTERM│   |   ",
+            "    |   └────────┘   |   ",
+            "     \\              /    ",
+            "      '------------'     "
+        ].join("\n");
+    }
+
+    /**
+     * Exécute fastfetch / neofetch avec récupération des métriques matérielles et de l'environnement client
+     */
+    function executeFastfetch(entry, outputElem, args) {
+        const cleanArgs = (args || "").trim();
+        if (cleanArgs === "--help" || cleanArgs === "-h") {
+            outputElem.className += " cmd-info";
+            outputElem.innerHTML = `
+<strong>Usage :</strong> fastfetch [os_preview]
+Affiche les spécifications système, logicielles et matérielles détectées côté client.
+
+<strong>Arguments optionnels pour prévisualisation :</strong>
+  <strong>linux</strong>   : Prévisualiser le logo Linux (Tux)
+  <strong>windows</strong> : Prévisualiser le logo Microsoft Windows
+  <strong>android</strong> : Prévisualiser le logo Android (Bugdroid)`;
+            entry.appendChild(outputElem);
+            return;
+        }
+
+        const osInfo = detectOS(cleanArgs);
+
+        // Si l'utilisateur est sur un appareil Apple (macOS ou iOS), afficher le message en attente
+        if (osInfo.isApple) {
+            outputElem.className += " cmd-info";
+            outputElem.innerHTML = `
+<div style="color: #f9e2af; font-weight: bold; margin-bottom: 0.35rem;">[fastfetch / neofetch] Détection Apple</div>
+<div>Système détecté : <strong style="color: #ffffff;">${escapeHtml(osInfo.name)}</strong></div>
+<div style="margin-top: 0.35rem; color: #a6adc8;">La prise en charge des métriques et des logos pour l'écosystème Apple (macOS &amp; iOS) est temporairement suspendue et sera intégrée ultérieurement.</div>
+<div style="color: #7b889b; font-size: 0.85rem; margin-top: 0.35rem;">Astuce : Testez la commande depuis une machine Linux, Windows ou un appareil Android pour visualiser le logo et les statistiques complètes.</div>`;
+            entry.appendChild(outputElem);
+            return;
+        }
+
+        const browserInfo = detectBrowser();
+        const screenW = window.screen.width;
+        const screenH = window.screen.height;
+        const dpr = window.devicePixelRatio || 1;
+        const colorDepth = window.screen.colorDepth || 24;
+
+        // Uptime de la session terminal
+        const uptimeSec = Math.floor((Date.now() - pageStartTime) / 1000);
+        const uptimeHrs = Math.floor(uptimeSec / 3600);
+        const uptimeMins = Math.floor((uptimeSec % 3600) / 60);
+        const uptimeRemainingSec = uptimeSec % 60;
+        const uptimeParts = [];
+        if (uptimeHrs > 0) uptimeParts.push(`${uptimeHrs} hour${uptimeHrs > 1 ? "s" : ""}`);
+        if (uptimeMins > 0 || uptimeHrs > 0) uptimeParts.push(`${uptimeMins} min${uptimeMins > 1 ? "s" : ""}`);
+        uptimeParts.push(`${uptimeRemainingSec} sec${uptimeRemainingSec > 1 ? "s" : ""}`);
+        const uptimeStr = uptimeParts.join(", ");
+
+        // Kernel
+        let kernelStr = "CigTerm Virtual Kernel 6.1 (JS)";
+        if (osInfo.type === "linux") {
+            kernelStr = "Linux (Navigateur WebAssembly/JS)";
+        } else if (osInfo.type === "windows") {
+            kernelStr = "Windows NT (Navigateur Isolé)";
+        } else if (osInfo.type === "android") {
+            kernelStr = "Linux Kernel (Android Runtime)";
+        }
+
+        // Host
+        const hostStr = browserInfo.deviceModel
+            ? `${browserInfo.deviceModel} — ${browserInfo.fullName}`
+            : `${browserInfo.fullName} (Moteur ${browserInfo.engine})`;
+
+        // CPU & Mémoire
+        const cpuCores = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} (cœurs/threads logiques)` : "Non divulgué";
+        const memGiB = navigator.deviceMemory ? `~${navigator.deviceMemory} GiB` : "Non divulgué (sécurité navigateur)";
+
+        // Locale & Timezone
+        const locale = navigator.language || "fr-FR";
+        let tz = "";
+        try {
+            tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+        } catch (_) {}
+        const localeStr = tz ? `${locale} (${tz})` : locale;
+
+        // Titre et séparateur
+        const titleUserHost = `${userLogin}@cybercigales`;
+        const separator = "-".repeat(titleUserHost.length);
+
+        // Logo ASCII
+        const logoData = getOSLogo(osInfo.type);
+
+        // Palette ANSI
+        const standardColors = ["#1e1e2e", "#f38ba8", "#a6e3a1", "#f9e2af", "#89b4fa", "#cba6f7", "#89dceb", "#cdd6f4"];
+        const brightColors = ["#585b70", "#eba0ac", "#94e2d5", "#fab387", "#74c7ec", "#f5c2e7", "#b4befe", "#ffffff"];
+        const renderPaletteRow = (colors) => colors.map(c => `<span style="color:${c};">███</span>`).join(" ");
+
+        outputElem.className += " cmd-fastfetch";
+        outputElem.innerHTML = `
+<div class="fastfetch-wrapper">
+    <div class="fastfetch-logo fastfetch-logo-${osInfo.type}">
+        <pre>${logoData}</pre>
+    </div>
+    <div class="fastfetch-content">
+        <div class="fastfetch-title">
+            <span class="fastfetch-user">${escapeHtml(userLogin)}</span><span class="fastfetch-at">@</span><span class="fastfetch-host">cybercigales</span>
+        </div>
+        <div class="fastfetch-separator">${separator}</div>
+        <div class="fastfetch-row"><span class="fastfetch-key">OS:</span><span class="fastfetch-val">${escapeHtml(osInfo.name)}</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Host:</span><span class="fastfetch-val">${escapeHtml(hostStr)}</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Kernel:</span><span class="fastfetch-val">${escapeHtml(kernelStr)}</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Uptime:</span><span class="fastfetch-val">${escapeHtml(uptimeStr)}</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Packages:</span><span class="fastfetch-val">9 (CigTerm Builtins)</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Shell:</span><span class="fastfetch-val">bash 5.3.20-1 (CigTerm)</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Display:</span><span class="fastfetch-val">${screenW}x${screenH} @ ${dpr}x (${colorDepth}-bit)</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Terminal:</span><span class="fastfetch-val">CigTerm (xterm-kitty / DOM)</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">CPU:</span><span class="fastfetch-val">${escapeHtml(cpuCores)}</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Memory:</span><span class="fastfetch-val">${escapeHtml(memGiB)}</span></div>
+        <div class="fastfetch-row"><span class="fastfetch-key">Locale:</span><span class="fastfetch-val">${escapeHtml(localeStr)}</span></div>
+        <div class="fastfetch-palette">
+            <div class="palette-row">${renderPaletteRow(standardColors)}</div>
+            <div class="palette-row">${renderPaletteRow(brightColors)}</div>
+        </div>
+    </div>
+</div>`;
+        entry.appendChild(outputElem);
     }
 
     function scrollToBottom() {
